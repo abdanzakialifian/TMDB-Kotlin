@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Movies</string>
+    <string name="popular_movies">Popular movies</string>
+    <string name="see_all">See all</string>
+    <string name="top_rated_movies">Top rated movies</string>
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="favorite">Favorite</string>
+    <string name="up_coming_movies">Up coming movies</string>
+    <string name="top_rated_tv_shows">Top rated tv shows</string>
+    <string name="on_the_air_tv_shows">On the air tv shows</string>
+    <string name="popular_tv_shows">Popular tv shows</string>
+    <string name="genre_not_available">Genre Not Available</string>
+    <string name="top_cast">Top Cast</string>
+    <string name="reviews">Reviews</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
