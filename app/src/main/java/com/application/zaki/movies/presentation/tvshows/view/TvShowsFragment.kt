@@ -24,7 +24,7 @@ import com.application.zaki.movies.presentation.tvshows.adapter.OnTheAirTvShowsA
 import com.application.zaki.movies.presentation.tvshows.adapter.PopularTvShowsAdapter
 import com.application.zaki.movies.presentation.tvshows.adapter.TopRatedTvShowsAdapter
 import com.application.zaki.movies.presentation.tvshows.viewmodel.TvShowsViewModel
-import com.application.zaki.movies.utils.NetworkResult
+import com.application.zaki.movies.utils.UiState
 import com.application.zaki.movies.utils.RxDisposer
 import com.application.zaki.movies.utils.gone
 import com.application.zaki.movies.utils.visible
@@ -90,7 +90,7 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
             .observe(viewLifecycleOwner) { result ->
                 if (result != null) {
                     when (result) {
-                        is NetworkResult.Loading -> {
+                        is UiState.Loading -> {
                             binding?.apply {
                                 shimmerImageSlider.startShimmer()
                                 shimmerImageSlider.visible()
@@ -98,7 +98,7 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
                                 wormDotsIndicator.gone()
                             }
                         }
-                        is NetworkResult.Success -> {
+                        is UiState.Success -> {
                             binding?.apply {
                                 shimmerImageSlider.stopShimmer()
                                 shimmerImageSlider.gone()
@@ -107,7 +107,7 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
                             }
                             adapter.submitList(result.data.results)
                         }
-                        is NetworkResult.Error -> {
+                        is UiState.Error -> {
                             binding?.apply {
                                 shimmerImageSlider.stopShimmer()
                                 shimmerImageSlider.gone()
@@ -115,7 +115,7 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
                                 wormDotsIndicator.gone()
                             }
                         }
-                        is NetworkResult.Empty -> {}
+                        is UiState.Empty -> {}
                     }
                 }
             }
@@ -158,14 +158,14 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
             .observe(viewLifecycleOwner) { result ->
                 if (result != null) {
                     when (result) {
-                        is NetworkResult.Loading -> {
+                        is UiState.Loading -> {
                             binding?.apply {
                                 shimmerTopRatedTvShows.visible()
                                 shimmerTopRatedTvShows.startShimmer()
                                 rvTopRatedTvShows.gone()
                             }
                         }
-                        is NetworkResult.Success -> {
+                        is UiState.Success -> {
                             binding?.apply {
                                 shimmerTopRatedTvShows.gone()
                                 shimmerTopRatedTvShows.stopShimmer()
@@ -173,14 +173,14 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
                             }
                             adapter.submitList(result.data.results)
                         }
-                        is NetworkResult.Error -> {
+                        is UiState.Error -> {
                             binding?.apply {
                                 shimmerTopRatedTvShows.gone()
                                 shimmerTopRatedTvShows.stopShimmer()
                                 rvTopRatedTvShows.gone()
                             }
                         }
-                        is NetworkResult.Empty -> {}
+                        is UiState.Empty -> {}
                     }
                 }
                 binding?.apply {
@@ -206,14 +206,14 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
             .observe(viewLifecycleOwner) { result ->
                 if (result != null) {
                     when (result) {
-                        is NetworkResult.Loading -> {
+                        is UiState.Loading -> {
                             binding?.apply {
                                 shimmerPopularTvShows.visible()
                                 shimmerPopularTvShows.startShimmer()
                                 rvPopularTvShows.gone()
                             }
                         }
-                        is NetworkResult.Success -> {
+                        is UiState.Success -> {
                             binding?.apply {
                                 shimmerPopularTvShows.gone()
                                 shimmerPopularTvShows.stopShimmer()
@@ -221,14 +221,14 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
                             }
                             adapter.submitList(result.data.results)
                         }
-                        is NetworkResult.Error -> {
+                        is UiState.Error -> {
                             binding?.apply {
                                 shimmerPopularTvShows.gone()
                                 shimmerPopularTvShows.stopShimmer()
                                 rvPopularTvShows.gone()
                             }
                         }
-                        is NetworkResult.Empty -> {}
+                        is UiState.Empty -> {}
                     }
                 }
             }
@@ -254,14 +254,14 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
             .observe(viewLifecycleOwner) { result ->
                 if (result != null) {
                     when (result) {
-                        is NetworkResult.Loading -> {
+                        is UiState.Loading -> {
                             binding?.apply {
                                 shimmerOnTheAirTvShows.visible()
                                 shimmerOnTheAirTvShows.startShimmer()
                                 rvOnTheAirTvShows.gone()
                             }
                         }
-                        is NetworkResult.Success -> {
+                        is UiState.Success -> {
                             binding?.apply {
                                 shimmerOnTheAirTvShows.gone()
                                 shimmerOnTheAirTvShows.stopShimmer()
@@ -269,14 +269,14 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
                             }
                             adapter.submitList(result.data.results)
                         }
-                        is NetworkResult.Error -> {
+                        is UiState.Error -> {
                             binding?.apply {
                                 shimmerOnTheAirTvShows.gone()
                                 shimmerOnTheAirTvShows.stopShimmer()
                                 rvOnTheAirTvShows.gone()
                             }
                         }
-                        is NetworkResult.Empty -> {}
+                        is UiState.Empty -> {}
                     }
                 }
             }

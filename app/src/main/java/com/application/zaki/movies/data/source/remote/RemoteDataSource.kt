@@ -8,7 +8,6 @@ import javax.inject.Singleton
 
 @Singleton
 class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
-
     fun getNowPlayingMovies(): Flowable<NowPlayingMoviesResponse> = apiService.getNowPlayingMovies()
 
     fun getTopRatedMovies(): Flowable<TopRatedMoviesResponse> = apiService.getTopRatedMovies()

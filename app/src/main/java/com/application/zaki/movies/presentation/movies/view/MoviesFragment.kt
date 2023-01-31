@@ -24,8 +24,8 @@ import com.application.zaki.movies.presentation.movies.adapter.PopularMoviesAdap
 import com.application.zaki.movies.presentation.movies.adapter.TopRatedMoviesAdapter
 import com.application.zaki.movies.presentation.movies.adapter.UpComingMoviesAdapter
 import com.application.zaki.movies.presentation.movies.viewmodel.MoviesViewModel
-import com.application.zaki.movies.utils.NetworkResult
 import com.application.zaki.movies.utils.RxDisposer
+import com.application.zaki.movies.utils.UiState
 import com.application.zaki.movies.utils.gone
 import com.application.zaki.movies.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -86,35 +86,33 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
         })
         moviesViewModel.nowPlayingMovies(RxDisposer().apply { bind(lifecycle) })
             .observe(viewLifecycleOwner) { result ->
-                if (result != null) {
-                    when (result) {
-                        is NetworkResult.Loading -> {
-                            binding?.apply {
-                                shimmerImageSlider.startShimmer()
-                                shimmerImageSlider.visible()
-                                viewPagerImageSlider.gone()
-                                wormDotsIndicator.gone()
-                            }
+                when (result) {
+                    is UiState.Loading -> {
+                        binding?.apply {
+                            shimmerImageSlider.startShimmer()
+                            shimmerImageSlider.visible()
+                            viewPagerImageSlider.gone()
+                            wormDotsIndicator.gone()
                         }
-                        is NetworkResult.Success -> {
-                            binding?.apply {
-                                shimmerImageSlider.stopShimmer()
-                                shimmerImageSlider.gone()
-                                viewPagerImageSlider.visible()
-                                wormDotsIndicator.visible()
-                            }
-                            adapter.submitList(result.data.results)
-                        }
-                        is NetworkResult.Error -> {
-                            binding?.apply {
-                                shimmerImageSlider.stopShimmer()
-                                shimmerImageSlider.gone()
-                                viewPagerImageSlider.gone()
-                                wormDotsIndicator.gone()
-                            }
-                        }
-                        is NetworkResult.Empty -> {}
                     }
+                    is UiState.Success -> {
+                        binding?.apply {
+                            shimmerImageSlider.stopShimmer()
+                            shimmerImageSlider.gone()
+                            viewPagerImageSlider.visible()
+                            wormDotsIndicator.visible()
+                        }
+                        adapter.submitList(result.data.results)
+                    }
+                    is UiState.Error -> {
+                        binding?.apply {
+                            shimmerImageSlider.stopShimmer()
+                            shimmerImageSlider.gone()
+                            viewPagerImageSlider.gone()
+                            wormDotsIndicator.gone()
+                        }
+                    }
+                    is UiState.Empty -> {}
                 }
             }
         binding?.viewPagerImageSlider.apply {
@@ -156,14 +154,14 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
             .observe(viewLifecycleOwner) { result ->
                 if (result != null) {
                     when (result) {
-                        is NetworkResult.Loading -> {
+                        is UiState.Loading -> {
                             binding?.apply {
                                 shimmerTopRatedMovies.startShimmer()
                                 shimmerTopRatedMovies.visible()
                                 rvTopRatedMovies.gone()
                             }
                         }
-                        is NetworkResult.Success -> {
+                        is UiState.Success -> {
                             binding?.apply {
                                 shimmerTopRatedMovies.stopShimmer()
                                 shimmerTopRatedMovies.gone()
@@ -171,14 +169,14 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
                             }
                             adapter.submitList(result.data.results)
                         }
-                        is NetworkResult.Error -> {
+                        is UiState.Error -> {
                             binding?.apply {
                                 shimmerTopRatedMovies.stopShimmer()
                                 shimmerTopRatedMovies.gone()
                                 rvTopRatedMovies.gone()
                             }
                         }
-                        is NetworkResult.Empty -> {}
+                        is UiState.Empty -> {}
                     }
                 }
             }
@@ -204,14 +202,14 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
             .observe(viewLifecycleOwner) { result ->
                 if (result != null) {
                     when (result) {
-                        is NetworkResult.Loading -> {
+                        is UiState.Loading -> {
                             binding?.apply {
                                 shimmerPopularMovies.startShimmer()
                                 shimmerPopularMovies.visible()
                                 rvPopularMovies.gone()
                             }
                         }
-                        is NetworkResult.Success -> {
+                        is UiState.Success -> {
                             binding?.apply {
                                 shimmerPopularMovies.stopShimmer()
                                 shimmerPopularMovies.gone()
@@ -219,14 +217,14 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
                             }
                             adapter.submitList(result.data.results)
                         }
-                        is NetworkResult.Error -> {
+                        is UiState.Error -> {
                             binding?.apply {
                                 shimmerPopularMovies.stopShimmer()
                                 shimmerPopularMovies.gone()
                                 rvPopularMovies.gone()
                             }
                         }
-                        is NetworkResult.Empty -> {}
+                        is UiState.Empty -> {}
                     }
                 }
             }
@@ -252,14 +250,14 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
             .observe(viewLifecycleOwner) { result ->
                 if (result != null) {
                     when (result) {
-                        is NetworkResult.Loading -> {
+                        is UiState.Loading -> {
                             binding?.apply {
                                 shimmerUpComingMovies.startShimmer()
                                 shimmerUpComingMovies.visible()
                                 rvUpComingMovies.gone()
                             }
                         }
-                        is NetworkResult.Success -> {
+                        is UiState.Success -> {
                             binding?.apply {
                                 shimmerUpComingMovies.stopShimmer()
                                 shimmerUpComingMovies.gone()
@@ -267,14 +265,14 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
                             }
                             adapter.submitList(result.data.results)
                         }
-                        is NetworkResult.Error -> {
+                        is UiState.Error -> {
                             binding?.apply {
                                 shimmerUpComingMovies.stopShimmer()
                                 shimmerUpComingMovies.gone()
                                 rvUpComingMovies.gone()
                             }
                         }
-                        is NetworkResult.Empty -> {}
+                        is UiState.Empty -> {}
                     }
                 }
             }

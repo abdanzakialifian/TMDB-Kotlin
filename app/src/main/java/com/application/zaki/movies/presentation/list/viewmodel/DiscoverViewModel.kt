@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.paging.PagingData
 import com.application.zaki.movies.domain.interfaces.IMoviesUseCase
 import com.application.zaki.movies.domain.model.movies.ResultsItemDiscover
-import com.application.zaki.movies.utils.NetworkResult
+import com.application.zaki.movies.utils.UiState
 import com.application.zaki.movies.utils.RxDisposer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -17,6 +17,6 @@ class DiscoverViewModel @Inject constructor(private val movieUseCase: IMoviesUse
     fun getDiscoverMovie(
         rxDisposer: RxDisposer,
         genreId: String
-    ): LiveData<NetworkResult<PagingData<ResultsItemDiscover>>> =
+    ): LiveData<UiState<PagingData<ResultsItemDiscover>>> =
         LiveDataReactiveStreams.fromPublisher(movieUseCase.getDiscoverMovies(rxDisposer, genreId))
 }

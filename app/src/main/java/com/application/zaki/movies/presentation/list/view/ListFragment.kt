@@ -1,6 +1,5 @@
 package com.application.zaki.movies.presentation.list.view
 
-import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -22,7 +21,7 @@ import com.application.zaki.movies.presentation.list.adapter.tvshows.PopularTvSh
 import com.application.zaki.movies.presentation.list.adapter.tvshows.TopRatedTvShowsPagingAdapter
 import com.application.zaki.movies.presentation.movies.viewmodel.MoviesViewModel
 import com.application.zaki.movies.presentation.tvshows.viewmodel.TvShowsViewModel
-import com.application.zaki.movies.utils.NetworkResult
+import com.application.zaki.movies.utils.UiState
 import com.application.zaki.movies.utils.RxDisposer
 import com.application.zaki.movies.utils.gone
 import com.application.zaki.movies.utils.visible
@@ -69,19 +68,19 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
             .observe(viewLifecycleOwner) { result ->
                 if (result != null) {
                     when (result) {
-                        is NetworkResult.Loading -> {
+                        is UiState.Loading -> {
                             showLoading()
                         }
-                        is NetworkResult.Success -> {
+                        is UiState.Success -> {
                             binding?.apply {
                                 adapter.submitData(lifecycle, result.data)
                                 visibleDataList()
                             }
                         }
-                        is NetworkResult.Error -> {
+                        is UiState.Error -> {
                             goneDataList()
                         }
-                        is NetworkResult.Empty -> {
+                        is UiState.Empty -> {
                             goneDataList()
                         }
                     }
@@ -107,19 +106,19 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
             .observe(viewLifecycleOwner) { result ->
                 if (result != null) {
                     when (result) {
-                        is NetworkResult.Loading -> {
+                        is UiState.Loading -> {
                             showLoading()
                         }
-                        is NetworkResult.Success -> {
+                        is UiState.Success -> {
                             binding?.apply {
                                 adapter.submitData(lifecycle, result.data)
                                 visibleDataList()
                             }
                         }
-                        is NetworkResult.Error -> {
+                        is UiState.Error -> {
                             goneDataList()
                         }
-                        is NetworkResult.Empty -> {
+                        is UiState.Empty -> {
                             goneDataList()
                         }
                     }
@@ -145,19 +144,19 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
             .observe(viewLifecycleOwner) { result ->
                 if (result != null) {
                     when (result) {
-                        is NetworkResult.Loading -> {
+                        is UiState.Loading -> {
                             showLoading()
                         }
-                        is NetworkResult.Success -> {
+                        is UiState.Success -> {
                             binding?.apply {
                                 adapter.submitData(lifecycle, result.data)
                                 visibleDataList()
                             }
                         }
-                        is NetworkResult.Error -> {
+                        is UiState.Error -> {
                             goneDataList()
                         }
-                        is NetworkResult.Empty -> {
+                        is UiState.Empty -> {
                             goneDataList()
                         }
                     }
@@ -183,19 +182,19 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
             .observe(viewLifecycleOwner) { result ->
                 if (result != null) {
                     when (result) {
-                        is NetworkResult.Loading -> {
+                        is UiState.Loading -> {
                             showLoading()
                         }
-                        is NetworkResult.Success -> {
+                        is UiState.Success -> {
                             binding?.apply {
                                 adapter.submitData(lifecycle, result.data)
                                 visibleDataList()
                             }
                         }
-                        is NetworkResult.Error -> {
+                        is UiState.Error -> {
                             goneDataList()
                         }
-                        is NetworkResult.Empty -> {
+                        is UiState.Empty -> {
                             goneDataList()
                         }
                     }
@@ -221,19 +220,19 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
             .observe(viewLifecycleOwner) { result ->
                 if (result != null) {
                     when (result) {
-                        is NetworkResult.Loading -> {
+                        is UiState.Loading -> {
                             showLoading()
                         }
-                        is NetworkResult.Success -> {
+                        is UiState.Success -> {
                             binding?.apply {
                                 adapter.submitData(lifecycle, result.data)
                                 visibleDataList()
                             }
                         }
-                        is NetworkResult.Error -> {
+                        is UiState.Error -> {
                             goneDataList()
                         }
-                        is NetworkResult.Empty -> {
+                        is UiState.Empty -> {
                             goneDataList()
                         }
                     }
@@ -259,19 +258,19 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
             .observe(viewLifecycleOwner) { result ->
                 if (result != null) {
                     when (result) {
-                        is NetworkResult.Loading -> {
+                        is UiState.Loading -> {
                             showLoading()
                         }
-                        is NetworkResult.Success -> {
+                        is UiState.Success -> {
                             binding?.apply {
                                 adapter.submitData(lifecycle, result.data)
                                 visibleDataList()
                             }
                         }
-                        is NetworkResult.Error -> {
+                        is UiState.Error -> {
                             goneDataList()
                         }
-                        is NetworkResult.Empty -> {
+                        is UiState.Empty -> {
                             goneDataList()
                         }
                     }

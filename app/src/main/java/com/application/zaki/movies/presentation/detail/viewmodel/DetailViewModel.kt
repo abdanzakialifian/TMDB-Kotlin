@@ -8,7 +8,7 @@ import com.application.zaki.movies.domain.interfaces.ITvShowsUseCase
 import com.application.zaki.movies.domain.model.movies.DetailMovies
 import com.application.zaki.movies.domain.model.movies.ReviewsMovie
 import com.application.zaki.movies.domain.model.tvshows.DetailTvShows
-import com.application.zaki.movies.utils.NetworkResult
+import com.application.zaki.movies.utils.UiState
 import com.application.zaki.movies.utils.RxDisposer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -21,19 +21,19 @@ class DetailViewModel @Inject constructor(
     fun detailMovies(
         rxDisposer: RxDisposer,
         movieId: String,
-    ): LiveData<NetworkResult<DetailMovies>> =
+    ): LiveData<UiState<DetailMovies>> =
         LiveDataReactiveStreams.fromPublisher(movieUseCase.getDetailMovies(rxDisposer, movieId))
 
     fun detailTvShows(
         rxDisposer: RxDisposer,
         tvId: String,
-    ): LiveData<NetworkResult<DetailTvShows>> =
+    ): LiveData<UiState<DetailTvShows>> =
         LiveDataReactiveStreams.fromPublisher(tvShowsUseCase.getDetailTvShows(rxDisposer, tvId))
 
     fun reviewsMovie(
         rxDisposer: RxDisposer,
         movieId: String
-    ): LiveData<NetworkResult<ReviewsMovie>> = LiveDataReactiveStreams.fromPublisher(
+    ): LiveData<UiState<ReviewsMovie>> = LiveDataReactiveStreams.fromPublisher(
         movieUseCase.getReviewsMoviePaging(
             rxDisposer,
             movieId

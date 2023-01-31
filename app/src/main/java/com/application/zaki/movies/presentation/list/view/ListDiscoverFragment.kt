@@ -9,7 +9,7 @@ import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.view.DetailFragment
 import com.application.zaki.movies.presentation.list.adapter.genres.DiscoverGenresAdapter
 import com.application.zaki.movies.presentation.list.viewmodel.DiscoverViewModel
-import com.application.zaki.movies.utils.NetworkResult
+import com.application.zaki.movies.utils.UiState
 import com.application.zaki.movies.utils.RxDisposer
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,8 +28,8 @@ class ListDiscoverFragment : BaseVBFragment<FragmentListDiscoverBinding>() {
         ).observe(viewLifecycleOwner) { result ->
             if (result != null) {
                 when (result) {
-                    is NetworkResult.Loading -> {}
-                    is NetworkResult.Success -> {
+                    is UiState.Loading -> {}
+                    is UiState.Success -> {
                         binding?.apply {
                             tvTitleAppBar.text = args.genreName
                             val adapter = DiscoverGenresAdapter(object :
@@ -49,8 +49,8 @@ class ListDiscoverFragment : BaseVBFragment<FragmentListDiscoverBinding>() {
                         }
 
                     }
-                    is NetworkResult.Error -> {}
-                    is NetworkResult.Empty -> {}
+                    is UiState.Error -> {}
+                    is UiState.Empty -> {}
                 }
             }
         }

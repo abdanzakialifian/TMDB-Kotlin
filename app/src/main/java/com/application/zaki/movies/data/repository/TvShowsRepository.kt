@@ -12,7 +12,7 @@ import com.application.zaki.movies.data.source.remote.paging.tvshows.TopRatedTvS
 import com.application.zaki.movies.domain.interfaces.ITvShowsRepository
 import com.application.zaki.movies.domain.model.tvshows.*
 import com.application.zaki.movies.utils.DataMapperTvShows
-import com.application.zaki.movies.utils.NetworkResult
+import com.application.zaki.movies.utils.UiState
 import com.application.zaki.movies.utils.RxDisposer
 import com.application.zaki.movies.utils.addToDisposer
 import io.reactivex.BackpressureStrategy
@@ -32,10 +32,10 @@ class TvShowsRepository @Inject constructor(
 ) :
     ITvShowsRepository {
 
-    override fun getAiringTodayTvShows(rxDisposer: RxDisposer): Flowable<NetworkResult<AiringTodayTvShows>> {
-        val result = ReplaySubject.create<NetworkResult<AiringTodayTvShows>>()
+    override fun getAiringTodayTvShows(rxDisposer: RxDisposer): Flowable<UiState<AiringTodayTvShows>> {
+        val result = ReplaySubject.create<UiState<AiringTodayTvShows>>()
 
-        result.onNext(NetworkResult.Loading(null))
+        result.onNext(UiState.Loading(null))
         remoteDataSource.getAiringTodayTvShows()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -45,23 +45,23 @@ class TvShowsRepository @Inject constructor(
             .subscribe(
                 { value ->
                     if (value != null) {
-                        result.onNext(NetworkResult.Success(value))
+                        result.onNext(UiState.Success(value))
                     } else {
-                        result.onNext(NetworkResult.Empty)
+                        result.onNext(UiState.Empty)
                     }
                 },
                 { throwable ->
-                    result.onNext(NetworkResult.Error(throwable.message.toString()))
+                    result.onNext(UiState.Error(throwable.message.toString()))
                 }
             )
             .addToDisposer(rxDisposer)
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
-    override fun getTopRatedTvShows(rxDisposer: RxDisposer): Flowable<NetworkResult<TopRatedTvShows>> {
-        val result = ReplaySubject.create<NetworkResult<TopRatedTvShows>>()
+    override fun getTopRatedTvShows(rxDisposer: RxDisposer): Flowable<UiState<TopRatedTvShows>> {
+        val result = ReplaySubject.create<UiState<TopRatedTvShows>>()
 
-        result.onNext(NetworkResult.Loading(null))
+        result.onNext(UiState.Loading(null))
         remoteDataSource.getTopRatedTvShows()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -71,13 +71,13 @@ class TvShowsRepository @Inject constructor(
             .subscribe(
                 { value ->
                     if (value != null) {
-                        result.onNext(NetworkResult.Success(value))
+                        result.onNext(UiState.Success(value))
                     } else {
-                        result.onNext(NetworkResult.Empty)
+                        result.onNext(UiState.Empty)
                     }
                 },
                 { throwable ->
-                    result.onNext(NetworkResult.Error(throwable.message.toString()))
+                    result.onNext(UiState.Error(throwable.message.toString()))
                 }
             )
             .addToDisposer(rxDisposer)
@@ -85,10 +85,10 @@ class TvShowsRepository @Inject constructor(
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
-    override fun getPopularTvShows(rxDisposer: RxDisposer): Flowable<NetworkResult<PopularTvShows>> {
-        val result = ReplaySubject.create<NetworkResult<PopularTvShows>>()
+    override fun getPopularTvShows(rxDisposer: RxDisposer): Flowable<UiState<PopularTvShows>> {
+        val result = ReplaySubject.create<UiState<PopularTvShows>>()
 
-        result.onNext(NetworkResult.Loading(null))
+        result.onNext(UiState.Loading(null))
         remoteDataSource.getPopularTvShows()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -98,23 +98,23 @@ class TvShowsRepository @Inject constructor(
             .subscribe(
                 { value ->
                     if (value != null) {
-                        result.onNext(NetworkResult.Success(value))
+                        result.onNext(UiState.Success(value))
                     } else {
-                        result.onNext(NetworkResult.Empty)
+                        result.onNext(UiState.Empty)
                     }
                 },
                 { throwable ->
-                    result.onNext(NetworkResult.Error(throwable.message.toString()))
+                    result.onNext(UiState.Error(throwable.message.toString()))
                 }
             )
             .addToDisposer(rxDisposer)
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
-    override fun getOnTheAirTvShows(rxDisposer: RxDisposer): Flowable<NetworkResult<OnTheAirTvShows>> {
-        val result = ReplaySubject.create<NetworkResult<OnTheAirTvShows>>()
+    override fun getOnTheAirTvShows(rxDisposer: RxDisposer): Flowable<UiState<OnTheAirTvShows>> {
+        val result = ReplaySubject.create<UiState<OnTheAirTvShows>>()
 
-        result.onNext(NetworkResult.Loading(null))
+        result.onNext(UiState.Loading(null))
         remoteDataSource.getOnTheAirTvShows()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -124,13 +124,13 @@ class TvShowsRepository @Inject constructor(
             .subscribe(
                 { value ->
                     if (value != null) {
-                        result.onNext(NetworkResult.Success(value))
+                        result.onNext(UiState.Success(value))
                     } else {
-                        result.onNext(NetworkResult.Empty)
+                        result.onNext(UiState.Empty)
                     }
                 },
                 { throwable ->
-                    result.onNext(NetworkResult.Error(throwable.message.toString()))
+                    result.onNext(UiState.Error(throwable.message.toString()))
                 }
             )
             .addToDisposer(rxDisposer)
@@ -140,10 +140,10 @@ class TvShowsRepository @Inject constructor(
     override fun getDetailTvShows(
         rxDisposer: RxDisposer,
         tvId: String,
-    ): Flowable<NetworkResult<DetailTvShows>> {
-        val result = ReplaySubject.create<NetworkResult<DetailTvShows>>()
+    ): Flowable<UiState<DetailTvShows>> {
+        val result = ReplaySubject.create<UiState<DetailTvShows>>()
 
-        result.onNext(NetworkResult.Loading(null))
+        result.onNext(UiState.Loading(null))
 
         remoteDataSource.getDetailTvShows(tvId)
             .subscribeOn(Schedulers.io())
@@ -154,13 +154,13 @@ class TvShowsRepository @Inject constructor(
             .subscribe(
                 { value ->
                     if (value != null) {
-                        result.onNext(NetworkResult.Success(value))
+                        result.onNext(UiState.Success(value))
                     } else {
-                        result.onNext(NetworkResult.Empty)
+                        result.onNext(UiState.Empty)
                     }
                 },
                 { throwable ->
-                    result.onNext(NetworkResult.Error(throwable.message.toString()))
+                    result.onNext(UiState.Error(throwable.message.toString()))
                 }
             )
             .addToDisposer(rxDisposer)
@@ -168,8 +168,8 @@ class TvShowsRepository @Inject constructor(
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
-    override fun getOnTheAirTvShowsPaging(rxDisposer: RxDisposer): Flowable<NetworkResult<PagingData<ListOnTheAirTvShows>>> {
-        val result = ReplaySubject.create<NetworkResult<PagingData<ListOnTheAirTvShows>>>()
+    override fun getOnTheAirTvShowsPaging(rxDisposer: RxDisposer): Flowable<UiState<PagingData<ListOnTheAirTvShows>>> {
+        val result = ReplaySubject.create<UiState<PagingData<ListOnTheAirTvShows>>>()
 
         val listOnTheAirTvShowsPaging = Pager(
             config = PagingConfig(
@@ -203,7 +203,7 @@ class TvShowsRepository @Inject constructor(
         ).flowable
         val listGenreTvShows = remoteDataSource.getGenreTvShows()
 
-        result.onNext(NetworkResult.Loading(null))
+        result.onNext(UiState.Loading(null))
         Flowable.zip(
             listOnTheAirTvShowsPaging,
             listGenreTvShows
@@ -220,13 +220,13 @@ class TvShowsRepository @Inject constructor(
             .subscribe(
                 { value ->
                     if (value != null) {
-                        result.onNext(NetworkResult.Success(value))
+                        result.onNext(UiState.Success(value))
                     } else {
-                        result.onNext(NetworkResult.Empty)
+                        result.onNext(UiState.Empty)
                     }
                 },
                 { throwable ->
-                    result.onNext(NetworkResult.Error(throwable.message.toString()))
+                    result.onNext(UiState.Error(throwable.message.toString()))
                 }
             )
             .addToDisposer(rxDisposer)
@@ -234,8 +234,8 @@ class TvShowsRepository @Inject constructor(
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
-    override fun getPopularTvShowsPaging(rxDisposer: RxDisposer): Flowable<NetworkResult<PagingData<ListPopularTvShows>>> {
-        val result = ReplaySubject.create<NetworkResult<PagingData<ListPopularTvShows>>>()
+    override fun getPopularTvShowsPaging(rxDisposer: RxDisposer): Flowable<UiState<PagingData<ListPopularTvShows>>> {
+        val result = ReplaySubject.create<UiState<PagingData<ListPopularTvShows>>>()
 
         val listPopularTvShowsPaging = Pager(
             config = PagingConfig(
@@ -269,7 +269,7 @@ class TvShowsRepository @Inject constructor(
         ).flowable
         val listGenreTvShows = remoteDataSource.getGenreTvShows()
 
-        result.onNext(NetworkResult.Loading(null))
+        result.onNext(UiState.Loading(null))
         Flowable.zip(
             listPopularTvShowsPaging,
             listGenreTvShows
@@ -286,13 +286,13 @@ class TvShowsRepository @Inject constructor(
             .subscribe(
                 { value ->
                     if (value != null) {
-                        result.onNext(NetworkResult.Success(value))
+                        result.onNext(UiState.Success(value))
                     } else {
-                        result.onNext(NetworkResult.Empty)
+                        result.onNext(UiState.Empty)
                     }
                 },
                 { throwable ->
-                    result.onNext(NetworkResult.Error(throwable.message.toString()))
+                    result.onNext(UiState.Error(throwable.message.toString()))
                 }
             )
             .addToDisposer(rxDisposer)
@@ -300,8 +300,8 @@ class TvShowsRepository @Inject constructor(
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
-    override fun getTopRatedTvShowsPaging(rxDisposer: RxDisposer): Flowable<NetworkResult<PagingData<ListTopRatedTvShows>>> {
-        val result = ReplaySubject.create<NetworkResult<PagingData<ListTopRatedTvShows>>>()
+    override fun getTopRatedTvShowsPaging(rxDisposer: RxDisposer): Flowable<UiState<PagingData<ListTopRatedTvShows>>> {
+        val result = ReplaySubject.create<UiState<PagingData<ListTopRatedTvShows>>>()
 
         val listTopRatedTvShowsPaging = Pager(
             config = PagingConfig(
@@ -335,7 +335,7 @@ class TvShowsRepository @Inject constructor(
         ).flowable
         val listGenreTvShows = remoteDataSource.getGenreTvShows()
 
-        result.onNext(NetworkResult.Loading(null))
+        result.onNext(UiState.Loading(null))
         Flowable.zip(
             listTopRatedTvShowsPaging,
             listGenreTvShows
@@ -352,13 +352,13 @@ class TvShowsRepository @Inject constructor(
             .subscribe(
                 { value ->
                     if (value != null) {
-                        result.onNext(NetworkResult.Success(value))
+                        result.onNext(UiState.Success(value))
                     } else {
-                        result.onNext(NetworkResult.Empty)
+                        result.onNext(UiState.Empty)
                     }
                 },
                 { throwable ->
-                    result.onNext(NetworkResult.Error(throwable.message.toString()))
+                    result.onNext(UiState.Error(throwable.message.toString()))
                 }
             )
             .addToDisposer(rxDisposer)

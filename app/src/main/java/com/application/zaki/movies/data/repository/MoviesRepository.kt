@@ -13,8 +13,8 @@ import com.application.zaki.movies.data.source.remote.paging.movies.UpComingMovi
 import com.application.zaki.movies.domain.interfaces.IMoviesRepository
 import com.application.zaki.movies.domain.model.movies.*
 import com.application.zaki.movies.utils.DataMapperMovies
-import com.application.zaki.movies.utils.NetworkResult
 import com.application.zaki.movies.utils.RxDisposer
+import com.application.zaki.movies.utils.UiState
 import com.application.zaki.movies.utils.addToDisposer
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -33,118 +33,37 @@ class MoviesRepository @Inject constructor(
     private val discoverMoviesRxPagingSource: DiscoverMoviesRxPagingSource
 ) : IMoviesRepository {
 
-    override fun getNowPlayingMovies(rxDisposer: RxDisposer): Flowable<NetworkResult<NowPlayingMovies>> {
-        val result = ReplaySubject.create<NetworkResult<NowPlayingMovies>>()
-
-        result.onNext(NetworkResult.Loading(null))
+    override fun getNowPlayingMovies(): Flowable<NowPlayingMovies> =
         remoteDataSource.getNowPlayingMovies()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .map { value ->
-                DataMapperMovies.mapNowPlayingMoviesResponseToNowPlayingMovies(value)
+            .map { data ->
+                DataMapperMovies.mapNowPlayingMoviesResponseToNowPlayingMovies(data)
             }
-            .subscribe(
-                { value ->
-                    if (value != null) {
-                        result.onNext(NetworkResult.Success(value))
-                    } else {
-                        result.onNext(NetworkResult.Empty)
-                    }
-                }, { throwable ->
-                    result.onNext(NetworkResult.Error(throwable.message.toString()))
-                }
-            )
-            .addToDisposer(rxDisposer)
-        return result.toFlowable(BackpressureStrategy.BUFFER)
-    }
 
-    override fun getTopRatedMovies(rxDisposer: RxDisposer): Flowable<NetworkResult<TopRatedMovies>> {
-        val result = ReplaySubject.create<NetworkResult<TopRatedMovies>>()
-
-        result.onNext(NetworkResult.Loading(null))
+    override fun getTopRatedMovies(): Flowable<TopRatedMovies> =
         remoteDataSource.getTopRatedMovies()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .map { value ->
-                DataMapperMovies.mapTopRatedMoviesResponseToTopRatedMovies(value)
+            .map { data ->
+                DataMapperMovies.mapTopRatedMoviesResponseToTopRatedMovies(data)
             }
-            .subscribe(
-                { value ->
-                    if (value != null) {
-                        result.onNext(NetworkResult.Success(value))
-                    } else {
-                        result.onNext(NetworkResult.Empty)
-                    }
-                },
-                { throwable ->
-                    result.onNext(NetworkResult.Error(throwable.message.toString()))
-                }
-            )
-            .addToDisposer(rxDisposer)
-        return result.toFlowable(BackpressureStrategy.BUFFER)
-    }
 
-    override fun getPopularMovies(rxDisposer: RxDisposer): Flowable<NetworkResult<PopularMovies>> {
-        // using replay subject so that loading is included emit
-        val result = ReplaySubject.create<NetworkResult<PopularMovies>>()
-
-        result.onNext(NetworkResult.Loading(null))
+    override fun getPopularMovies(): Flowable<PopularMovies> =
         remoteDataSource.getPopularMovies()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .map { value ->
-                DataMapperMovies.mapPopularMoviesResponseToPopularMovies(value)
+            .map { data ->
+                DataMapperMovies.mapPopularMoviesResponseToPopularMovies(data)
             }
-            .subscribe(
-                { value ->
-                    if (value != null) {
-                        result.onNext(NetworkResult.Success(value))
-                    } else {
-                        result.onNext(NetworkResult.Empty)
-                    }
-                }, { throwable ->
-                    result.onNext(NetworkResult.Error(throwable.message.toString()))
-                }
-            )
-            .addToDisposer(rxDisposer)
-        return result.toFlowable(BackpressureStrategy.BUFFER)
-    }
 
-    override fun getUpComingMovies(rxDisposer: RxDisposer): Flowable<NetworkResult<UpComingMovies>> {
-        val result = ReplaySubject.create<NetworkResult<UpComingMovies>>()
-
-        result.onNext(NetworkResult.Loading(null))
-
+    override fun getUpComingMovies(): Flowable<UpComingMovies> =
         remoteDataSource.getUpComingMovies()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .map { value ->
-                DataMapperMovies.mapUpComingMoviesResponseToUpComingMovies(value)
+            .map { data ->
+                DataMapperMovies.mapUpComingMoviesResponseToUpComingMovies(data)
             }
-            .subscribe(
-                { value ->
-                    if (value != null) {
-                        result.onNext(NetworkResult.Success(value))
-                    } else {
-                        result.onNext(NetworkResult.Empty)
-                    }
-                },
-                { throwable ->
-                    result.onNext(NetworkResult.Error(throwable.message.toString()))
-                }
-            )
-            .addToDisposer(rxDisposer)
-
-        return result.toFlowable(BackpressureStrategy.BUFFER)
-    }
 
     override fun getDetailMovies(
         rxDisposer: RxDisposer,
         movieId: String,
-    ): Flowable<NetworkResult<DetailMovies>> {
-        val result = ReplaySubject.create<NetworkResult<DetailMovies>>()
+    ): Flowable<UiState<DetailMovies>> {
+        val result = ReplaySubject.create<UiState<DetailMovies>>()
 
-        result.onNext(NetworkResult.Loading(null))
+        result.onNext(UiState.Loading(null))
 
         remoteDataSource.getDetailMovies(movieId)
             .subscribeOn(Schedulers.io())
@@ -155,13 +74,13 @@ class MoviesRepository @Inject constructor(
             .subscribe(
                 { value ->
                     if (value != null) {
-                        result.onNext(NetworkResult.Success(value))
+                        result.onNext(UiState.Success(value))
                     } else {
-                        result.onNext(NetworkResult.Empty)
+                        result.onNext(UiState.Empty)
                     }
                 },
                 { throwable ->
-                    result.onNext(NetworkResult.Error(throwable.message.toString()))
+                    result.onNext(UiState.Error(throwable.message.toString()))
                 }
             )
             .addToDisposer(rxDisposer)
@@ -169,9 +88,7 @@ class MoviesRepository @Inject constructor(
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
-    override fun getPopularMoviesPaging(rxDisposer: RxDisposer): Flowable<NetworkResult<PagingData<ListPopularMovies>>> {
-        val result = ReplaySubject.create<NetworkResult<PagingData<ListPopularMovies>>>()
-
+    override fun getPopularMoviesPaging(): Flowable<PagingData<ListPopularMovies>> {
         val listPopularMoviesPaging = Pager(
             config = PagingConfig(
                 pageSize = 20,
@@ -184,35 +101,18 @@ class MoviesRepository @Inject constructor(
             }
         ).flowable
         val listGenreMovies = remoteDataSource.getGenreMovies()
-
-        result.onNext(NetworkResult.Loading(null))
         // combine two api into one result
-        Flowable.zip(listPopularMoviesPaging, listGenreMovies) { popularMoviesPaging, genreMovies ->
+        return Flowable.zip(
+            listPopularMoviesPaging,
+            listGenreMovies
+        ) { popularMoviesPaging, genreMovies ->
             return@zip popularMoviesPaging.map { map ->
                 DataMapperMovies.mapListPopularMoviesResponseToListPopularMovies(map, genreMovies)
             }
         }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { value ->
-                    if (value != null) {
-                        result.onNext(NetworkResult.Success(value))
-                    } else {
-                        result.onNext(NetworkResult.Empty)
-                    }
-                },
-                { throwable ->
-                    result.onNext(NetworkResult.Error(throwable.message.toString()))
-                }
-            )
-            .addToDisposer(rxDisposer)
-        return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
-    override fun getTopRatedMoviesPaging(rxDisposer: RxDisposer): Flowable<NetworkResult<PagingData<ListTopRatedMovies>>> {
-        val result = ReplaySubject.create<NetworkResult<PagingData<ListTopRatedMovies>>>()
-
+    override fun getTopRatedMoviesPaging(): Flowable<PagingData<ListTopRatedMovies>> {
         val listTopRatingMoviesPaging = Pager(
             config = PagingConfig(
                 pageSize = 20,
@@ -226,9 +126,8 @@ class MoviesRepository @Inject constructor(
         ).flowable
         val listGenreMovies = remoteDataSource.getGenreMovies()
 
-        result.onNext(NetworkResult.Loading(null))
         // combine two api into one result
-        Flowable.zip(
+        return Flowable.zip(
             listTopRatingMoviesPaging,
             listGenreMovies
         ) { topRatedMoviesPaging, genreMovies ->
@@ -239,28 +138,9 @@ class MoviesRepository @Inject constructor(
                 )
             }
         }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { value ->
-                    if (value != null) {
-                        result.onNext(NetworkResult.Success(value))
-                    } else {
-                        result.onNext(NetworkResult.Empty)
-                    }
-                },
-                { throwable ->
-                    result.onNext(NetworkResult.Error(throwable.message.toString()))
-                }
-            )
-            .addToDisposer(rxDisposer)
-
-        return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
-    override fun getUpComingMoviesPaging(rxDisposer: RxDisposer): Flowable<NetworkResult<PagingData<ListUpComingMovies>>> {
-        val result = ReplaySubject.create<NetworkResult<PagingData<ListUpComingMovies>>>()
-
+    override fun getUpComingMoviesPaging(): Flowable<PagingData<ListUpComingMovies>> {
         val listUpComingMoviesPaging = Pager(
             config = PagingConfig(
                 pageSize = 20,
@@ -274,8 +154,7 @@ class MoviesRepository @Inject constructor(
         ).flowable
         val listGenreMovies = remoteDataSource.getGenreMovies()
 
-        result.onNext(NetworkResult.Loading(null))
-        Flowable.zip(
+        return Flowable.zip(
             listUpComingMoviesPaging,
             listGenreMovies
         ) { upComingMoviesPaging, genreMovies ->
@@ -283,32 +162,15 @@ class MoviesRepository @Inject constructor(
                 DataMapperMovies.mapListUpComingMoviesResponseToListUpComingMovies(map, genreMovies)
             }
         }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { value ->
-                    if (value != null) {
-                        result.onNext(NetworkResult.Success(value))
-                    } else {
-                        result.onNext(NetworkResult.Empty)
-                    }
-                },
-                { throwable ->
-                    result.onNext(NetworkResult.Error(throwable.message.toString()))
-                }
-            )
-            .addToDisposer(rxDisposer)
-
-        return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
     override fun getReviewsMoviePaging(
         rxDisposer: RxDisposer,
         movieId: String
-    ): Flowable<NetworkResult<ReviewsMovie>> {
-        val result = ReplaySubject.create<NetworkResult<ReviewsMovie>>()
+    ): Flowable<UiState<ReviewsMovie>> {
+        val result = ReplaySubject.create<UiState<ReviewsMovie>>()
 
-        result.onNext(NetworkResult.Loading(null))
+        result.onNext(UiState.Loading(null))
 
         remoteDataSource.getReviews(movieId)
             .subscribeOn(Schedulers.io())
@@ -319,13 +181,13 @@ class MoviesRepository @Inject constructor(
             .subscribe(
                 { value ->
                     if (value != null) {
-                        result.onNext(NetworkResult.Success(value))
+                        result.onNext(UiState.Success(value))
                     } else {
-                        result.onNext(NetworkResult.Empty)
+                        result.onNext(UiState.Empty)
                     }
                 },
                 { throwable ->
-                    result.onNext(NetworkResult.Error(throwable.message.toString()))
+                    result.onNext(UiState.Error(throwable.message.toString()))
                 }
             )
             .addToDisposer(rxDisposer)
@@ -336,8 +198,8 @@ class MoviesRepository @Inject constructor(
     override fun getDiscoverMovies(
         rxDisposer: RxDisposer,
         genreId: String
-    ): Flowable<NetworkResult<PagingData<ResultsItemDiscover>>> {
-        val result = ReplaySubject.create<NetworkResult<PagingData<ResultsItemDiscover>>>()
+    ): Flowable<UiState<PagingData<ResultsItemDiscover>>> {
+        val result = ReplaySubject.create<UiState<PagingData<ResultsItemDiscover>>>()
 
         val listDiscoverMoviesPaging = Pager(
             config = PagingConfig(
@@ -353,7 +215,7 @@ class MoviesRepository @Inject constructor(
             }
         ).flowable
 
-        result.onNext(NetworkResult.Loading(null))
+        result.onNext(UiState.Loading(null))
 
         listDiscoverMoviesPaging
             .subscribeOn(Schedulers.io())
@@ -366,13 +228,13 @@ class MoviesRepository @Inject constructor(
             .subscribe(
                 { value ->
                     if (value != null) {
-                        result.onNext(NetworkResult.Success(value))
+                        result.onNext(UiState.Success(value))
                     } else {
-                        result.onNext(NetworkResult.Empty)
+                        result.onNext(UiState.Empty)
                     }
                 },
                 { throwable ->
-                    result.onNext(NetworkResult.Error(throwable.message.toString()))
+                    result.onNext(UiState.Error(throwable.message.toString()))
                 }
             )
             .addToDisposer(rxDisposer)

@@ -67,8 +67,8 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                 .observe(viewLifecycleOwner) { result ->
                     if (result != null) {
                         when (result) {
-                            is NetworkResult.Loading -> {}
-                            is NetworkResult.Success -> {
+                            is UiState.Loading -> {}
+                            is UiState.Success -> {
                                 binding?.apply {
                                     imgDetail.loadBackdropImageUrl(result.data.backdropPath ?: "")
                                     playAnimation.setOnClickListener {
@@ -107,8 +107,8 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                                     rvCast.setHasFixedSize(true)
                                 }
                             }
-                            is NetworkResult.Error -> {}
-                            is NetworkResult.Empty -> {}
+                            is UiState.Error -> {}
+                            is UiState.Empty -> {}
                         }
                     }
                 }
@@ -117,8 +117,8 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                 .observe(viewLifecycleOwner) { result ->
                     if (result != null) {
                         when (result) {
-                            is NetworkResult.Loading -> {}
-                            is NetworkResult.Success -> {
+                            is UiState.Loading -> {}
+                            is UiState.Success -> {
                                 binding?.apply {
                                     imgDetail.loadBackdropImageUrl(result.data.backdropPath ?: "")
                                     playAnimation.setOnClickListener {
@@ -159,8 +159,8 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                                     rvCast.setHasFixedSize(true)
                                 }
                             }
-                            is NetworkResult.Error -> {}
-                            is NetworkResult.Empty -> {}
+                            is UiState.Error -> {}
+                            is UiState.Empty -> {}
                         }
                     }
                 }
@@ -172,8 +172,8 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
             .observe(viewLifecycleOwner) { result ->
                 if (result != null) {
                     when (result) {
-                        is NetworkResult.Loading -> {}
-                        is NetworkResult.Success -> {
+                        is UiState.Loading -> {}
+                        is UiState.Success -> {
                             val adapter = ReviewsAdapter()
                             binding?.rvReviews?.layoutManager =
                                 LinearLayoutManager(requireContext())
@@ -181,8 +181,8 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                             binding?.rvReviews?.setHasFixedSize(true)
                             adapter.setListReview(result.data.results ?: arrayListOf())
                         }
-                        is NetworkResult.Error -> {}
-                        is NetworkResult.Empty -> {}
+                        is UiState.Error -> {}
+                        is UiState.Empty -> {}
                     }
                 }
             }
