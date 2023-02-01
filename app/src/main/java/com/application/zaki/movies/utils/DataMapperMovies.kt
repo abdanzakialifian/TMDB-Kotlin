@@ -370,35 +370,21 @@ object DataMapperMovies {
         )
     }
 
-    fun mapReviewMovieResponseToReviewMovie(reviewsMovieResponse: ReviewsMovieResponse): ReviewsMovie {
-        val results = ArrayList<ReviewItem>()
-        reviewsMovieResponse.results?.forEach {
-            it?.let { data ->
-                val authorDetails = AuthorDetails(
-                    avatarPath = data.authorDetails?.avatarPath,
-                    name = data.authorDetails?.name,
-                    rating = data.authorDetails?.rating,
-                    username = data.authorDetails?.username
-                )
-                results.add(
-                    ReviewItem(
-                        authorDetails = authorDetails,
-                        updatedAt = data.updatedAt,
-                        author = data.author,
-                        createdAt = data.createdAt,
-                        id = data.id,
-                        content = data.content,
-                        url = data.url
-                    )
-                )
-            }
-        }
-        return ReviewsMovie(
-            id = reviewsMovieResponse.id,
-            page = reviewsMovieResponse.id,
-            totalPages = reviewsMovieResponse.totalPages,
-            results = results,
-            totalResults = reviewsMovieResponse.totalResults
+    fun mapReviewMovieResponseToReviewMovie(reviewItemResponse: ReviewItemResponse): ReviewItem {
+        val authorDetails = AuthorDetails(
+            avatarPath = reviewItemResponse.authorDetails?.avatarPath,
+            name = reviewItemResponse.authorDetails?.name,
+            rating = reviewItemResponse.authorDetails?.rating,
+            username = reviewItemResponse.authorDetails?.username
+        )
+        return ReviewItem(
+            authorDetails = authorDetails,
+            updatedAt = reviewItemResponse.updatedAt,
+            author = reviewItemResponse.author,
+            createdAt = reviewItemResponse.createdAt,
+            id = reviewItemResponse.id,
+            content = reviewItemResponse.content,
+            url = reviewItemResponse.url
         )
     }
 

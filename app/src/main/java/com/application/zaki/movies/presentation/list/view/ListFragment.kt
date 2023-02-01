@@ -1,8 +1,10 @@
 package com.application.zaki.movies.presentation.list.view
 
+import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.zaki.movies.databinding.FragmentListBinding
 import com.application.zaki.movies.domain.model.movies.ListPopularMovies
@@ -110,10 +112,8 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
                             showLoading()
                         }
                         is UiState.Success -> {
-                            binding?.apply {
-                                adapter.submitData(lifecycle, result.data)
-                                visibleDataList()
-                            }
+                            adapter.submitData(lifecycle, result.data)
+                            visibleDataList()
                         }
                         is UiState.Error -> {
                             goneDataList()

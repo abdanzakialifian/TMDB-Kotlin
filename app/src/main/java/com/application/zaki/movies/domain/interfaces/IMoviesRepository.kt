@@ -11,21 +11,10 @@ interface IMoviesRepository {
     fun getNowPlayingMovies(): Flowable<NowPlayingMovies>
     fun getTopRatedMovies(): Flowable<TopRatedMovies>
     fun getUpComingMovies(): Flowable<UpComingMovies>
-    fun getDetailMovies(
-        rxDisposer: RxDisposer,
-        movieId: String
-    ): Flowable<UiState<DetailMovies>>
-
+    fun getDetailMovies(movieId: String): Flowable<DetailMovies>
     fun getPopularMoviesPaging(): Flowable<PagingData<ListPopularMovies>>
     fun getTopRatedMoviesPaging(): Flowable<PagingData<ListTopRatedMovies>>
     fun getUpComingMoviesPaging(): Flowable<PagingData<ListUpComingMovies>>
-    fun getReviewsMoviePaging(
-        rxDisposer: RxDisposer,
-        movieId: String
-    ): Flowable<UiState<ReviewsMovie>>
-
-    fun getDiscoverMovies(
-        rxDisposer: RxDisposer,
-        genreId: String
-    ): Flowable<UiState<PagingData<ResultsItemDiscover>>>
+    fun getReviewsMoviePaging(movieId: String): Flowable<PagingData<ReviewItem>>
+    fun getDiscoverMovies(genreId: String): Flowable<PagingData<ResultsItemDiscover>>
 }

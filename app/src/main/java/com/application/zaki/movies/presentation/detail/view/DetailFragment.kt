@@ -2,14 +2,19 @@ package com.application.zaki.movies.presentation.detail.view
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.paging.LoadState
+import androidx.paging.PagingData
+import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.zaki.movies.databinding.FragmentDetailBinding
+import com.application.zaki.movies.domain.model.movies.ReviewItem
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.adapter.CastMovieAdapter
 import com.application.zaki.movies.presentation.detail.adapter.CastTvShowsAdapter
-import com.application.zaki.movies.presentation.detail.adapter.ReviewsAdapter
+import com.application.zaki.movies.presentation.detail.adapter.ReviewsMoviesPagingAdapter
 import com.application.zaki.movies.presentation.detail.viewmodel.DetailViewModel
 import com.application.zaki.movies.utils.*
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
@@ -168,21 +173,36 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
     }
 
     private fun setReviews(id: String) {
-        detailViewModel.reviewsMovie(RxDisposer().apply { bind(lifecycle) }, id)
+        val adapter = ReviewsMoviesPagingAdapter()
+        adapter.addLoadStateListener { loadState ->
+            when(loadState.refresh) {
+                is LoadState.Loading -> Log.d("CEK", "setReviews: LOADING")
+                is LoadState.NotLoading -> Log.d("CEK", "setReviews: SUCCESS")
+                is LoadState.Error -> Log.d("CEK", "setReviews: ERROR")
+            }
+        }
+        binding?.rvReviews?.layoutManager =
+            LinearLayoutManager(requireContext())
+        binding?.rvReviews?.adapter = adapter
+        binding?.rvReviews?.setHasFixedSize(true)
+        detailViewModel.reviewsMoviesPaging(RxDisposer().apply { bind(lifecycle) }, id)
             .observe(viewLifecycleOwner) { result ->
                 if (result != null) {
                     when (result) {
-                        is UiState.Loading -> {}
-                        is UiState.Success -> {
-                            val adapter = ReviewsAdapter()
-                            binding?.rvReviews?.layoutManager =
-                                LinearLayoutManager(requireContext())
-                            binding?.rvReviews?.adapter = adapter
-                            binding?.rvReviews?.setHasFixedSize(true)
-                            adapter.setListReview(result.data.results ?: arrayListOf())
+                        is UiState.Loading -> {
+                            println("debug: loading")
                         }
-                        is UiState.Error -> {}
-                        is UiState.Empty -> {}
+                        is UiState.Success -> {
+                            adapter.submitData(viewLifecycleOwner.lifecycle, result.data)
+                        }
+                        is UiState.Error -> {
+                            println("debug: error")
+
+                        }
+                        is UiState.Empty -> {
+                            println("debug: empty")
+
+                        }
                     }
                 }
             }

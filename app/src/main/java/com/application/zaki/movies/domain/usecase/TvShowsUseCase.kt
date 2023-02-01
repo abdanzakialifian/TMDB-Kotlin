@@ -11,29 +11,27 @@ import javax.inject.Inject
 
 class TvShowsUseCase @Inject constructor(private val tvShowsRepository: ITvShowsRepository) :
     ITvShowsUseCase {
-    override fun getAiringTodayTvShows(rxDisposer: RxDisposer): Flowable<UiState<AiringTodayTvShows>> =
-        tvShowsRepository.getAiringTodayTvShows(rxDisposer)
+    override fun getAiringTodayTvShows(): Flowable<AiringTodayTvShows> =
+        tvShowsRepository.getAiringTodayTvShows()
 
-    override fun getTopRatedTvShows(rxDisposer: RxDisposer): Flowable<UiState<TopRatedTvShows>> =
-        tvShowsRepository.getTopRatedTvShows(rxDisposer)
+    override fun getTopRatedTvShows(): Flowable<TopRatedTvShows> =
+        tvShowsRepository.getTopRatedTvShows()
 
-    override fun getPopularTvShows(rxDisposer: RxDisposer): Flowable<UiState<PopularTvShows>> =
-        tvShowsRepository.getPopularTvShows(rxDisposer)
+    override fun getPopularTvShows(): Flowable<PopularTvShows> =
+        tvShowsRepository.getPopularTvShows()
 
-    override fun getOnTheAirTvShows(rxDisposer: RxDisposer): Flowable<UiState<OnTheAirTvShows>> =
-        tvShowsRepository.getOnTheAirTvShows(rxDisposer)
+    override fun getOnTheAirTvShows(): Flowable<OnTheAirTvShows> =
+        tvShowsRepository.getOnTheAirTvShows()
 
-    override fun getDetailTvShows(
-        rxDisposer: RxDisposer,
-        tvId: String,
-    ): Flowable<UiState<DetailTvShows>> = tvShowsRepository.getDetailTvShows(rxDisposer, tvId)
+    override fun getDetailTvShows(tvId: String): Flowable<DetailTvShows> =
+        tvShowsRepository.getDetailTvShows(tvId)
 
-    override fun getOnTheAirTvShowsPaging(rxDisposer: RxDisposer): Flowable<UiState<PagingData<ListOnTheAirTvShows>>> =
-        tvShowsRepository.getOnTheAirTvShowsPaging(rxDisposer)
+    override fun getOnTheAirTvShowsPaging(): Flowable<PagingData<ListOnTheAirTvShows>> =
+        tvShowsRepository.getOnTheAirTvShowsPaging()
 
-    override fun getPopularTvShowsPaging(rxDisposer: RxDisposer): Flowable<UiState<PagingData<ListPopularTvShows>>> =
-        tvShowsRepository.getPopularTvShowsPaging(rxDisposer)
+    override fun getPopularTvShowsPaging(): Flowable<PagingData<ListPopularTvShows>> =
+        tvShowsRepository.getPopularTvShowsPaging()
 
-    override fun getTopRatedTvShowsPaging(rxDisposer: RxDisposer): Flowable<UiState<PagingData<ListTopRatedTvShows>>> =
-        tvShowsRepository.getTopRatedTvShowsPaging(rxDisposer)
+    override fun getTopRatedTvShowsPaging(): Flowable<PagingData<ListTopRatedTvShows>> =
+        tvShowsRepository.getTopRatedTvShowsPaging()
 }

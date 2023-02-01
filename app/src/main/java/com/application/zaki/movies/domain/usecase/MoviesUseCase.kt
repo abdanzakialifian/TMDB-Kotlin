@@ -22,10 +22,8 @@ class MoviesUseCase @Inject constructor(private val moviesRepository: IMoviesRep
     override fun getUpComingMovies(): Flowable<UpComingMovies> =
         moviesRepository.getUpComingMovies()
 
-    override fun getDetailMovies(
-        rxDisposer: RxDisposer,
-        movieId: String,
-    ): Flowable<UiState<DetailMovies>> = moviesRepository.getDetailMovies(rxDisposer, movieId)
+    override fun getDetailMovies(movieId: String): Flowable<DetailMovies> =
+        moviesRepository.getDetailMovies(movieId)
 
     override fun getPopularMoviesPaging(): Flowable<PagingData<ListPopularMovies>> =
         moviesRepository.getPopularMoviesPaging()
@@ -36,15 +34,9 @@ class MoviesUseCase @Inject constructor(private val moviesRepository: IMoviesRep
     override fun getUpComingMoviesPaging(): Flowable<PagingData<ListUpComingMovies>> =
         moviesRepository.getUpComingMoviesPaging()
 
-    override fun getReviewsMoviePaging(
-        rxDisposer: RxDisposer,
-        movieId: String
-    ): Flowable<UiState<ReviewsMovie>> =
-        moviesRepository.getReviewsMoviePaging(rxDisposer, movieId)
+    override fun getReviewsMoviePaging(movieId: String): Flowable<PagingData<ReviewItem>> =
+        moviesRepository.getReviewsMoviePaging(movieId)
 
-    override fun getDiscoverMovies(
-        rxDisposer: RxDisposer,
-        genreId: String
-    ): Flowable<UiState<PagingData<ResultsItemDiscover>>> =
-        moviesRepository.getDiscoverMovies(rxDisposer, genreId)
+    override fun getDiscoverMovies(genreId: String): Flowable<PagingData<ResultsItemDiscover>> =
+        moviesRepository.getDiscoverMovies(genreId)
 }

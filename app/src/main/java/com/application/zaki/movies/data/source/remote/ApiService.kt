@@ -82,8 +82,9 @@ interface ApiService {
 
     @GET("movie/{movie_id}/reviews")
     fun getReviewsMovie(
-        @Path("movie_id") movieId: String
-    ): Flowable<ReviewsMovieResponse>
+        @Path("movie_id") movieId: String,
+        @Query("page") page: Int
+    ): Single<ReviewsMovieResponse>
 
     @GET("discover/movie")
     fun getDiscoverMovie(
