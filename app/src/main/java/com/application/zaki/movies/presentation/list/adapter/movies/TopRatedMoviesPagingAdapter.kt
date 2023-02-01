@@ -2,7 +2,6 @@ package com.application.zaki.movies.presentation.list.adapter.movies
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -46,7 +45,7 @@ class TopRatedMoviesPagingAdapter(private val onItemClickCallback: OnItemClickCa
                         override fun onItemClicked(data: Genre) {
                             val navigateToDetailFragment =
                                 ListFragmentDirections.actionListFragmentToListDiscoverFragment()
-                            navigateToDetailFragment.genreId = data?.genreId ?: 0
+                            navigateToDetailFragment.genreId = data.genreId ?: 0
                             navigateToDetailFragment.intentFrom = DetailFragment.INTENT_FROM_MOVIE
                             navigateToDetailFragment.genreName = data.genreName ?: ""
                             itemView.findNavController().navigate(navigateToDetailFragment)

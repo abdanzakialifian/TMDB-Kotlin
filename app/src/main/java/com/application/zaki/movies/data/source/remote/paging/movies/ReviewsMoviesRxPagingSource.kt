@@ -5,7 +5,6 @@ import androidx.paging.rxjava2.RxPagingSource
 import com.application.zaki.movies.data.source.remote.ApiService
 import com.application.zaki.movies.data.source.remote.response.movies.ReviewItemResponse
 import com.application.zaki.movies.data.source.remote.response.movies.ReviewsMovieResponse
-import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -14,6 +13,7 @@ import javax.inject.Singleton
 @Singleton
 class ReviewsMoviesRxPagingSource @Inject constructor(private val apiService: ApiService) :
     RxPagingSource<Int, ReviewItemResponse>() {
+
     private var movieId: String = ""
 
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, ReviewItemResponse>> {

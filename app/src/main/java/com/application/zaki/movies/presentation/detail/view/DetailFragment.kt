@@ -33,35 +33,6 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
         setReviews(args.id.toString())
     }
 
-    private fun setYoutubeTrailer(keyYoutube: String) {
-        binding?.apply {
-            viewLifecycleOwner.lifecycle.addObserver(youtubePlayerView)
-            youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-                override fun onError(
-                    youTubePlayer: YouTubePlayer,
-                    error: PlayerConstants.PlayerError,
-                ) {
-                    showBackdropImage()
-                    youTubePlayer.seekTo(0F)
-                }
-
-                override fun onReady(youTubePlayer: YouTubePlayer) {
-                    youTubePlayer.loadVideo(keyYoutube, 0F)
-                }
-
-                override fun onStateChange(
-                    youTubePlayer: YouTubePlayer,
-                    state: PlayerConstants.PlayerState,
-                ) {
-                    if (state == PlayerConstants.PlayerState.ENDED) {
-                        showBackdropImage()
-                        youTubePlayer.seekTo(0F)
-                    }
-                }
-            })
-        }
-    }
-
     private fun setDetailInformation(id: String, intentFrom: String) {
         if (intentFrom == INTENT_FROM_MOVIE) {
             detailViewModel.detailMovies(RxDisposer().apply { bind(lifecycle) }, id)
@@ -77,8 +48,12 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                                     genres.add(data?.name ?: "")
                                 }
                                 val listKey = ArrayList<String>()
-                                result.data.videos?.results?.forEach {
-                                    listKey.add(it?.key ?: "")
+                                if (result.data.videos?.results?.isNotEmpty() == true) {
+                                    result.data.videos.results.forEach {
+                                        listKey.add(it?.key ?: "")
+                                    }
+                                } else {
+                                    listKey.add("")
                                 }
                                 val randomKey = listKey.random()
 
@@ -131,8 +106,12 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                                         genres.add(data?.name ?: "")
                                     }
                                     val listKey = ArrayList<String>()
-                                    result.data.videos?.results?.forEach {
-                                        listKey.add(it?.key ?: "")
+                                    if (result.data.videos?.results?.isNotEmpty() == true) {
+                                        result.data.videos.results.forEach {
+                                            listKey.add(it?.key ?: "")
+                                        }
+                                    } else {
+                                        listKey.add("")
                                     }
                                     val randomKey = listKey.random()
 
@@ -140,12 +119,10 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                                     playAnimation.setOnClickListener {
                                         playAnimation.playAnimation()
                                         Handler(Looper.getMainLooper()).postDelayed({
-                                            if (result.data.videos?.results != null && result.data.videos.results.isNotEmpty()) {
-                                                setYoutubeTrailer(randomKey)
-                                                imgDetail.gone()
-                                                playAnimation.gone()
-                                                youtubePlayerView.visible()
-                                            }
+                                            setYoutubeTrailer(randomKey)
+                                            imgDetail.gone()
+                                            playAnimation.gone()
+                                            youtubePlayerView.visible()
                                         }, DELAY_PLAY_TRAILER_YOUTUBE)
                                     }
                                     tvRating.text = convertRating.toString()
@@ -171,6 +148,35 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                         }
                     }
                 }
+        }
+    }
+
+    private fun setYoutubeTrailer(keyYoutube: String) {
+        binding?.apply {
+            viewLifecycleOwner.lifecycle.addObserver(youtubePlayerView)
+            youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                override fun onError(
+                    youTubePlayer: YouTubePlayer,
+                    error: PlayerConstants.PlayerError,
+                ) {
+                    showBackdropImage()
+                    youTubePlayer.seekTo(0F)
+                }
+
+                override fun onReady(youTubePlayer: YouTubePlayer) {
+                    youTubePlayer.loadVideo(keyYoutube, 0F)
+                }
+
+                override fun onStateChange(
+                    youTubePlayer: YouTubePlayer,
+                    state: PlayerConstants.PlayerState,
+                ) {
+                    if (state == PlayerConstants.PlayerState.ENDED) {
+                        showBackdropImage()
+                        youTubePlayer.seekTo(0F)
+                    }
+                }
+            })
         }
     }
 

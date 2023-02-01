@@ -83,12 +83,12 @@ class DetailViewModel @Inject constructor(
         movieId: String
     ): LiveData<PagingData<ReviewItem>> {
         val subject = ReplaySubject.create<PagingData<ReviewItem>>()
+
         movieUseCase.getReviewsMoviePaging(movieId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->
                 subject.onNext(data)
-
             }
             .addToDisposer(rxDisposer)
 

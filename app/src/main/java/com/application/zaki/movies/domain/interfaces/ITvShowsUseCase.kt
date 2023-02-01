@@ -2,8 +2,6 @@ package com.application.zaki.movies.domain.interfaces
 
 import androidx.paging.PagingData
 import com.application.zaki.movies.domain.model.tvshows.*
-import com.application.zaki.movies.utils.UiState
-import com.application.zaki.movies.utils.RxDisposer
 import io.reactivex.Flowable
 
 interface ITvShowsUseCase {

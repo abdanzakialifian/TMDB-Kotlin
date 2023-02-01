@@ -7,7 +7,6 @@ import androidx.paging.PagingData
 import com.application.zaki.movies.domain.interfaces.IMoviesUseCase
 import com.application.zaki.movies.domain.model.movies.ResultsItemDiscover
 import com.application.zaki.movies.utils.RxDisposer
-import com.application.zaki.movies.utils.UiState
 import com.application.zaki.movies.utils.addToDisposer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.BackpressureStrategy

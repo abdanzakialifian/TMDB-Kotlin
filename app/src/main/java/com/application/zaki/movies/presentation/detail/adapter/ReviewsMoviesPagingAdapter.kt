@@ -6,13 +6,14 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListReviewBinding
-import com.application.zaki.movies.databinding.ItemListVerticalBinding
 import com.application.zaki.movies.domain.model.movies.ReviewItem
-import com.application.zaki.movies.presentation.list.adapter.movies.PopularMoviesPagingAdapter
 import com.application.zaki.movies.utils.getInitialName
 
 class ReviewsMoviesPagingAdapter :
-    PagingDataAdapter<ReviewItem, ReviewsMoviesPagingAdapter.ReviewsPagingViewHolder>(DIFF_CALLBACK) {
+    PagingDataAdapter<ReviewItem, ReviewsMoviesPagingAdapter.ReviewsPagingViewHolder>(
+        DIFF_CALLBACK
+    ) {
+
     inner class ReviewsPagingViewHolder(private val binding: ItemListReviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ReviewItem?) {

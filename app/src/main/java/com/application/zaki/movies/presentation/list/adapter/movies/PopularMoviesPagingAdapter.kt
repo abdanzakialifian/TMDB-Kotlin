@@ -46,7 +46,7 @@ class PopularMoviesPagingAdapter(private val onItemClickCallback: OnItemClickCal
                         override fun onItemClicked(data: Genre) {
                             val navigateToDetailFragment =
                                 ListFragmentDirections.actionListFragmentToListDiscoverFragment()
-                            navigateToDetailFragment.genreId = data?.genreId ?: 0
+                            navigateToDetailFragment.genreId = data.genreId ?: 0
                             navigateToDetailFragment.intentFrom = DetailFragment.INTENT_FROM_MOVIE
                             navigateToDetailFragment.genreName = data.genreName ?: ""
                             itemView.findNavController().navigate(navigateToDetailFragment)

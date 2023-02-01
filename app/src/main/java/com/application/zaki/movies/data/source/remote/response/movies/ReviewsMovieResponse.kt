@@ -23,13 +23,13 @@ data class ReviewsMovieResponse(
 data class AuthorDetailsResponse(
 
 	@field:SerializedName("avatar_path")
-	val avatarPath: Any? = null,
+	val avatarPath: String? = null,
 
 	@field:SerializedName("name")
 	val name: String? = null,
 
 	@field:SerializedName("rating")
-	val rating: Any? = null,
+	val rating: Int? = null,
 
 	@field:SerializedName("username")
 	val username: String? = null

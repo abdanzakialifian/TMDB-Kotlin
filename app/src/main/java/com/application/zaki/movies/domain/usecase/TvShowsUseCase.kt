@@ -4,8 +4,6 @@ import androidx.paging.PagingData
 import com.application.zaki.movies.domain.interfaces.ITvShowsRepository
 import com.application.zaki.movies.domain.interfaces.ITvShowsUseCase
 import com.application.zaki.movies.domain.model.tvshows.*
-import com.application.zaki.movies.utils.UiState
-import com.application.zaki.movies.utils.RxDisposer
 import io.reactivex.Flowable
 import javax.inject.Inject
 

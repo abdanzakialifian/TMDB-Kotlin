@@ -5,7 +5,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.zaki.movies.databinding.FragmentListBinding
 import com.application.zaki.movies.domain.model.movies.ListPopularMovies
 import com.application.zaki.movies.domain.model.movies.ListTopRatedMovies
@@ -24,7 +23,6 @@ import com.application.zaki.movies.presentation.list.adapter.tvshows.TopRatedTvS
 import com.application.zaki.movies.presentation.movies.viewmodel.MoviesViewModel
 import com.application.zaki.movies.presentation.tvshows.viewmodel.TvShowsViewModel
 import com.application.zaki.movies.utils.RxDisposer
-import com.application.zaki.movies.utils.UiState
 import com.application.zaki.movies.utils.gone
 import com.application.zaki.movies.utils.visible
 import dagger.hilt.android.AndroidEntryPoint

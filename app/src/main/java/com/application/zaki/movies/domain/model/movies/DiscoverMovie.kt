@@ -1,12 +1,5 @@
 package com.application.zaki.movies.domain.model.movies
 
-data class DiscoverMovie(
-    val page: Int? = null,
-    val totalPages: Int? = null,
-    val results: List<ResultsItemDiscover?>? = null,
-    val totalResults: Int? = null
-)
-
 data class ResultsItemDiscover(
     val overview: String? = null,
     val originalLanguage: String? = null,

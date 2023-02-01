@@ -1,13 +1,5 @@
 package com.application.zaki.movies.domain.model.movies
 
-data class ReviewsMovie(
-    val id: Int? = null,
-    val page: Int? = null,
-    val totalPages: Int? = null,
-    val results: ArrayList<ReviewItem>? = null,
-    val totalResults: Int? = null
-)
-
 data class AuthorDetails(
     val avatarPath: Any? = null,
     val name: String? = null,
