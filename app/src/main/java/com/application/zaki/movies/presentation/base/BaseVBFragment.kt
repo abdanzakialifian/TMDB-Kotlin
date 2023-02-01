@@ -24,22 +24,7 @@ abstract class BaseVBFragment<VB : ViewBinding> : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initView()
-//        handleBottomNavigationView()
     }
-
-//    private fun handleBottomNavigationView() {
-//        if (isShowBottomNavigationView()) {
-//            val bottomNavigationView =
-//                activity?.findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
-//            bottomNavigationView?.visible()
-//        } else {
-//            val bottomNavigationView =
-//                activity?.findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
-//            bottomNavigationView?.gone()
-//        }
-//    }
-
-//    abstract fun isShowBottomNavigationView(): Boolean
 
     abstract fun getViewBinding(): VB
 
