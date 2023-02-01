@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.ViewModel
 import androidx.paging.PagingData
-import com.application.zaki.movies.domain.model.tvshows.*
 import com.application.zaki.movies.domain.interfaces.ITvShowsUseCase
-import com.application.zaki.movies.utils.UiState
+import com.application.zaki.movies.domain.model.tvshows.*
 import com.application.zaki.movies.utils.RxDisposer
+import com.application.zaki.movies.utils.UiState
 import com.application.zaki.movies.utils.addToDisposer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.BackpressureStrategy
@@ -119,75 +119,45 @@ class TvShowsViewModel @Inject constructor(private val tvShowsUseCase: ITvShowsU
         return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
     }
 
-    fun onTheAirTvShowsPaging(rxDisposer: RxDisposer): LiveData<UiState<PagingData<ListOnTheAirTvShows>>> {
-        val subject = ReplaySubject.create<UiState<PagingData<ListOnTheAirTvShows>>>()
+    fun onTheAirTvShowsPaging(rxDisposer: RxDisposer): LiveData<PagingData<ListOnTheAirTvShows>> {
+        val subject = ReplaySubject.create<PagingData<ListOnTheAirTvShows>>()
 
-        subject.onNext(UiState.Loading(null))
         tvShowsUseCase.getOnTheAirTvShowsPaging()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { data ->
-                    if (data != null) {
-                        subject.onNext(UiState.Success(data))
-                    } else {
-                        subject.onNext(UiState.Empty)
-                    }
-                },
-                { throwable ->
-                    subject.onNext(UiState.Error(throwable.message.toString()))
-                }
-            )
+            .subscribe { data ->
+                subject.onNext(data)
+            }
             .addToDisposer(rxDisposer)
 
         // convert flowable to livedata
         return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
     }
 
-    fun popularTvShowsPaging(rxDisposer: RxDisposer): LiveData<UiState<PagingData<ListPopularTvShows>>> {
-        val subject = ReplaySubject.create<UiState<PagingData<ListPopularTvShows>>>()
+    fun popularTvShowsPaging(rxDisposer: RxDisposer): LiveData<PagingData<ListPopularTvShows>> {
+        val subject = ReplaySubject.create<PagingData<ListPopularTvShows>>()
 
-        subject.onNext(UiState.Loading(null))
         tvShowsUseCase.getPopularTvShowsPaging()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { data ->
-                    if (data != null) {
-                        subject.onNext(UiState.Success(data))
-                    } else {
-                        subject.onNext(UiState.Empty)
-                    }
-                },
-                { throwable ->
-                    subject.onNext(UiState.Error(throwable.message.toString()))
-                }
-            )
+            .subscribe { data ->
+                subject.onNext(data)
+            }
             .addToDisposer(rxDisposer)
 
         // convert flowable to livedata
         return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
     }
 
-    fun topRatedTvShowsPaging(rxDisposer: RxDisposer): LiveData<UiState<PagingData<ListTopRatedTvShows>>> {
-        val subject = ReplaySubject.create<UiState<PagingData<ListTopRatedTvShows>>>()
+    fun topRatedTvShowsPaging(rxDisposer: RxDisposer): LiveData<PagingData<ListTopRatedTvShows>> {
+        val subject = ReplaySubject.create<PagingData<ListTopRatedTvShows>>()
 
-        subject.onNext(UiState.Loading(null))
         tvShowsUseCase.getTopRatedTvShowsPaging()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { data ->
-                    if (data != null) {
-                        subject.onNext(UiState.Success(data))
-                    } else {
-                        subject.onNext(UiState.Empty)
-                    }
-                },
-                { throwable ->
-                    subject.onNext(UiState.Error(throwable.message.toString()))
-                }
-            )
+            .subscribe { data ->
+                subject.onNext(data)
+            }
             .addToDisposer(rxDisposer)
 
         // convert flowable to livedata

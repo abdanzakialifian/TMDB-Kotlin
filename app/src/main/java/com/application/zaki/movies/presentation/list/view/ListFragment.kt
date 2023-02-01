@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.paging.map
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.zaki.movies.databinding.FragmentListBinding
 import com.application.zaki.movies.domain.model.movies.ListPopularMovies
@@ -23,8 +23,8 @@ import com.application.zaki.movies.presentation.list.adapter.tvshows.PopularTvSh
 import com.application.zaki.movies.presentation.list.adapter.tvshows.TopRatedTvShowsPagingAdapter
 import com.application.zaki.movies.presentation.movies.viewmodel.MoviesViewModel
 import com.application.zaki.movies.presentation.tvshows.viewmodel.TvShowsViewModel
-import com.application.zaki.movies.utils.UiState
 import com.application.zaki.movies.utils.RxDisposer
+import com.application.zaki.movies.utils.UiState
 import com.application.zaki.movies.utils.gone
 import com.application.zaki.movies.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,36 +53,32 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
     }
 
     private fun setListTopRatedMoviesPaging() {
-        val adapter =
-            TopRatedMoviesPagingAdapter(object : TopRatedMoviesPagingAdapter.OnItemClickCallback {
-                override fun onItemClicked(data: ListTopRatedMovies?) {
-                    val navigateToDetailFragment =
-                        ListFragmentDirections.actionListFragmentToDetailFragment()
-                    navigateToDetailFragment.id = data?.id ?: 0
-                    navigateToDetailFragment.intentFrom = DetailFragment.INTENT_FROM_MOVIE
-                    findNavController().navigate(navigateToDetailFragment)
-                }
-            })
-        binding?.rvListMovies?.layoutManager = LinearLayoutManager(requireContext())
-        binding?.rvListMovies?.adapter = adapter
-        binding?.rvListMovies?.setHasFixedSize(true)
         moviesViewModel.topRatedMoviesPaging(RxDisposer().apply { bind(lifecycle) })
             .observe(viewLifecycleOwner) { result ->
-                if (result != null) {
-                    when (result) {
-                        is UiState.Loading -> {
+                val adapter =
+                    TopRatedMoviesPagingAdapter(object :
+                        TopRatedMoviesPagingAdapter.OnItemClickCallback {
+                        override fun onItemClicked(data: ListTopRatedMovies?) {
+                            navigateToDetailFragment(data?.id ?: 0)
+                        }
+                    })
+                adapter.submitData(lifecycle, result)
+                binding?.apply {
+                    rvListMovies.adapter = adapter
+                    rvListMovies.setHasFixedSize(true)
+                }
+                adapter.addLoadStateListener { loadState ->
+                    when (loadState.refresh) {
+                        is LoadState.Loading -> {
+                            Log.d("LOG", "setReviews: LOADING")
                             showLoading()
                         }
-                        is UiState.Success -> {
-                            binding?.apply {
-                                adapter.submitData(lifecycle, result.data)
-                                visibleDataList()
-                            }
+                        is LoadState.NotLoading -> {
+                            Log.d("LOG", "setReviews: MASUK")
+                            visibleDataList()
                         }
-                        is UiState.Error -> {
-                            goneDataList()
-                        }
-                        is UiState.Empty -> {
+                        is LoadState.Error -> {
+                            Log.d("LOG", "setReviews: ERROR")
                             goneDataList()
                         }
                     }
@@ -91,34 +87,32 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
     }
 
     private fun setListPopularMoviesPaging() {
-        val adapter =
-            PopularMoviesPagingAdapter(object : PopularMoviesPagingAdapter.OnItemClickCallback {
-                override fun onItemClicked(data: ListPopularMovies?) {
-                    val navigateToDetailFragment =
-                        ListFragmentDirections.actionListFragmentToDetailFragment()
-                    navigateToDetailFragment.id = data?.id ?: 0
-                    navigateToDetailFragment.intentFrom = DetailFragment.INTENT_FROM_MOVIE
-                    findNavController().navigate(navigateToDetailFragment)
-                }
-            })
-        binding?.rvListMovies?.layoutManager = LinearLayoutManager(requireContext())
-        binding?.rvListMovies?.adapter = adapter
-        binding?.rvListMovies?.setHasFixedSize(true)
         moviesViewModel.popularMoviesPaging(RxDisposer().apply { bind(lifecycle) })
             .observe(viewLifecycleOwner) { result ->
-                if (result != null) {
-                    when (result) {
-                        is UiState.Loading -> {
+                val adapter =
+                    PopularMoviesPagingAdapter(object :
+                        PopularMoviesPagingAdapter.OnItemClickCallback {
+                        override fun onItemClicked(data: ListPopularMovies?) {
+                            navigateToDetailFragment(data?.id ?: 0)
+                        }
+                    })
+                adapter.submitData(lifecycle, result)
+                binding?.apply {
+                    rvListMovies.adapter = adapter
+                    rvListMovies.setHasFixedSize(true)
+                }
+                adapter.addLoadStateListener { loadState ->
+                    when (loadState.refresh) {
+                        is LoadState.Loading -> {
+                            Log.d("LOG", "setReviews: LOADING")
                             showLoading()
                         }
-                        is UiState.Success -> {
-                            adapter.submitData(lifecycle, result.data)
+                        is LoadState.NotLoading -> {
+                            Log.d("LOG", "setReviews: MASUK")
                             visibleDataList()
                         }
-                        is UiState.Error -> {
-                            goneDataList()
-                        }
-                        is UiState.Empty -> {
+                        is LoadState.Error -> {
+                            Log.d("LOG", "setReviews: ERROR")
                             goneDataList()
                         }
                     }
@@ -127,36 +121,32 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
     }
 
     private fun setListUpComingMoviesPaging() {
-        val adapter =
-            UpComingMoviesPagingAdapter(object : UpComingMoviesPagingAdapter.OnItemClickCallback {
-                override fun onItemClicked(data: ListUpComingMovies?) {
-                    val navigateToDetailFragment =
-                        ListFragmentDirections.actionListFragmentToDetailFragment()
-                    navigateToDetailFragment.id = data?.id ?: 0
-                    navigateToDetailFragment.intentFrom = DetailFragment.INTENT_FROM_MOVIE
-                    findNavController().navigate(navigateToDetailFragment)
-                }
-            })
-        binding?.rvListMovies?.layoutManager = LinearLayoutManager(requireContext())
-        binding?.rvListMovies?.adapter = adapter
-        binding?.rvListMovies?.setHasFixedSize(true)
         moviesViewModel.upComingMoviesPaging(RxDisposer().apply { bind(lifecycle) })
             .observe(viewLifecycleOwner) { result ->
-                if (result != null) {
-                    when (result) {
-                        is UiState.Loading -> {
+                val adapter =
+                    UpComingMoviesPagingAdapter(object :
+                        UpComingMoviesPagingAdapter.OnItemClickCallback {
+                        override fun onItemClicked(data: ListUpComingMovies?) {
+                            navigateToDetailFragment(data?.id ?: 0)
+                        }
+                    })
+                adapter.submitData(lifecycle, result)
+                binding?.apply {
+                    rvListMovies.adapter = adapter
+                    rvListMovies.setHasFixedSize(true)
+                }
+                adapter.addLoadStateListener { loadState ->
+                    when (loadState.refresh) {
+                        is LoadState.Loading -> {
+                            Log.d("LOG", "setReviews: LOADING")
                             showLoading()
                         }
-                        is UiState.Success -> {
-                            binding?.apply {
-                                adapter.submitData(lifecycle, result.data)
-                                visibleDataList()
-                            }
+                        is LoadState.NotLoading -> {
+                            Log.d("LOG", "setReviews: MASUK")
+                            visibleDataList()
                         }
-                        is UiState.Error -> {
-                            goneDataList()
-                        }
-                        is UiState.Empty -> {
+                        is LoadState.Error -> {
+                            Log.d("LOG", "setReviews: ERROR")
                             goneDataList()
                         }
                     }
@@ -165,36 +155,31 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
     }
 
     private fun setListTopRatedTvShowsPaging() {
-        val adapter =
-            TopRatedTvShowsPagingAdapter(object : TopRatedTvShowsPagingAdapter.OnItemClickCallback {
-                override fun onItemClicked(data: ListTopRatedTvShows?) {
-                    val navigateToDetailFragment =
-                        ListFragmentDirections.actionListFragmentToDetailFragment()
-                    navigateToDetailFragment.id = data?.id ?: 0
-                    navigateToDetailFragment.intentFrom = DetailFragment.INTENT_FROM_TV_SHOWS
-                    findNavController().navigate(navigateToDetailFragment)
-                }
-            })
-        binding?.rvListMovies?.layoutManager = LinearLayoutManager(requireContext())
-        binding?.rvListMovies?.adapter = adapter
-        binding?.rvListMovies?.setHasFixedSize(true)
         tvShowsViewModel.topRatedTvShowsPaging(RxDisposer().apply { bind(lifecycle) })
             .observe(viewLifecycleOwner) { result ->
-                if (result != null) {
-                    when (result) {
-                        is UiState.Loading -> {
+                val adapter =
+                    TopRatedTvShowsPagingAdapter(object : TopRatedTvShowsPagingAdapter.OnItemClickCallback {
+                        override fun onItemClicked(data: ListTopRatedTvShows?) {
+                            navigateToDetailFragment(data?.id ?: 0)
+                        }
+                    })
+                adapter.submitData(lifecycle, result)
+                binding?.apply {
+                    rvListMovies.adapter = adapter
+                    rvListMovies.setHasFixedSize(true)
+                }
+                adapter.addLoadStateListener { loadState ->
+                    when (loadState.refresh) {
+                        is LoadState.Loading -> {
+                            Log.d("LOG", "setReviews: LOADING")
                             showLoading()
                         }
-                        is UiState.Success -> {
-                            binding?.apply {
-                                adapter.submitData(lifecycle, result.data)
-                                visibleDataList()
-                            }
+                        is LoadState.NotLoading -> {
+                            Log.d("LOG", "setReviews: MASUK")
+                            visibleDataList()
                         }
-                        is UiState.Error -> {
-                            goneDataList()
-                        }
-                        is UiState.Empty -> {
+                        is LoadState.Error -> {
+                            Log.d("LOG", "setReviews: ERROR")
                             goneDataList()
                         }
                     }
@@ -203,36 +188,31 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
     }
 
     private fun setListPopularTvShowsPaging() {
-        val adapter =
-            PopularTvShowsPagingAdapter(object : PopularTvShowsPagingAdapter.OnItemClickCallback {
-                override fun onItemClicked(data: ListPopularTvShows?) {
-                    val navigateToDetailFragment =
-                        ListFragmentDirections.actionListFragmentToDetailFragment()
-                    navigateToDetailFragment.id = data?.id ?: 0
-                    navigateToDetailFragment.intentFrom = DetailFragment.INTENT_FROM_TV_SHOWS
-                    findNavController().navigate(navigateToDetailFragment)
-                }
-            })
-        binding?.rvListMovies?.layoutManager = LinearLayoutManager(requireContext())
-        binding?.rvListMovies?.adapter = adapter
-        binding?.rvListMovies?.setHasFixedSize(true)
         tvShowsViewModel.popularTvShowsPaging(RxDisposer().apply { bind(lifecycle) })
             .observe(viewLifecycleOwner) { result ->
-                if (result != null) {
-                    when (result) {
-                        is UiState.Loading -> {
+                val adapter =
+                    PopularTvShowsPagingAdapter(object : PopularTvShowsPagingAdapter.OnItemClickCallback {
+                        override fun onItemClicked(data: ListPopularTvShows?) {
+                            navigateToDetailFragment(data?.id ?: 0)
+                        }
+                    })
+                adapter.submitData(lifecycle, result)
+                binding?.apply {
+                    rvListMovies.adapter = adapter
+                    rvListMovies.setHasFixedSize(true)
+                }
+                adapter.addLoadStateListener { loadState ->
+                    when (loadState.refresh) {
+                        is LoadState.Loading -> {
+                            Log.d("LOG", "setReviews: LOADING")
                             showLoading()
                         }
-                        is UiState.Success -> {
-                            binding?.apply {
-                                adapter.submitData(lifecycle, result.data)
-                                visibleDataList()
-                            }
+                        is LoadState.NotLoading -> {
+                            Log.d("LOG", "setReviews: MASUK")
+                            visibleDataList()
                         }
-                        is UiState.Error -> {
-                            goneDataList()
-                        }
-                        is UiState.Empty -> {
+                        is LoadState.Error -> {
+                            Log.d("LOG", "setReviews: ERROR")
                             goneDataList()
                         }
                     }
@@ -241,37 +221,35 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
     }
 
     private fun setListOnTheAirTvShowsPaging() {
-        val adapter =
-            OnTheAirTvShowsPagingAdapter(object : OnTheAirTvShowsPagingAdapter.OnItemClickCallback {
-                override fun onItemClicked(data: ListOnTheAirTvShows?) {
-                    val navigateToDetailFragment =
-                        ListFragmentDirections.actionListFragmentToDetailFragment()
-                    navigateToDetailFragment.id = data?.id ?: 0
-                    navigateToDetailFragment.intentFrom = DetailFragment.INTENT_FROM_TV_SHOWS
-                    findNavController().navigate(navigateToDetailFragment)
-                }
-            })
-        binding?.rvListMovies?.layoutManager = LinearLayoutManager(requireContext())
-        binding?.rvListMovies?.adapter = adapter
-        binding?.rvListMovies?.setHasFixedSize(true)
         tvShowsViewModel.onTheAirTvShowsPaging(RxDisposer().apply { bind(lifecycle) })
             .observe(viewLifecycleOwner) { result ->
-                if (result != null) {
-                    when (result) {
-                        is UiState.Loading -> {
-                            showLoading()
+                val adapter =
+                    OnTheAirTvShowsPagingAdapter(object :
+                        OnTheAirTvShowsPagingAdapter.OnItemClickCallback {
+                        override fun onItemClicked(data: ListOnTheAirTvShows?) {
+                            navigateToDetailFragment(data?.id ?: 0)
                         }
-                        is UiState.Success -> {
-                            binding?.apply {
-                                adapter.submitData(lifecycle, result.data)
+                    })
+                adapter.submitData(lifecycle, result)
+                binding?.apply {
+                    rvListMovies.adapter = adapter
+                    rvListMovies.setHasFixedSize(true)
+                }
+                adapter.addLoadStateListener {
+                    adapter.addLoadStateListener { loadState ->
+                        when (loadState.refresh) {
+                            is LoadState.Loading -> {
+                                Log.d("LOG", "setReviews: LOADING")
+                                showLoading()
+                            }
+                            is LoadState.NotLoading -> {
+                                Log.d("LOG", "setReviews: MASUK")
                                 visibleDataList()
                             }
-                        }
-                        is UiState.Error -> {
-                            goneDataList()
-                        }
-                        is UiState.Empty -> {
-                            goneDataList()
+                            is LoadState.Error -> {
+                                Log.d("LOG", "setReviews: ERROR")
+                                goneDataList()
+                            }
                         }
                     }
                 }
@@ -300,6 +278,14 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
             shimmerList.startShimmer()
             rvListMovies.gone()
         }
+    }
+
+    private fun navigateToDetailFragment(id: Int) {
+        val navigateToDetailFragment =
+            ListFragmentDirections.actionListFragmentToDetailFragment()
+        navigateToDetailFragment.id = id
+        navigateToDetailFragment.intentFrom = DetailFragment.INTENT_FROM_MOVIE
+        findNavController().navigate(navigateToDetailFragment)
     }
 
     companion object {

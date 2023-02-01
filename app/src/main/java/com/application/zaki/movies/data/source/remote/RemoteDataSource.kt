@@ -10,10 +10,6 @@ import com.application.zaki.movies.data.source.remote.paging.tvshows.PopularTvSh
 import com.application.zaki.movies.data.source.remote.paging.tvshows.TopRatedTvShowsRxPagingSource
 import com.application.zaki.movies.data.source.remote.response.movies.*
 import com.application.zaki.movies.data.source.remote.response.tvshows.*
-import com.application.zaki.movies.domain.model.tvshows.ListOnTheAirTvShows
-import com.application.zaki.movies.domain.model.tvshows.ListTopRatedTvShows
-import com.application.zaki.movies.utils.RxDisposer
-import com.application.zaki.movies.utils.UiState
 import io.reactivex.Flowable
 import javax.inject.Inject
 import javax.inject.Singleton

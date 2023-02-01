@@ -6,11 +6,7 @@ import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
-import androidx.paging.PagingData
-import androidx.paging.map
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.zaki.movies.databinding.FragmentDetailBinding
-import com.application.zaki.movies.domain.model.movies.ReviewItem
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.adapter.CastMovieAdapter
 import com.application.zaki.movies.presentation.detail.adapter.CastTvShowsAdapter
@@ -74,25 +70,28 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                         when (result) {
                             is UiState.Loading -> {}
                             is UiState.Success -> {
+                                val rating = result.data.voteAverage.toString().toDouble()
+                                val convertRating = (rating * 100.0).roundToInt() / 100.0
+                                val genres = ArrayList<String>()
+                                result.data.genres?.forEach { data ->
+                                    genres.add(data?.name ?: "")
+                                }
+                                val listKey = ArrayList<String>()
+                                result.data.videos?.results?.forEach {
+                                    listKey.add(it?.key ?: "")
+                                }
+                                val randomKey = listKey.random()
+
                                 binding?.apply {
                                     imgDetail.loadBackdropImageUrl(result.data.backdropPath ?: "")
                                     playAnimation.setOnClickListener {
                                         playAnimation.playAnimation()
                                         Handler(Looper.getMainLooper()).postDelayed({
-                                            setYoutubeTrailer(
-                                                result.data.videos?.results?.get(0)?.key
-                                                    ?: ""
-                                            )
-                                            binding?.imgDetail?.gone()
+                                            setYoutubeTrailer(randomKey)
+                                            imgDetail.gone()
                                             playAnimation.gone()
-                                            binding?.youtubePlayerView?.visible()
+                                            youtubePlayerView.visible()
                                         }, DELAY_PLAY_TRAILER_YOUTUBE)
-                                    }
-                                    val rating = result.data.voteAverage.toString().toDouble()
-                                    val convertRating = (rating * 100.0).roundToInt() / 100.0
-                                    val genres = ArrayList<String>()
-                                    result.data.genres?.forEach { data ->
-                                        genres.add(data?.name ?: "")
                                     }
                                     tvRating.text = convertRating.toString()
                                     tvVote.text = result.data.voteCount.toString()
@@ -125,26 +124,29 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                             is UiState.Loading -> {}
                             is UiState.Success -> {
                                 binding?.apply {
-                                    imgDetail.loadBackdropImageUrl(result.data.backdropPath ?: "")
-                                    playAnimation.setOnClickListener {
-                                        playAnimation.playAnimation()
-                                        Handler(Looper.getMainLooper()).postDelayed({
-                                            if (result.data.videos?.results != null && result.data.videos.results.isNotEmpty()) {
-                                                setYoutubeTrailer(
-                                                    result.data.videos.results[0]?.key
-                                                        ?: ""
-                                                )
-                                                binding?.imgDetail?.gone()
-                                                playAnimation.gone()
-                                                binding?.youtubePlayerView?.visible()
-                                            }
-                                        }, DELAY_PLAY_TRAILER_YOUTUBE)
-                                    }
                                     val rating = result.data.voteAverage.toString().toDouble()
                                     val convertRating = (rating * 100.0).roundToInt() / 100.0
                                     val genres = ArrayList<String>()
                                     result.data.genres?.forEach { data ->
                                         genres.add(data?.name ?: "")
+                                    }
+                                    val listKey = ArrayList<String>()
+                                    result.data.videos?.results?.forEach {
+                                        listKey.add(it?.key ?: "")
+                                    }
+                                    val randomKey = listKey.random()
+
+                                    imgDetail.loadBackdropImageUrl(result.data.backdropPath ?: "")
+                                    playAnimation.setOnClickListener {
+                                        playAnimation.playAnimation()
+                                        Handler(Looper.getMainLooper()).postDelayed({
+                                            if (result.data.videos?.results != null && result.data.videos.results.isNotEmpty()) {
+                                                setYoutubeTrailer(randomKey)
+                                                imgDetail.gone()
+                                                playAnimation.gone()
+                                                youtubePlayerView.visible()
+                                            }
+                                        }, DELAY_PLAY_TRAILER_YOUTUBE)
                                     }
                                     tvRating.text = convertRating.toString()
                                     tvVote.text = result.data.voteCount.toString()
@@ -173,36 +175,19 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
     }
 
     private fun setReviews(id: String) {
-        val adapter = ReviewsMoviesPagingAdapter()
-        adapter.addLoadStateListener { loadState ->
-            when(loadState.refresh) {
-                is LoadState.Loading -> Log.d("CEK", "setReviews: LOADING")
-                is LoadState.NotLoading -> Log.d("CEK", "setReviews: SUCCESS")
-                is LoadState.Error -> Log.d("CEK", "setReviews: ERROR")
-            }
-        }
-        binding?.rvReviews?.layoutManager =
-            LinearLayoutManager(requireContext())
-        binding?.rvReviews?.adapter = adapter
-        binding?.rvReviews?.setHasFixedSize(true)
         detailViewModel.reviewsMoviesPaging(RxDisposer().apply { bind(lifecycle) }, id)
             .observe(viewLifecycleOwner) { result ->
-                if (result != null) {
-                    when (result) {
-                        is UiState.Loading -> {
-                            println("debug: loading")
-                        }
-                        is UiState.Success -> {
-                            adapter.submitData(viewLifecycleOwner.lifecycle, result.data)
-                        }
-                        is UiState.Error -> {
-                            println("debug: error")
-
-                        }
-                        is UiState.Empty -> {
-                            println("debug: empty")
-
-                        }
+                val adapter = ReviewsMoviesPagingAdapter()
+                adapter.submitData(lifecycle, result)
+                binding?.apply {
+                    rvReviews.adapter = adapter
+                    rvReviews.setHasFixedSize(true)
+                }
+                adapter.addLoadStateListener { loadState ->
+                    when (loadState.refresh) {
+                        is LoadState.Loading -> Log.d("LOG", "setReviews: LOADING")
+                        is LoadState.NotLoading -> Log.d("LOG", "setReviews: MASUK")
+                        is LoadState.Error -> Log.d("LOG", "setReviews: ERROR")
                     }
                 }
             }

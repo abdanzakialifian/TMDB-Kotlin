@@ -81,25 +81,15 @@ class DetailViewModel @Inject constructor(
     fun reviewsMoviesPaging(
         rxDisposer: RxDisposer,
         movieId: String
-    ): LiveData<UiState<PagingData<ReviewItem>>> {
-        val subject = ReplaySubject.create<UiState<PagingData<ReviewItem>>>()
-
-        subject.onNext(UiState.Loading(null))
+    ): LiveData<PagingData<ReviewItem>> {
+        val subject = ReplaySubject.create<PagingData<ReviewItem>>()
         movieUseCase.getReviewsMoviePaging(movieId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { data ->
-                    if (data != null) {
-                        subject.onNext(UiState.Success(data))
-                    } else {
-                        subject.onNext(UiState.Empty)
-                    }
-                },
-                { throwable ->
-                    subject.onNext(UiState.Error(throwable.message.toString()))
-                }
-            )
+            .subscribe { data ->
+                subject.onNext(data)
+
+            }
             .addToDisposer(rxDisposer)
 
         // convert flowable to livedata
