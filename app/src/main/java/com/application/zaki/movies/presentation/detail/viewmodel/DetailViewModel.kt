@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.ViewModel
 import androidx.paging.PagingData
+import com.application.zaki.movies.domain.interfaces.ICombineUseCase
 import com.application.zaki.movies.domain.interfaces.IMoviesUseCase
 import com.application.zaki.movies.domain.interfaces.ITvShowsUseCase
 import com.application.zaki.movies.domain.model.movies.DetailMovies
@@ -21,6 +22,7 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(
     private val movieUseCase: IMoviesUseCase,
     private val tvShowsUseCase: ITvShowsUseCase,
+    private val combineUseCase: ICombineUseCase
 ) : ViewModel() {
     fun detailMovies(
         rxDisposer: RxDisposer,
@@ -78,13 +80,15 @@ class DetailViewModel @Inject constructor(
         return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
     }
 
-    fun reviewsMoviesPaging(
+    fun reviewsPaging(
         rxDisposer: RxDisposer,
-        movieId: String
+        movieId: String,
+        totalPage: String,
+        type: String
     ): LiveData<PagingData<ReviewItem>> {
         val subject = ReplaySubject.create<PagingData<ReviewItem>>()
 
-        movieUseCase.getReviewsMoviePaging(movieId)
+        combineUseCase.getReviewsPaging(movieId, totalPage, type)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->

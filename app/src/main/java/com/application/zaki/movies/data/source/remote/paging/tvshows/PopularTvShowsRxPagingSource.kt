@@ -11,8 +11,15 @@ import javax.inject.Inject
 
 class PopularTvShowsRxPagingSource @Inject constructor(private val apiService: ApiService) :
     RxPagingSource<Int, ListPopularTvShowsResponse>() {
+
+    private var totalPage = ""
+
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, ListPopularTvShowsResponse>> {
-        val position = params.key ?: 1
+        val position = if (totalPage == ONE) {
+            1
+        } else {
+            params.key ?: 1
+        }
 
         return apiService.getPopularTvShowsPaging(position)
             .subscribeOn(Schedulers.io())
@@ -39,7 +46,7 @@ class PopularTvShowsRxPagingSource @Inject constructor(private val apiService: A
         return LoadResult.Page(
             data = listPopularTvShowsResponse,
             prevKey = if (position == 1) null else position - 1,
-            nextKey = if (position == data.totalPages) null else position + 1
+            nextKey = if (totalPage != ONE) if (position == data.totalPages) null else position + 1 else null
         )
     }
 
@@ -48,5 +55,14 @@ class PopularTvShowsRxPagingSource @Inject constructor(private val apiService: A
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
         }
+    }
+
+    fun setTotalPage(totalPage: String) {
+        this.totalPage = totalPage
+    }
+
+    companion object {
+        const val ONE = "ONE"
+        const val MORE_THAN_ONE = "MORE THAN ONE"
     }
 }

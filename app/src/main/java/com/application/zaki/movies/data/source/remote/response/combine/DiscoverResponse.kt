@@ -1,8 +1,8 @@
-package com.application.zaki.movies.data.source.remote.response.movies
+package com.application.zaki.movies.data.source.remote.response.combine
 
 import com.google.gson.annotations.SerializedName
 
-data class DiscoverMovieResponse(
+data class DiscoverResponse(
 
 	@field:SerializedName("page")
 	val page: Int? = null,

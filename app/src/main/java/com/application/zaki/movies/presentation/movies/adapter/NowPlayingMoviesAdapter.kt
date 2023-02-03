@@ -8,9 +8,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListSliderBinding
 import com.application.zaki.movies.domain.model.movies.ListNowPlayingMovies
 import com.application.zaki.movies.utils.loadImageUrl
+import javax.inject.Inject
 
-class NowPlayingMoviesAdapter(private val onItemClickCallback: OnItemClickCallback) :
+class NowPlayingMoviesAdapter @Inject constructor() :
     ListAdapter<ListNowPlayingMovies, NowPlayingMoviesAdapter.SliderViewHolder>(DIFF_CALLBACK) {
+
+    private lateinit var onItemClickCallback: OnItemClickCallback
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
 
     class SliderViewHolder(private val binding: ItemListSliderBinding) :
         RecyclerView.ViewHolder(binding.root) {

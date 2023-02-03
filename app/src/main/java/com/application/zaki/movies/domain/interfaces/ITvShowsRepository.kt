@@ -7,17 +7,11 @@ import io.reactivex.Flowable
 interface ITvShowsRepository {
     fun getAiringTodayTvShows(): Flowable<AiringTodayTvShows>
 
-    fun getTopRatedTvShows(): Flowable<TopRatedTvShows>
-
-    fun getPopularTvShows(): Flowable<PopularTvShows>
-
-    fun getOnTheAirTvShows(): Flowable<OnTheAirTvShows>
-
     fun getDetailTvShows(tvId: String): Flowable<DetailTvShows>
 
-    fun getOnTheAirTvShowsPaging(): Flowable<PagingData<ListOnTheAirTvShows>>
+    fun getOnTheAirTvShowsPaging(type: String, totalPage: String): Flowable<PagingData<ListOnTheAirTvShows>>
 
-    fun getPopularTvShowsPaging(): Flowable<PagingData<ListPopularTvShows>>
+    fun getPopularTvShowsPaging(type: String, totalPage: String): Flowable<PagingData<ListPopularTvShows>>
 
-    fun getTopRatedTvShowsPaging(): Flowable<PagingData<ListTopRatedTvShows>>
+    fun getTopRatedTvShowsPaging(type: String, totalPage: String): Flowable<PagingData<ListTopRatedTvShows>>
 }

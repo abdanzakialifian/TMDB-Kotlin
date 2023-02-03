@@ -18,26 +18,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MoviesViewModel @Inject constructor(private val moviesUseCase: IMoviesUseCase) : ViewModel() {
-    fun popularMovies(rxDisposer: RxDisposer): LiveData<UiState<PopularMovies>> {
-        // using replay subject so that loading is included emit
-        val subject = ReplaySubject.create<UiState<PopularMovies>>()
-
-        subject.onNext(UiState.Loading(null))
-        moviesUseCase.getPopularMovies().subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread()).subscribe({ data ->
-                if (data != null) {
-                    subject.onNext(UiState.Success(data))
-                } else {
-                    subject.onNext(UiState.Empty)
-                }
-            }, { throwable ->
-                subject.onNext(UiState.Error(throwable.message.toString()))
-            }).addToDisposer(rxDisposer)
-
-        // convert flowable to livedata
-        return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
-    }
-
     fun nowPlayingMovies(rxDisposer: RxDisposer): LiveData<UiState<NowPlayingMovies>> {
         val subject = ReplaySubject.create<UiState<NowPlayingMovies>>()
 
@@ -57,48 +37,10 @@ class MoviesViewModel @Inject constructor(private val moviesUseCase: IMoviesUseC
         return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
     }
 
-    fun topRatedMovies(rxDisposer: RxDisposer): LiveData<UiState<TopRatedMovies>> {
-        val subject = ReplaySubject.create<UiState<TopRatedMovies>>()
-
-        subject.onNext(UiState.Loading(null))
-        moviesUseCase.getTopRatedMovies().subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread()).subscribe({ data ->
-                if (data != null) {
-                    subject.onNext(UiState.Success(data))
-                } else {
-                    subject.onNext(UiState.Empty)
-                }
-            }, { throwable ->
-                subject.onNext(UiState.Error(throwable.message.toString()))
-            }).addToDisposer(rxDisposer)
-
-        // convert flowable to livedata
-        return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
-    }
-
-    fun upComingMovies(rxDisposer: RxDisposer): LiveData<UiState<UpComingMovies>> {
-        val subject = ReplaySubject.create<UiState<UpComingMovies>>()
-
-        subject.onNext(UiState.Loading(null))
-        moviesUseCase.getUpComingMovies().subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread()).subscribe({ data ->
-                if (data != null) {
-                    subject.onNext(UiState.Success(data))
-                } else {
-                    subject.onNext(UiState.Empty)
-                }
-            }, { throwable ->
-                subject.onNext(UiState.Error(throwable.message.toString()))
-            }).addToDisposer(rxDisposer)
-
-        // convert flowable to livedata
-        return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
-    }
-
-    fun popularMoviesPaging(rxDisposer: RxDisposer): LiveData<PagingData<ListPopularMovies>> {
+    fun popularMoviesPaging(rxDisposer: RxDisposer, type: String, totalPage: String): LiveData<PagingData<ListPopularMovies>> {
         val subject = ReplaySubject.create<PagingData<ListPopularMovies>>()
 
-        moviesUseCase.getPopularMoviesPaging().subscribeOn(Schedulers.io())
+        moviesUseCase.getPopularMoviesPaging(type, totalPage).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread()).subscribe { data ->
                 subject.onNext(data)
             }.addToDisposer(rxDisposer)
@@ -107,10 +49,10 @@ class MoviesViewModel @Inject constructor(private val moviesUseCase: IMoviesUseC
         return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
     }
 
-    fun topRatedMoviesPaging(rxDisposer: RxDisposer): LiveData<PagingData<ListTopRatedMovies>> {
+    fun topRatedMoviesPaging(rxDisposer: RxDisposer, type: String, totalPage: String): LiveData<PagingData<ListTopRatedMovies>> {
         val subject = ReplaySubject.create<PagingData<ListTopRatedMovies>>()
 
-        moviesUseCase.getTopRatedMoviesPaging().subscribeOn(Schedulers.io())
+        moviesUseCase.getTopRatedMoviesPaging(type, totalPage).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread()).subscribe { data ->
                 subject.onNext(data)
             }.addToDisposer(rxDisposer)
@@ -119,10 +61,10 @@ class MoviesViewModel @Inject constructor(private val moviesUseCase: IMoviesUseC
         return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
     }
 
-    fun upComingMoviesPaging(rxDisposer: RxDisposer): LiveData<PagingData<ListUpComingMovies>> {
+    fun upComingMoviesPaging(rxDisposer: RxDisposer, type: String, totalPage: String): LiveData<PagingData<ListUpComingMovies>> {
         val subject = ReplaySubject.create<PagingData<ListUpComingMovies>>()
 
-        moviesUseCase.getUpComingMoviesPaging().subscribeOn(Schedulers.io())
+        moviesUseCase.getUpComingMoviesPaging(type, totalPage).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread()).subscribe { data ->
                 subject.onNext(data)
             }.addToDisposer(rxDisposer)

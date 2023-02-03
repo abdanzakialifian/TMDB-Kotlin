@@ -1,5 +1,8 @@
 package com.application.zaki.movies.utils
 
+import com.application.zaki.movies.data.source.remote.response.combine.GenreResponse
+import com.application.zaki.movies.data.source.remote.response.combine.ResultsItemDiscoverResponse
+import com.application.zaki.movies.data.source.remote.response.combine.ReviewItemResponse
 import com.application.zaki.movies.data.source.remote.response.movies.*
 import com.application.zaki.movies.domain.model.movies.*
 
@@ -134,7 +137,7 @@ object DataMapperMovies {
 
     fun mapListPopularMoviesResponseToListPopularMovies(
         listPopularMovies: ListPopularMoviesResponse?,
-        genreMovies: GenreMoviesResponse?,
+        genreMovies: GenreResponse?,
     ): ListPopularMovies {
         // adding response genre to list popular movies
         val listGenreMovies = genreMovies?.genres?.map { map ->
@@ -163,7 +166,7 @@ object DataMapperMovies {
 
     fun mapListTopRatedMoviesResponseToListTopRatedMovies(
         listTopRatedMovies: ListTopRatedMoviesResponse?,
-        genreMovies: GenreMoviesResponse?,
+        genreMovies: GenreResponse?,
     ): ListTopRatedMovies {
         val listGenreMovies = genreMovies?.genres?.map { map ->
             map?.let {
@@ -192,7 +195,7 @@ object DataMapperMovies {
 
     fun mapListUpComingMoviesResponseToListUpComingMovies(
         listUpComingMovies: ListUpComingMoviesResponse?,
-        genreMovies: GenreMoviesResponse?,
+        genreMovies: GenreResponse?,
     ): ListUpComingMovies {
         val listGenreMovies = genreMovies?.genres?.map { map ->
             map?.let {

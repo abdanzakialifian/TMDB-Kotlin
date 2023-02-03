@@ -2,7 +2,6 @@ package com.application.zaki.movies.presentation.list.adapter.tvshows
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -11,11 +10,19 @@ import com.application.zaki.movies.domain.model.genre.Genre
 import com.application.zaki.movies.domain.model.tvshows.ListPopularTvShows
 import com.application.zaki.movies.presentation.list.adapter.genres.GenresAdapter
 import com.application.zaki.movies.utils.loadImageUrl
+import javax.inject.Inject
 
-class PopularTvShowsPagingAdapter(private val onItemClickCallback: OnItemClickCallback) :
+class PopularTvShowsPagingAdapter @Inject constructor() :
     PagingDataAdapter<ListPopularTvShows, PopularTvShowsPagingAdapter.PopularTvShowsPagingViewHolder>(
         DIFF_CALLBACK
     ) {
+
+    private lateinit var onItemClickCallback: OnItemClickCallback
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
+
     inner class PopularTvShowsPagingViewHolder(private val binding: ItemListVerticalBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ListPopularTvShows?) {
@@ -42,8 +49,7 @@ class PopularTvShowsPagingAdapter(private val onItemClickCallback: OnItemClickCa
                     // convert list to adapter
                     val adapter = GenresAdapter(object : GenresAdapter.OnItemClickCallback {
                         override fun onItemClicked(data: Genre) {
-                            Toast.makeText(itemView.context, data.genreName, Toast.LENGTH_SHORT)
-                                .show()
+                            onItemClickCallback.onItemGenreClicked(data)
                         }
                     })
                     adapter.submitList(genre)
@@ -76,6 +82,7 @@ class PopularTvShowsPagingAdapter(private val onItemClickCallback: OnItemClickCa
 
     interface OnItemClickCallback {
         fun onItemClicked(data: ListPopularTvShows?)
+        fun onItemGenreClicked(data: Genre)
     }
 
     companion object {

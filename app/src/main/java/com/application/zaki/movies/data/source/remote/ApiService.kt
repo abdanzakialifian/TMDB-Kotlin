@@ -1,5 +1,8 @@
 package com.application.zaki.movies.data.source.remote
 
+import com.application.zaki.movies.data.source.remote.response.combine.DiscoverResponse
+import com.application.zaki.movies.data.source.remote.response.combine.GenreResponse
+import com.application.zaki.movies.data.source.remote.response.combine.ReviewsResponse
 import com.application.zaki.movies.data.source.remote.response.movies.*
 import com.application.zaki.movies.data.source.remote.response.tvshows.*
 import io.reactivex.Flowable
@@ -13,23 +16,14 @@ interface ApiService {
     fun getNowPlayingMovies(): Flowable<NowPlayingMoviesResponse>
 
     @GET("movie/top_rated")
-    fun getTopRatedMovies(): Flowable<TopRatedMoviesResponse>
-
-    @GET("movie/top_rated")
     fun getTopRatedMoviesPaging(
         @Query("page") page: Int
     ): Single<TopRatedMoviesResponse>
 
     @GET("movie/popular")
-    fun getPopularMovies(): Flowable<PopularMoviesResponse>
-
-    @GET("movie/popular")
     fun getPopularMoviesPaging(
         @Query("page") page: Int
     ): Single<PopularMoviesResponse>
-
-    @GET("movie/upcoming")
-    fun getUpComingMovies(): Flowable<UpComingMoviesResponse>
 
     @GET("movie/upcoming")
     fun getUpComingMoviesPaging(
@@ -40,15 +34,9 @@ interface ApiService {
     fun getAiringTodayTvShows(): Flowable<AiringTodayTvShowsResponse>
 
     @GET("tv/top_rated")
-    fun getTopRatedTvShows(): Flowable<TopRatedTvShowsResponse>
-
-    @GET("tv/top_rated")
     fun getTopRatedTvShowsPaging(
         @Query("page") page: Int
     ): Single<TopRatedTvShowsResponse>
-
-    @GET("tv/popular")
-    fun getPopularTvShows(): Flowable<PopularTvShowsResponse>
 
     @GET("tv/popular")
     fun getPopularTvShowsPaging(
@@ -56,18 +44,15 @@ interface ApiService {
     ): Single<PopularTvShowsResponse>
 
     @GET("tv/on_the_air")
-    fun getOnTheAirTvShows(): Flowable<OnTheAirTvShowsResponse>
-
-    @GET("tv/on_the_air")
     fun getOnTheAirTvShowsPaging(
         @Query("page") page: Int
     ): Single<OnTheAirTvShowsResponse>
 
     @GET("genre/movie/list")
-    fun getGenreMovies(): Flowable<GenreMoviesResponse>
+    fun getGenreMovies(): Flowable<GenreResponse>
 
     @GET("genre/tv/list")
-    fun getGenreTvShows(): Flowable<GenreTvShowsResponse>
+    fun getGenreTvShows(): Flowable<GenreResponse>
 
     @GET("movie/{movie_id}?append_to_response=credits,videos")
     fun getDetailMovies(
@@ -83,11 +68,23 @@ interface ApiService {
     fun getReviewsMovie(
         @Path("movie_id") movieId: String,
         @Query("page") page: Int
-    ): Single<ReviewsMovieResponse>
+    ): Single<ReviewsResponse>
+
+    @GET("tv/{tv_id}/reviews")
+    fun getReviewsTvShow(
+        @Path("tv_id") tvId: String,
+        @Query("page") page: Int
+    ): Single<ReviewsResponse>
 
     @GET("discover/movie")
     fun getDiscoverMovie(
         @Query("page") page: Int,
         @Query("with_genres") withGenres: String
-    ): Single<DiscoverMovieResponse>
+    ): Single<DiscoverResponse>
+
+    @GET("discover/tv")
+    fun getDiscoverTvShow(
+        @Query("page") page: Int,
+        @Query("with_genres") withGenres: String
+    ): Single<DiscoverResponse>
 }

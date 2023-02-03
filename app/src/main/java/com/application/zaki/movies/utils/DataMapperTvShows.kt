@@ -1,5 +1,6 @@
 package com.application.zaki.movies.utils
 
+import com.application.zaki.movies.data.source.remote.response.combine.GenreResponse
 import com.application.zaki.movies.data.source.remote.response.tvshows.*
 import com.application.zaki.movies.domain.model.tvshows.*
 
@@ -122,7 +123,7 @@ object DataMapperTvShows {
 
     fun mapListOnTheAirTvShowsResponseToListOnTheAirTvShows(
         listOnTheAirTvShows: ListOnTheAirTvShowsResponse?,
-        genreTvShows: GenreTvShowsResponse?,
+        genreTvShows: GenreResponse?,
     ): ListOnTheAirTvShows {
 
         val listGenreTvShows = genreTvShows?.genres?.map { map ->
@@ -154,7 +155,7 @@ object DataMapperTvShows {
 
     fun mapListPopularTvShowsResponseToListPopularTvShows(
         listPopularTvShows: ListPopularTvShowsResponse?,
-        genreTvShows: GenreTvShowsResponse?,
+        genreTvShows: GenreResponse?,
     ): ListPopularTvShows {
 
         val listGenreTvShows = genreTvShows?.genres?.map { map ->
@@ -186,7 +187,7 @@ object DataMapperTvShows {
 
     fun mapListTopRatedTvShowsResponseToListTopRatedTvShows(
         listTopRatedTvShows: ListTopRatedTvShowsResponse?,
-        genreTvShows: GenreTvShowsResponse?,
+        genreTvShows: GenreResponse?,
     ): ListTopRatedTvShows {
         val listGenreTopRatedTvShows = genreTvShows?.genres?.map { map ->
             map?.let {

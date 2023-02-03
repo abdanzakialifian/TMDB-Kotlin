@@ -44,85 +44,14 @@ class TvShowsViewModel @Inject constructor(private val tvShowsUseCase: ITvShowsU
         return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
     }
 
-    fun topRatedTvShows(rxDisposer: RxDisposer): LiveData<UiState<TopRatedTvShows>> {
-        val subject = ReplaySubject.create<UiState<TopRatedTvShows>>()
-
-        subject.onNext(UiState.Loading(null))
-        tvShowsUseCase.getTopRatedTvShows()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { data ->
-                    if (data != null) {
-                        subject.onNext(UiState.Success(data))
-                    } else {
-                        subject.onNext(UiState.Empty)
-                    }
-                },
-                { throwable ->
-                    subject.onNext(UiState.Error(throwable.message.toString()))
-                }
-            )
-            .addToDisposer(rxDisposer)
-
-        // convert flowable to livedata
-        return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
-    }
-
-    fun popularTvShows(rxDisposer: RxDisposer): LiveData<UiState<PopularTvShows>> {
-        val subject = ReplaySubject.create<UiState<PopularTvShows>>()
-
-        subject.onNext(UiState.Loading(null))
-        tvShowsUseCase.getPopularTvShows()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { data ->
-                    if (data != null) {
-                        subject.onNext(UiState.Success(data))
-                    } else {
-                        subject.onNext(UiState.Empty)
-                    }
-                },
-                { throwable ->
-                    subject.onNext(UiState.Error(throwable.message.toString()))
-                }
-            )
-            .addToDisposer(rxDisposer)
-
-        // convert flowable to livedata
-        return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
-    }
-
-    fun onTheAirTvShows(rxDisposer: RxDisposer): LiveData<UiState<OnTheAirTvShows>> {
-        val subject = ReplaySubject.create<UiState<OnTheAirTvShows>>()
-
-        subject.onNext(UiState.Loading(null))
-        tvShowsUseCase.getOnTheAirTvShows()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { data ->
-                    if (data != null) {
-                        subject.onNext(UiState.Success(data))
-                    } else {
-                        subject.onNext(UiState.Empty)
-                    }
-                },
-                { throwable ->
-                    subject.onNext(UiState.Error(throwable.message.toString()))
-                }
-            )
-            .addToDisposer(rxDisposer)
-
-        // convert flowable to livedata
-        return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
-    }
-
-    fun onTheAirTvShowsPaging(rxDisposer: RxDisposer): LiveData<PagingData<ListOnTheAirTvShows>> {
+    fun onTheAirTvShowsPaging(
+        rxDisposer: RxDisposer,
+        type: String,
+        totalPage: String
+    ): LiveData<PagingData<ListOnTheAirTvShows>> {
         val subject = ReplaySubject.create<PagingData<ListOnTheAirTvShows>>()
 
-        tvShowsUseCase.getOnTheAirTvShowsPaging()
+        tvShowsUseCase.getOnTheAirTvShowsPaging(type, totalPage)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->
@@ -134,10 +63,14 @@ class TvShowsViewModel @Inject constructor(private val tvShowsUseCase: ITvShowsU
         return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
     }
 
-    fun popularTvShowsPaging(rxDisposer: RxDisposer): LiveData<PagingData<ListPopularTvShows>> {
+    fun popularTvShowsPaging(
+        rxDisposer: RxDisposer,
+        type: String,
+        totalPage: String
+    ): LiveData<PagingData<ListPopularTvShows>> {
         val subject = ReplaySubject.create<PagingData<ListPopularTvShows>>()
 
-        tvShowsUseCase.getPopularTvShowsPaging()
+        tvShowsUseCase.getPopularTvShowsPaging(type, totalPage)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->
@@ -149,10 +82,14 @@ class TvShowsViewModel @Inject constructor(private val tvShowsUseCase: ITvShowsU
         return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
     }
 
-    fun topRatedTvShowsPaging(rxDisposer: RxDisposer): LiveData<PagingData<ListTopRatedTvShows>> {
+    fun topRatedTvShowsPaging(
+        rxDisposer: RxDisposer,
+        type: String,
+        totalPage: String
+    ): LiveData<PagingData<ListTopRatedTvShows>> {
         val subject = ReplaySubject.create<PagingData<ListTopRatedTvShows>>()
 
-        tvShowsUseCase.getTopRatedTvShowsPaging()
+        tvShowsUseCase.getTopRatedTvShowsPaging(type, totalPage)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->

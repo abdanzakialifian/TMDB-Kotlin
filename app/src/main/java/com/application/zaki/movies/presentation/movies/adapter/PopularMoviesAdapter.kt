@@ -3,20 +3,27 @@ package com.application.zaki.movies.presentation.movies.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListHorizontalBinding
 import com.application.zaki.movies.domain.model.movies.ListPopularMovies
 import com.application.zaki.movies.utils.loadImageUrl
+import javax.inject.Inject
 
-class PopularMoviesAdapter(private val onItemClickCallback: OnItemClickCallback) :
-    ListAdapter<ListPopularMovies, PopularMoviesAdapter.PopularMoviesViewHolder>(DIFF_CALLBACK) {
+class PopularMoviesAdapter @Inject constructor() :
+    PagingDataAdapter<ListPopularMovies, PopularMoviesAdapter.PopularMoviesViewHolder>(DIFF_CALLBACK) {
+
+    private lateinit var onItemClickCallback: OnItemClickCallback
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
 
     inner class PopularMoviesViewHolder(val binding: ItemListHorizontalBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ListPopularMovies) {
-            item.posterPath?.let {
+        fun bind(item: ListPopularMovies?) {
+            item?.posterPath?.let {
                 binding.imgHorizontal.loadImageUrl(it)
             }
             itemView.setOnClickListener {
@@ -53,10 +60,8 @@ class PopularMoviesAdapter(private val onItemClickCallback: OnItemClickCallback)
         }
     }
 
-    override fun getItemCount(): Int = if (currentList.size > 8) 8 else currentList.size
-
     interface OnItemClickCallback {
-        fun onItemClicked(data: ListPopularMovies)
+        fun onItemClicked(data: ListPopularMovies?)
     }
 
     companion object {

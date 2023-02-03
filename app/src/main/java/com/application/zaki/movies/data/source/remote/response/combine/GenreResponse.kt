@@ -1,14 +1,14 @@
-package com.application.zaki.movies.data.source.remote.response.movies
+package com.application.zaki.movies.data.source.remote.response.combine
 
 import com.google.gson.annotations.SerializedName
 
-data class GenreMoviesResponse(
+data class GenreResponse(
 
 	@field:SerializedName("genres")
-	val genres: List<GenresItemMoviesResponse?>? = null
+	val genres: List<GenresItemResponse?>? = null
 )
 
-data class GenresItemMoviesResponse(
+data class GenresItemResponse(
 
 	@field:SerializedName("name")
 	val name: String? = null,

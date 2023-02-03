@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListReviewBinding
 import com.application.zaki.movies.domain.model.movies.ReviewItem
 import com.application.zaki.movies.utils.getInitialName
+import javax.inject.Inject
 
-class ReviewsMoviesPagingAdapter :
-    PagingDataAdapter<ReviewItem, ReviewsMoviesPagingAdapter.ReviewsPagingViewHolder>(
+class ReviewsMoviesPagingAdapter @Inject constructor() : PagingDataAdapter<ReviewItem, ReviewsMoviesPagingAdapter.ReviewsPagingViewHolder>(
         DIFF_CALLBACK
     ) {
 

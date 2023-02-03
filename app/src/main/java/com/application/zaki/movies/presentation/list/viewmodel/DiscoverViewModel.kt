@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.ViewModel
 import androidx.paging.PagingData
-import com.application.zaki.movies.domain.interfaces.IMoviesUseCase
+import com.application.zaki.movies.domain.interfaces.ICombineUseCase
 import com.application.zaki.movies.domain.model.movies.ResultsItemDiscover
 import com.application.zaki.movies.utils.RxDisposer
 import com.application.zaki.movies.utils.addToDisposer
@@ -16,15 +16,16 @@ import io.reactivex.subjects.ReplaySubject
 import javax.inject.Inject
 
 @HiltViewModel
-class DiscoverViewModel @Inject constructor(private val movieUseCase: IMoviesUseCase) :
+class DiscoverViewModel @Inject constructor(private val combineUseCase: ICombineUseCase) :
     ViewModel() {
-    fun getDiscoverMovie(
+    fun getDiscover(
         rxDisposer: RxDisposer,
-        genreId: String
+        genreId: String,
+        type: String
     ): LiveData<PagingData<ResultsItemDiscover>> {
         val subject = ReplaySubject.create<PagingData<ResultsItemDiscover>>()
 
-        movieUseCase.getDiscoverMovies(genreId)
+        combineUseCase.getDiscoverPaging(genreId, type)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->

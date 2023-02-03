@@ -14,8 +14,14 @@ import javax.inject.Singleton
 data class TopRatedMoviesRxPagingSource @Inject constructor(private val apiService: ApiService) :
     RxPagingSource<Int, ListTopRatedMoviesResponse>() {
 
+    private var totalPage = ""
+
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, ListTopRatedMoviesResponse>> {
-        val position = params.key ?: 1
+        val position = if (totalPage == ONE) {
+            1
+        } else {
+            params.key ?: 1
+        }
 
         return apiService.getTopRatedMoviesPaging(position)
             .subscribeOn(Schedulers.io())
@@ -42,7 +48,7 @@ data class TopRatedMoviesRxPagingSource @Inject constructor(private val apiServi
         return LoadResult.Page(
             data = listTopRatedMoviesResponse,
             prevKey = if (position == 1) null else position - 1,
-            nextKey = if (position == data.totalPages) null else position + 1
+            nextKey = if (totalPage != ONE) if (position == data.totalPages) null else position + 1 else null
         )
     }
 
@@ -51,5 +57,14 @@ data class TopRatedMoviesRxPagingSource @Inject constructor(private val apiServi
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
         }
+    }
+
+    fun setTotalPage(totalPage: String) {
+        this.totalPage = totalPage
+    }
+
+    companion object {
+        const val ONE = "ONE"
+        const val MORE_THAN_ONE = "MORE THAN ONE"
     }
 }

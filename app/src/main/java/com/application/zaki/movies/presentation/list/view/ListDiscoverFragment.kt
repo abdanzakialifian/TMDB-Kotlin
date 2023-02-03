@@ -1,10 +1,10 @@
 package com.application.zaki.movies.presentation.list.view
 
-import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
+import com.application.zaki.movies.data.source.remote.paging.combine.DiscoverRxPagingSource
 import com.application.zaki.movies.databinding.FragmentListDiscoverBinding
 import com.application.zaki.movies.domain.model.movies.ResultsItemDiscover
 import com.application.zaki.movies.presentation.base.BaseVBFragment
@@ -13,9 +13,13 @@ import com.application.zaki.movies.presentation.list.adapter.genres.DiscoverGenr
 import com.application.zaki.movies.presentation.list.viewmodel.DiscoverViewModel
 import com.application.zaki.movies.utils.RxDisposer
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ListDiscoverFragment : BaseVBFragment<FragmentListDiscoverBinding>() {
+
+    @Inject
+    lateinit var adapter: DiscoverGenresAdapter
     private val args: ListDiscoverFragmentArgs by navArgs()
     private val discoverViewModel by viewModels<DiscoverViewModel>()
 
@@ -23,14 +27,14 @@ class ListDiscoverFragment : BaseVBFragment<FragmentListDiscoverBinding>() {
         FragmentListDiscoverBinding.inflate(layoutInflater)
 
     override fun initView() {
-        discoverViewModel.getDiscoverMovie(
+        discoverViewModel.getDiscover(
             RxDisposer().apply { bind(lifecycle) },
-            args.genreId.toString()
+            args.genreId.toString(),
+            if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) DiscoverRxPagingSource.MOVIES else DiscoverRxPagingSource.TV_SHOWS
         ).observe(viewLifecycleOwner) { result ->
             binding?.apply {
                 tvTitleAppBar.text = args.genreName
-                val adapter = DiscoverGenresAdapter(object :
-                    DiscoverGenresAdapter.OnItemClickCallback {
+                adapter.setOnItemClickCallback(object : DiscoverGenresAdapter.OnItemClickCallback {
                     override fun onItemClicked(data: ResultsItemDiscover?) {
                         navigateToDetailFragment(data?.id ?: 0)
                     }
@@ -40,9 +44,9 @@ class ListDiscoverFragment : BaseVBFragment<FragmentListDiscoverBinding>() {
                 rvDiscover.adapter = adapter
                 adapter.addLoadStateListener { loadState ->
                     when (loadState.refresh) {
-                        is LoadState.Loading -> Log.d("LOG", "setReviews: LOADING")
-                        is LoadState.NotLoading -> Log.d("LOG", "setReviews: MASUK")
-                        is LoadState.Error -> Log.d("LOG", "setReviews: ERROR")
+                        is LoadState.Loading -> {}
+                        is LoadState.NotLoading -> {}
+                        is LoadState.Error -> {}
                     }
                 }
             }
@@ -53,8 +57,12 @@ class ListDiscoverFragment : BaseVBFragment<FragmentListDiscoverBinding>() {
         val navigateToDetailFragment =
             ListDiscoverFragmentDirections.actionListDiscoverFragmentToDetailFragment()
         navigateToDetailFragment.id = id
-        navigateToDetailFragment.intentFrom =
-            DetailFragment.INTENT_FROM_MOVIE
+        navigateToDetailFragment.intentFrom = DetailFragment.INTENT_FROM_MOVIE
         findNavController().navigate(navigateToDetailFragment)
+    }
+
+    companion object {
+        const val INTENT_FROM_MOVIE = "Intent From Movie"
+        const val INTENT_FROM_TV_SHOWS = "Intent From Tv Shows"
     }
 }

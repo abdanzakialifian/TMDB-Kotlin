@@ -19,70 +19,45 @@ class MoviesRepository @Inject constructor(private val remoteDataSource: RemoteD
                 DataMapperMovies.mapNowPlayingMoviesResponseToNowPlayingMovies(data)
             }
 
-    override fun getTopRatedMovies(): Flowable<TopRatedMovies> =
-        remoteDataSource.getTopRatedMovies()
-            .map { data ->
-                DataMapperMovies.mapTopRatedMoviesResponseToTopRatedMovies(data)
-            }
-
-    override fun getPopularMovies(): Flowable<PopularMovies> =
-        remoteDataSource.getPopularMovies()
-            .map { data ->
-                DataMapperMovies.mapPopularMoviesResponseToPopularMovies(data)
-            }
-
-    override fun getUpComingMovies(): Flowable<UpComingMovies> =
-        remoteDataSource.getUpComingMovies()
-            .map { data ->
-                DataMapperMovies.mapUpComingMoviesResponseToUpComingMovies(data)
-            }
-
     override fun getDetailMovies(movieId: String): Flowable<DetailMovies> =
         remoteDataSource.getDetailMovies(movieId)
             .map { data ->
                 DataMapperMovies.mapDetailMovieResponseToDetailMovie(data)
             }
 
-    override fun getPopularMoviesPaging(): Flowable<PagingData<ListPopularMovies>> = Flowable.zip(
-        remoteDataSource.getPopularMoviesPaging(),
-        remoteDataSource.getGenreMovies()
-    ) { popularMoviesPaging, genreMovies ->
-        return@zip popularMoviesPaging.map { data ->
-            DataMapperMovies.mapListPopularMoviesResponseToListPopularMovies(data, genreMovies)
-        }
-    }
-
-    override fun getTopRatedMoviesPaging(): Flowable<PagingData<ListTopRatedMovies>> = Flowable.zip(
-        remoteDataSource.getTopRatedMoviesPaging(),
-        remoteDataSource.getGenreMovies()
-    ) { topRatedMoviesPaging, genreMovies ->
-        return@zip topRatedMoviesPaging.map { data ->
-            DataMapperMovies.mapListTopRatedMoviesResponseToListTopRatedMovies(data, genreMovies)
-        }
-    }
-
-    override fun getUpComingMoviesPaging(): Flowable<PagingData<ListUpComingMovies>> = Flowable.zip(
-        remoteDataSource.getUpComingMoviesPaging(),
-        remoteDataSource.getGenreMovies()
-    ) { upComingMoviesPaging, genreMovies ->
-        return@zip upComingMoviesPaging.map { data ->
-            DataMapperMovies.mapListUpComingMoviesResponseToListUpComingMovies(data, genreMovies)
-        }
-    }
-
-    override fun getReviewsMoviePaging(movieId: String): Flowable<PagingData<ReviewItem>> =
-        remoteDataSource.getReviewsPaging(movieId)
-            .map { pagingData ->
-                pagingData.map {
-                    DataMapperMovies.mapReviewMovieResponseToReviewMovie(it)
-                }
+    override fun getPopularMoviesPaging(type: String, totalPage: String): Flowable<PagingData<ListPopularMovies>> =
+        Flowable.zip(
+            remoteDataSource.getPopularMoviesPaging(totalPage),
+            remoteDataSource.getGenre(type)
+        ) { popularMoviesPaging, genreMovies ->
+            return@zip popularMoviesPaging.map { data ->
+                DataMapperMovies.mapListPopularMoviesResponseToListPopularMovies(data, genreMovies)
             }
+        }
 
-    override fun getDiscoverMovies(genreId: String): Flowable<PagingData<ResultsItemDiscover>> =
-        remoteDataSource.getDiscoverMoviesPaging(genreId)
-            .map { pagingData ->
-                pagingData.map { map ->
-                    DataMapperMovies.mapResultItemDiscoverResponseToResultItemDiscover(map)
-                }
+    override fun getTopRatedMoviesPaging(type: String, totalPage: String): Flowable<PagingData<ListTopRatedMovies>> =
+        Flowable.zip(
+            remoteDataSource.getTopRatedMoviesPaging(totalPage),
+            remoteDataSource.getGenre(type)
+        ) { topRatedMoviesPaging, genreMovies ->
+            return@zip topRatedMoviesPaging.map { data ->
+                DataMapperMovies.mapListTopRatedMoviesResponseToListTopRatedMovies(
+                    data,
+                    genreMovies
+                )
             }
+        }
+
+    override fun getUpComingMoviesPaging(type: String, totalPage: String): Flowable<PagingData<ListUpComingMovies>> =
+        Flowable.zip(
+            remoteDataSource.getUpComingMoviesPaging(totalPage),
+            remoteDataSource.getGenre(type)
+        ) { upComingMoviesPaging, genreMovies ->
+            return@zip upComingMoviesPaging.map { data ->
+                DataMapperMovies.mapListUpComingMoviesResponseToListUpComingMovies(
+                    data,
+                    genreMovies
+                )
+            }
+        }
 }

@@ -4,10 +4,14 @@ import android.os.Handler
 import android.os.Looper
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.application.zaki.movies.data.source.remote.RemoteDataSource
+import com.application.zaki.movies.data.source.remote.paging.movies.PopularMoviesRxPagingSource
+import com.application.zaki.movies.data.source.remote.paging.movies.TopRatedMoviesRxPagingSource
+import com.application.zaki.movies.data.source.remote.paging.movies.UpComingMoviesRxPagingSource
 import com.application.zaki.movies.databinding.FragmentMoviesBinding
 import com.application.zaki.movies.domain.model.movies.ListNowPlayingMovies
 import com.application.zaki.movies.domain.model.movies.ListPopularMovies
@@ -29,10 +33,23 @@ import com.application.zaki.movies.utils.UiState
 import com.application.zaki.movies.utils.gone
 import com.application.zaki.movies.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlin.math.abs
 
 @AndroidEntryPoint
 class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
+
+    @Inject
+    lateinit var popularMoviesAdapter: PopularMoviesAdapter
+
+    @Inject
+    lateinit var nowPlayingMoviesAdapter: NowPlayingMoviesAdapter
+
+    @Inject
+    lateinit var topRatedMoviesAdapter: TopRatedMoviesAdapter
+
+    @Inject
+    lateinit var upComingMoviesAdapter: UpComingMoviesAdapter
 
     private val moviesViewModel by viewModels<MoviesViewModel>()
     private val sliderHandler = Handler(Looper.getMainLooper())
@@ -53,35 +70,23 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
 
         binding?.apply {
             tvSeeAllTopRatedMovies.setOnClickListener {
-                val navigateToListFragment =
-                    HomeFragmentDirections.actionHomeFragmentToListFragment()
-                navigateToListFragment.intentFrom = INTENT_FROM_TOP_RATED_MOVIES
-                findNavController().navigate(navigateToListFragment)
+                navigateToListPage(INTENT_FROM_TOP_RATED_MOVIES)
             }
 
             tvSeeAllPopularMovies.setOnClickListener {
-                val navigateToListFragment =
-                    HomeFragmentDirections.actionHomeFragmentToListFragment()
-                navigateToListFragment.intentFrom = INTENT_FROM_POPULAR_MOVIES
-                findNavController().navigate(navigateToListFragment)
+                navigateToListPage(INTENT_FROM_POPULAR_MOVIES)
             }
             tvSeeAllUpComingMovies.setOnClickListener {
-                val navigateToListFragment =
-                    HomeFragmentDirections.actionHomeFragmentToListFragment()
-                navigateToListFragment.intentFrom = INTENT_FROM_UP_COMING_MOVIES
-                findNavController().navigate(navigateToListFragment)
+                navigateToListPage(INTENT_FROM_UP_COMING_MOVIES)
             }
         }
     }
 
     private fun setImageSlider() {
-        val adapter = NowPlayingMoviesAdapter(object : NowPlayingMoviesAdapter.OnItemClickCallback {
+        nowPlayingMoviesAdapter.setOnItemClickCallback(object :
+            NowPlayingMoviesAdapter.OnItemClickCallback {
             override fun onItemClicked(data: ListNowPlayingMovies) {
-                val navigateToDetailFragment =
-                    HomeFragmentDirections.actionHomeFragmentToDetailFragment()
-                navigateToDetailFragment.id = data.id ?: 0
-                navigateToDetailFragment.intentFrom = INTENT_FROM_MOVIE
-                findNavController().navigate(navigateToDetailFragment)
+                navigateToDetailPage(data.id ?: 0)
             }
         })
         moviesViewModel.nowPlayingMovies(RxDisposer().apply { bind(lifecycle) })
@@ -102,7 +107,7 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
                             viewPagerImageSlider.visible()
                             wormDotsIndicator.visible()
                         }
-                        adapter.submitList(result.data.results)
+                        nowPlayingMoviesAdapter.submitList(result.data.results)
                     }
                     is UiState.Error -> {
                         binding?.apply {
@@ -116,7 +121,7 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
                 }
             }
         binding?.viewPagerImageSlider.apply {
-            this?.adapter = adapter
+            this?.adapter = nowPlayingMoviesAdapter
             binding?.wormDotsIndicator?.attachTo(this ?: this!!)
             this?.clipToPadding = false
             this?.clipChildren = false
@@ -141,147 +146,156 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
     }
 
     private fun setTopRatedMovies() {
-        val adapter = TopRatedMoviesAdapter(object : TopRatedMoviesAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: ListTopRatedMovies) {
-                val navigateToDetailFragment =
-                    HomeFragmentDirections.actionHomeFragmentToDetailFragment()
-                navigateToDetailFragment.id = data.id ?: 0
-                navigateToDetailFragment.intentFrom = INTENT_FROM_MOVIE
-                findNavController().navigate(navigateToDetailFragment)
+        topRatedMoviesAdapter.setOnItemClickCallback(object :
+            TopRatedMoviesAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: ListTopRatedMovies?) {
+                navigateToDetailPage(data?.id ?: 0)
             }
         })
-        moviesViewModel.topRatedMovies(RxDisposer().apply { bind(lifecycle) })
-            .observe(viewLifecycleOwner) { result ->
-                if (result != null) {
-                    when (result) {
-                        is UiState.Loading -> {
-                            binding?.apply {
-                                shimmerTopRatedMovies.startShimmer()
-                                shimmerTopRatedMovies.visible()
-                                rvTopRatedMovies.gone()
-                            }
+        moviesViewModel.topRatedMoviesPaging(
+            RxDisposer().apply { bind(lifecycle) },
+            RemoteDataSource.MOVIES,
+            TopRatedMoviesRxPagingSource.ONE
+        ).observe(viewLifecycleOwner) { result ->
+            topRatedMoviesAdapter.submitData(lifecycle, result)
+            binding?.apply {
+                rvTopRatedMovies.adapter = topRatedMoviesAdapter
+                rvTopRatedMovies.setHasFixedSize(true)
+            }
+
+            topRatedMoviesAdapter.addLoadStateListener { loadState ->
+                when (loadState.refresh) {
+                    is LoadState.Loading -> {
+                        binding?.apply {
+                            shimmerTopRatedMovies.startShimmer()
+                            shimmerTopRatedMovies.visible()
+                            rvTopRatedMovies.gone()
                         }
-                        is UiState.Success -> {
-                            binding?.apply {
-                                shimmerTopRatedMovies.stopShimmer()
-                                shimmerTopRatedMovies.gone()
-                                rvTopRatedMovies.visible()
-                            }
-                            adapter.submitList(result.data.results)
+                    }
+                    is LoadState.NotLoading -> {
+                        binding?.apply {
+                            shimmerTopRatedMovies.stopShimmer()
+                            shimmerTopRatedMovies.gone()
+                            rvTopRatedMovies.visible()
                         }
-                        is UiState.Error -> {
-                            binding?.apply {
-                                shimmerTopRatedMovies.stopShimmer()
-                                shimmerTopRatedMovies.gone()
-                                rvTopRatedMovies.gone()
-                            }
+                    }
+                    is LoadState.Error -> {
+                        binding?.apply {
+                            shimmerTopRatedMovies.stopShimmer()
+                            shimmerTopRatedMovies.gone()
+                            rvTopRatedMovies.gone()
                         }
-                        is UiState.Empty -> {}
                     }
                 }
             }
-        binding?.apply {
-            rvTopRatedMovies.layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            rvTopRatedMovies.adapter = adapter
-            rvTopRatedMovies.setHasFixedSize(true)
         }
     }
 
     private fun setPopularMovies() {
-        val adapter = PopularMoviesAdapter(object : PopularMoviesAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: ListPopularMovies) {
-                val navigateToDetailFragment =
-                    HomeFragmentDirections.actionHomeFragmentToDetailFragment()
-                navigateToDetailFragment.id = data.id ?: 0
-                navigateToDetailFragment.intentFrom = INTENT_FROM_MOVIE
-                findNavController().navigate(navigateToDetailFragment)
+        popularMoviesAdapter.setOnItemClickCallback(object :
+            PopularMoviesAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: ListPopularMovies?) {
+                navigateToDetailPage(data?.id ?: 0)
             }
         })
-        moviesViewModel.popularMovies(RxDisposer().apply { bind(lifecycle) })
-            .observe(viewLifecycleOwner) { result ->
-                if (result != null) {
-                    when (result) {
-                        is UiState.Loading -> {
-                            binding?.apply {
-                                shimmerPopularMovies.startShimmer()
-                                shimmerPopularMovies.visible()
-                                rvPopularMovies.gone()
-                            }
+        moviesViewModel.popularMoviesPaging(
+            RxDisposer().apply { bind(lifecycle) },
+            RemoteDataSource.MOVIES,
+            PopularMoviesRxPagingSource.ONE
+        ).observe(viewLifecycleOwner) { result ->
+            popularMoviesAdapter.submitData(lifecycle, result)
+            binding?.apply {
+                rvPopularMovies.adapter = popularMoviesAdapter
+                rvPopularMovies.setHasFixedSize(true)
+            }
+
+            popularMoviesAdapter.addLoadStateListener { loadState ->
+                when (loadState.refresh) {
+                    is LoadState.Loading -> {
+                        binding?.apply {
+                            shimmerPopularMovies.startShimmer()
+                            shimmerPopularMovies.visible()
+                            rvPopularMovies.gone()
                         }
-                        is UiState.Success -> {
-                            binding?.apply {
-                                shimmerPopularMovies.stopShimmer()
-                                shimmerPopularMovies.gone()
-                                rvPopularMovies.visible()
-                            }
-                            adapter.submitList(result.data.results)
+                    }
+                    is LoadState.NotLoading -> {
+                        binding?.apply {
+                            shimmerPopularMovies.stopShimmer()
+                            shimmerPopularMovies.gone()
+                            rvPopularMovies.visible()
                         }
-                        is UiState.Error -> {
-                            binding?.apply {
-                                shimmerPopularMovies.stopShimmer()
-                                shimmerPopularMovies.gone()
-                                rvPopularMovies.gone()
-                            }
+                    }
+                    is LoadState.Error -> {
+                        binding?.apply {
+                            shimmerPopularMovies.stopShimmer()
+                            shimmerPopularMovies.gone()
+                            rvPopularMovies.gone()
                         }
-                        is UiState.Empty -> {}
                     }
                 }
             }
-        binding?.apply {
-            rvPopularMovies.layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            rvPopularMovies.adapter = adapter
-            rvPopularMovies.setHasFixedSize(true)
         }
     }
 
     private fun setUpComingMovies() {
-        val adapter = UpComingMoviesAdapter(object : UpComingMoviesAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: ListUpComingMovies) {
-                val navigateToDetailFragment =
-                    HomeFragmentDirections.actionHomeFragmentToDetailFragment()
-                navigateToDetailFragment.id = data.id ?: 0
-                navigateToDetailFragment.intentFrom = INTENT_FROM_MOVIE
-                findNavController().navigate(navigateToDetailFragment)
+        upComingMoviesAdapter.setOnItemClickCallback(object :
+            UpComingMoviesAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: ListUpComingMovies?) {
+                navigateToDetailPage(data?.id ?: 0)
             }
         })
-        moviesViewModel.upComingMovies(RxDisposer().apply { bind(lifecycle) })
-            .observe(viewLifecycleOwner) { result ->
-                if (result != null) {
-                    when (result) {
-                        is UiState.Loading -> {
-                            binding?.apply {
-                                shimmerUpComingMovies.startShimmer()
-                                shimmerUpComingMovies.visible()
-                                rvUpComingMovies.gone()
-                            }
-                        }
-                        is UiState.Success -> {
-                            binding?.apply {
-                                shimmerUpComingMovies.stopShimmer()
-                                shimmerUpComingMovies.gone()
-                                rvUpComingMovies.visible()
-                            }
-                            adapter.submitList(result.data.results)
-                        }
-                        is UiState.Error -> {
-                            binding?.apply {
-                                shimmerUpComingMovies.stopShimmer()
-                                shimmerUpComingMovies.gone()
-                                rvUpComingMovies.gone()
-                            }
-                        }
-                        is UiState.Empty -> {}
+        moviesViewModel.upComingMoviesPaging(
+            RxDisposer().apply { bind(lifecycle) },
+            RemoteDataSource.MOVIES,
+            UpComingMoviesRxPagingSource.ONE
+        ).observe(viewLifecycleOwner) { result ->
+            upComingMoviesAdapter.submitData(lifecycle, result)
+            binding?.apply {
+                rvUpComingMovies.adapter = upComingMoviesAdapter
+                rvUpComingMovies.setHasFixedSize(true)
+            }
+        }
+
+        upComingMoviesAdapter.addLoadStateListener { loadState ->
+            when (loadState.refresh) {
+                is LoadState.Loading -> {
+                    binding?.apply {
+                        shimmerUpComingMovies.startShimmer()
+                        shimmerUpComingMovies.visible()
+                        rvUpComingMovies.gone()
+                    }
+                }
+                is LoadState.NotLoading -> {
+                    binding?.apply {
+                        shimmerUpComingMovies.stopShimmer()
+                        shimmerUpComingMovies.gone()
+                        rvUpComingMovies.visible()
+                    }
+                }
+                is LoadState.Error -> {
+                    binding?.apply {
+                        shimmerUpComingMovies.stopShimmer()
+                        shimmerUpComingMovies.gone()
+                        rvUpComingMovies.gone()
                     }
                 }
             }
-        binding?.apply {
-            rvUpComingMovies.layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            rvUpComingMovies.adapter = adapter
-            rvUpComingMovies.setHasFixedSize(true)
         }
+    }
+
+    private fun navigateToDetailPage(id: Int) {
+        val navigateToDetailFragment =
+            HomeFragmentDirections.actionHomeFragmentToDetailFragment()
+        navigateToDetailFragment.id = id
+        navigateToDetailFragment.intentFrom = INTENT_FROM_MOVIE
+        findNavController().navigate(navigateToDetailFragment)
+    }
+
+    private fun navigateToListPage(intentFrom: String) {
+        val navigateToListFragment =
+            HomeFragmentDirections.actionHomeFragmentToListFragment()
+        navigateToListFragment.intentFrom = intentFrom
+        findNavController().navigate(navigateToListFragment)
     }
 
     override fun onPause() {

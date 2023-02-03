@@ -12,24 +12,15 @@ class TvShowsUseCase @Inject constructor(private val tvShowsRepository: ITvShows
     override fun getAiringTodayTvShows(): Flowable<AiringTodayTvShows> =
         tvShowsRepository.getAiringTodayTvShows()
 
-    override fun getTopRatedTvShows(): Flowable<TopRatedTvShows> =
-        tvShowsRepository.getTopRatedTvShows()
-
-    override fun getPopularTvShows(): Flowable<PopularTvShows> =
-        tvShowsRepository.getPopularTvShows()
-
-    override fun getOnTheAirTvShows(): Flowable<OnTheAirTvShows> =
-        tvShowsRepository.getOnTheAirTvShows()
-
     override fun getDetailTvShows(tvId: String): Flowable<DetailTvShows> =
         tvShowsRepository.getDetailTvShows(tvId)
 
-    override fun getOnTheAirTvShowsPaging(): Flowable<PagingData<ListOnTheAirTvShows>> =
-        tvShowsRepository.getOnTheAirTvShowsPaging()
+    override fun getOnTheAirTvShowsPaging(type: String, totalPage: String): Flowable<PagingData<ListOnTheAirTvShows>> =
+        tvShowsRepository.getOnTheAirTvShowsPaging(type, totalPage)
 
-    override fun getPopularTvShowsPaging(): Flowable<PagingData<ListPopularTvShows>> =
-        tvShowsRepository.getPopularTvShowsPaging()
+    override fun getPopularTvShowsPaging(type: String, totalPage: String): Flowable<PagingData<ListPopularTvShows>> =
+        tvShowsRepository.getPopularTvShowsPaging(type, totalPage)
 
-    override fun getTopRatedTvShowsPaging(): Flowable<PagingData<ListTopRatedTvShows>> =
-        tvShowsRepository.getTopRatedTvShowsPaging()
+    override fun getTopRatedTvShowsPaging(type: String, totalPage: String): Flowable<PagingData<ListTopRatedTvShows>> =
+        tvShowsRepository.getTopRatedTvShowsPaging(type, totalPage)
 }

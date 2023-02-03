@@ -133,6 +133,8 @@
         android:id="@+id/rv_top_rated_movies"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:orientation="horizontal"
         android:layout_marginTop="10dp"
         android:visibility="gone" />
 
@@ -209,6 +211,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:orientation="horizontal"
         android:visibility="gone" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -282,6 +286,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_up_coming_movies"
         android:layout_width="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:orientation="horizontal"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:visibility="gone" />

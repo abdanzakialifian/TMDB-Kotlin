@@ -3,20 +3,29 @@ package com.application.zaki.movies.presentation.tvshows.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListHorizontalBinding
 import com.application.zaki.movies.domain.model.tvshows.ListOnTheAirTvShows
 import com.application.zaki.movies.utils.loadImageUrl
+import javax.inject.Inject
 
-class OnTheAirTvShowsAdapter(private val onItemClickCallback: OnItemClickCallback) :
-    ListAdapter<ListOnTheAirTvShows, OnTheAirTvShowsAdapter.OnTheAirTvShowsViewHolder>(DIFF_CALLBACK) {
+class OnTheAirTvShowsAdapter @Inject constructor() :
+    PagingDataAdapter<ListOnTheAirTvShows, OnTheAirTvShowsAdapter.OnTheAirTvShowsViewHolder>(
+        DIFF_CALLBACK
+    ) {
+
+    private lateinit var onItemClickCallback: OnItemClickCallback
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
 
     inner class OnTheAirTvShowsViewHolder(val binding: ItemListHorizontalBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ListOnTheAirTvShows) {
-            item.posterPath?.let {
+        fun bind(item: ListOnTheAirTvShows?) {
+            item?.posterPath?.let {
                 binding.imgHorizontal.loadImageUrl(it)
             }
             itemView.setOnClickListener {
@@ -62,10 +71,8 @@ class OnTheAirTvShowsAdapter(private val onItemClickCallback: OnItemClickCallbac
         }
     }
 
-    override fun getItemCount(): Int = if (currentList.size > 8) 8 else currentList.size
-
     interface OnItemClickCallback {
-        fun onItemClicked(data: ListOnTheAirTvShows)
+        fun onItemClicked(data: ListOnTheAirTvShows?)
     }
 
     companion object {

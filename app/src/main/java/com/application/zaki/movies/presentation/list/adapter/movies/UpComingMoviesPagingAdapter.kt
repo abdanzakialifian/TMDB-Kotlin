@@ -2,22 +2,27 @@ package com.application.zaki.movies.presentation.list.adapter.movies
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListVerticalBinding
 import com.application.zaki.movies.domain.model.genre.Genre
 import com.application.zaki.movies.domain.model.movies.ListUpComingMovies
-import com.application.zaki.movies.presentation.detail.view.DetailFragment
 import com.application.zaki.movies.presentation.list.adapter.genres.GenresAdapter
-import com.application.zaki.movies.presentation.list.view.ListFragmentDirections
 import com.application.zaki.movies.utils.loadImageUrl
+import javax.inject.Inject
 
-class UpComingMoviesPagingAdapter(private val onItemClickCallback: OnItemClickCallback) :
+class UpComingMoviesPagingAdapter @Inject constructor() :
     PagingDataAdapter<ListUpComingMovies, UpComingMoviesPagingAdapter.UpComingMoviesPagingViewHolder>(
         DIFF_CALLBACK
     ) {
+
+    private lateinit var onItemClickCallback: OnItemClickCallback
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
+
     inner class UpComingMoviesPagingViewHolder(private val binding: ItemListVerticalBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ListUpComingMovies?) {
@@ -43,12 +48,7 @@ class UpComingMoviesPagingAdapter(private val onItemClickCallback: OnItemClickCa
                     // convert list to adapter
                     val adapter = GenresAdapter(object : GenresAdapter.OnItemClickCallback {
                         override fun onItemClicked(data: Genre) {
-                            val navigateToDetailFragment =
-                                ListFragmentDirections.actionListFragmentToListDiscoverFragment()
-                            navigateToDetailFragment.genreId = data.genreId ?: 0
-                            navigateToDetailFragment.intentFrom = DetailFragment.INTENT_FROM_MOVIE
-                            navigateToDetailFragment.genreName = data.genreName ?: ""
-                            itemView.findNavController().navigate(navigateToDetailFragment)
+                            onItemClickCallback.onItemGenreClicked(data)
                         }
                     })
                     adapter.submitList(genre)
@@ -82,6 +82,7 @@ class UpComingMoviesPagingAdapter(private val onItemClickCallback: OnItemClickCa
 
     interface OnItemClickCallback {
         fun onItemClicked(data: ListUpComingMovies?)
+        fun onItemGenreClicked(data: Genre)
     }
 
     companion object {

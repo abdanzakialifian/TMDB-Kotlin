@@ -8,11 +8,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListDiscoverBinding
 import com.application.zaki.movies.domain.model.movies.ResultsItemDiscover
 import com.application.zaki.movies.utils.loadImageUrl
+import javax.inject.Inject
 
-class DiscoverGenresAdapter(private val onItemClickCallback: OnItemClickCallback) :
+class DiscoverGenresAdapter @Inject constructor() :
     PagingDataAdapter<ResultsItemDiscover, DiscoverGenresAdapter.DiscoverGenresViewHolder>(
         DIFF_CALLBACK
     ) {
+
+    private lateinit var onItemClickCallback: OnItemClickCallback
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
     inner class DiscoverGenresViewHolder(private val binding: ItemListDiscoverBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ResultsItemDiscover?) {
