@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListVerticalBinding
 import com.application.zaki.movies.domain.model.genre.Genre
-import com.application.zaki.movies.domain.model.movies.ListTopRatedMovies
+import com.application.zaki.movies.domain.model.movies.ListMovies
 import com.application.zaki.movies.presentation.list.adapter.genres.GenresAdapter
 import com.application.zaki.movies.utils.loadImageUrl
 import javax.inject.Inject
 
 class TopRatedMoviesPagingAdapter @Inject constructor() :
-    PagingDataAdapter<ListTopRatedMovies, TopRatedMoviesPagingAdapter.TopRatedMoviesPagingViewHolder>(
+    PagingDataAdapter<ListMovies, TopRatedMoviesPagingAdapter.TopRatedMoviesPagingViewHolder>(
         DIFF_CALLBACK
     ) {
 
@@ -25,7 +25,7 @@ class TopRatedMoviesPagingAdapter @Inject constructor() :
 
     inner class TopRatedMoviesPagingViewHolder(private val binding: ItemListVerticalBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ListTopRatedMovies?) {
+        fun bind(item: ListMovies?) {
             binding.apply {
                 item?.apply {
                     posterPath?.let { url ->
@@ -77,20 +77,20 @@ class TopRatedMoviesPagingAdapter @Inject constructor() :
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: ListTopRatedMovies?)
+        fun onItemClicked(data: ListMovies?)
         fun onItemGenreClicked(data: Genre)
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListTopRatedMovies>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListMovies>() {
             override fun areItemsTheSame(
-                oldItem: ListTopRatedMovies,
-                newItem: ListTopRatedMovies
+                oldItem: ListMovies,
+                newItem: ListMovies
             ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
-                oldItem: ListTopRatedMovies,
-                newItem: ListTopRatedMovies
+                oldItem: ListMovies,
+                newItem: ListMovies
             ): Boolean = oldItem == newItem
         }
     }

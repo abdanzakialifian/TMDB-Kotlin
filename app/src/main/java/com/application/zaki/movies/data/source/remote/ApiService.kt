@@ -13,22 +13,24 @@ import retrofit2.http.Query
 
 interface ApiService {
     @GET("movie/now_playing")
-    fun getNowPlayingMovies(): Flowable<NowPlayingMoviesResponse>
+    fun getNowPlayingMovies(
+        @Query("page") page: Int
+    ): Single<MoviesResponse>
 
     @GET("movie/top_rated")
     fun getTopRatedMoviesPaging(
         @Query("page") page: Int
-    ): Single<TopRatedMoviesResponse>
+    ): Single<MoviesResponse>
 
     @GET("movie/popular")
     fun getPopularMoviesPaging(
         @Query("page") page: Int
-    ): Single<PopularMoviesResponse>
+    ): Single<MoviesResponse>
 
     @GET("movie/upcoming")
     fun getUpComingMoviesPaging(
         @Query("page") page: Int
-    ): Single<UpComingMoviesResponse>
+    ): Single<MoviesResponse>
 
     @GET("tv/airing_today")
     fun getAiringTodayTvShows(): Flowable<AiringTodayTvShowsResponse>

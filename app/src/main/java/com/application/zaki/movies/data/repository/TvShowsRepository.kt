@@ -6,6 +6,7 @@ import com.application.zaki.movies.data.source.remote.RemoteDataSource
 import com.application.zaki.movies.domain.interfaces.ITvShowsRepository
 import com.application.zaki.movies.domain.model.tvshows.*
 import com.application.zaki.movies.utils.DataMapperTvShows
+import com.application.zaki.movies.utils.Genre
 import io.reactivex.Flowable
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -26,12 +27,12 @@ class TvShowsRepository @Inject constructor(private val remoteDataSource: Remote
             }
 
     override fun getOnTheAirTvShowsPaging(
-        type: String,
+        genre: Genre,
         totalPage: String
     ): Flowable<PagingData<ListOnTheAirTvShows>> =
         Flowable.zip(
             remoteDataSource.getOnTheAirTvShowsPaging(totalPage),
-            remoteDataSource.getGenre(type)
+            remoteDataSource.getGenre(genre)
         ) { onTheAirTvShowsPaging, genreTvShows ->
             return@zip onTheAirTvShowsPaging.map { data ->
                 DataMapperTvShows.mapListOnTheAirTvShowsResponseToListOnTheAirTvShows(
@@ -42,12 +43,12 @@ class TvShowsRepository @Inject constructor(private val remoteDataSource: Remote
         }
 
     override fun getPopularTvShowsPaging(
-        type: String,
+        genre: Genre,
         totalPage: String
     ): Flowable<PagingData<ListPopularTvShows>> =
         Flowable.zip(
             remoteDataSource.getPopularTvShowsPaging(totalPage),
-            remoteDataSource.getGenre(type)
+            remoteDataSource.getGenre(genre)
         ) { popularTvShowsPaging, genreTvShows ->
             return@zip popularTvShowsPaging.map {
                 DataMapperTvShows.mapListPopularTvShowsResponseToListPopularTvShows(
@@ -58,12 +59,12 @@ class TvShowsRepository @Inject constructor(private val remoteDataSource: Remote
         }
 
     override fun getTopRatedTvShowsPaging(
-        type: String,
+        genre: Genre,
         totalPage: String
     ): Flowable<PagingData<ListTopRatedTvShows>> =
         Flowable.zip(
             remoteDataSource.getTopRatedTvShowsPaging(totalPage),
-            remoteDataSource.getGenre(type)
+            remoteDataSource.getGenre(genre)
         ) { topRatedTvShowsPaging, genreTvShows ->
             return@zip topRatedTvShowsPaging.map {
                 DataMapperTvShows.mapListTopRatedTvShowsResponseToListTopRatedTvShows(

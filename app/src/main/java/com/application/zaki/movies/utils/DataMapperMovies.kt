@@ -3,221 +3,35 @@ package com.application.zaki.movies.utils
 import com.application.zaki.movies.data.source.remote.response.combine.GenreResponse
 import com.application.zaki.movies.data.source.remote.response.combine.ResultsItemDiscoverResponse
 import com.application.zaki.movies.data.source.remote.response.combine.ReviewItemResponse
-import com.application.zaki.movies.data.source.remote.response.movies.*
+import com.application.zaki.movies.data.source.remote.response.movies.DetailMoviesResponse
+import com.application.zaki.movies.data.source.remote.response.movies.ListMoviesResponse
 import com.application.zaki.movies.domain.model.movies.*
 
 object DataMapperMovies {
-    fun mapPopularMoviesResponseToPopularMovies(input: PopularMoviesResponse?): PopularMovies {
-        val listPopularMovies = input?.results?.map { map ->
-            map?.let {
-                ListPopularMovies(
-                    overview = it.overview,
-                    originalLanguage = it.originalLanguage,
-                    originalTitle = it.originalTitle,
-                    video = it.video,
-                    title = it.title,
-                    genreIds = it.genreIds,
-                    posterPath = it.posterPath,
-                    backdropPath = it.backdropPath,
-                    releaseDate = it.releaseDate,
-                    popularity = it.popularity,
-                    voteAverage = it.voteAverage,
-                    id = it.id,
-                    adult = it.adult,
-                    voteCount = it.voteCount
-                )
-            }
+
+    fun mapListMoviesResponseToListMovies(
+        listMovies: ListMoviesResponse,
+        genreMovies: GenreResponse
+    ): ListMovies {
+        val listGenreMovies = genreMovies.genres?.map { map ->
+            GenreItemMovies(name = map.name, id = map.id)
         }
 
-        return PopularMovies(
-            page = input?.page,
-            results = listPopularMovies,
-            totalResults = input?.totalResults,
-            totalPages = input?.totalPages
-        )
-    }
-
-    fun mapNowPlayingMoviesResponseToNowPlayingMovies(input: NowPlayingMoviesResponse?): NowPlayingMovies {
-        val listNowPlayingMovies = input?.results?.map { map ->
-            map?.let {
-                ListNowPlayingMovies(
-                    overview = it.overview,
-                    originalLanguage = it.originalLanguage,
-                    originalTitle = it.originalTitle,
-                    video = it.video,
-                    title = it.originalTitle,
-                    genreIds = it.genreIds,
-                    posterPath = it.posterPath,
-                    backdropPath = it.backdropPath,
-                    releaseDate = it.releaseDate,
-                    popularity = it.popularity,
-                    voteAverage = it.voteAverage,
-                    id = it.id,
-                    adult = it.adult,
-                    voteCount = it.voteCount
-                )
-            }
-        }
-
-        val dates = Dates(maximum = input?.dates?.maximum, minimum = input?.dates?.minimum)
-
-        return NowPlayingMovies(
-            dates = dates,
-            page = input?.page,
-            totalPages = input?.totalPages,
-            results = listNowPlayingMovies,
-            totalResults = input?.totalResults
-        )
-    }
-
-    fun mapTopRatedMoviesResponseToTopRatedMovies(input: TopRatedMoviesResponse?): TopRatedMovies {
-        val listTopRatedMovies = input?.results?.map { map ->
-            map?.let {
-                ListTopRatedMovies(
-                    overview = it.overview,
-                    originalLanguage = it.originalLanguage,
-                    originalTitle = it.originalTitle,
-                    video = it.video,
-                    title = it.originalTitle,
-                    genreIds = it.genreIds,
-                    posterPath = it.posterPath,
-                    backdropPath = it.backdropPath,
-                    releaseDate = it.releaseDate,
-                    popularity = it.popularity,
-                    voteAverage = it.voteAverage,
-                    id = it.id,
-                    adult = it.adult,
-                    voteCount = it.voteCount
-                )
-            }
-        }
-
-        return TopRatedMovies(
-            page = input?.page,
-            totalPages = input?.totalPages,
-            results = listTopRatedMovies,
-            totalResults = input?.totalResults
-        )
-    }
-
-    fun mapUpComingMoviesResponseToUpComingMovies(input: UpComingMoviesResponse?): UpComingMovies {
-        val listUpComingMovies = input?.results?.map { map ->
-            map?.let {
-                ListUpComingMovies(
-                    overview = it.overview,
-                    originalLanguage = it.originalLanguage,
-                    originalTitle = it.originalTitle,
-                    video = it.video,
-                    title = it.originalTitle,
-                    genreIds = it.genreIds,
-                    posterPath = it.posterPath,
-                    backdropPath = it.backdropPath,
-                    releaseDate = it.releaseDate,
-                    popularity = it.popularity,
-                    voteAverage = it.voteAverage,
-                    id = it.id,
-                    adult = it.adult,
-                    voteCount = it.voteCount
-                )
-            }
-        }
-
-
-        val dates =
-            DatesUpComingMovies(maximum = input?.dates?.maximum, minimum = input?.dates?.minimum)
-
-        return UpComingMovies(
-            dates = dates,
-            page = input?.page,
-            totalPages = input?.totalPages,
-            results = listUpComingMovies,
-            totalResults = input?.totalResults
-        )
-    }
-
-    fun mapListPopularMoviesResponseToListPopularMovies(
-        listPopularMovies: ListPopularMoviesResponse?,
-        genreMovies: GenreResponse?,
-    ): ListPopularMovies {
-        // adding response genre to list popular movies
-        val listGenreMovies = genreMovies?.genres?.map { map ->
-            map?.let {
-                GenreItemPopularMovies(it.name, it.id)
-            }
-        }
-        return ListPopularMovies(
-            overview = listPopularMovies?.overview,
-            originalLanguage = listPopularMovies?.originalLanguage,
-            originalTitle = listPopularMovies?.originalTitle,
-            video = listPopularMovies?.video,
-            title = listPopularMovies?.originalTitle,
-            genreIds = listPopularMovies?.genreIds,
-            posterPath = listPopularMovies?.posterPath,
-            backdropPath = listPopularMovies?.backdropPath,
-            releaseDate = listPopularMovies?.releaseDate,
-            popularity = listPopularMovies?.popularity,
-            voteAverage = listPopularMovies?.voteAverage,
-            id = listPopularMovies?.id,
-            adult = listPopularMovies?.adult,
-            voteCount = listPopularMovies?.voteCount,
-            genres = listGenreMovies
-        )
-    }
-
-    fun mapListTopRatedMoviesResponseToListTopRatedMovies(
-        listTopRatedMovies: ListTopRatedMoviesResponse?,
-        genreMovies: GenreResponse?,
-    ): ListTopRatedMovies {
-        val listGenreMovies = genreMovies?.genres?.map { map ->
-            map?.let {
-                GenreItemTopRatedMovies(name = it.name, id = it.id)
-            }
-        }
-
-        return ListTopRatedMovies(
-            overview = listTopRatedMovies?.overview,
-            originalLanguage = listTopRatedMovies?.originalLanguage,
-            originalTitle = listTopRatedMovies?.originalTitle,
-            video = listTopRatedMovies?.video,
-            title = listTopRatedMovies?.title,
-            genreIds = listTopRatedMovies?.genreIds,
-            posterPath = listTopRatedMovies?.posterPath,
-            backdropPath = listTopRatedMovies?.backdropPath,
-            releaseDate = listTopRatedMovies?.releaseDate,
-            popularity = listTopRatedMovies?.popularity,
-            voteAverage = listTopRatedMovies?.voteAverage,
-            id = listTopRatedMovies?.id,
-            adult = listTopRatedMovies?.adult,
-            voteCount = listTopRatedMovies?.voteCount,
-            genres = listGenreMovies
-        )
-    }
-
-    fun mapListUpComingMoviesResponseToListUpComingMovies(
-        listUpComingMovies: ListUpComingMoviesResponse?,
-        genreMovies: GenreResponse?,
-    ): ListUpComingMovies {
-        val listGenreMovies = genreMovies?.genres?.map { map ->
-            map?.let {
-                GenreItemUpComingMovies(name = it.name, id = it.id)
-            }
-        }
-
-        return ListUpComingMovies(
-            overview = listUpComingMovies?.overview,
-            originalLanguage = listUpComingMovies?.originalLanguage,
-            originalTitle = listUpComingMovies?.originalTitle,
-            video = listUpComingMovies?.video,
-            title = listUpComingMovies?.title,
-            genreIds = listUpComingMovies?.genreIds,
-            posterPath = listUpComingMovies?.posterPath,
-            backdropPath = listUpComingMovies?.backdropPath,
-            releaseDate = listUpComingMovies?.releaseDate,
-            popularity = listUpComingMovies?.popularity,
-            voteAverage = listUpComingMovies?.voteAverage,
-            id = listUpComingMovies?.id,
-            adult = listUpComingMovies?.adult,
-            voteCount = listUpComingMovies?.voteCount,
+        return ListMovies(
+            overview = listMovies.overview,
+            originalLanguage = listMovies.originalLanguage,
+            originalTitle = listMovies.originalTitle,
+            video = listMovies.video,
+            title = listMovies.title,
+            genreIds = listMovies.genreIds,
+            posterPath = listMovies.posterPath,
+            backdropPath = listMovies.backdropPath,
+            releaseDate = listMovies.releaseDate,
+            popularity = listMovies.popularity,
+            voteAverage = listMovies.voteAverage,
+            id = listMovies.id,
+            adult = listMovies.adult,
+            voteCount = listMovies.voteCount,
             genres = listGenreMovies
         )
     }

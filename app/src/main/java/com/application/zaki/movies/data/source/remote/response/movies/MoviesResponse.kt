@@ -2,23 +2,21 @@ package com.application.zaki.movies.data.source.remote.response.movies
 
 import com.google.gson.annotations.SerializedName
 
-data class PopularMoviesResponse(
-
+data class MoviesResponse(
     @field:SerializedName("page")
     val page: Int? = null,
 
     @field:SerializedName("results")
-    val results: List<ListPopularMoviesResponse?>? = null,
+    val results: List<ListMoviesResponse>? = null,
 
     @field:SerializedName("total_results")
     val totalResults: Int? = null,
 
     @field:SerializedName("total_pages")
     val totalPages: Int? = null
-
 )
 
-data class ListPopularMoviesResponse(
+data class ListMoviesResponse(
 
     @field:SerializedName("overview")
     val overview: String? = null,
@@ -36,7 +34,7 @@ data class ListPopularMoviesResponse(
     val title: String? = null,
 
     @field:SerializedName("genre_ids")
-    val genreIds: List<Int?>? = null,
+    val genreIds: List<Int>? = null,
 
     @field:SerializedName("poster_path")
     val posterPath: String? = null,

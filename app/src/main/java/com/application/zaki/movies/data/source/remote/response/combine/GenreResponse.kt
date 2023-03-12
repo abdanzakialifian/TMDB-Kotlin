@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class GenreResponse(
 
 	@field:SerializedName("genres")
-	val genres: List<GenresItemResponse?>? = null
+	val genres: List<GenresItemResponse>? = null
 )
 
 data class GenresItemResponse(

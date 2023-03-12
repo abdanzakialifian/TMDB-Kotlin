@@ -8,7 +8,6 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.ViewPager2
-import com.application.zaki.movies.data.source.remote.RemoteDataSource
 import com.application.zaki.movies.data.source.remote.paging.tvshows.OnTheAirTvShowsRxPagingSource
 import com.application.zaki.movies.data.source.remote.paging.tvshows.PopularTvShowsRxPagingSource
 import com.application.zaki.movies.data.source.remote.paging.tvshows.TopRatedTvShowsRxPagingSource
@@ -28,10 +27,7 @@ import com.application.zaki.movies.presentation.tvshows.adapter.OnTheAirTvShowsA
 import com.application.zaki.movies.presentation.tvshows.adapter.PopularTvShowsAdapter
 import com.application.zaki.movies.presentation.tvshows.adapter.TopRatedTvShowsAdapter
 import com.application.zaki.movies.presentation.tvshows.viewmodel.TvShowsViewModel
-import com.application.zaki.movies.utils.RxDisposer
-import com.application.zaki.movies.utils.UiState
-import com.application.zaki.movies.utils.gone
-import com.application.zaki.movies.utils.visible
+import com.application.zaki.movies.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.math.abs
@@ -157,7 +153,7 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
         })
         tvShowsViewModel.topRatedTvShowsPaging(
             RxDisposer().apply { bind(lifecycle) },
-            RemoteDataSource.MOVIES,
+            Genre.TV_SHOWS,
             TopRatedTvShowsRxPagingSource.ONE
         ).observe(viewLifecycleOwner) { result ->
             topRatedTvShowsAdapter.submitData(lifecycle, result)
@@ -203,7 +199,7 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
         })
         tvShowsViewModel.popularTvShowsPaging(
             RxDisposer().apply { bind(lifecycle) },
-            RemoteDataSource.MOVIES,
+            Genre.TV_SHOWS,
             PopularTvShowsRxPagingSource.ONE
         ).observe(viewLifecycleOwner) { result ->
             popularTvShowsAdapter.submitData(lifecycle, result)
@@ -249,7 +245,7 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
         })
         tvShowsViewModel.onTheAirTvShowsPaging(
             RxDisposer().apply { bind(lifecycle) },
-            RemoteDataSource.MOVIES,
+            Genre.TV_SHOWS,
             OnTheAirTvShowsRxPagingSource.ONE
         ).observe(viewLifecycleOwner) { result ->
             onTheAirTvShowsAdapter.submitData(lifecycle, result)

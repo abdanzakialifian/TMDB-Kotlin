@@ -2,16 +2,17 @@ package com.application.zaki.movies.presentation.movies.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListSliderBinding
-import com.application.zaki.movies.domain.model.movies.ListNowPlayingMovies
+import com.application.zaki.movies.domain.model.movies.ListMovies
 import com.application.zaki.movies.utils.loadImageUrl
 import javax.inject.Inject
 
 class NowPlayingMoviesAdapter @Inject constructor() :
-    ListAdapter<ListNowPlayingMovies, NowPlayingMoviesAdapter.SliderViewHolder>(DIFF_CALLBACK) {
+    PagingDataAdapter<ListMovies, NowPlayingMoviesAdapter.SliderViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
 
@@ -21,8 +22,8 @@ class NowPlayingMoviesAdapter @Inject constructor() :
 
     class SliderViewHolder(private val binding: ItemListSliderBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ListNowPlayingMovies) {
-            item.posterPath?.let {
+        fun bind(item: ListMovies?) {
+            item?.posterPath?.let {
                 binding.imgSlider.loadImageUrl(it)
             }
         }
@@ -42,23 +43,21 @@ class NowPlayingMoviesAdapter @Inject constructor() :
         }
     }
 
-    override fun getItemCount(): Int = if (currentList.size > 8) 8 else currentList.size
-
     interface OnItemClickCallback {
-        fun onItemClicked(data: ListNowPlayingMovies)
+        fun onItemClicked(data: ListMovies?)
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListNowPlayingMovies>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListMovies>() {
             override fun areItemsTheSame(
-                oldItem: ListNowPlayingMovies,
-                newItem: ListNowPlayingMovies
+                oldItem: ListMovies,
+                newItem: ListMovies
             ): Boolean =
                 oldItem.id == newItem.id
 
             override fun areContentsTheSame(
-                oldItem: ListNowPlayingMovies,
-                newItem: ListNowPlayingMovies
+                oldItem: ListMovies,
+                newItem: ListMovies
             ): Boolean =
                 oldItem == newItem
         }

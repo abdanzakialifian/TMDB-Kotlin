@@ -1,7 +1,7 @@
 package com.application.zaki.movies.data.di
 
-import com.application.zaki.movies.domain.interfaces.IMoviesRepository
 import com.application.zaki.movies.data.repository.MoviesRepository
+import com.application.zaki.movies.domain.interfaces.IMoviesRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

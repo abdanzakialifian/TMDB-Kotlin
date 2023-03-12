@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.paging.PagingData
 import com.application.zaki.movies.domain.interfaces.ITvShowsUseCase
 import com.application.zaki.movies.domain.model.tvshows.*
+import com.application.zaki.movies.utils.Genre
 import com.application.zaki.movies.utils.RxDisposer
 import com.application.zaki.movies.utils.UiState
 import com.application.zaki.movies.utils.addToDisposer
@@ -46,12 +47,12 @@ class TvShowsViewModel @Inject constructor(private val tvShowsUseCase: ITvShowsU
 
     fun onTheAirTvShowsPaging(
         rxDisposer: RxDisposer,
-        type: String,
+        genre: Genre,
         totalPage: String
     ): LiveData<PagingData<ListOnTheAirTvShows>> {
         val subject = ReplaySubject.create<PagingData<ListOnTheAirTvShows>>()
 
-        tvShowsUseCase.getOnTheAirTvShowsPaging(type, totalPage)
+        tvShowsUseCase.getOnTheAirTvShowsPaging(genre, totalPage)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->
@@ -65,12 +66,12 @@ class TvShowsViewModel @Inject constructor(private val tvShowsUseCase: ITvShowsU
 
     fun popularTvShowsPaging(
         rxDisposer: RxDisposer,
-        type: String,
+        genre: Genre,
         totalPage: String
     ): LiveData<PagingData<ListPopularTvShows>> {
         val subject = ReplaySubject.create<PagingData<ListPopularTvShows>>()
 
-        tvShowsUseCase.getPopularTvShowsPaging(type, totalPage)
+        tvShowsUseCase.getPopularTvShowsPaging(genre, totalPage)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->
@@ -84,12 +85,12 @@ class TvShowsViewModel @Inject constructor(private val tvShowsUseCase: ITvShowsU
 
     fun topRatedTvShowsPaging(
         rxDisposer: RxDisposer,
-        type: String,
+        genre: Genre,
         totalPage: String
     ): LiveData<PagingData<ListTopRatedTvShows>> {
         val subject = ReplaySubject.create<PagingData<ListTopRatedTvShows>>()
 
-        tvShowsUseCase.getTopRatedTvShowsPaging(type, totalPage)
+        tvShowsUseCase.getTopRatedTvShowsPaging(genre, totalPage)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->

@@ -13,8 +13,12 @@ import com.application.zaki.movies.data.source.remote.paging.tvshows.TopRatedTvS
 import com.application.zaki.movies.data.source.remote.response.combine.GenreResponse
 import com.application.zaki.movies.data.source.remote.response.combine.ResultsItemDiscoverResponse
 import com.application.zaki.movies.data.source.remote.response.combine.ReviewItemResponse
-import com.application.zaki.movies.data.source.remote.response.movies.*
+import com.application.zaki.movies.data.source.remote.response.movies.DetailMoviesResponse
+import com.application.zaki.movies.data.source.remote.response.movies.ListMoviesResponse
 import com.application.zaki.movies.data.source.remote.response.tvshows.*
+import com.application.zaki.movies.utils.Genre
+import com.application.zaki.movies.utils.Movie
+import com.application.zaki.movies.utils.Page
 import io.reactivex.Flowable
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -24,20 +28,19 @@ class RemoteDataSource @Inject constructor(
     private val apiService: ApiService,
     private val reviewsRxPagingSource: ReviewsRxPagingSource,
     private val discoverRxPagingSource: DiscoverRxPagingSource,
-    private val popularMoviesRxPagingSource: PopularMoviesRxPagingSource,
-    private val topRatedMoviesRxPagingSource: TopRatedMoviesRxPagingSource,
-    private val upComingMoviesRxPagingSource: UpComingMoviesRxPagingSource,
+    private val nowPlayingMoviesRxPagingSource: MoviesRxPagingSource,
+    private val topRatedMoviesRxPagingSource: MoviesRxPagingSource,
+    private val popularMoviesRxPagingSource: MoviesRxPagingSource,
+    private val upComingMoviesRxPagingSource: MoviesRxPagingSource,
     private val onTheAirTvShowsRxPagingSource: OnTheAirTvShowsRxPagingSource,
     private val popularTvShowsRxPagingSource: PopularTvShowsRxPagingSource,
     private val topRatedTvShowsRxPagingSource: TopRatedTvShowsRxPagingSource,
 ) {
-    fun getNowPlayingMovies(): Flowable<NowPlayingMoviesResponse> = apiService.getNowPlayingMovies()
-
     fun getAiringTodayTvShows(): Flowable<AiringTodayTvShowsResponse> =
         apiService.getAiringTodayTvShows()
 
-    fun getGenre(type: String): Flowable<GenreResponse> =
-        if (type == MOVIES) apiService.getGenreMovies() else apiService.getGenreTvShows()
+    fun getGenre(genre: Genre): Flowable<GenreResponse> =
+        if (genre == Genre.MOVIES) apiService.getGenreMovies() else apiService.getGenreTvShows()
 
     fun getDetailMovies(movieId: String): Flowable<DetailMoviesResponse> =
         apiService.getDetailMovies(movieId)
@@ -67,32 +70,32 @@ class RemoteDataSource @Inject constructor(
             }
         }).flowable
 
-    fun getPopularMoviesPaging(totalPage: String): Flowable<PagingData<ListPopularMoviesResponse>> =
-        Pager(config = PagingConfig(
-            pageSize = 10, enablePlaceholders = true, prefetchDistance = 2
-        ), pagingSourceFactory = {
-            popularMoviesRxPagingSource.apply {
-                setTotalPage(totalPage)
+    fun getMovies(
+        movie: Movie,
+        page: Page
+    ): Flowable<PagingData<ListMoviesResponse>> = Pager(
+        config = PagingConfig(
+            pageSize = 10,
+            initialLoadSize = 10,
+            enablePlaceholders = true
+        ),
+        pagingSourceFactory = {
+            when(movie) {
+                Movie.NOW_PLAYING_MOVIES -> nowPlayingMoviesRxPagingSource.apply {
+                    setData(movie, page)
+                }
+                Movie.POPULAR_MOVIES -> popularMoviesRxPagingSource.apply {
+                    setData(movie, page)
+                }
+                Movie.TOP_RATED_MOVIES -> topRatedMoviesRxPagingSource.apply {
+                    setData(movie, page)
+                }
+                Movie.UP_COMING_MOVIES -> upComingMoviesRxPagingSource.apply {
+                    setData(movie, page)
+                }
             }
-        }).flowable
-
-    fun getTopRatedMoviesPaging(totalPage: String): Flowable<PagingData<ListTopRatedMoviesResponse>> =
-        Pager(config = PagingConfig(
-            pageSize = 10, enablePlaceholders = true, prefetchDistance = 2
-        ), pagingSourceFactory = {
-            topRatedMoviesRxPagingSource.apply {
-                setTotalPage(totalPage)
-            }
-        }).flowable
-
-    fun getUpComingMoviesPaging(totalPage: String): Flowable<PagingData<ListUpComingMoviesResponse>> =
-        Pager(config = PagingConfig(
-            pageSize = 10, enablePlaceholders = true, prefetchDistance = 2
-        ), pagingSourceFactory = {
-            upComingMoviesRxPagingSource.apply {
-                setTotalPage(totalPage)
-            }
-        }).flowable
+        }
+    ).flowable
 
     fun getOnTheAirTvShowsPaging(totalPage: String): Flowable<PagingData<ListOnTheAirTvShowsResponse>> =
         Pager(config = PagingConfig(
@@ -120,9 +123,4 @@ class RemoteDataSource @Inject constructor(
                 setTotalPage(totalPage)
             }
         }).flowable
-
-    companion object {
-        const val MOVIES = "MOVIES"
-        const val TV_SHOWS = "TV SHOWS"
-    }
 }

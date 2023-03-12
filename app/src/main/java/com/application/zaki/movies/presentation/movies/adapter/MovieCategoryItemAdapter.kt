@@ -7,24 +7,21 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListHorizontalBinding
-import com.application.zaki.movies.domain.model.movies.ListUpComingMovies
+import com.application.zaki.movies.domain.model.movies.ListMovies
 import com.application.zaki.movies.utils.loadImageUrl
 import javax.inject.Inject
 
-class UpComingMoviesAdapter @Inject constructor() :
-    PagingDataAdapter<ListUpComingMovies, UpComingMoviesAdapter.UpComingMoviesViewHolder>(
-        DIFF_CALLBACK
-    ) {
-
+class MovieCategoryItemAdapter @Inject constructor() :
+    PagingDataAdapter<ListMovies, MovieCategoryItemAdapter.MovieItemViewHolder>(DIFF_CALLBACK) {
     private lateinit var onItemClickCallback: OnItemClickCallback
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
     }
 
-    inner class UpComingMoviesViewHolder(val binding: ItemListHorizontalBinding) :
+    inner class MovieItemViewHolder(val binding: ItemListHorizontalBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ListUpComingMovies?) {
+        fun bind(item: ListMovies?) {
             item?.posterPath?.let {
                 binding.imgHorizontal.loadImageUrl(it)
             }
@@ -34,14 +31,14 @@ class UpComingMoviesAdapter @Inject constructor() :
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UpComingMoviesViewHolder =
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieItemViewHolder =
         ItemListHorizontalBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         ).run {
-            UpComingMoviesViewHolder(this)
+            MovieItemViewHolder(this)
         }
 
-    override fun onBindViewHolder(holder: UpComingMoviesViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MovieItemViewHolder, position: Int) {
         holder.bind(getItem(position))
         when (position) {
             0 -> {
@@ -72,19 +69,19 @@ class UpComingMoviesAdapter @Inject constructor() :
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: ListUpComingMovies?)
+        fun onItemClicked(data: ListMovies?)
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListUpComingMovies>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListMovies>() {
             override fun areItemsTheSame(
-                oldItem: ListUpComingMovies,
-                newItem: ListUpComingMovies
+                oldItem: ListMovies,
+                newItem: ListMovies
             ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
-                oldItem: ListUpComingMovies,
-                newItem: ListUpComingMovies
+                oldItem: ListMovies,
+                newItem: ListMovies
             ): Boolean = oldItem == newItem
 
         }

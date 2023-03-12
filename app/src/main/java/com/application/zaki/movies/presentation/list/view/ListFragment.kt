@@ -4,18 +4,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
-import com.application.zaki.movies.data.source.remote.RemoteDataSource
-import com.application.zaki.movies.data.source.remote.paging.movies.PopularMoviesRxPagingSource
-import com.application.zaki.movies.data.source.remote.paging.movies.TopRatedMoviesRxPagingSource
-import com.application.zaki.movies.data.source.remote.paging.movies.UpComingMoviesRxPagingSource
 import com.application.zaki.movies.data.source.remote.paging.tvshows.OnTheAirTvShowsRxPagingSource
 import com.application.zaki.movies.data.source.remote.paging.tvshows.PopularTvShowsRxPagingSource
 import com.application.zaki.movies.data.source.remote.paging.tvshows.TopRatedTvShowsRxPagingSource
 import com.application.zaki.movies.databinding.FragmentListBinding
 import com.application.zaki.movies.domain.model.genre.Genre
-import com.application.zaki.movies.domain.model.movies.ListPopularMovies
-import com.application.zaki.movies.domain.model.movies.ListTopRatedMovies
-import com.application.zaki.movies.domain.model.movies.ListUpComingMovies
+import com.application.zaki.movies.domain.model.movies.ListMovies
 import com.application.zaki.movies.domain.model.tvshows.ListOnTheAirTvShows
 import com.application.zaki.movies.domain.model.tvshows.ListPopularTvShows
 import com.application.zaki.movies.domain.model.tvshows.ListTopRatedTvShows
@@ -29,11 +23,11 @@ import com.application.zaki.movies.presentation.list.adapter.tvshows.PopularTvSh
 import com.application.zaki.movies.presentation.list.adapter.tvshows.TopRatedTvShowsPagingAdapter
 import com.application.zaki.movies.presentation.movies.viewmodel.MoviesViewModel
 import com.application.zaki.movies.presentation.tvshows.viewmodel.TvShowsViewModel
-import com.application.zaki.movies.utils.RxDisposer
-import com.application.zaki.movies.utils.gone
-import com.application.zaki.movies.utils.visible
+import com.application.zaki.movies.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import com.application.zaki.movies.utils.Genre.MOVIES
+import com.application.zaki.movies.utils.Genre.TV_SHOWS
 
 @AndroidEntryPoint
 class ListFragment : BaseVBFragment<FragmentListBinding>() {
@@ -77,15 +71,16 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
     }
 
     private fun setListTopRatedMoviesPaging() {
-        moviesViewModel.topRatedMoviesPaging(
-            RxDisposer().apply { bind(lifecycle) },
-            if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) RemoteDataSource.MOVIES else RemoteDataSource.TV_SHOWS,
-            TopRatedMoviesRxPagingSource.MORE_THAN_ONE
+        moviesViewModel.getMovies(
+            movie = Movie.TOP_RATED_MOVIES,
+            genre = if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) MOVIES else TV_SHOWS,
+            page = Page.MORE_THAN_ONE,
+            rxDisposer =  RxDisposer().apply { bind(lifecycle) },
         )
             .observe(viewLifecycleOwner) { result ->
                 topRatedMoviesAdapter.setOnItemClickCallback(object :
                     TopRatedMoviesPagingAdapter.OnItemClickCallback {
-                    override fun onItemClicked(data: ListTopRatedMovies?) {
+                    override fun onItemClicked(data: ListMovies?) {
                         navigateToDetailPage(data?.id ?: 0)
                     }
 
@@ -109,16 +104,17 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
     }
 
     private fun setListPopularMoviesPaging() {
-        moviesViewModel.popularMoviesPaging(
-            RxDisposer().apply { bind(lifecycle) },
-            if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) RemoteDataSource.MOVIES else RemoteDataSource.TV_SHOWS,
-            PopularMoviesRxPagingSource.MORE_THAN_ONE
+        moviesViewModel.getMovies(
+            movie = Movie.POPULAR_MOVIES,
+            genre = if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) MOVIES else TV_SHOWS,
+            page = Page.MORE_THAN_ONE,
+            rxDisposer =  RxDisposer().apply { bind(lifecycle) },
         )
             .observe(viewLifecycleOwner) { result ->
 
                 popularMoviesAdapter.setOnItemClickCallback(object :
                     PopularMoviesPagingAdapter.OnItemClickCallback {
-                    override fun onItemClicked(data: ListPopularMovies?) {
+                    override fun onItemClicked(data: ListMovies?) {
                         navigateToDetailPage(data?.id ?: 0)
                     }
 
@@ -142,15 +138,16 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
     }
 
     private fun setListUpComingMoviesPaging() {
-        moviesViewModel.upComingMoviesPaging(
-            RxDisposer().apply { bind(lifecycle) },
-            if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) RemoteDataSource.MOVIES else RemoteDataSource.TV_SHOWS,
-            UpComingMoviesRxPagingSource.MORE_THAN_ONE
+        moviesViewModel.getMovies(
+            movie = Movie.UP_COMING_MOVIES,
+            genre = if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) MOVIES else TV_SHOWS,
+            page = Page.MORE_THAN_ONE,
+            rxDisposer =  RxDisposer().apply { bind(lifecycle) },
         )
             .observe(viewLifecycleOwner) { result ->
                 upComingMoviesAdapter.setOnItemClickCallback(object :
                     UpComingMoviesPagingAdapter.OnItemClickCallback {
-                    override fun onItemClicked(data: ListUpComingMovies?) {
+                    override fun onItemClicked(data: ListMovies?) {
                         navigateToDetailPage(data?.id ?: 0)
                     }
 
@@ -176,7 +173,7 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
     private fun setListTopRatedTvShowsPaging() {
         tvShowsViewModel.topRatedTvShowsPaging(
             RxDisposer().apply { bind(lifecycle) },
-            if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) RemoteDataSource.MOVIES else RemoteDataSource.TV_SHOWS,
+            if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) MOVIES else TV_SHOWS,
             TopRatedTvShowsRxPagingSource.MORE_THAN_ONE
         )
             .observe(viewLifecycleOwner) { result ->
@@ -208,7 +205,7 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
     private fun setListPopularTvShowsPaging() {
         tvShowsViewModel.popularTvShowsPaging(
             RxDisposer().apply { bind(lifecycle) },
-            if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) RemoteDataSource.MOVIES else RemoteDataSource.TV_SHOWS,
+            if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) MOVIES else TV_SHOWS,
             PopularTvShowsRxPagingSource.MORE_THAN_ONE
         )
             .observe(viewLifecycleOwner) { result ->
@@ -240,7 +237,7 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
     private fun setListOnTheAirTvShowsPaging() {
         tvShowsViewModel.onTheAirTvShowsPaging(
             RxDisposer().apply { bind(lifecycle) },
-            if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) RemoteDataSource.MOVIES else RemoteDataSource.TV_SHOWS,
+            if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) MOVIES else TV_SHOWS,
             OnTheAirTvShowsRxPagingSource.MORE_THAN_ONE
         )
             .observe(viewLifecycleOwner) { result ->

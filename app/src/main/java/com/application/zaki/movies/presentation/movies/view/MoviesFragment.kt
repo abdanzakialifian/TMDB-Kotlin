@@ -2,36 +2,26 @@ package com.application.zaki.movies.presentation.movies.view
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.ViewPager2
-import com.application.zaki.movies.data.source.remote.RemoteDataSource
-import com.application.zaki.movies.data.source.remote.paging.movies.PopularMoviesRxPagingSource
-import com.application.zaki.movies.data.source.remote.paging.movies.TopRatedMoviesRxPagingSource
-import com.application.zaki.movies.data.source.remote.paging.movies.UpComingMoviesRxPagingSource
 import com.application.zaki.movies.databinding.FragmentMoviesBinding
-import com.application.zaki.movies.domain.model.movies.ListNowPlayingMovies
-import com.application.zaki.movies.domain.model.movies.ListPopularMovies
-import com.application.zaki.movies.domain.model.movies.ListTopRatedMovies
-import com.application.zaki.movies.domain.model.movies.ListUpComingMovies
+import com.application.zaki.movies.domain.model.movies.ListMovies
+import com.application.zaki.movies.domain.model.movies.MoviesCategory
+import com.application.zaki.movies.domain.model.movies.MoviesCategoryItem
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.view.DetailFragment.Companion.INTENT_FROM_MOVIE
 import com.application.zaki.movies.presentation.home.HomeFragmentDirections
 import com.application.zaki.movies.presentation.list.view.ListFragment.Companion.INTENT_FROM_POPULAR_MOVIES
 import com.application.zaki.movies.presentation.list.view.ListFragment.Companion.INTENT_FROM_TOP_RATED_MOVIES
 import com.application.zaki.movies.presentation.list.view.ListFragment.Companion.INTENT_FROM_UP_COMING_MOVIES
-import com.application.zaki.movies.presentation.movies.adapter.NowPlayingMoviesAdapter
-import com.application.zaki.movies.presentation.movies.adapter.PopularMoviesAdapter
-import com.application.zaki.movies.presentation.movies.adapter.TopRatedMoviesAdapter
-import com.application.zaki.movies.presentation.movies.adapter.UpComingMoviesAdapter
+import com.application.zaki.movies.presentation.movies.adapter.*
 import com.application.zaki.movies.presentation.movies.viewmodel.MoviesViewModel
-import com.application.zaki.movies.utils.RxDisposer
-import com.application.zaki.movies.utils.UiState
-import com.application.zaki.movies.utils.gone
-import com.application.zaki.movies.utils.visible
+import com.application.zaki.movies.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.math.abs
@@ -40,28 +30,33 @@ import kotlin.math.abs
 class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
 
     @Inject
-    lateinit var popularMoviesAdapter: PopularMoviesAdapter
-
-    @Inject
     lateinit var nowPlayingMoviesAdapter: NowPlayingMoviesAdapter
 
     @Inject
-    lateinit var topRatedMoviesAdapter: TopRatedMoviesAdapter
+    lateinit var popularMoviesAdapter: MovieCategoryItemAdapter
 
     @Inject
-    lateinit var upComingMoviesAdapter: UpComingMoviesAdapter
+    lateinit var topRatedMoviesAdapter: MovieCategoryItemAdapter
+
+    @Inject
+    lateinit var upComingMoviesAdapter: MovieCategoryItemAdapter
+
+    @Inject
+    lateinit var movieCategoryAdapter: MovieCategoryAdapter
 
     private val moviesViewModel by viewModels<MoviesViewModel>()
     private val sliderHandler = Handler(Looper.getMainLooper())
     private lateinit var sliderRunnable: Runnable
+    private val moviesCategory = ArrayList<MoviesCategoryItem>()
 
     override fun getViewBinding(): FragmentMoviesBinding =
         FragmentMoviesBinding.inflate(layoutInflater)
 
     override fun initView() {
         sliderRunnable = Runnable {
-            binding?.viewPagerImageSlider?.currentItem =
-                binding?.viewPagerImageSlider?.currentItem?.plus(1) ?: 0
+            binding?.viewPagerImageSlider?.apply {
+                currentItem += 1
+            }
         }
         setImageSlider()
         setTopRatedMovies()
@@ -80,62 +75,65 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
                 navigateToListPage(INTENT_FROM_UP_COMING_MOVIES)
             }
         }
+
+        Log.d("CEK", moviesCategory.toString())
+        movieCategoryAdapter.submitList(moviesCategory)
+        movieCategoryAdapter.setLifecycle(lifecycle)
+        binding?.rvMovies?.apply {
+            adapter = movieCategoryAdapter
+            setHasFixedSize(true)
+        }
     }
 
     private fun setImageSlider() {
         nowPlayingMoviesAdapter.setOnItemClickCallback(object :
             NowPlayingMoviesAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: ListNowPlayingMovies) {
-                navigateToDetailPage(data.id ?: 0)
+            override fun onItemClicked(data: ListMovies?) {
+                navigateToDetailPage(data?.id ?: 0)
             }
         })
-        moviesViewModel.nowPlayingMovies(RxDisposer().apply { bind(lifecycle) })
-            .observe(viewLifecycleOwner) { result ->
-                when (result) {
-                    is UiState.Loading -> {
-                        binding?.apply {
-                            shimmerImageSlider.startShimmer()
-                            shimmerImageSlider.visible()
-                            viewPagerImageSlider.gone()
-                            wormDotsIndicator.gone()
-                        }
+        moviesViewModel.getMovies(
+            movie = Movie.NOW_PLAYING_MOVIES,
+            genre = Genre.MOVIES,
+            page = Page.MORE_THAN_ONE,
+            rxDisposer = RxDisposer().apply { bind(lifecycle) }
+        ).observe(viewLifecycleOwner) { result ->
+            nowPlayingMoviesAdapter.submitData(lifecycle, result)
+            nowPlayingMoviesAdapter.addLoadStateListener { loadState ->
+                when (loadState.refresh) {
+                    is LoadState.NotLoading -> binding?.apply {
+                        shimmerImageSlider.stopShimmer()
+                        shimmerImageSlider.gone()
+                        viewPagerImageSlider.visible()
                     }
-                    is UiState.Success -> {
-                        binding?.apply {
-                            shimmerImageSlider.stopShimmer()
-                            shimmerImageSlider.gone()
-                            viewPagerImageSlider.visible()
-                            wormDotsIndicator.visible()
-                        }
-                        nowPlayingMoviesAdapter.submitList(result.data.results)
+                    LoadState.Loading -> binding?.apply {
+                        shimmerImageSlider.startShimmer()
+                        shimmerImageSlider.visible()
+                        viewPagerImageSlider.gone()
                     }
-                    is UiState.Error -> {
-                        binding?.apply {
-                            shimmerImageSlider.stopShimmer()
-                            shimmerImageSlider.gone()
-                            viewPagerImageSlider.gone()
-                            wormDotsIndicator.gone()
-                        }
+                    is LoadState.Error -> binding?.apply {
+                        shimmerImageSlider.stopShimmer()
+                        shimmerImageSlider.gone()
+                        viewPagerImageSlider.gone()
                     }
-                    is UiState.Empty -> {}
                 }
             }
-        binding?.viewPagerImageSlider.apply {
-            this?.adapter = nowPlayingMoviesAdapter
-            binding?.wormDotsIndicator?.attachTo(this ?: this!!)
-            this?.clipToPadding = false
-            this?.clipChildren = false
-            this?.offscreenPageLimit = 3
-            this?.getChildAt(0)?.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+        }
+        binding?.viewPagerImageSlider?.apply {
+            adapter = nowPlayingMoviesAdapter
+            clipToPadding = false
+            clipChildren = false
+            offscreenPageLimit = 3
+            getChildAt(0)?.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
             val compositePageTransformer = CompositePageTransformer()
             compositePageTransformer.addTransformer { page, position ->
                 val r = 1 - abs(position)
                 page.scaleY = 0.95f + r * 0.10f
             }
-            this?.setPageTransformer(compositePageTransformer)
+            setPageTransformer(compositePageTransformer)
 
-            this?.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
                     sliderHandler.removeCallbacks(sliderRunnable)
@@ -147,21 +145,25 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
 
     private fun setTopRatedMovies() {
         topRatedMoviesAdapter.setOnItemClickCallback(object :
-            TopRatedMoviesAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: ListTopRatedMovies?) {
+            MovieCategoryItemAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: ListMovies?) {
                 navigateToDetailPage(data?.id ?: 0)
             }
         })
-        moviesViewModel.topRatedMoviesPaging(
-            RxDisposer().apply { bind(lifecycle) },
-            RemoteDataSource.MOVIES,
-            TopRatedMoviesRxPagingSource.ONE
+        moviesViewModel.getMovies(
+            movie = Movie.TOP_RATED_MOVIES,
+            genre = Genre.MOVIES,
+            page = Page.ONE,
+            rxDisposer = RxDisposer().apply { bind(lifecycle) }
         ).observe(viewLifecycleOwner) { result ->
-            topRatedMoviesAdapter.submitData(lifecycle, result)
-            binding?.apply {
-                rvTopRatedMovies.adapter = topRatedMoviesAdapter
-                rvTopRatedMovies.setHasFixedSize(true)
-            }
+            val data = MoviesCategoryItem(categoryTitle = "Top", categories = result)
+            moviesCategory.add(data)
+
+//            topRatedMoviesAdapter.submitData(lifecycle, result)
+//            binding?.apply {
+//                rvTopRatedMovies.adapter = topRatedMoviesAdapter
+//                rvTopRatedMovies.setHasFixedSize(true)
+//            }
 
             topRatedMoviesAdapter.addLoadStateListener { loadState ->
                 when (loadState.refresh) {
@@ -193,21 +195,24 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
 
     private fun setPopularMovies() {
         popularMoviesAdapter.setOnItemClickCallback(object :
-            PopularMoviesAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: ListPopularMovies?) {
+            MovieCategoryItemAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: ListMovies?) {
                 navigateToDetailPage(data?.id ?: 0)
             }
         })
-        moviesViewModel.popularMoviesPaging(
-            RxDisposer().apply { bind(lifecycle) },
-            RemoteDataSource.MOVIES,
-            PopularMoviesRxPagingSource.ONE
+        moviesViewModel.getMovies(
+            movie = Movie.POPULAR_MOVIES,
+            genre = Genre.MOVIES,
+            page = Page.ONE,
+            rxDisposer = RxDisposer().apply { bind(lifecycle) }
         ).observe(viewLifecycleOwner) { result ->
-            popularMoviesAdapter.submitData(lifecycle, result)
-            binding?.apply {
-                rvPopularMovies.adapter = popularMoviesAdapter
-                rvPopularMovies.setHasFixedSize(true)
-            }
+            val data = MoviesCategoryItem(categoryTitle = "Popular", categories = result)
+            moviesCategory.add(data)
+//            popularMoviesAdapter.submitData(lifecycle, result)
+//            binding?.apply {
+//                rvPopularMovies.adapter = popularMoviesAdapter
+//                rvPopularMovies.setHasFixedSize(true)
+//            }
 
             popularMoviesAdapter.addLoadStateListener { loadState ->
                 when (loadState.refresh) {
@@ -239,21 +244,24 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
 
     private fun setUpComingMovies() {
         upComingMoviesAdapter.setOnItemClickCallback(object :
-            UpComingMoviesAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: ListUpComingMovies?) {
+            MovieCategoryItemAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: ListMovies?) {
                 navigateToDetailPage(data?.id ?: 0)
             }
         })
-        moviesViewModel.upComingMoviesPaging(
-            RxDisposer().apply { bind(lifecycle) },
-            RemoteDataSource.MOVIES,
-            UpComingMoviesRxPagingSource.ONE
+        moviesViewModel.getMovies(
+            movie = Movie.UP_COMING_MOVIES,
+            genre = Genre.MOVIES,
+            page = Page.ONE,
+            rxDisposer = RxDisposer().apply { bind(lifecycle) }
         ).observe(viewLifecycleOwner) { result ->
-            upComingMoviesAdapter.submitData(lifecycle, result)
-            binding?.apply {
-                rvUpComingMovies.adapter = upComingMoviesAdapter
-                rvUpComingMovies.setHasFixedSize(true)
-            }
+            val data = MoviesCategoryItem(categoryTitle = "Up Coming", categories = result)
+            moviesCategory.add(data)
+//            upComingMoviesAdapter.submitData(lifecycle, result)
+//            binding?.apply {
+//                rvUpComingMovies.adapter = upComingMoviesAdapter
+//                rvUpComingMovies.setHasFixedSize(true)
+//            }
         }
 
         upComingMoviesAdapter.addLoadStateListener { loadState ->

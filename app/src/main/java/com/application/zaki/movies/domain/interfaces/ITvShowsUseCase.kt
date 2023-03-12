@@ -2,6 +2,7 @@ package com.application.zaki.movies.domain.interfaces
 
 import androidx.paging.PagingData
 import com.application.zaki.movies.domain.model.tvshows.*
+import com.application.zaki.movies.utils.Genre
 import io.reactivex.Flowable
 
 interface ITvShowsUseCase {
@@ -9,9 +10,9 @@ interface ITvShowsUseCase {
 
     fun getDetailTvShows(tvId: String): Flowable<DetailTvShows>
 
-    fun getOnTheAirTvShowsPaging(type: String, totalPage: String): Flowable<PagingData<ListOnTheAirTvShows>>
+    fun getOnTheAirTvShowsPaging(genre: Genre, totalPage: String): Flowable<PagingData<ListOnTheAirTvShows>>
 
-    fun getPopularTvShowsPaging(type: String, totalPage: String): Flowable<PagingData<ListPopularTvShows>>
+    fun getPopularTvShowsPaging(genre: Genre, totalPage: String): Flowable<PagingData<ListPopularTvShows>>
 
-    fun getTopRatedTvShowsPaging(type: String, totalPage: String): Flowable<PagingData<ListTopRatedTvShows>>
+    fun getTopRatedTvShowsPaging(genre: Genre, totalPage: String): Flowable<PagingData<ListTopRatedTvShows>>
 }
