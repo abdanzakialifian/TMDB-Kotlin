@@ -3,7 +3,9 @@ package com.application.zaki.movies.presentation.movies.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.application.zaki.movies.domain.interfaces.IMoviesUseCase
 import com.application.zaki.movies.domain.model.movies.*
 import com.application.zaki.movies.utils.*
@@ -32,6 +34,6 @@ class MoviesViewModel @Inject constructor(private val moviesUseCase: IMoviesUseC
             .addToDisposer(rxDisposer)
 
         // convert flowable to livedata
-        return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
+        return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER)).cachedIn(viewModelScope)
     }
 }

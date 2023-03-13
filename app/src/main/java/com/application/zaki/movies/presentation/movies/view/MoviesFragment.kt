@@ -2,7 +2,6 @@ package com.application.zaki.movies.presentation.movies.view
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
@@ -11,7 +10,6 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.application.zaki.movies.databinding.FragmentMoviesBinding
 import com.application.zaki.movies.domain.model.movies.ListMovies
-import com.application.zaki.movies.domain.model.movies.MoviesCategory
 import com.application.zaki.movies.domain.model.movies.MoviesCategoryItem
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.view.DetailFragment.Companion.INTENT_FROM_MOVIE
@@ -64,24 +62,16 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
         setUpComingMovies()
 
         binding?.apply {
-            tvSeeAllTopRatedMovies.setOnClickListener {
-                navigateToListPage(INTENT_FROM_TOP_RATED_MOVIES)
-            }
-
-            tvSeeAllPopularMovies.setOnClickListener {
-                navigateToListPage(INTENT_FROM_POPULAR_MOVIES)
-            }
-            tvSeeAllUpComingMovies.setOnClickListener {
-                navigateToListPage(INTENT_FROM_UP_COMING_MOVIES)
-            }
-        }
-
-        Log.d("CEK", moviesCategory.toString())
-        movieCategoryAdapter.submitList(moviesCategory)
-        movieCategoryAdapter.setLifecycle(lifecycle)
-        binding?.rvMovies?.apply {
-            adapter = movieCategoryAdapter
-            setHasFixedSize(true)
+//            tvSeeAllTopRatedMovies.setOnClickListener {
+//                navigateToListPage(INTENT_FROM_TOP_RATED_MOVIES)
+//            }
+//
+//            tvSeeAllPopularMovies.setOnClickListener {
+//                navigateToListPage(INTENT_FROM_POPULAR_MOVIES)
+//            }
+//            tvSeeAllUpComingMovies.setOnClickListener {
+//                navigateToListPage(INTENT_FROM_UP_COMING_MOVIES)
+//            }
         }
     }
 
@@ -159,36 +149,37 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
             val data = MoviesCategoryItem(categoryTitle = "Top", categories = result)
             moviesCategory.add(data)
 
-//            topRatedMoviesAdapter.submitData(lifecycle, result)
-//            binding?.apply {
-//                rvTopRatedMovies.adapter = topRatedMoviesAdapter
-//                rvTopRatedMovies.setHasFixedSize(true)
-//            }
+            movieCategoryAdapter.submitList(moviesCategory)
+            movieCategoryAdapter.setLifecycle(lifecycle)
+            binding?.rvMovies?.apply {
+                adapter = movieCategoryAdapter
+                setHasFixedSize(true)
+            }
 
             topRatedMoviesAdapter.addLoadStateListener { loadState ->
-                when (loadState.refresh) {
-                    is LoadState.Loading -> {
-                        binding?.apply {
-                            shimmerTopRatedMovies.startShimmer()
-                            shimmerTopRatedMovies.visible()
-                            rvTopRatedMovies.gone()
-                        }
-                    }
-                    is LoadState.NotLoading -> {
-                        binding?.apply {
-                            shimmerTopRatedMovies.stopShimmer()
-                            shimmerTopRatedMovies.gone()
-                            rvTopRatedMovies.visible()
-                        }
-                    }
-                    is LoadState.Error -> {
-                        binding?.apply {
-                            shimmerTopRatedMovies.stopShimmer()
-                            shimmerTopRatedMovies.gone()
-                            rvTopRatedMovies.gone()
-                        }
-                    }
-                }
+//                when (loadState.refresh) {
+//                    is LoadState.Loading -> {
+//                        binding?.apply {
+//                            shimmerTopRatedMovies.startShimmer()
+//                            shimmerTopRatedMovies.visible()
+//                            rvTopRatedMovies.gone()
+//                        }
+//                    }
+//                    is LoadState.NotLoading -> {
+//                        binding?.apply {
+//                            shimmerTopRatedMovies.stopShimmer()
+//                            shimmerTopRatedMovies.gone()
+//                            rvTopRatedMovies.visible()
+//                        }
+//                    }
+//                    is LoadState.Error -> {
+//                        binding?.apply {
+//                            shimmerTopRatedMovies.stopShimmer()
+//                            shimmerTopRatedMovies.gone()
+//                            rvTopRatedMovies.gone()
+//                        }
+//                    }
+//                }
             }
         }
     }
@@ -208,36 +199,38 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
         ).observe(viewLifecycleOwner) { result ->
             val data = MoviesCategoryItem(categoryTitle = "Popular", categories = result)
             moviesCategory.add(data)
-//            popularMoviesAdapter.submitData(lifecycle, result)
-//            binding?.apply {
-//                rvPopularMovies.adapter = popularMoviesAdapter
-//                rvPopularMovies.setHasFixedSize(true)
-//            }
+
+            movieCategoryAdapter.submitList(moviesCategory)
+            movieCategoryAdapter.setLifecycle(lifecycle)
+            binding?.rvMovies?.apply {
+                adapter = movieCategoryAdapter
+                setHasFixedSize(true)
+            }
 
             popularMoviesAdapter.addLoadStateListener { loadState ->
-                when (loadState.refresh) {
-                    is LoadState.Loading -> {
-                        binding?.apply {
-                            shimmerPopularMovies.startShimmer()
-                            shimmerPopularMovies.visible()
-                            rvPopularMovies.gone()
-                        }
-                    }
-                    is LoadState.NotLoading -> {
-                        binding?.apply {
-                            shimmerPopularMovies.stopShimmer()
-                            shimmerPopularMovies.gone()
-                            rvPopularMovies.visible()
-                        }
-                    }
-                    is LoadState.Error -> {
-                        binding?.apply {
-                            shimmerPopularMovies.stopShimmer()
-                            shimmerPopularMovies.gone()
-                            rvPopularMovies.gone()
-                        }
-                    }
-                }
+//                when (loadState.refresh) {
+//                    is LoadState.Loading -> {
+//                        binding?.apply {
+//                            shimmerPopularMovies.startShimmer()
+//                            shimmerPopularMovies.visible()
+//                            rvPopularMovies.gone()
+//                        }
+//                    }
+//                    is LoadState.NotLoading -> {
+//                        binding?.apply {
+//                            shimmerPopularMovies.stopShimmer()
+//                            shimmerPopularMovies.gone()
+//                            rvPopularMovies.visible()
+//                        }
+//                    }
+//                    is LoadState.Error -> {
+//                        binding?.apply {
+//                            shimmerPopularMovies.stopShimmer()
+//                            shimmerPopularMovies.gone()
+//                            rvPopularMovies.gone()
+//                        }
+//                    }
+//                }
             }
         }
     }
@@ -257,37 +250,39 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
         ).observe(viewLifecycleOwner) { result ->
             val data = MoviesCategoryItem(categoryTitle = "Up Coming", categories = result)
             moviesCategory.add(data)
-//            upComingMoviesAdapter.submitData(lifecycle, result)
-//            binding?.apply {
-//                rvUpComingMovies.adapter = upComingMoviesAdapter
-//                rvUpComingMovies.setHasFixedSize(true)
-//            }
+
+            movieCategoryAdapter.submitList(moviesCategory)
+            movieCategoryAdapter.setLifecycle(lifecycle)
+            binding?.rvMovies?.apply {
+                adapter = movieCategoryAdapter
+                setHasFixedSize(true)
+            }
         }
 
         upComingMoviesAdapter.addLoadStateListener { loadState ->
-            when (loadState.refresh) {
-                is LoadState.Loading -> {
-                    binding?.apply {
-                        shimmerUpComingMovies.startShimmer()
-                        shimmerUpComingMovies.visible()
-                        rvUpComingMovies.gone()
-                    }
-                }
-                is LoadState.NotLoading -> {
-                    binding?.apply {
-                        shimmerUpComingMovies.stopShimmer()
-                        shimmerUpComingMovies.gone()
-                        rvUpComingMovies.visible()
-                    }
-                }
-                is LoadState.Error -> {
-                    binding?.apply {
-                        shimmerUpComingMovies.stopShimmer()
-                        shimmerUpComingMovies.gone()
-                        rvUpComingMovies.gone()
-                    }
-                }
-            }
+//            when (loadState.refresh) {
+//                is LoadState.Loading -> {
+//                    binding?.apply {
+//                        shimmerUpComingMovies.startShimmer()
+//                        shimmerUpComingMovies.visible()
+//                        rvUpComingMovies.gone()
+//                    }
+//                }
+//                is LoadState.NotLoading -> {
+//                    binding?.apply {
+//                        shimmerUpComingMovies.stopShimmer()
+//                        shimmerUpComingMovies.gone()
+//                        rvUpComingMovies.visible()
+//                    }
+//                }
+//                is LoadState.Error -> {
+//                    binding?.apply {
+//                        shimmerUpComingMovies.stopShimmer()
+//                        shimmerUpComingMovies.gone()
+//                        rvUpComingMovies.gone()
+//                    }
+//                }
+//            }
         }
     }
 
