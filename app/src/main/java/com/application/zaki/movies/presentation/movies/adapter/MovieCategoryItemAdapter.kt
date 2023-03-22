@@ -83,7 +83,6 @@ class MovieCategoryItemAdapter @Inject constructor() :
                 oldItem: ListMovies,
                 newItem: ListMovies
             ): Boolean = oldItem == newItem
-
         }
     }
 }

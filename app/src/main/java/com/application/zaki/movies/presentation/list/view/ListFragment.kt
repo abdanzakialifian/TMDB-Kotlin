@@ -60,20 +60,20 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
     override fun initView() {
         when (args.intentFrom) {
             // set list from movies
-            INTENT_FROM_TOP_RATED_MOVIES -> setListTopRatedMoviesPaging()
-            INTENT_FROM_POPULAR_MOVIES -> setListPopularMoviesPaging()
-            INTENT_FROM_UP_COMING_MOVIES -> setListUpComingMoviesPaging()
+            Movie.TOP_RATED_MOVIES -> setListTopRatedMoviesPaging()
+            Movie.POPULAR_MOVIES -> setListPopularMoviesPaging()
+            else -> setListUpComingMoviesPaging()
             // set list from tv shows
-            INTENT_FROM_TOP_RATED_TV_SHOWS -> setListTopRatedTvShowsPaging()
-            INTENT_FROM_POPULAR_TV_SHOWS -> setListPopularTvShowsPaging()
-            INTENT_FROM_ON_THE_AIR_TV_SHOWS -> setListOnTheAirTvShowsPaging()
+//            INTENT_FROM_TOP_RATED_TV_SHOWS -> setListTopRatedTvShowsPaging()
+//            INTENT_FROM_POPULAR_TV_SHOWS -> setListPopularTvShowsPaging()
+//            INTENT_FROM_ON_THE_AIR_TV_SHOWS -> setListOnTheAirTvShowsPaging()
         }
     }
 
     private fun setListTopRatedMoviesPaging() {
         moviesViewModel.getMovies(
             movie = Movie.TOP_RATED_MOVIES,
-            genre = if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) MOVIES else TV_SHOWS,
+            genre = MOVIES,
             page = Page.MORE_THAN_ONE,
             rxDisposer =  RxDisposer().apply { bind(lifecycle) },
         )
@@ -106,7 +106,7 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
     private fun setListPopularMoviesPaging() {
         moviesViewModel.getMovies(
             movie = Movie.POPULAR_MOVIES,
-            genre = if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) MOVIES else TV_SHOWS,
+            genre = MOVIES,
             page = Page.MORE_THAN_ONE,
             rxDisposer =  RxDisposer().apply { bind(lifecycle) },
         )
@@ -140,7 +140,7 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
     private fun setListUpComingMoviesPaging() {
         moviesViewModel.getMovies(
             movie = Movie.UP_COMING_MOVIES,
-            genre = if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) MOVIES else TV_SHOWS,
+            genre = MOVIES,
             page = Page.MORE_THAN_ONE,
             rxDisposer =  RxDisposer().apply { bind(lifecycle) },
         )
@@ -170,102 +170,102 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
             }
     }
 
-    private fun setListTopRatedTvShowsPaging() {
-        tvShowsViewModel.topRatedTvShowsPaging(
-            RxDisposer().apply { bind(lifecycle) },
-            if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) MOVIES else TV_SHOWS,
-            TopRatedTvShowsRxPagingSource.MORE_THAN_ONE
-        )
-            .observe(viewLifecycleOwner) { result ->
-                topRatedTvShowsAdapter.setOnItemClickCallback(object :
-                    TopRatedTvShowsPagingAdapter.OnItemClickCallback {
-                    override fun onItemClicked(data: ListTopRatedTvShows?) {
-                        navigateToDetailPage(data?.id ?: 0)
-                    }
-
-                    override fun onItemGenreClicked(data: Genre) {
-                        navigateToDiscoverPage(data, ListDiscoverFragment.INTENT_FROM_TV_SHOWS)
-                    }
-                })
-                topRatedTvShowsAdapter.submitData(lifecycle, result)
-                binding?.apply {
-                    rvListMovies.adapter = topRatedTvShowsAdapter
-                    rvListMovies.setHasFixedSize(true)
-                }
-                topRatedTvShowsAdapter.addLoadStateListener { loadState ->
-                    when (loadState.refresh) {
-                        is LoadState.Loading -> showLoading()
-                        is LoadState.NotLoading -> visibleDataList()
-                        is LoadState.Error -> goneDataList()
-                    }
-                }
-            }
-    }
-
-    private fun setListPopularTvShowsPaging() {
-        tvShowsViewModel.popularTvShowsPaging(
-            RxDisposer().apply { bind(lifecycle) },
-            if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) MOVIES else TV_SHOWS,
-            PopularTvShowsRxPagingSource.MORE_THAN_ONE
-        )
-            .observe(viewLifecycleOwner) { result ->
-                popularTvShowsAdapter.setOnItemClickCallback(object :
-                    PopularTvShowsPagingAdapter.OnItemClickCallback {
-                    override fun onItemClicked(data: ListPopularTvShows?) {
-                        navigateToDetailPage(data?.id ?: 0)
-                    }
-
-                    override fun onItemGenreClicked(data: Genre) {
-                        navigateToDiscoverPage(data, ListDiscoverFragment.INTENT_FROM_TV_SHOWS)
-                    }
-                })
-                popularTvShowsAdapter.submitData(lifecycle, result)
-                binding?.apply {
-                    rvListMovies.adapter = popularTvShowsAdapter
-                    rvListMovies.setHasFixedSize(true)
-                }
-                popularTvShowsAdapter.addLoadStateListener { loadState ->
-                    when (loadState.refresh) {
-                        is LoadState.Loading -> showLoading()
-                        is LoadState.NotLoading -> visibleDataList()
-                        is LoadState.Error -> goneDataList()
-                    }
-                }
-            }
-    }
-
-    private fun setListOnTheAirTvShowsPaging() {
-        tvShowsViewModel.onTheAirTvShowsPaging(
-            RxDisposer().apply { bind(lifecycle) },
-            if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) MOVIES else TV_SHOWS,
-            OnTheAirTvShowsRxPagingSource.MORE_THAN_ONE
-        )
-            .observe(viewLifecycleOwner) { result ->
-                onTheAirTvShowsAdapter.setOnItemClickCallback(object :
-                    OnTheAirTvShowsPagingAdapter.OnItemClickCallback {
-                    override fun onItemClicked(data: ListOnTheAirTvShows?) {
-                        navigateToDetailPage(data?.id ?: 0)
-                    }
-
-                    override fun onItemGenreClicked(data: Genre) {
-                        navigateToDiscoverPage(data, ListDiscoverFragment.INTENT_FROM_TV_SHOWS)
-                    }
-                })
-
-                onTheAirTvShowsAdapter.submitData(lifecycle, result)
-                binding?.apply {
-                    rvListMovies.adapter = onTheAirTvShowsAdapter
-                    rvListMovies.setHasFixedSize(true)
-                }
-                onTheAirTvShowsAdapter.addLoadStateListener { loadState ->
-                    when (loadState.refresh) {
-                        is LoadState.Loading -> showLoading()
-                        is LoadState.NotLoading -> visibleDataList()
-                        is LoadState.Error -> goneDataList()
-                    }
-                }
-            }
-    }
+//    private fun setListTopRatedTvShowsPaging() {
+//        tvShowsViewModel.topRatedTvShowsPaging(
+//            RxDisposer().apply { bind(lifecycle) },
+//            if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) MOVIES else TV_SHOWS,
+//            TopRatedTvShowsRxPagingSource.MORE_THAN_ONE
+//        )
+//            .observe(viewLifecycleOwner) { result ->
+//                topRatedTvShowsAdapter.setOnItemClickCallback(object :
+//                    TopRatedTvShowsPagingAdapter.OnItemClickCallback {
+//                    override fun onItemClicked(data: ListTopRatedTvShows?) {
+//                        navigateToDetailPage(data?.id ?: 0)
+//                    }
+//
+//                    override fun onItemGenreClicked(data: Genre) {
+//                        navigateToDiscoverPage(data, ListDiscoverFragment.INTENT_FROM_TV_SHOWS)
+//                    }
+//                })
+//                topRatedTvShowsAdapter.submitData(lifecycle, result)
+//                binding?.apply {
+//                    rvListMovies.adapter = topRatedTvShowsAdapter
+//                    rvListMovies.setHasFixedSize(true)
+//                }
+//                topRatedTvShowsAdapter.addLoadStateListener { loadState ->
+//                    when (loadState.refresh) {
+//                        is LoadState.Loading -> showLoading()
+//                        is LoadState.NotLoading -> visibleDataList()
+//                        is LoadState.Error -> goneDataList()
+//                    }
+//                }
+//            }
+//    }
+//
+//    private fun setListPopularTvShowsPaging() {
+//        tvShowsViewModel.popularTvShowsPaging(
+//            RxDisposer().apply { bind(lifecycle) },
+//            if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) MOVIES else TV_SHOWS,
+//            PopularTvShowsRxPagingSource.MORE_THAN_ONE
+//        )
+//            .observe(viewLifecycleOwner) { result ->
+//                popularTvShowsAdapter.setOnItemClickCallback(object :
+//                    PopularTvShowsPagingAdapter.OnItemClickCallback {
+//                    override fun onItemClicked(data: ListPopularTvShows?) {
+//                        navigateToDetailPage(data?.id ?: 0)
+//                    }
+//
+//                    override fun onItemGenreClicked(data: Genre) {
+//                        navigateToDiscoverPage(data, ListDiscoverFragment.INTENT_FROM_TV_SHOWS)
+//                    }
+//                })
+//                popularTvShowsAdapter.submitData(lifecycle, result)
+//                binding?.apply {
+//                    rvListMovies.adapter = popularTvShowsAdapter
+//                    rvListMovies.setHasFixedSize(true)
+//                }
+//                popularTvShowsAdapter.addLoadStateListener { loadState ->
+//                    when (loadState.refresh) {
+//                        is LoadState.Loading -> showLoading()
+//                        is LoadState.NotLoading -> visibleDataList()
+//                        is LoadState.Error -> goneDataList()
+//                    }
+//                }
+//            }
+//    }
+//
+//    private fun setListOnTheAirTvShowsPaging() {
+//        tvShowsViewModel.onTheAirTvShowsPaging(
+//            RxDisposer().apply { bind(lifecycle) },
+//            if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) MOVIES else TV_SHOWS,
+//            OnTheAirTvShowsRxPagingSource.MORE_THAN_ONE
+//        )
+//            .observe(viewLifecycleOwner) { result ->
+//                onTheAirTvShowsAdapter.setOnItemClickCallback(object :
+//                    OnTheAirTvShowsPagingAdapter.OnItemClickCallback {
+//                    override fun onItemClicked(data: ListOnTheAirTvShows?) {
+//                        navigateToDetailPage(data?.id ?: 0)
+//                    }
+//
+//                    override fun onItemGenreClicked(data: Genre) {
+//                        navigateToDiscoverPage(data, ListDiscoverFragment.INTENT_FROM_TV_SHOWS)
+//                    }
+//                })
+//
+//                onTheAirTvShowsAdapter.submitData(lifecycle, result)
+//                binding?.apply {
+//                    rvListMovies.adapter = onTheAirTvShowsAdapter
+//                    rvListMovies.setHasFixedSize(true)
+//                }
+//                onTheAirTvShowsAdapter.addLoadStateListener { loadState ->
+//                    when (loadState.refresh) {
+//                        is LoadState.Loading -> showLoading()
+//                        is LoadState.NotLoading -> visibleDataList()
+//                        is LoadState.Error -> goneDataList()
+//                    }
+//                }
+//            }
+//    }
 
     private fun goneDataList() {
         binding?.apply {
@@ -310,9 +310,9 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
 
     companion object {
         // intent from movies
-        const val INTENT_FROM_POPULAR_MOVIES = "List Popular Movies"
-        const val INTENT_FROM_TOP_RATED_MOVIES = "Top Rated Movies"
-        const val INTENT_FROM_UP_COMING_MOVIES = "List Up Coming Movies"
+        const val INTENT_FROM_POPULAR_MOVIES = "Popular Movies"
+        const val INTENT_FROM_TOP_RATED_MOVIES = "Top rated movies"
+        const val INTENT_FROM_UP_COMING_MOVIES = "Up coming movies"
 
         // intent from tv shows
         const val INTENT_FROM_ON_THE_AIR_TV_SHOWS = "Intent On The Air TV Shows"

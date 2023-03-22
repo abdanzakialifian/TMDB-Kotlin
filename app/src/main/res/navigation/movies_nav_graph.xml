@@ -32,16 +32,16 @@
         android:name="com.application.zaki.movies.presentation.list.view.ListFragment"
         android:label="fragment_list"
         tools:layout="@layout/fragment_list">
-        <argument
-            android:name="intentFrom"
-            android:defaultValue=""
-            app:argType="string" />
         <action
             android:id="@+id/action_listFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
         <action
             android:id="@+id/action_listFragment_to_listDiscoverFragment"
             app:destination="@id/listDiscoverFragment" />
+        <argument
+            android:name="intentFrom"
+            android:defaultValue="POPULAR_MOVIES"
+            app:argType="com.application.zaki.movies.utils.Movie" />
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
@@ -97,7 +97,7 @@
         android:id="@+id/reviewsFragment"
         android:name="com.application.zaki.movies.presentation.reviews.ReviewsFragment"
         android:label="fragment_reviews"
-        tools:layout="@layout/fragment_reviews" >
+        tools:layout="@layout/fragment_reviews">
         <argument
             android:name="id"
             android:defaultValue=""

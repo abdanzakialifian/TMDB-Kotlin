@@ -5,19 +5,20 @@ import android.os.Looper
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.application.zaki.movies.R
 import com.application.zaki.movies.databinding.FragmentMoviesBinding
 import com.application.zaki.movies.domain.model.movies.ListMovies
 import com.application.zaki.movies.domain.model.movies.MoviesCategoryItem
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.view.DetailFragment.Companion.INTENT_FROM_MOVIE
 import com.application.zaki.movies.presentation.home.HomeFragmentDirections
-import com.application.zaki.movies.presentation.list.view.ListFragment.Companion.INTENT_FROM_POPULAR_MOVIES
-import com.application.zaki.movies.presentation.list.view.ListFragment.Companion.INTENT_FROM_TOP_RATED_MOVIES
-import com.application.zaki.movies.presentation.list.view.ListFragment.Companion.INTENT_FROM_UP_COMING_MOVIES
-import com.application.zaki.movies.presentation.movies.adapter.*
+import com.application.zaki.movies.presentation.movies.adapter.MovieCategoryAdapter
+import com.application.zaki.movies.presentation.movies.adapter.MovieCategoryItemAdapter
+import com.application.zaki.movies.presentation.movies.adapter.NowPlayingMoviesAdapter
 import com.application.zaki.movies.presentation.movies.viewmodel.MoviesViewModel
 import com.application.zaki.movies.utils.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,32 +57,48 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
                 currentItem += 1
             }
         }
-        setImageSlider()
-        setTopRatedMovies()
-        setPopularMovies()
-        setUpComingMovies()
-
-        binding?.apply {
-//            tvSeeAllTopRatedMovies.setOnClickListener {
-//                navigateToListPage(INTENT_FROM_TOP_RATED_MOVIES)
-//            }
-//
-//            tvSeeAllPopularMovies.setOnClickListener {
-//                navigateToListPage(INTENT_FROM_POPULAR_MOVIES)
-//            }
-//            tvSeeAllUpComingMovies.setOnClickListener {
-//                navigateToListPage(INTENT_FROM_UP_COMING_MOVIES)
-//            }
-        }
+        setMoviesSlider()
+        setMovies()
+        eventListener()
     }
 
-    private fun setImageSlider() {
+    private fun eventListener() {
         nowPlayingMoviesAdapter.setOnItemClickCallback(object :
             NowPlayingMoviesAdapter.OnItemClickCallback {
             override fun onItemClicked(data: ListMovies?) {
                 navigateToDetailPage(data?.id ?: 0)
             }
         })
+
+        topRatedMoviesAdapter.setOnItemClickCallback(object :
+            MovieCategoryItemAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: ListMovies?) {
+                navigateToDetailPage(data?.id ?: 0)
+            }
+        })
+
+        popularMoviesAdapter.setOnItemClickCallback(object :
+            MovieCategoryItemAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: ListMovies?) {
+                navigateToDetailPage(data?.id ?: 0)
+            }
+        })
+
+        upComingMoviesAdapter.setOnItemClickCallback(object :
+            MovieCategoryItemAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: ListMovies?) {
+                navigateToDetailPage(data?.id ?: 0)
+            }
+        })
+        movieCategoryAdapter.setOnSeeAllClickCallback(object :
+            MovieCategoryAdapter.OnSeeAllClickCallback {
+            override fun onSeeAllClicked(movie: Movie) {
+                navigateToListPage(movie)
+            }
+        })
+    }
+
+    private fun setMoviesSlider() {
         moviesViewModel.getMovies(
             movie = Movie.NOW_PLAYING_MOVIES,
             genre = Genre.MOVIES,
@@ -133,20 +150,17 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
         }
     }
 
-    private fun setTopRatedMovies() {
-        topRatedMoviesAdapter.setOnItemClickCallback(object :
-            MovieCategoryItemAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: ListMovies?) {
-                navigateToDetailPage(data?.id ?: 0)
-            }
-        })
+    private fun setMovies() {
         moviesViewModel.getMovies(
             movie = Movie.TOP_RATED_MOVIES,
             genre = Genre.MOVIES,
             page = Page.ONE,
             rxDisposer = RxDisposer().apply { bind(lifecycle) }
         ).observe(viewLifecycleOwner) { result ->
-            val data = MoviesCategoryItem(categoryTitle = "Top", categories = result)
+            val data = MoviesCategoryItem(
+                categoryTitle = resources.getString(R.string.top_rated_movies),
+                categories = result
+            )
             moviesCategory.add(data)
 
             movieCategoryAdapter.submitList(moviesCategory)
@@ -155,49 +169,18 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
                 adapter = movieCategoryAdapter
                 setHasFixedSize(true)
             }
-
-            topRatedMoviesAdapter.addLoadStateListener { loadState ->
-//                when (loadState.refresh) {
-//                    is LoadState.Loading -> {
-//                        binding?.apply {
-//                            shimmerTopRatedMovies.startShimmer()
-//                            shimmerTopRatedMovies.visible()
-//                            rvTopRatedMovies.gone()
-//                        }
-//                    }
-//                    is LoadState.NotLoading -> {
-//                        binding?.apply {
-//                            shimmerTopRatedMovies.stopShimmer()
-//                            shimmerTopRatedMovies.gone()
-//                            rvTopRatedMovies.visible()
-//                        }
-//                    }
-//                    is LoadState.Error -> {
-//                        binding?.apply {
-//                            shimmerTopRatedMovies.stopShimmer()
-//                            shimmerTopRatedMovies.gone()
-//                            rvTopRatedMovies.gone()
-//                        }
-//                    }
-//                }
-            }
         }
-    }
 
-    private fun setPopularMovies() {
-        popularMoviesAdapter.setOnItemClickCallback(object :
-            MovieCategoryItemAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: ListMovies?) {
-                navigateToDetailPage(data?.id ?: 0)
-            }
-        })
         moviesViewModel.getMovies(
             movie = Movie.POPULAR_MOVIES,
             genre = Genre.MOVIES,
             page = Page.ONE,
             rxDisposer = RxDisposer().apply { bind(lifecycle) }
         ).observe(viewLifecycleOwner) { result ->
-            val data = MoviesCategoryItem(categoryTitle = "Popular", categories = result)
+            val data = MoviesCategoryItem(
+                categoryTitle = resources.getString(R.string.popular_movies),
+                categories = result
+            )
             moviesCategory.add(data)
 
             movieCategoryAdapter.submitList(moviesCategory)
@@ -206,49 +189,18 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
                 adapter = movieCategoryAdapter
                 setHasFixedSize(true)
             }
-
-            popularMoviesAdapter.addLoadStateListener { loadState ->
-//                when (loadState.refresh) {
-//                    is LoadState.Loading -> {
-//                        binding?.apply {
-//                            shimmerPopularMovies.startShimmer()
-//                            shimmerPopularMovies.visible()
-//                            rvPopularMovies.gone()
-//                        }
-//                    }
-//                    is LoadState.NotLoading -> {
-//                        binding?.apply {
-//                            shimmerPopularMovies.stopShimmer()
-//                            shimmerPopularMovies.gone()
-//                            rvPopularMovies.visible()
-//                        }
-//                    }
-//                    is LoadState.Error -> {
-//                        binding?.apply {
-//                            shimmerPopularMovies.stopShimmer()
-//                            shimmerPopularMovies.gone()
-//                            rvPopularMovies.gone()
-//                        }
-//                    }
-//                }
-            }
         }
-    }
 
-    private fun setUpComingMovies() {
-        upComingMoviesAdapter.setOnItemClickCallback(object :
-            MovieCategoryItemAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: ListMovies?) {
-                navigateToDetailPage(data?.id ?: 0)
-            }
-        })
         moviesViewModel.getMovies(
             movie = Movie.UP_COMING_MOVIES,
             genre = Genre.MOVIES,
             page = Page.ONE,
             rxDisposer = RxDisposer().apply { bind(lifecycle) }
         ).observe(viewLifecycleOwner) { result ->
-            val data = MoviesCategoryItem(categoryTitle = "Up Coming", categories = result)
+            val data = MoviesCategoryItem(
+                categoryTitle = resources.getString(R.string.up_coming_movies),
+                categories = result
+            )
             moviesCategory.add(data)
 
             movieCategoryAdapter.submitList(moviesCategory)
@@ -257,32 +209,6 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
                 adapter = movieCategoryAdapter
                 setHasFixedSize(true)
             }
-        }
-
-        upComingMoviesAdapter.addLoadStateListener { loadState ->
-//            when (loadState.refresh) {
-//                is LoadState.Loading -> {
-//                    binding?.apply {
-//                        shimmerUpComingMovies.startShimmer()
-//                        shimmerUpComingMovies.visible()
-//                        rvUpComingMovies.gone()
-//                    }
-//                }
-//                is LoadState.NotLoading -> {
-//                    binding?.apply {
-//                        shimmerUpComingMovies.stopShimmer()
-//                        shimmerUpComingMovies.gone()
-//                        rvUpComingMovies.visible()
-//                    }
-//                }
-//                is LoadState.Error -> {
-//                    binding?.apply {
-//                        shimmerUpComingMovies.stopShimmer()
-//                        shimmerUpComingMovies.gone()
-//                        rvUpComingMovies.gone()
-//                    }
-//                }
-//            }
         }
     }
 
@@ -294,16 +220,16 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
         findNavController().navigate(navigateToDetailFragment)
     }
 
-    private fun navigateToListPage(intentFrom: String) {
+    private fun navigateToListPage(movie: Movie) {
         val navigateToListFragment =
             HomeFragmentDirections.actionHomeFragmentToListFragment()
-        navigateToListFragment.intentFrom = intentFrom
+        navigateToListFragment.intentFrom = movie
         findNavController().navigate(navigateToListFragment)
     }
 
     override fun onPause() {
-        super.onPause()
         sliderHandler.removeCallbacks(sliderRunnable)
+        super.onPause()
     }
 
     override fun onResume() {

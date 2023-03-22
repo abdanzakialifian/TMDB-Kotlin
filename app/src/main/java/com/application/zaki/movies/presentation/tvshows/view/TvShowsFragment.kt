@@ -293,7 +293,7 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
     private fun navigateToListPage(intentFrom: String) {
         val navigateToListFragment =
             HomeFragmentDirections.actionHomeFragmentToListFragment()
-        navigateToListFragment.intentFrom = intentFrom
+//        navigateToListFragment.intentFrom = intentFrom
         findNavController().navigate(navigateToListFragment)
     }
 }
