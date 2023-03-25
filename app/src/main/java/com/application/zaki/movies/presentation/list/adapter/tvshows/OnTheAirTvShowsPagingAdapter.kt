@@ -6,7 +6,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListVerticalBinding
-import com.application.zaki.movies.domain.model.genre.Genre
+import com.application.zaki.movies.domain.model.genre.GenresItem
 import com.application.zaki.movies.domain.model.tvshows.ListOnTheAirTvShows
 import com.application.zaki.movies.presentation.list.adapter.genres.GenresAdapter
 import com.application.zaki.movies.utils.loadImageUrl
@@ -37,18 +37,23 @@ class OnTheAirTvShowsPagingAdapter @Inject constructor() :
                     }
 
                     // mapping data genre
-                    val genre = ArrayList<Genre>()
-                    genreIds?.forEach { genreId ->
-                        genres?.forEach {
-                            if (genreId == it?.id) {
-                                genre.add(Genre(it?.id ?: 0, it?.name ?: ""))
+                    val genre = ArrayList<GenresItem>()
+                    genreIds?.map { genreId ->
+                        genres?.map { genres ->
+                            if (genreId == genres?.id) {
+                                genre.add(
+                                    GenresItem(
+                                        name = genres?.name ?: "",
+                                        id = genres?.id ?: 0
+                                    )
+                                )
                             }
                         }
                     }
 
                     // convert list to adapter
                     val adapter = GenresAdapter(object : GenresAdapter.OnItemClickCallback {
-                        override fun onItemClicked(data: Genre) {
+                        override fun onItemClicked(data: GenresItem) {
                             onItemClickCallback.onItemGenreClicked(data)
                         }
                     })
@@ -78,7 +83,7 @@ class OnTheAirTvShowsPagingAdapter @Inject constructor() :
 
     interface OnItemClickCallback {
         fun onItemClicked(data: ListOnTheAirTvShows?)
-        fun onItemGenreClicked(data: Genre)
+        fun onItemGenreClicked(data: GenresItem)
     }
 
     companion object {

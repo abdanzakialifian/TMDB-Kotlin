@@ -11,8 +11,9 @@ import com.application.zaki.movies.domain.model.movies.ListMovies
 import com.application.zaki.movies.utils.loadImageUrl
 import javax.inject.Inject
 
-class MovieCategoryItemAdapter @Inject constructor() :
-    PagingDataAdapter<ListMovies, MovieCategoryItemAdapter.MovieItemViewHolder>(DIFF_CALLBACK) {
+class MovieItemAdapter @Inject constructor() :
+    PagingDataAdapter<ListMovies, MovieItemAdapter.MovieItemViewHolder>(DIFF_CALLBACK) {
+
     private lateinit var onItemClickCallback: OnItemClickCallback
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
@@ -49,12 +50,12 @@ class MovieCategoryItemAdapter @Inject constructor() :
                 params.setMargins(30, 0, 15, 0)
                 holder.binding.layoutList.layoutParams = params
             }
-            7 -> {
+            19 -> {
                 val params = ConstraintLayout.LayoutParams(
                     ConstraintLayout.LayoutParams.WRAP_CONTENT,
                     ConstraintLayout.LayoutParams.WRAP_CONTENT
                 )
-                params.setMargins(0, 0, 30, 0)
+                params.setMargins(0, 0, 15, 0)
                 holder.binding.layoutList.layoutParams = params
             }
             else -> {

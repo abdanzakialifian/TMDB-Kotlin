@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/tv_title_movies"
-        android:layout_width="150dp"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:background="@drawable/background_rounded_shimmer"
         android:fontFamily="@font/montserrat_regular"

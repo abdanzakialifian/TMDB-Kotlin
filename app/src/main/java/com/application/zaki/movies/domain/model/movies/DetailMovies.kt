@@ -1,5 +1,7 @@
 package com.application.zaki.movies.domain.model.movies
 
+import com.application.zaki.movies.domain.model.genre.GenresItem
+
 data class DetailMovies(
     val originalLanguage: String? = null,
     val imdbId: String? = null,
@@ -9,7 +11,7 @@ data class DetailMovies(
     val backdropPath: String? = null,
     val revenue: Int? = null,
     val credits: Credits? = null,
-    val genres: List<GenresItem?>? = null,
+    val genres: List<GenresItem>? = null,
     val popularity: Any? = null,
     val productionCountries: List<ProductionCountriesItem?>? = null,
     val id: Int? = null,
@@ -73,11 +75,6 @@ data class CastItem(
     val id: Int? = null,
     val adult: Boolean? = null,
     val order: Int? = null
-)
-
-data class GenresItem(
-    val name: String? = null,
-    val id: Int? = null
 )
 
 data class SpokenLanguagesItem(

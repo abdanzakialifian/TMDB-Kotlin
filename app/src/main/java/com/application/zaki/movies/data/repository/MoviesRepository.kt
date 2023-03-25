@@ -4,8 +4,12 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.application.zaki.movies.data.source.remote.RemoteDataSource
 import com.application.zaki.movies.domain.interfaces.IMoviesRepository
-import com.application.zaki.movies.domain.model.movies.*
+import com.application.zaki.movies.domain.model.genre.Genres
+import com.application.zaki.movies.domain.model.movies.DetailMovies
+import com.application.zaki.movies.domain.model.movies.ListMovies
 import com.application.zaki.movies.utils.DataMapperMovies
+import com.application.zaki.movies.utils.DataMapperMovies.toGenreItemMovies
+import com.application.zaki.movies.utils.DataMapperMovies.toListMovies
 import com.application.zaki.movies.utils.Genre
 import com.application.zaki.movies.utils.Movie
 import com.application.zaki.movies.utils.Page
@@ -21,13 +25,14 @@ class MoviesRepository @Inject constructor(private val remoteDataSource: RemoteD
             DataMapperMovies.mapDetailMovieResponseToDetailMovie(data)
         }
 
-    override fun getMovies(
-        movie: Movie, genre: Genre, page: Page
-    ): Flowable<PagingData<ListMovies>> = Flowable.zip(
-        remoteDataSource.getMovies(movie, page), remoteDataSource.getGenre(genre)
-    ) { movies, genres ->
-        return@zip movies.map { map ->
-            DataMapperMovies.mapListMoviesResponseToListMovies(map, genres)
-        }
+    override fun getGenres(genre: Genre): Flowable<Genres> = remoteDataSource.getGenre(genre).map {
+        it.toGenreItemMovies()
     }
+
+    override fun getMovies(movie: Movie, page: Page): Flowable<PagingData<ListMovies>> =
+        remoteDataSource.getMovies(movie, page).map { pagingData ->
+            pagingData.map {
+                it.toListMovies()
+            }
+        }
 }

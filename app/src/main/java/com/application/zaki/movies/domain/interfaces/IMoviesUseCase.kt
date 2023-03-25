@@ -5,6 +5,7 @@ import com.application.zaki.movies.domain.model.movies.*
 import com.application.zaki.movies.utils.Genre
 import com.application.zaki.movies.utils.Movie
 import com.application.zaki.movies.utils.Page
+import com.application.zaki.movies.utils.RxDisposer
 import io.reactivex.Flowable
 
 interface IMoviesUseCase {
@@ -12,6 +13,7 @@ interface IMoviesUseCase {
     fun getMovies(
         movie: Movie,
         genre: Genre,
-        page: Page
+        page: Page,
+        rxDisposer: RxDisposer
     ): Flowable<PagingData<ListMovies>>
 }

@@ -1,14 +1,13 @@
 package com.application.zaki.movies.utils
 
 import android.util.Log
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import javax.inject.Inject
 
 // custom disposable rxjava with design pattern mvvm
-class RxDisposer : LifecycleObserver {
+class RxDisposer @Inject constructor() : DefaultLifecycleObserver {
     private var compositeDisposable: CompositeDisposable? = null
 
     fun bind(lifecycle: Lifecycle) {
@@ -22,16 +21,16 @@ class RxDisposer : LifecycleObserver {
         }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun onDestroy() {
+    override fun onDestroy(owner: LifecycleOwner) {
         Log.d("CEK", "ON DESTROY")
         compositeDisposable?.dispose()
+        super.onDestroy(owner)
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    fun onPause() {
-        Log.d("CEK","ON PAUSE")
+    override fun onPause(owner: LifecycleOwner) {
+        Log.d("CEK", "ON PAUSE")
         compositeDisposable?.clear()
+        super.onPause(owner)
     }
 }
 

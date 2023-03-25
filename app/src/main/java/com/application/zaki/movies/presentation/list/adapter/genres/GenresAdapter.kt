@@ -6,15 +6,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListGenreBinding
-import com.application.zaki.movies.domain.model.genre.Genre
+import com.application.zaki.movies.domain.model.genre.GenresItem
 
 class GenresAdapter(private val onItemClickCallback: OnItemClickCallback) :
-    ListAdapter<Genre, GenresAdapter.GenresViewHolder>(DIFF_CALLBACK) {
+    ListAdapter<GenresItem, GenresAdapter.GenresViewHolder>(DIFF_CALLBACK) {
 
     inner class GenresViewHolder(private val binding: ItemListGenreBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Genre) {
-            binding.tvGenre.text = item.genreName
+        fun bind(item: GenresItem) {
+            binding.tvGenre.text = item.name
             itemView.setOnClickListener {
                 onItemClickCallback.onItemClicked(item)
             }
@@ -33,15 +33,15 @@ class GenresAdapter(private val onItemClickCallback: OnItemClickCallback) :
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: Genre)
+        fun onItemClicked(data: GenresItem)
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Genre>() {
-            override fun areItemsTheSame(oldItem: Genre, newItem: Genre): Boolean =
-                oldItem.genreId == newItem.genreId
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<GenresItem>() {
+            override fun areItemsTheSame(oldItem: GenresItem, newItem: GenresItem): Boolean =
+                oldItem.id == newItem.id
 
-            override fun areContentsTheSame(oldItem: Genre, newItem: Genre): Boolean =
+            override fun areContentsTheSame(oldItem: GenresItem, newItem: GenresItem): Boolean =
                 oldItem == newItem
         }
     }

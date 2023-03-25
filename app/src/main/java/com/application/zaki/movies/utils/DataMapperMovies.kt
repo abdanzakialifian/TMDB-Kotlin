@@ -5,33 +5,40 @@ import com.application.zaki.movies.data.source.remote.response.combine.ResultsIt
 import com.application.zaki.movies.data.source.remote.response.combine.ReviewItemResponse
 import com.application.zaki.movies.data.source.remote.response.movies.DetailMoviesResponse
 import com.application.zaki.movies.data.source.remote.response.movies.ListMoviesResponse
+import com.application.zaki.movies.domain.model.genre.Genres
+import com.application.zaki.movies.domain.model.genre.GenresItem
 import com.application.zaki.movies.domain.model.movies.*
 
 object DataMapperMovies {
+    fun GenreResponse.toGenreItemMovies(): Genres {
+        val listGenresItem = this.genres?.map {
+            GenresItem(name = it.name, id = it.id)
+        }
+        return Genres(genres = listGenresItem)
+    }
 
-    fun mapListMoviesResponseToListMovies(
-        listMovies: ListMoviesResponse,
-        genreMovies: GenreResponse
-    ): ListMovies {
-        val listGenreMovies = genreMovies.genres?.map { map ->
-            GenreItemMovies(name = map.name, id = map.id)
+    fun ListMoviesResponse.toListMovies(): ListMovies = ListMovies(
+        originalTitle = this.originalTitle,
+        title = this.title,
+        genreIds = this.genreIds,
+        posterPath = this.posterPath,
+        voteAverage = this.voteAverage,
+        id = this.id,
+        genres = listOf()
+    )
+
+    fun ListMovies.toMergeListMoviesGenres(genres: Genres): ListMovies {
+        val listGenreMovies = genres.genres?.map { map ->
+            GenresItem(name = map.name, id = map.id)
         }
 
         return ListMovies(
-            overview = listMovies.overview,
-            originalLanguage = listMovies.originalLanguage,
-            originalTitle = listMovies.originalTitle,
-            video = listMovies.video,
-            title = listMovies.title,
-            genreIds = listMovies.genreIds,
-            posterPath = listMovies.posterPath,
-            backdropPath = listMovies.backdropPath,
-            releaseDate = listMovies.releaseDate,
-            popularity = listMovies.popularity,
-            voteAverage = listMovies.voteAverage,
-            id = listMovies.id,
-            adult = listMovies.adult,
-            voteCount = listMovies.voteCount,
+            originalTitle = this.originalTitle,
+            title = this.title,
+            genreIds = this.genreIds,
+            posterPath = this.posterPath,
+            voteAverage = this.voteAverage,
+            id = this.id,
             genres = listGenreMovies
         )
     }

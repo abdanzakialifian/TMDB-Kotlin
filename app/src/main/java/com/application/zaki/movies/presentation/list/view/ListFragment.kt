@@ -8,7 +8,7 @@ import com.application.zaki.movies.data.source.remote.paging.tvshows.OnTheAirTvS
 import com.application.zaki.movies.data.source.remote.paging.tvshows.PopularTvShowsRxPagingSource
 import com.application.zaki.movies.data.source.remote.paging.tvshows.TopRatedTvShowsRxPagingSource
 import com.application.zaki.movies.databinding.FragmentListBinding
-import com.application.zaki.movies.domain.model.genre.Genre
+import com.application.zaki.movies.domain.model.genre.GenresItem
 import com.application.zaki.movies.domain.model.movies.ListMovies
 import com.application.zaki.movies.domain.model.tvshows.ListOnTheAirTvShows
 import com.application.zaki.movies.domain.model.tvshows.ListPopularTvShows
@@ -84,7 +84,7 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
                         navigateToDetailPage(data?.id ?: 0)
                     }
 
-                    override fun onItemGenreClicked(data: Genre) {
+                    override fun onItemGenreClicked(data: GenresItem) {
                         navigateToDiscoverPage(data, ListDiscoverFragment.INTENT_FROM_MOVIE)
                     }
                 })
@@ -118,7 +118,7 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
                         navigateToDetailPage(data?.id ?: 0)
                     }
 
-                    override fun onItemGenreClicked(data: Genre) {
+                    override fun onItemGenreClicked(data: GenresItem) {
                         navigateToDiscoverPage(data, ListDiscoverFragment.INTENT_FROM_MOVIE)
                     }
                 })
@@ -151,7 +151,7 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
                         navigateToDetailPage(data?.id ?: 0)
                     }
 
-                    override fun onItemGenreClicked(data: Genre) {
+                    override fun onItemGenreClicked(data: GenresItem) {
                         navigateToDiscoverPage(data, ListDiscoverFragment.INTENT_FROM_MOVIE)
                     }
                 })
@@ -183,7 +183,7 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
 //                        navigateToDetailPage(data?.id ?: 0)
 //                    }
 //
-//                    override fun onItemGenreClicked(data: Genre) {
+//                    override fun onItemGenreClicked(data: GenresItem) {
 //                        navigateToDiscoverPage(data, ListDiscoverFragment.INTENT_FROM_TV_SHOWS)
 //                    }
 //                })
@@ -215,7 +215,7 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
 //                        navigateToDetailPage(data?.id ?: 0)
 //                    }
 //
-//                    override fun onItemGenreClicked(data: Genre) {
+//                    override fun onItemGenreClicked(data: GenresItem) {
 //                        navigateToDiscoverPage(data, ListDiscoverFragment.INTENT_FROM_TV_SHOWS)
 //                    }
 //                })
@@ -247,7 +247,7 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
 //                        navigateToDetailPage(data?.id ?: 0)
 //                    }
 //
-//                    override fun onItemGenreClicked(data: Genre) {
+//                    override fun onItemGenreClicked(data: GenresItem) {
 //                        navigateToDiscoverPage(data, ListDiscoverFragment.INTENT_FROM_TV_SHOWS)
 //                    }
 //                })
@@ -299,12 +299,12 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
         findNavController().navigate(navigateToDetailFragment)
     }
 
-    private fun navigateToDiscoverPage(data: Genre, intentFrom: String) {
+    private fun navigateToDiscoverPage(data: GenresItem, intentFrom: String) {
         val navigateToDetailFragment =
             ListFragmentDirections.actionListFragmentToListDiscoverFragment()
-        navigateToDetailFragment.genreId = data.genreId ?: 0
+        navigateToDetailFragment.genreId = data.id ?: 0
         navigateToDetailFragment.intentFrom = intentFrom
-        navigateToDetailFragment.genreName = data.genreName ?: ""
+        navigateToDetailFragment.genreName = data.name ?: ""
         findNavController().navigate(navigateToDetailFragment)
     }
 
