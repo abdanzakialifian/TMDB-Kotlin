@@ -196,14 +196,18 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
         findNavController().navigate(navigateToListFragment)
     }
 
-    override fun onPause() {
-        sliderHandler.removeCallbacks(sliderRunnable)
-        movieCategories.clear()
-        super.onPause()
-    }
-
     override fun onResume() {
         super.onResume()
         sliderHandler.postDelayed(sliderRunnable, 2000)
+    }
+
+    override fun onPause() {
+        sliderHandler.removeCallbacks(sliderRunnable)
+        super.onPause()
+    }
+
+    override fun onDestroyView() {
+        movieCategories.clear()
+        super.onDestroyView()
     }
 }
