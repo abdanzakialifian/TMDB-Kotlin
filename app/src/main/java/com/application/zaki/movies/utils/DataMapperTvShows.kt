@@ -39,7 +39,7 @@ object DataMapperTvShows {
     fun mapDetailTvShowsResponseToDetailTvShows(detailTvShowsResponse: DetailTvShowsResponse): DetailTvShows {
         val results = ArrayList<ResultsItem>()
         detailTvShowsResponse.videos?.results?.forEach {
-            it?.let { data ->
+            it.let { data ->
                 results.add(
                     ResultsItem(
                         site = data.site,
@@ -60,7 +60,7 @@ object DataMapperTvShows {
 
         val networks = ArrayList<NetworksItem>()
         detailTvShowsResponse.networks?.forEach {
-            it?.let { data ->
+            it.let { data ->
                 networks.add(
                     NetworksItem(
                         logoPath = data.logoPath,
@@ -74,7 +74,7 @@ object DataMapperTvShows {
 
         val cast = ArrayList<CastItem>()
         detailTvShowsResponse.credits?.cast?.forEach {
-            it?.let { data ->
+            it.let { data ->
                 cast.add(
                     CastItem(
                         character = data.character,
@@ -94,7 +94,7 @@ object DataMapperTvShows {
         }
         val crew = ArrayList<CrewItem>()
         detailTvShowsResponse.credits?.crew?.forEach {
-            it?.let { data ->
+            it.let { data ->
                 crew.add(
                     CrewItem(
                         gender = data.gender,
@@ -116,14 +116,14 @@ object DataMapperTvShows {
 
         val genres = ArrayList<GenresItem>()
         detailTvShowsResponse.genres?.forEach {
-            it?.let { data ->
+            it.let { data ->
                 genres.add(GenresItem(name = data.name, id = data.id))
             }
         }
 
         val productionCountries = ArrayList<ProductionCountriesItem>()
         detailTvShowsResponse.productionCountries?.forEach {
-            it?.let { data ->
+            it.let { data ->
                 productionCountries.add(
                     ProductionCountriesItem(
                         iso31661 = data.iso31661,
@@ -135,7 +135,7 @@ object DataMapperTvShows {
 
         val seasons = ArrayList<SeasonsItem>()
         detailTvShowsResponse.seasons?.forEach {
-            it?.let { data ->
+            it.let { data ->
                 seasons.add(
                     SeasonsItem(
                         airDate = data.airDate,
@@ -167,7 +167,7 @@ object DataMapperTvShows {
 
         val spokenLanguages = ArrayList<SpokenLanguagesItem>()
         detailTvShowsResponse.spokenLanguages?.forEach {
-            it?.let { data ->
+            it.let { data ->
                 spokenLanguages.add(
                     SpokenLanguagesItem(
                         name = data.name,
@@ -180,7 +180,7 @@ object DataMapperTvShows {
 
         val productionCompanies = ArrayList<ProductionCompaniesItem>()
         detailTvShowsResponse.productionCompanies?.forEach {
-            it?.let { data ->
+            it.let { data ->
                 productionCompanies.add(
                     ProductionCompaniesItem(
                         logoPath = data.logoPath,

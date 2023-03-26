@@ -6,6 +6,7 @@ import com.application.zaki.movies.domain.interfaces.ITvShowsRepository
 import com.application.zaki.movies.domain.interfaces.ITvShowsUseCase
 import com.application.zaki.movies.domain.model.tvshows.DetailTvShows
 import com.application.zaki.movies.domain.model.tvshows.ListTvShows
+import com.application.zaki.movies.utils.DataMapperTvShows.toMergeListTvShowsGenres
 import com.application.zaki.movies.utils.Genre
 import com.application.zaki.movies.utils.Page
 import com.application.zaki.movies.utils.TvShow
@@ -26,7 +27,7 @@ class TvShowsUseCase @Inject constructor(private val tvShowsRepository: ITvShows
         tvShowsRepository.getGenres(genre)
     ) { tvShows, genres ->
         return@zip tvShows.map { map ->
-            map.
+            map.toMergeListTvShowsGenres(genres)
         }
     }
 }
