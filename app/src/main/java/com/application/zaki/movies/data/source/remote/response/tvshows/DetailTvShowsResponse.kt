@@ -14,7 +14,7 @@ data class DetailTvShowsResponse(
     val videos: VideosResponse? = null,
 
     @field:SerializedName("networks")
-    val networks: List<NetworksItemResponse?>? = null,
+    val networks: List<NetworksItemResponse>? = null,
 
     @field:SerializedName("type")
     val type: String? = null,
@@ -26,13 +26,13 @@ data class DetailTvShowsResponse(
     val credits: CreditsResponse? = null,
 
     @field:SerializedName("genres")
-    val genres: List<GenresItemResponse?>? = null,
+    val genres: List<GenresItemResponse>? = null,
 
     @field:SerializedName("popularity")
     val popularity: Any? = null,
 
     @field:SerializedName("production_countries")
-    val productionCountries: List<ProductionCountriesItemResponse?>? = null,
+    val productionCountries: List<ProductionCountriesItemResponse>? = null,
 
     @field:SerializedName("id")
     val id: Int? = null,
@@ -50,13 +50,13 @@ data class DetailTvShowsResponse(
     val overview: String? = null,
 
     @field:SerializedName("seasons")
-    val seasons: List<SeasonsItemResponse?>? = null,
+    val seasons: List<SeasonsItemResponse>? = null,
 
     @field:SerializedName("languages")
-    val languages: List<String?>? = null,
+    val languages: List<String>? = null,
 
     @field:SerializedName("created_by")
-    val createdBy: List<Any?>? = null,
+    val createdBy: List<Any>? = null,
 
     @field:SerializedName("last_episode_to_air")
     val lastEpisodeToAir: LastEpisodeToAirResponse? = null,
@@ -65,13 +65,13 @@ data class DetailTvShowsResponse(
     val posterPath: String? = null,
 
     @field:SerializedName("origin_country")
-    val originCountry: List<String?>? = null,
+    val originCountry: List<String>? = null,
 
     @field:SerializedName("spoken_languages")
-    val spokenLanguages: List<SpokenLanguagesItemResponse?>? = null,
+    val spokenLanguages: List<SpokenLanguagesItemResponse>? = null,
 
     @field:SerializedName("production_companies")
-    val productionCompanies: List<ProductionCompaniesItemResponse?>? = null,
+    val productionCompanies: List<ProductionCompaniesItemResponse>? = null,
 
     @field:SerializedName("original_name")
     val originalName: String? = null,
@@ -86,7 +86,7 @@ data class DetailTvShowsResponse(
     val tagline: String? = null,
 
     @field:SerializedName("episode_run_time")
-    val episodeRunTime: List<Any?>? = null,
+    val episodeRunTime: List<Any>? = null,
 
     @field:SerializedName("adult")
     val adult: Boolean? = null,
@@ -194,10 +194,10 @@ data class CastItemResponse(
 data class CreditsResponse(
 
     @field:SerializedName("cast")
-    val cast: List<CastItemResponse?>? = null,
+    val cast: List<CastItemResponse>? = null,
 
     @field:SerializedName("crew")
-    val crew: List<CrewItemResponse?>? = null
+    val crew: List<CrewItemResponse>? = null
 )
 
 data class SeasonsItemResponse(
@@ -278,7 +278,7 @@ data class ProductionCountriesItemResponse(
 data class VideosResponse(
 
     @field:SerializedName("results")
-    val results: List<ResultsItemResponse?>? = null
+    val results: List<ResultsItemResponse>? = null
 )
 
 data class ResultsItemResponse(

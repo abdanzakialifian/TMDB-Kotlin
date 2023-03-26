@@ -1,6 +1,9 @@
 package com.application.zaki.movies.utils
 
-import com.application.zaki.movies.data.source.remote.response.tvshows.*
+import com.application.zaki.movies.data.source.remote.response.tvshows.DetailTvShowsResponse
+import com.application.zaki.movies.data.source.remote.response.tvshows.ListTvShowsResponse
+import com.application.zaki.movies.domain.model.genre.Genres
+import com.application.zaki.movies.domain.model.genre.GenresItem
 import com.application.zaki.movies.domain.model.tvshows.*
 
 object DataMapperTvShows {
@@ -15,6 +18,23 @@ object DataMapperTvShows {
         id = this.id,
         genres = listOf()
     )
+
+    fun ListTvShows.toMergeListTvShowsGenres(genres: Genres): ListTvShows {
+        val listGenresTvShows = genres.genres?.map { map ->
+            GenresItem(name = map.name, id = map.id)
+        }
+
+        return ListTvShows(
+            originalLanguage = this.originalLanguage,
+            genreIds = this.genreIds,
+            posterPath = this.posterPath,
+            voteAverage = this.voteAverage,
+            originalName = this.originalName,
+            name = this.name,
+            id = this.id,
+            genres = listGenresTvShows
+        )
+    }
 
     fun mapDetailTvShowsResponseToDetailTvShows(detailTvShowsResponse: DetailTvShowsResponse): DetailTvShows {
         val results = ArrayList<ResultsItem>()
