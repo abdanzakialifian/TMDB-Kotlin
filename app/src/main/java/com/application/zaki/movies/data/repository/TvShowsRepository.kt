@@ -4,9 +4,15 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.application.zaki.movies.data.source.remote.RemoteDataSource
 import com.application.zaki.movies.domain.interfaces.ITvShowsRepository
-import com.application.zaki.movies.domain.model.tvshows.*
+import com.application.zaki.movies.domain.model.genre.Genres
+import com.application.zaki.movies.domain.model.tvshows.DetailTvShows
+import com.application.zaki.movies.domain.model.tvshows.ListTvShows
+import com.application.zaki.movies.utils.DataMapperMovies.toGenreItemMovies
 import com.application.zaki.movies.utils.DataMapperTvShows
+import com.application.zaki.movies.utils.DataMapperTvShows.toListTvShows
 import com.application.zaki.movies.utils.Genre
+import com.application.zaki.movies.utils.Page
+import com.application.zaki.movies.utils.TvShow
 import io.reactivex.Flowable
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -14,11 +20,6 @@ import javax.inject.Singleton
 @Singleton
 class TvShowsRepository @Inject constructor(private val remoteDataSource: RemoteDataSource) :
     ITvShowsRepository {
-    override fun getAiringTodayTvShows(): Flowable<AiringTodayTvShows> =
-        remoteDataSource.getAiringTodayTvShows()
-            .map { data ->
-                DataMapperTvShows.mapAiringTodayTvShowsResponseToAiringTodayTvShows(data)
-            }
 
     override fun getDetailTvShows(tvId: String): Flowable<DetailTvShows> =
         remoteDataSource.getDetailTvShows(tvId)
@@ -26,51 +27,15 @@ class TvShowsRepository @Inject constructor(private val remoteDataSource: Remote
                 DataMapperTvShows.mapDetailTvShowsResponseToDetailTvShows(data)
             }
 
-    override fun getOnTheAirTvShowsPaging(
-        genre: Genre,
-        totalPage: String
-    ): Flowable<PagingData<ListOnTheAirTvShows>> =
-        Flowable.zip(
-            remoteDataSource.getOnTheAirTvShowsPaging(totalPage),
-            remoteDataSource.getGenre(genre)
-        ) { onTheAirTvShowsPaging, genreTvShows ->
-            return@zip onTheAirTvShowsPaging.map { data ->
-                DataMapperTvShows.mapListOnTheAirTvShowsResponseToListOnTheAirTvShows(
-                    data,
-                    genreTvShows
-                )
-            }
+    override fun getGenres(genre: Genre): Flowable<Genres> = remoteDataSource.getGenre(genre)
+        .map {
+            it.toGenreItemMovies()
         }
 
-    override fun getPopularTvShowsPaging(
-        genre: Genre,
-        totalPage: String
-    ): Flowable<PagingData<ListPopularTvShows>> =
-        Flowable.zip(
-            remoteDataSource.getPopularTvShowsPaging(totalPage),
-            remoteDataSource.getGenre(genre)
-        ) { popularTvShowsPaging, genreTvShows ->
-            return@zip popularTvShowsPaging.map {
-                DataMapperTvShows.mapListPopularTvShowsResponseToListPopularTvShows(
-                    it,
-                    genreTvShows
-                )
-            }
-        }
-
-    override fun getTopRatedTvShowsPaging(
-        genre: Genre,
-        totalPage: String
-    ): Flowable<PagingData<ListTopRatedTvShows>> =
-        Flowable.zip(
-            remoteDataSource.getTopRatedTvShowsPaging(totalPage),
-            remoteDataSource.getGenre(genre)
-        ) { topRatedTvShowsPaging, genreTvShows ->
-            return@zip topRatedTvShowsPaging.map {
-                DataMapperTvShows.mapListTopRatedTvShowsResponseToListTopRatedTvShows(
-                    it,
-                    genreTvShows
-                )
+    override fun getTvShows(tvShow: TvShow, page: Page): Flowable<PagingData<ListTvShows>> =
+        remoteDataSource.getTvShows(tvShow, page).map { pagingData ->
+            pagingData.map {
+                it.toListTvShows()
             }
         }
 }
