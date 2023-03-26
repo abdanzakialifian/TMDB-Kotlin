@@ -25,14 +25,16 @@ class MoviesRepository @Inject constructor(private val remoteDataSource: RemoteD
             DataMapperMovies.mapDetailMovieResponseToDetailMovie(data)
         }
 
-    override fun getGenres(genre: Genre): Flowable<Genres> = remoteDataSource.getGenre(genre).map {
-        it.toGenreItemMovies()
-    }
+    override fun getGenres(genre: Genre): Flowable<Genres> = remoteDataSource.getGenre(genre)
+        .map {
+            it.toGenreItemMovies()
+        }
 
     override fun getMovies(movie: Movie, page: Page): Flowable<PagingData<ListMovies>> =
-        remoteDataSource.getMovies(movie, page).map { pagingData ->
-            pagingData.map {
-                it.toListMovies()
+        remoteDataSource.getMovies(movie, page)
+            .map { pagingData ->
+                pagingData.map {
+                    it.toListMovies()
+                }
             }
-        }
 }

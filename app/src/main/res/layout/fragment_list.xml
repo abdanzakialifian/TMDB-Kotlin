@@ -20,25 +20,25 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/item_list_vertical_placeholder" />
+            <include layout="@layout/item_list_vertical_shimmer_placeholder" />
 
-            <include layout="@layout/item_list_vertical_placeholder" />
+            <include layout="@layout/item_list_vertical_shimmer_placeholder" />
 
-            <include layout="@layout/item_list_vertical_placeholder" />
+            <include layout="@layout/item_list_vertical_shimmer_placeholder" />
 
-            <include layout="@layout/item_list_vertical_placeholder" />
+            <include layout="@layout/item_list_vertical_shimmer_placeholder" />
 
-            <include layout="@layout/item_list_vertical_placeholder" />
+            <include layout="@layout/item_list_vertical_shimmer_placeholder" />
 
-            <include layout="@layout/item_list_vertical_placeholder" />
+            <include layout="@layout/item_list_vertical_shimmer_placeholder" />
 
-            <include layout="@layout/item_list_vertical_placeholder" />
+            <include layout="@layout/item_list_vertical_shimmer_placeholder" />
 
-            <include layout="@layout/item_list_vertical_placeholder" />
+            <include layout="@layout/item_list_vertical_shimmer_placeholder" />
 
-            <include layout="@layout/item_list_vertical_placeholder" />
+            <include layout="@layout/item_list_vertical_shimmer_placeholder" />
 
-            <include layout="@layout/item_list_vertical_placeholder" />
+            <include layout="@layout/item_list_vertical_shimmer_placeholder" />
 
         </LinearLayout>
 

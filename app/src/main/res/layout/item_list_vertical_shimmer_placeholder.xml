@@ -46,7 +46,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="30dp"
         android:elevation="10dp"
-        android:background="@color/grey200"
+        android:background="@drawable/background_rounded_shimmer"
         android:fontFamily="@font/montserrat_semi_bold"
         android:textColor="@color/white"
         android:textSize="14sp"
@@ -61,7 +61,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="80dp"
         android:elevation="10dp"
-        android:background="@color/grey200"
+        android:background="@drawable/background_rounded_shimmer"
         android:fontFamily="@font/montserrat_medium"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +74,7 @@
         android:layout_height="12dp"
         android:layout_marginTop="10dp"
         android:elevation="10dp"
-        android:src="@color/grey200"
+        android:src="@drawable/background_rounded_shimmer"
         app:layout_constraintStart_toStartOf="@id/tv_title"
         app:layout_constraintTop_toBottomOf="@id/tv_genre" />
 
@@ -86,7 +86,7 @@
         android:elevation="10dp"
         android:fontFamily="@font/montserrat_medium"
         android:textSize="14sp"
-        android:background="@color/grey200"
+        android:background="@drawable/background_rounded_shimmer"
         app:layout_constraintBottom_toBottomOf="@id/img_star"
         app:layout_constraintStart_toEndOf="@id/img_star"
         app:layout_constraintTop_toTopOf="@id/img_star" />

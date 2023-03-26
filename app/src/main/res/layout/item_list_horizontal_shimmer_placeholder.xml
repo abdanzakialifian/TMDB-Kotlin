@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:background="@color/grey500"
+            android:background="@color/grey200"
             android:scaleType="centerCrop" />
 
     </androidx.cardview.widget.CardView>

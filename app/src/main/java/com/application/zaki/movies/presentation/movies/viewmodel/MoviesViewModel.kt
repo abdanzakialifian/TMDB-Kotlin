@@ -8,11 +8,13 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.application.zaki.movies.domain.interfaces.IMoviesUseCase
 import com.application.zaki.movies.domain.model.movies.ListMovies
-import com.application.zaki.movies.utils.Genre
-import com.application.zaki.movies.utils.Movie
-import com.application.zaki.movies.utils.Page
-import com.application.zaki.movies.utils.RxDisposer
+import com.application.zaki.movies.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.BackpressureStrategy
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,12 +24,19 @@ class MoviesViewModel @Inject constructor(private val moviesUseCase: IMoviesUseC
         genre: Genre,
         page: Page,
         rxDisposer: RxDisposer
-    ): LiveData<PagingData<ListMovies>> = LiveDataReactiveStreams.fromPublisher(
-        moviesUseCase.getMovies(
-            movie,
-            genre,
-            page,
-            rxDisposer
-        )
-    ).cachedIn(viewModelScope)
+    ): LiveData<PagingData<ListMovies>> {
+        val subject = PublishSubject.create<PagingData<ListMovies>>()
+
+        viewModelScope.launch {
+            moviesUseCase.getMovies(movie, genre, page)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { data ->
+                    subject.onNext(data)
+                }.addToDisposer(rxDisposer)
+        }
+
+        return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
+            .cachedIn(viewModelScope)
+    }
 }

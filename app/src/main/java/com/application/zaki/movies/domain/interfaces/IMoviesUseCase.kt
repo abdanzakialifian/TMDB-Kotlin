@@ -13,7 +13,6 @@ interface IMoviesUseCase {
     fun getMovies(
         movie: Movie,
         genre: Genre,
-        page: Page,
-        rxDisposer: RxDisposer
+        page: Page
     ): Flowable<PagingData<ListMovies>>
 }

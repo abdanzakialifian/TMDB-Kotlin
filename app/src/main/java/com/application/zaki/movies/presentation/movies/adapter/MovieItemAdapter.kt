@@ -47,15 +47,7 @@ class MovieItemAdapter @Inject constructor() :
                     ConstraintLayout.LayoutParams.WRAP_CONTENT,
                     ConstraintLayout.LayoutParams.WRAP_CONTENT
                 )
-                params.setMargins(30, 0, 15, 0)
-                holder.binding.layoutList.layoutParams = params
-            }
-            19 -> {
-                val params = ConstraintLayout.LayoutParams(
-                    ConstraintLayout.LayoutParams.WRAP_CONTENT,
-                    ConstraintLayout.LayoutParams.WRAP_CONTENT
-                )
-                params.setMargins(0, 0, 15, 0)
+                params.setMargins(15, 0, 15, 0)
                 holder.binding.layoutList.layoutParams = params
             }
             else -> {

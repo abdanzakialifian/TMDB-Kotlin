@@ -11,18 +11,13 @@
         android:id="@+id/shimmer_image_slider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingVertical="20dp"
         android:layout_marginStart="100dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
-            <include layout="@layout/item_list_slider_shimmer_placeholder" />
-
-            <include layout="@layout/item_list_slider_shimmer_placeholder" />
-
-            <include layout="@layout/item_list_slider_shimmer_placeholder" />
 
             <include layout="@layout/item_list_slider_shimmer_placeholder" />
 
@@ -42,16 +37,18 @@
         android:id="@+id/view_pager_image_slider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="120dp"
+        android:paddingHorizontal="110dp"
+        android:paddingVertical="20dp"
         android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_movies"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="visible"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_list_movies" />
+        tools:listitem="@layout/item_list_category_movies" />
 
 </LinearLayout>

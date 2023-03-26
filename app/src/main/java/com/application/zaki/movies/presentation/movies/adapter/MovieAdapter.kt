@@ -3,6 +3,7 @@ package com.application.zaki.movies.presentation.movies.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Lifecycle
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
@@ -11,7 +12,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.R
-import com.application.zaki.movies.databinding.ItemListMoviesBinding
+import com.application.zaki.movies.databinding.ItemListCategoryMoviesBinding
 import com.application.zaki.movies.domain.model.movies.ListMovies
 import com.application.zaki.movies.domain.model.movies.MoviesCategoryItem
 import com.application.zaki.movies.utils.Movie
@@ -36,7 +37,7 @@ class MovieAdapter @Inject constructor() :
         this.onEventClickCallback = onEventClickCallback
     }
 
-    inner class MovieCategoryViewHolder(private val binding: ItemListMoviesBinding) :
+    inner class MovieCategoryViewHolder(val binding: ItemListCategoryMoviesBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: MoviesCategoryItem) {
             binding.apply {
@@ -61,7 +62,7 @@ class MovieAdapter @Inject constructor() :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieCategoryViewHolder =
-        ItemListMoviesBinding.inflate(
+        ItemListCategoryMoviesBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         ).run {
             MovieCategoryViewHolder(this)
@@ -69,6 +70,14 @@ class MovieAdapter @Inject constructor() :
 
     override fun onBindViewHolder(holder: MovieCategoryViewHolder, position: Int) {
         holder.bind(getItem(position))
+        if (position != 0) {
+            val params = ConstraintLayout.LayoutParams(
+                ConstraintLayout.LayoutParams.WRAP_CONTENT,
+                ConstraintLayout.LayoutParams.WRAP_CONTENT
+            )
+            params.setMargins(0, 60, 0, 0)
+            holder.binding.layoutCategory.layoutParams = params
+        }
     }
 
     private fun setMovieItemClick() {
@@ -93,7 +102,10 @@ class MovieAdapter @Inject constructor() :
         }
     }
 
-    private fun setLoadStatePaging(loadState: CombinedLoadStates, binding: ItemListMoviesBinding) {
+    private fun setLoadStatePaging(
+        loadState: CombinedLoadStates,
+        binding: ItemListCategoryMoviesBinding
+    ) {
         binding.apply {
             when (loadState.refresh) {
                 is LoadState.Loading -> {

@@ -108,21 +108,21 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
         </LinearLayout>
 
@@ -185,21 +185,21 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
         </LinearLayout>
 
@@ -262,21 +262,21 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
-            <include layout="@layout/item_shimmer_placeholder" />
+            <include layout="@layout/item_category_shimmer_placeholder" />
 
         </LinearLayout>
 

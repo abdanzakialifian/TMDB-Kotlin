@@ -2,6 +2,7 @@ package com.application.zaki.movies.utils
 
 import android.view.View
 import android.widget.ImageView
+import com.application.zaki.movies.R
 import com.bumptech.glide.Glide
 import java.text.SimpleDateFormat
 import java.util.*
@@ -9,6 +10,8 @@ import java.util.*
 fun ImageView.loadImageUrl(url: String) {
     Glide.with(context)
         .load("https://image.tmdb.org/t/p/w500/$url")
+        .placeholder(R.color.grey500)
+        .error(R.drawable.ic_broken_image)
         .into(this)
 }
 
