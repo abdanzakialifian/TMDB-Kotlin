@@ -42,23 +42,9 @@
         android:id="@+id/view_pager_image_slider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="120dp"
+        android:paddingHorizontal="110dp"
+        android:paddingVertical="20dp"
         android:visibility="gone" />
-
-    <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
-        android:id="@+id/worm_dots_indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:visibility="gone"
-        app:dotsColor="@color/grey500"
-        app:dotsCornerRadius="8dp"
-        app:dotsSize="6dp"
-        app:dotsSpacing="4dp"
-        app:dotsWidthFactor="2.5"
-        app:progressMode="true"
-        app:selectedDotColor="@color/light_blue" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

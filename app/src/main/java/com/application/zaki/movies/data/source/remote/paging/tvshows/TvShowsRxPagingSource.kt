@@ -1,81 +1,85 @@
-package com.application.zaki.movies.data.source.remote.paging.movies
+package com.application.zaki.movies.data.source.remote.paging.tvshows
 
 import androidx.paging.PagingState
 import androidx.paging.rxjava2.RxPagingSource
 import com.application.zaki.movies.data.source.remote.ApiService
-import com.application.zaki.movies.data.source.remote.response.movies.ListMoviesResponse
-import com.application.zaki.movies.data.source.remote.response.movies.MoviesResponse
-import com.application.zaki.movies.utils.Movie
+import com.application.zaki.movies.data.source.remote.response.tvshows.ListTvShowsResponse
+import com.application.zaki.movies.data.source.remote.response.tvshows.TvShowsResponse
 import com.application.zaki.movies.utils.Page
+import com.application.zaki.movies.utils.TvShow
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class MoviesRxPagingSource @Inject constructor(private val apiService: ApiService) :
-    RxPagingSource<Int, ListMoviesResponse>() {
+class TvShowsRxPagingSource @Inject constructor(private val apiService: ApiService) :
+    RxPagingSource<Int, ListTvShowsResponse>() {
 
     private lateinit var page: Page
-    private lateinit var movie: Movie
+    private lateinit var tvShow: TvShow
 
-    override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, ListMoviesResponse>> {
+    override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, ListTvShowsResponse>> {
         val position = if (page == Page.ONE) {
             1
         } else {
             params.key ?: 1
         }
 
-        return when (movie) {
-            Movie.NOW_PLAYING_MOVIES -> apiService.getNowPlayingMovies(position)
+        return when (tvShow) {
+            TvShow.AIRING_TODAY_TV_SHOWS -> apiService.getAiringTodayTvShows(position)
                 .subscribeOn(Schedulers.io())
                 .map {
                     toLoadResult(it, position)
-                }.onErrorReturn {
+                }
+                .onErrorReturn {
                     LoadResult.Error(it)
                 }
-            Movie.POPULAR_MOVIES -> apiService.getPopularMoviesPaging(position)
+            TvShow.TOP_RATED_TV_SHOWS -> apiService.getTopRatedTvShowsPaging(position)
                 .subscribeOn(Schedulers.io())
                 .map {
                     toLoadResult(it, position)
-                }.onErrorReturn {
+                }
+                .onErrorReturn {
                     LoadResult.Error(it)
                 }
-            Movie.TOP_RATED_MOVIES -> apiService.getTopRatedMoviesPaging(position)
+            TvShow.POPULAR_TV_SHOWS -> apiService.getPopularTvShowsPaging(position)
                 .subscribeOn(Schedulers.io())
                 .map {
                     toLoadResult(it, position)
-                }.onErrorReturn {
+                }
+                .onErrorReturn {
                     LoadResult.Error(it)
                 }
-            Movie.UP_COMING_MOVIES -> apiService.getUpComingMoviesPaging(position)
+            TvShow.ON_THE_AIR_TV_SHOWS -> apiService.getOnTheAirTvShowsPaging(position)
                 .subscribeOn(Schedulers.io())
                 .map {
                     toLoadResult(it, position)
-                }.onErrorReturn {
+                }
+                .onErrorReturn {
                     LoadResult.Error(it)
                 }
         }
     }
 
     private fun toLoadResult(
-        data: MoviesResponse, position: Int
-    ): LoadResult<Int, ListMoviesResponse> {
+        data: TvShowsResponse,
+        position: Int
+    ): LoadResult<Int, ListTvShowsResponse> {
         return LoadResult.Page(
-            // not nullable list
             data = data.results ?: emptyList(),
             prevKey = if (position == 1) null else position - 1,
             nextKey = if (page != Page.ONE) if (position == data.totalPages) null else position + 1 else null
         )
     }
 
-    override fun getRefreshKey(state: PagingState<Int, ListMoviesResponse>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, ListTvShowsResponse>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
         }
     }
 
-    fun setData(movie: Movie, page: Page) {
-        this.movie = movie
+    fun setData(tvShow: TvShow, page: Page) {
+        this.tvShow = tvShow
         this.page = page
     }
 }

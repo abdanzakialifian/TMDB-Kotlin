@@ -7,9 +7,6 @@ import androidx.paging.rxjava2.flowable
 import com.application.zaki.movies.data.source.remote.paging.combine.DiscoverRxPagingSource
 import com.application.zaki.movies.data.source.remote.paging.combine.ReviewsRxPagingSource
 import com.application.zaki.movies.data.source.remote.paging.movies.*
-import com.application.zaki.movies.data.source.remote.paging.tvshows.OnTheAirTvShowsRxPagingSource
-import com.application.zaki.movies.data.source.remote.paging.tvshows.PopularTvShowsRxPagingSource
-import com.application.zaki.movies.data.source.remote.paging.tvshows.TopRatedTvShowsRxPagingSource
 import com.application.zaki.movies.data.source.remote.response.combine.GenreResponse
 import com.application.zaki.movies.data.source.remote.response.combine.ResultsItemDiscoverResponse
 import com.application.zaki.movies.data.source.remote.response.combine.ReviewItemResponse

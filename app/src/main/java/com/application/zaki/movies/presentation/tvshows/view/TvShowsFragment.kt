@@ -8,9 +8,6 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.ViewPager2
-import com.application.zaki.movies.data.source.remote.paging.tvshows.OnTheAirTvShowsRxPagingSource
-import com.application.zaki.movies.data.source.remote.paging.tvshows.PopularTvShowsRxPagingSource
-import com.application.zaki.movies.data.source.remote.paging.tvshows.TopRatedTvShowsRxPagingSource
 import com.application.zaki.movies.databinding.FragmentTvShowsBinding
 import com.application.zaki.movies.domain.model.tvshows.ListAiringTodayTvShows
 import com.application.zaki.movies.domain.model.tvshows.ListOnTheAirTvShows
@@ -95,7 +92,6 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
                                 shimmerImageSlider.startShimmer()
                                 shimmerImageSlider.visible()
                                 viewPagerImageSlider.gone()
-                                wormDotsIndicator.gone()
                             }
                         }
                         is UiState.Success -> {
@@ -103,7 +99,6 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
                                 shimmerImageSlider.stopShimmer()
                                 shimmerImageSlider.gone()
                                 viewPagerImageSlider.visible()
-                                wormDotsIndicator.visible()
                             }
                             airingTodayTvShowsAdapter.submitList(result.data.results)
                         }
@@ -112,7 +107,6 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
                                 shimmerImageSlider.stopShimmer()
                                 shimmerImageSlider.gone()
                                 viewPagerImageSlider.gone()
-                                wormDotsIndicator.gone()
                             }
                         }
                         is UiState.Empty -> {}
@@ -121,7 +115,6 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
             }
         binding?.viewPagerImageSlider.apply {
             this?.adapter = airingTodayTvShowsAdapter
-            binding?.wormDotsIndicator?.attachTo(this ?: this!!)
             this?.clipToPadding = false
             this?.clipChildren = false
             this?.offscreenPageLimit = 3

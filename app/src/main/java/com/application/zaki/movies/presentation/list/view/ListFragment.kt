@@ -4,15 +4,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
-import com.application.zaki.movies.data.source.remote.paging.tvshows.OnTheAirTvShowsRxPagingSource
-import com.application.zaki.movies.data.source.remote.paging.tvshows.PopularTvShowsRxPagingSource
-import com.application.zaki.movies.data.source.remote.paging.tvshows.TopRatedTvShowsRxPagingSource
 import com.application.zaki.movies.databinding.FragmentListBinding
 import com.application.zaki.movies.domain.model.genre.GenresItem
 import com.application.zaki.movies.domain.model.movies.ListMovies
-import com.application.zaki.movies.domain.model.tvshows.ListOnTheAirTvShows
-import com.application.zaki.movies.domain.model.tvshows.ListPopularTvShows
-import com.application.zaki.movies.domain.model.tvshows.ListTopRatedTvShows
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.view.DetailFragment
 import com.application.zaki.movies.presentation.list.adapter.movies.PopularMoviesPagingAdapter
@@ -27,7 +21,6 @@ import com.application.zaki.movies.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import com.application.zaki.movies.utils.Genre.MOVIES
-import com.application.zaki.movies.utils.Genre.TV_SHOWS
 
 @AndroidEntryPoint
 class ListFragment : BaseVBFragment<FragmentListBinding>() {

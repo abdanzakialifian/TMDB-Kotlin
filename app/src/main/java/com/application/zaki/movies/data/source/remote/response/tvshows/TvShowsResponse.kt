@@ -2,7 +2,7 @@ package com.application.zaki.movies.data.source.remote.response.tvshows
 
 import com.google.gson.annotations.SerializedName
 
-data class PopularTvShowsResponse(
+data class TvShowsResponse(
 
 	@field:SerializedName("page")
 	val page: Int? = null,
@@ -11,13 +11,13 @@ data class PopularTvShowsResponse(
 	val totalPages: Int? = null,
 
 	@field:SerializedName("results")
-	val results: List<ListPopularTvShowsResponse?>? = null,
+	val results: List<ListTvShowsResponse>? = null,
 
 	@field:SerializedName("total_results")
 	val totalResults: Int? = null
 )
 
-data class ListPopularTvShowsResponse(
+data class ListTvShowsResponse(
 
 	@field:SerializedName("first_air_date")
 	val firstAirDate: String? = null,
@@ -29,13 +29,13 @@ data class ListPopularTvShowsResponse(
 	val originalLanguage: String? = null,
 
 	@field:SerializedName("genre_ids")
-	val genreIds: List<Int?>? = null,
+	val genreIds: List<Int>? = null,
 
 	@field:SerializedName("poster_path")
 	val posterPath: String? = null,
 
 	@field:SerializedName("origin_country")
-	val originCountry: List<String?>? = null,
+	val originCountry: List<String>? = null,
 
 	@field:SerializedName("backdrop_path")
 	val backdropPath: String? = null,

@@ -33,22 +33,24 @@ interface ApiService {
     ): Single<MoviesResponse>
 
     @GET("tv/airing_today")
-    fun getAiringTodayTvShows(): Flowable<AiringTodayTvShowsResponse>
+    fun getAiringTodayTvShows(
+        @Query("page") page: Int
+    ): Single<TvShowsResponse>
 
     @GET("tv/top_rated")
     fun getTopRatedTvShowsPaging(
         @Query("page") page: Int
-    ): Single<TopRatedTvShowsResponse>
+    ): Single<TvShowsResponse>
 
     @GET("tv/popular")
     fun getPopularTvShowsPaging(
         @Query("page") page: Int
-    ): Single<PopularTvShowsResponse>
+    ): Single<TvShowsResponse>
 
     @GET("tv/on_the_air")
     fun getOnTheAirTvShowsPaging(
         @Query("page") page: Int
-    ): Single<OnTheAirTvShowsResponse>
+    ): Single<TvShowsResponse>
 
     @GET("genre/movie/list")
     fun getGenreMovies(): Flowable<GenreResponse>
