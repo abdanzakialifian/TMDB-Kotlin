@@ -60,7 +60,6 @@ class MoviesRxPagingSource @Inject constructor(private val apiService: ApiServic
         data: MoviesResponse, position: Int
     ): LoadResult<Int, ListMoviesResponse> {
         return LoadResult.Page(
-            // not nullable list
             data = data.results ?: emptyList(),
             prevKey = if (position == 1) null else position - 1,
             nextKey = if (page != Page.ONE) if (position == data.totalPages) null else position + 1 else null
