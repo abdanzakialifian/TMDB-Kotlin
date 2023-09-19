@@ -2,19 +2,17 @@ package com.application.zaki.movies.presentation.detail.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListReviewBinding
 import com.application.zaki.movies.domain.model.other.ReviewItem
 import com.application.zaki.movies.utils.getInitialName
 import javax.inject.Inject
 
-class ReviewsMoviesPagingAdapter @Inject constructor() : PagingDataAdapter<ReviewItem, ReviewsMoviesPagingAdapter.ReviewsPagingViewHolder>(
-        DIFF_CALLBACK
-    ) {
-
-    inner class ReviewsPagingViewHolder(private val binding: ItemListReviewBinding) :
+class ReviewsAdapter @Inject constructor() :
+    ListAdapter<ReviewItem, ReviewsAdapter.ReviewsViewHolder>(DIFF_CALLBACK) {
+    inner class ReviewsViewHolder(private val binding: ItemListReviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ReviewItem?) {
             binding.apply {
@@ -28,12 +26,12 @@ class ReviewsMoviesPagingAdapter @Inject constructor() : PagingDataAdapter<Revie
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ReviewsPagingViewHolder =
+    ): ReviewsViewHolder =
         ItemListReviewBinding.inflate(LayoutInflater.from(parent.context), parent, false).run {
-            ReviewsPagingViewHolder(this)
+            ReviewsViewHolder(this)
         }
 
-    override fun onBindViewHolder(holder: ReviewsPagingViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ReviewsViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 

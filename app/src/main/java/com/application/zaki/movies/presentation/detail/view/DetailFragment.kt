@@ -5,17 +5,21 @@ import android.os.Looper
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.paging.LoadState
-import com.application.zaki.movies.data.source.remote.paging.combine.ReviewsRxPagingSource
 import com.application.zaki.movies.databinding.FragmentDetailBinding
 import com.application.zaki.movies.domain.model.movies.DetailMovies
 import com.application.zaki.movies.domain.model.tvshows.DetailTvShows
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.adapter.CastMovieAdapter
 import com.application.zaki.movies.presentation.detail.adapter.CastTvShowsAdapter
+import com.application.zaki.movies.presentation.detail.adapter.ReviewsAdapter
 import com.application.zaki.movies.presentation.detail.adapter.ReviewsMoviesPagingAdapter
 import com.application.zaki.movies.presentation.detail.viewmodel.DetailViewModel
-import com.application.zaki.movies.utils.*
+import com.application.zaki.movies.utils.RxDisposer
+import com.application.zaki.movies.utils.UiState
+import com.application.zaki.movies.utils.convertDateText
+import com.application.zaki.movies.utils.gone
+import com.application.zaki.movies.utils.loadBackdropImageUrl
+import com.application.zaki.movies.utils.visible
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -36,7 +40,7 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
 
     override fun initView() {
         setDetailInformation(args.id.toString(), args.intentFrom)
-        setReviews(args.id.toString())
+//        setReviews(args.id.toString())
         binding?.tvSeeAll?.setOnClickListener {
             navigateToReviewsPage()
         }
@@ -99,41 +103,41 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
         }
     }
 
-    private fun setReviews(id: String) {
-        detailViewModel.reviewsPaging(
-            RxDisposer().apply { bind(lifecycle) },
-            id,
-            ReviewsRxPagingSource.ONE,
-            if (args.intentFrom == INTENT_FROM_MOVIE) ReviewsRxPagingSource.MOVIES else ReviewsRxPagingSource.TV_SHOWS
-        )
-            .observe(viewLifecycleOwner) { result ->
-                adapter.submitData(lifecycle, result)
-                adapter.addLoadStateListener { loadState ->
-                    when (loadState.refresh) {
-                        is LoadState.Loading -> {}
-                        is LoadState.NotLoading -> {
-                            binding?.apply {
-                                rvReviews.adapter = adapter
-                                rvReviews.setHasFixedSize(true)
-                            }
-                        }
-                        is LoadState.Error -> {}
-                    }
-                }
-            }
-    }
+//    private fun setReviews(id: String) {
+//        detailViewModel.reviewsPaging(
+//            RxDisposer().apply { bind(lifecycle) },
+//            id,
+//            ReviewsRxPagingSource.ONE,
+//            if (args.intentFrom == INTENT_FROM_MOVIE) ReviewsRxPagingSource.MOVIES else ReviewsRxPagingSource.TV_SHOWS
+//        )
+//            .observe(viewLifecycleOwner) { result ->
+//                adapter.submitData(lifecycle, result)
+//                adapter.addLoadStateListener { loadState ->
+//                    when (loadState.refresh) {
+//                        is LoadState.Loading -> {}
+//                        is LoadState.NotLoading -> {
+//                            binding?.apply {
+//                                rvReviews.adapter = adapter
+//                                rvReviews.setHasFixedSize(true)
+//                            }
+//                        }
+//                        is LoadState.Error -> {}
+//                    }
+//                }
+//            }
+//    }
 
     private fun showDataMovie(data: DetailMovies) {
         val rating = data.voteAverage.toString().toDouble()
         val convertRating = (rating * 100.0).roundToInt() / 100.0
         val genres = ArrayList<String>()
         data.genres?.forEach {
-            genres.add(it?.name ?: "")
+            genres.add(it.name ?: "")
         }
         val listKey = ArrayList<String>()
         if (data.videos?.results?.isNotEmpty() == true) {
             data.videos.results.forEach {
-                listKey.add(it?.key ?: "")
+                listKey.add(it.key ?: "")
             }
         } else {
             listKey.add("")
@@ -167,6 +171,10 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
             adapter.submitList(data.credits?.cast)
             rvCast.adapter = adapter
             rvCast.setHasFixedSize(true)
+            val reviewsAdapter = ReviewsAdapter()
+            reviewsAdapter.submitList(data.reviews)
+            rvReviews.adapter = reviewsAdapter
+            rvReviews.setHasFixedSize(true)
         }
     }
 
@@ -176,12 +184,12 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
             val convertRating = (rating * 100.0).roundToInt() / 100.0
             val genres = ArrayList<String>()
             data.genres?.forEach {
-                genres.add(it?.name ?: "")
+                genres.add(it.name ?: "")
             }
             val listKey = ArrayList<String>()
             if (data.videos?.results?.isNotEmpty() == true) {
                 data.videos.results.forEach {
-                    listKey.add(it?.key ?: "")
+                    listKey.add(it.key ?: "")
                 }
             } else {
                 listKey.add("")

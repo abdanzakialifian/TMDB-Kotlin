@@ -1,11 +1,4 @@
-package com.application.zaki.movies.domain.model.movies
-
-data class AuthorDetails(
-    val avatarPath: Any? = null,
-    val name: String? = null,
-    val rating: Any? = null,
-    val username: String? = null
-)
+package com.application.zaki.movies.domain.model.other
 
 data class ReviewItem(
     val authorDetails: AuthorDetails? = null,
@@ -15,4 +8,11 @@ data class ReviewItem(
     val id: String? = null,
     val content: String? = null,
     val url: String? = null
+)
+
+data class AuthorDetails(
+    val avatarPath: Any? = null,
+    val name: String? = null,
+    val rating: Any? = null,
+    val username: String? = null
 )

@@ -1,6 +1,6 @@
 package com.application.zaki.movies.utils
 
-enum class Genre {
+enum class Category {
     MOVIES,
     TV_SHOWS
 }

@@ -1,4 +1,4 @@
-package com.application.zaki.movies.domain.model.genre
+package com.application.zaki.movies.domain.model.other
 
 data class Genres(
     val genres: List<GenresItem>? = null

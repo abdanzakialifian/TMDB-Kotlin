@@ -6,7 +6,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListVerticalBinding
-import com.application.zaki.movies.domain.model.genre.GenresItem
+import com.application.zaki.movies.domain.model.other.GenresItem
 import com.application.zaki.movies.domain.model.movies.ListMovies
 import com.application.zaki.movies.presentation.list.adapter.genres.GenresAdapter
 import com.application.zaki.movies.utils.loadImageUrl

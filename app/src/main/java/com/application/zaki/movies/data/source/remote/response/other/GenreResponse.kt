@@ -1,4 +1,4 @@
-package com.application.zaki.movies.data.source.remote.response.combine
+package com.application.zaki.movies.data.source.remote.response.other
 
 import com.google.gson.annotations.SerializedName
 

@@ -4,13 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.ViewModel
 import androidx.paging.PagingData
-import com.application.zaki.movies.domain.interfaces.ICombineUseCase
-import com.application.zaki.movies.domain.interfaces.IMoviesUseCase
-import com.application.zaki.movies.domain.interfaces.ITvShowsUseCase
 import com.application.zaki.movies.domain.model.movies.DetailMovies
-import com.application.zaki.movies.domain.model.movies.ReviewItem
+import com.application.zaki.movies.domain.model.other.ReviewItem
 import com.application.zaki.movies.domain.model.tvshows.DetailTvShows
-import com.application.zaki.movies.utils.*
+import com.application.zaki.movies.domain.usecase.GetDetailMovie
+import com.application.zaki.movies.domain.usecase.GetDetailTvShow
+import com.application.zaki.movies.domain.usecase.GetReviews
+import com.application.zaki.movies.utils.Category
+import com.application.zaki.movies.utils.Page
+import com.application.zaki.movies.utils.RxDisposer
+import com.application.zaki.movies.utils.UiState
+import com.application.zaki.movies.utils.addToDisposer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.BackpressureStrategy
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -20,9 +24,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val movieUseCase: IMoviesUseCase,
-    private val tvShowsUseCase: ITvShowsUseCase,
-    private val combineUseCase: ICombineUseCase
+    private val getDetailMovie: GetDetailMovie,
+    private val getDetailTvShow: GetDetailTvShow,
+    private val getReviews: GetReviews
 ) : ViewModel() {
     fun detailMovies(
         rxDisposer: RxDisposer,
@@ -31,7 +35,7 @@ class DetailViewModel @Inject constructor(
         val subject = ReplaySubject.create<UiState<DetailMovies>>()
 
         subject.onNext(UiState.Loading(null))
-        movieUseCase.getDetailMovies(movieId)
+        getDetailMovie(movieId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -59,7 +63,7 @@ class DetailViewModel @Inject constructor(
         val subject = ReplaySubject.create<UiState<DetailTvShows>>()
 
         subject.onNext(UiState.Loading(null))
-        tvShowsUseCase.getDetailTvShows(tvId)
+        getDetailTvShow(tvId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -82,13 +86,13 @@ class DetailViewModel @Inject constructor(
 
     fun reviewsPaging(
         rxDisposer: RxDisposer,
-        movieId: String,
-        totalPage: String,
-        type: String
+        id: String,
+        page: Page,
+        category: Category
     ): LiveData<PagingData<ReviewItem>> {
         val subject = ReplaySubject.create<PagingData<ReviewItem>>()
 
-        combineUseCase.getReviewsPaging(movieId, totalPage, type)
+        getReviews(id, page, category)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->

@@ -3,12 +3,14 @@ package com.application.zaki.movies.presentation.reviews
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
-import com.application.zaki.movies.data.source.remote.paging.combine.ReviewsRxPagingSource
+import com.application.zaki.movies.data.source.remote.paging.other.ReviewsRxPagingSource
 import com.application.zaki.movies.databinding.FragmentReviewsBinding
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.adapter.ReviewsMoviesPagingAdapter
 import com.application.zaki.movies.presentation.detail.view.DetailFragment
 import com.application.zaki.movies.presentation.detail.viewmodel.DetailViewModel
+import com.application.zaki.movies.utils.Category
+import com.application.zaki.movies.utils.Page
 import com.application.zaki.movies.utils.RxDisposer
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,8 +27,8 @@ class ReviewsFragment : BaseVBFragment<FragmentReviewsBinding>() {
         viewModel.reviewsPaging(
             RxDisposer().apply { bind(lifecycle) },
             args.id,
-            ReviewsRxPagingSource.MORE_THAN_ONE,
-            if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) ReviewsRxPagingSource.MOVIES else ReviewsRxPagingSource.TV_SHOWS
+            Page.MORE_THAN_ONE,
+            if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) Category.MOVIES else Category.TV_SHOWS
         ).observe(viewLifecycleOwner) { result ->
             val adapter = ReviewsMoviesPagingAdapter()
             adapter.submitData(lifecycle, result)

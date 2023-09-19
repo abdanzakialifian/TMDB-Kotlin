@@ -75,7 +75,7 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
     private fun setMovies() {
         moviesViewModel.getMovies(
             movie = Movie.NOW_PLAYING_MOVIES,
-            genre = Genre.MOVIES,
+            category = Category.MOVIES,
             page = Page.MORE_THAN_ONE,
             rxDisposer = RxDisposer().apply { bind(lifecycle) }
         ).observe(viewLifecycleOwner) { result ->
@@ -88,7 +88,7 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
 
         moviesViewModel.getMovies(
             movie = Movie.TOP_RATED_MOVIES,
-            genre = Genre.MOVIES,
+            category = Category.MOVIES,
             page = Page.ONE,
             rxDisposer = RxDisposer().apply { bind(lifecycle) }
         ).observe(viewLifecycleOwner) { result ->
@@ -102,7 +102,7 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
 
         moviesViewModel.getMovies(
             movie = Movie.POPULAR_MOVIES,
-            genre = Genre.MOVIES,
+            category = Category.MOVIES,
             page = Page.ONE,
             rxDisposer = RxDisposer().apply { bind(lifecycle) }
         ).observe(viewLifecycleOwner) { result ->
@@ -116,7 +116,7 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>() {
 
         moviesViewModel.getMovies(
             movie = Movie.UP_COMING_MOVIES,
-            genre = Genre.MOVIES,
+            category = Category.MOVIES,
             page = Page.ONE,
             rxDisposer = RxDisposer().apply { bind(lifecycle) }
         ).observe(viewLifecycleOwner) { result ->

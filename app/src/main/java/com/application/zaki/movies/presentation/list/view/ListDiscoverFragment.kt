@@ -4,13 +4,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
-import com.application.zaki.movies.data.source.remote.paging.combine.DiscoverRxPagingSource
 import com.application.zaki.movies.databinding.FragmentListDiscoverBinding
-import com.application.zaki.movies.domain.model.movies.ResultsItemDiscover
+import com.application.zaki.movies.domain.model.other.DiscoverItem
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.view.DetailFragment
 import com.application.zaki.movies.presentation.list.adapter.genres.DiscoverGenresAdapter
 import com.application.zaki.movies.presentation.list.viewmodel.DiscoverViewModel
+import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.RxDisposer
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -30,12 +30,12 @@ class ListDiscoverFragment : BaseVBFragment<FragmentListDiscoverBinding>() {
         discoverViewModel.getDiscover(
             RxDisposer().apply { bind(lifecycle) },
             args.genreId.toString(),
-            if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) DiscoverRxPagingSource.MOVIES else DiscoverRxPagingSource.TV_SHOWS
+            if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) Category.MOVIES else Category.TV_SHOWS
         ).observe(viewLifecycleOwner) { result ->
             binding?.apply {
                 tvTitleAppBar.text = args.genreName
                 adapter.setOnItemClickCallback(object : DiscoverGenresAdapter.OnItemClickCallback {
-                    override fun onItemClicked(data: ResultsItemDiscover?) {
+                    override fun onItemClicked(data: DiscoverItem?) {
                         navigateToDetailFragment(data?.id ?: 0)
                     }
                 })

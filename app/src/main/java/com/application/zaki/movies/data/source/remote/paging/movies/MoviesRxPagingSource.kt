@@ -19,39 +19,39 @@ class MoviesRxPagingSource @Inject constructor(private val apiService: ApiServic
 
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, ListMoviesResponse>> {
         val position = if (page == Page.ONE) {
-            1
+            INITIAL_POSITION
         } else {
-            params.key ?: 1
+            params.key ?: INITIAL_POSITION
         }
 
         return when (movie) {
             Movie.NOW_PLAYING_MOVIES -> apiService.getNowPlayingMovies(position)
                 .subscribeOn(Schedulers.io())
-                .map {
-                    toLoadResult(it, position)
-                }.onErrorReturn {
-                    LoadResult.Error(it)
+                .map { data ->
+                    toLoadResult(data, position)
+                }.onErrorReturn { throwable ->
+                    LoadResult.Error(throwable)
                 }
             Movie.POPULAR_MOVIES -> apiService.getPopularMoviesPaging(position)
                 .subscribeOn(Schedulers.io())
-                .map {
-                    toLoadResult(it, position)
-                }.onErrorReturn {
-                    LoadResult.Error(it)
+                .map { data ->
+                    toLoadResult(data, position)
+                }.onErrorReturn { throwable ->
+                    LoadResult.Error(throwable)
                 }
             Movie.TOP_RATED_MOVIES -> apiService.getTopRatedMoviesPaging(position)
                 .subscribeOn(Schedulers.io())
-                .map {
-                    toLoadResult(it, position)
-                }.onErrorReturn {
-                    LoadResult.Error(it)
+                .map { data ->
+                    toLoadResult(data, position)
+                }.onErrorReturn { throwable ->
+                    LoadResult.Error(throwable)
                 }
             Movie.UP_COMING_MOVIES -> apiService.getUpComingMoviesPaging(position)
                 .subscribeOn(Schedulers.io())
-                .map {
-                    toLoadResult(it, position)
-                }.onErrorReturn {
-                    LoadResult.Error(it)
+                .map { data ->
+                    toLoadResult(data, position)
+                }.onErrorReturn { throwable ->
+                    LoadResult.Error(throwable)
                 }
         }
     }
@@ -62,7 +62,11 @@ class MoviesRxPagingSource @Inject constructor(private val apiService: ApiServic
         return LoadResult.Page(
             data = data.results ?: emptyList(),
             prevKey = if (position == 1) null else position - 1,
-            nextKey = if (page != Page.ONE) if (position == data.totalPages) null else position + 1 else null
+            nextKey = if (page != Page.ONE) {
+                if (position == data.totalPages) null else position + 1
+            } else {
+                null
+            }
         )
     }
 
@@ -76,5 +80,9 @@ class MoviesRxPagingSource @Inject constructor(private val apiService: ApiServic
     fun setData(movie: Movie, page: Page) {
         this.movie = movie
         this.page = page
+    }
+
+    companion object {
+        private const val INITIAL_POSITION = 1
     }
 }

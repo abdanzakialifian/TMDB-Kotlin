@@ -1,10 +1,11 @@
-package com.application.zaki.movies.data.source.remote.paging.combine
+package com.application.zaki.movies.data.source.remote.paging.other
 
 import androidx.paging.PagingState
 import androidx.paging.rxjava2.RxPagingSource
 import com.application.zaki.movies.data.source.remote.ApiService
-import com.application.zaki.movies.data.source.remote.response.combine.DiscoverResponse
-import com.application.zaki.movies.data.source.remote.response.combine.ResultsItemDiscoverResponse
+import com.application.zaki.movies.data.source.remote.response.other.DiscoverResponse
+import com.application.zaki.movies.data.source.remote.response.other.ResultsItemDiscoverResponse
+import com.application.zaki.movies.utils.Category
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -15,47 +16,35 @@ class DiscoverRxPagingSource @Inject constructor(private val apiService: ApiServ
     RxPagingSource<Int, ResultsItemDiscoverResponse>() {
 
     private var genreId: String = ""
-    private var type: String = ""
+    private var category: Category = Category.MOVIES
 
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, ResultsItemDiscoverResponse>> {
         val position = params.key ?: 1
 
-        return if (type == MOVIES) {
-            apiService.getDiscoverMovie(position, genreId)
+        return when (category) {
+            Category.MOVIES -> apiService.getDiscoverMovie(position, genreId)
                 .subscribeOn(Schedulers.io())
-                .map {
-                    toLoadResult(it, position)
+                .map { data ->
+                    toLoadResult(data, position)
+                }.onErrorReturn { throwable ->
+                    LoadResult.Error(throwable)
                 }
-                .onErrorReturn {
-                    LoadResult.Error(it)
-                }
-        } else {
-            apiService.getDiscoverTvShow(position, genreId)
+
+            Category.TV_SHOWS -> apiService.getDiscoverTvShow(position, genreId)
                 .subscribeOn(Schedulers.io())
-                .map {
-                    toLoadResult(it, position)
-                }
-                .onErrorReturn {
-                    LoadResult.Error(it)
+                .map { data ->
+                    toLoadResult(data, position)
+                }.onErrorReturn { throwable ->
+                    LoadResult.Error(throwable)
                 }
         }
     }
 
     private fun toLoadResult(
-        data: DiscoverResponse,
-        position: Int
+        data: DiscoverResponse, position: Int
     ): LoadResult<Int, ResultsItemDiscoverResponse> {
-        // mapping list because list is nullable
-        val listDiscoverResponse = ArrayList<ResultsItemDiscoverResponse>()
-        data.results?.map { map ->
-            map?.let {
-                listDiscoverResponse.add(it)
-            }
-        }
-
         return LoadResult.Page(
-            // not nullable list
-            data = listDiscoverResponse,
+            data = data.results ?: emptyList(),
             prevKey = if (position == 1) null else position - 1,
             nextKey = if (position == data.totalPages) null else position + 1
         )
@@ -68,13 +57,8 @@ class DiscoverRxPagingSource @Inject constructor(private val apiService: ApiServ
         }
     }
 
-    fun setDataDiscover(genreId: String, type: String) {
+    fun setDataDiscover(genreId: String, category: Category) {
         this.genreId = genreId
-        this.type = type
-    }
-
-    companion object {
-        const val MOVIES = "MOVIES"
-        const val TV_SHOWS = "TV SHOWS"
+        this.category = category
     }
 }

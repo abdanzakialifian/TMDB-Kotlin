@@ -1,6 +1,7 @@
 package com.application.zaki.movies.domain.model.movies
 
-import com.application.zaki.movies.domain.model.genre.GenresItem
+import com.application.zaki.movies.domain.model.other.GenresItem
+import com.application.zaki.movies.domain.model.other.ReviewItem
 
 data class DetailMovies(
     val originalLanguage: String? = null,
@@ -13,7 +14,7 @@ data class DetailMovies(
     val credits: Credits? = null,
     val genres: List<GenresItem>? = null,
     val popularity: Any? = null,
-    val productionCountries: List<ProductionCountriesItem?>? = null,
+    val productionCountries: List<ProductionCountriesItem>? = null,
     val id: Int? = null,
     val voteCount: Int? = null,
     val budget: Int? = null,
@@ -21,8 +22,8 @@ data class DetailMovies(
     val originalTitle: String? = null,
     val runtime: Int? = null,
     val posterPath: String? = null,
-    val spokenLanguages: List<SpokenLanguagesItem?>? = null,
-    val productionCompanies: List<ProductionCompaniesItem?>? = null,
+    val spokenLanguages: List<SpokenLanguagesItem>? = null,
+    val productionCompanies: List<ProductionCompaniesItem>? = null,
     val releaseDate: String? = null,
     val voteAverage: Any? = null,
     val belongsToCollection: BelongsToCollection? = null,
@@ -30,6 +31,7 @@ data class DetailMovies(
     val adult: Boolean? = null,
     val homepage: String? = null,
     val status: String? = null,
+    val reviews: List<ReviewItem>? = null
 )
 
 data class CrewItem(
@@ -54,12 +56,12 @@ data class ProductionCompaniesItem(
 )
 
 data class Videos(
-    val results: List<ResultsItem?>? = null
+    val results: List<ResultsItem>? = null
 )
 
 data class Credits(
-    val cast: List<CastItem?>? = null,
-    val crew: List<CrewItem?>? = null
+    val cast: List<CastItem>? = null,
+    val crew: List<CrewItem>? = null
 )
 
 data class CastItem(

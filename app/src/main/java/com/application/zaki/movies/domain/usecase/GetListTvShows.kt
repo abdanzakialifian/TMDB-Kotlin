@@ -3,28 +3,24 @@ package com.application.zaki.movies.domain.usecase
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.application.zaki.movies.domain.interfaces.ITvShowsRepository
-import com.application.zaki.movies.domain.interfaces.ITvShowsUseCase
-import com.application.zaki.movies.domain.model.tvshows.DetailTvShows
 import com.application.zaki.movies.domain.model.tvshows.ListTvShows
+import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.DataMapperTvShows.toMergeListTvShowsGenres
-import com.application.zaki.movies.utils.Genre
 import com.application.zaki.movies.utils.Page
 import com.application.zaki.movies.utils.TvShow
 import io.reactivex.Flowable
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class TvShowsUseCase @Inject constructor(private val tvShowsRepository: ITvShowsRepository) :
-    ITvShowsUseCase {
-    override fun getDetailTvShows(tvId: String): Flowable<DetailTvShows> =
-        tvShowsRepository.getDetailTvShows(tvId)
-
-    override fun getTvShows(
+@Singleton
+class GetListTvShows @Inject constructor(private val iTvShowsRepository: ITvShowsRepository) {
+    operator fun invoke(
         tvShow: TvShow,
-        genre: Genre,
+        category: Category,
         page: Page
     ): Flowable<PagingData<ListTvShows>> = Flowable.zip(
-        tvShowsRepository.getTvShows(tvShow, page),
-        tvShowsRepository.getGenres(genre)
+        iTvShowsRepository.getTvShows(tvShow, page),
+        iTvShowsRepository.getGenres(category)
     ) { tvShows, genres ->
         return@zip tvShows.map { map ->
             map.toMergeListTvShowsGenres(genres)

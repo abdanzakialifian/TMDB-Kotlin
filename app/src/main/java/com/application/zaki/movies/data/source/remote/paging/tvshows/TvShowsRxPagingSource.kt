@@ -19,43 +19,43 @@ class TvShowsRxPagingSource @Inject constructor(private val apiService: ApiServi
 
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, ListTvShowsResponse>> {
         val position = if (page == Page.ONE) {
-            1
+            INITIAL_POSITION
         } else {
-            params.key ?: 1
+            params.key ?: INITIAL_POSITION
         }
 
         return when (tvShow) {
             TvShow.AIRING_TODAY_TV_SHOWS -> apiService.getAiringTodayTvShows(position)
                 .subscribeOn(Schedulers.io())
-                .map {
-                    toLoadResult(it, position)
+                .map { data ->
+                    toLoadResult(data, position)
                 }
-                .onErrorReturn {
-                    LoadResult.Error(it)
+                .onErrorReturn { throwable ->
+                    LoadResult.Error(throwable)
                 }
             TvShow.TOP_RATED_TV_SHOWS -> apiService.getTopRatedTvShowsPaging(position)
                 .subscribeOn(Schedulers.io())
-                .map {
-                    toLoadResult(it, position)
+                .map { data ->
+                    toLoadResult(data, position)
                 }
-                .onErrorReturn {
-                    LoadResult.Error(it)
+                .onErrorReturn { throwable ->
+                    LoadResult.Error(throwable)
                 }
             TvShow.POPULAR_TV_SHOWS -> apiService.getPopularTvShowsPaging(position)
                 .subscribeOn(Schedulers.io())
-                .map {
-                    toLoadResult(it, position)
+                .map { data ->
+                    toLoadResult(data, position)
                 }
-                .onErrorReturn {
-                    LoadResult.Error(it)
+                .onErrorReturn { throwable ->
+                    LoadResult.Error(throwable)
                 }
             TvShow.ON_THE_AIR_TV_SHOWS -> apiService.getOnTheAirTvShowsPaging(position)
                 .subscribeOn(Schedulers.io())
-                .map {
-                    toLoadResult(it, position)
+                .map { data ->
+                    toLoadResult(data, position)
                 }
-                .onErrorReturn {
-                    LoadResult.Error(it)
+                .onErrorReturn { throwable ->
+                    LoadResult.Error(throwable)
                 }
         }
     }
@@ -67,7 +67,11 @@ class TvShowsRxPagingSource @Inject constructor(private val apiService: ApiServi
         return LoadResult.Page(
             data = data.results ?: emptyList(),
             prevKey = if (position == 1) null else position - 1,
-            nextKey = if (page != Page.ONE) if (position == data.totalPages) null else position + 1 else null
+            nextKey = if (page != Page.ONE) {
+                if (position == data.totalPages) null else position + 1
+            } else {
+                null
+            }
         )
     }
 
@@ -81,5 +85,9 @@ class TvShowsRxPagingSource @Inject constructor(private val apiService: ApiServi
     fun setData(tvShow: TvShow, page: Page) {
         this.tvShow = tvShow
         this.page = page
+    }
+
+    companion object {
+        private const val INITIAL_POSITION = 1
     }
 }

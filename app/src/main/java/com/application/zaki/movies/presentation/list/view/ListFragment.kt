@@ -5,7 +5,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import com.application.zaki.movies.databinding.FragmentListBinding
-import com.application.zaki.movies.domain.model.genre.GenresItem
+import com.application.zaki.movies.domain.model.other.GenresItem
 import com.application.zaki.movies.domain.model.movies.ListMovies
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.view.DetailFragment
@@ -20,7 +20,7 @@ import com.application.zaki.movies.presentation.tvshows.viewmodel.TvShowsViewMod
 import com.application.zaki.movies.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import com.application.zaki.movies.utils.Genre.MOVIES
+import com.application.zaki.movies.utils.Category.MOVIES
 
 @AndroidEntryPoint
 class ListFragment : BaseVBFragment<FragmentListBinding>() {
@@ -66,7 +66,7 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
     private fun setListTopRatedMoviesPaging() {
         moviesViewModel.getMovies(
             movie = Movie.TOP_RATED_MOVIES,
-            genre = MOVIES,
+            category = MOVIES,
             page = Page.MORE_THAN_ONE,
             rxDisposer =  RxDisposer().apply { bind(lifecycle) },
         )
@@ -99,7 +99,7 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
     private fun setListPopularMoviesPaging() {
         moviesViewModel.getMovies(
             movie = Movie.POPULAR_MOVIES,
-            genre = MOVIES,
+            category = MOVIES,
             page = Page.MORE_THAN_ONE,
             rxDisposer =  RxDisposer().apply { bind(lifecycle) },
         )
@@ -133,7 +133,7 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
     private fun setListUpComingMoviesPaging() {
         moviesViewModel.getMovies(
             movie = Movie.UP_COMING_MOVIES,
-            genre = MOVIES,
+            category = MOVIES,
             page = Page.MORE_THAN_ONE,
             rxDisposer =  RxDisposer().apply { bind(lifecycle) },
         )

@@ -1,8 +1,8 @@
 package com.application.zaki.movies.data.source.remote
 
-import com.application.zaki.movies.data.source.remote.response.combine.DiscoverResponse
-import com.application.zaki.movies.data.source.remote.response.combine.GenreResponse
-import com.application.zaki.movies.data.source.remote.response.combine.ReviewsResponse
+import com.application.zaki.movies.data.source.remote.response.other.DiscoverResponse
+import com.application.zaki.movies.data.source.remote.response.other.GenreResponse
+import com.application.zaki.movies.data.source.remote.response.other.ReviewsResponse
 import com.application.zaki.movies.data.source.remote.response.movies.*
 import com.application.zaki.movies.data.source.remote.response.tvshows.*
 import io.reactivex.Flowable
@@ -63,7 +63,7 @@ interface ApiService {
         @Path("movie_id") movieId: String
     ): Flowable<DetailMoviesResponse>
 
-    @GET("tv/{tv_id}?append_to_response=credits,videos")
+    @GET("tv/{tv_id}?append_to_response=credits,videos,reviews")
     fun getDetailTvShows(
         @Path("tv_id") tvId: String
     ): Flowable<DetailTvShowsResponse>

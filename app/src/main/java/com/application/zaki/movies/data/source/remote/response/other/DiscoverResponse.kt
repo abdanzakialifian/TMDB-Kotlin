@@ -1,4 +1,4 @@
-package com.application.zaki.movies.data.source.remote.response.combine
+package com.application.zaki.movies.data.source.remote.response.other
 
 import com.google.gson.annotations.SerializedName
 
@@ -11,7 +11,7 @@ data class DiscoverResponse(
 	val totalPages: Int? = null,
 
 	@field:SerializedName("results")
-	val results: List<ResultsItemDiscoverResponse?>? = null,
+	val results: List<ResultsItemDiscoverResponse>? = null,
 
 	@field:SerializedName("total_results")
 	val totalResults: Int? = null
@@ -35,7 +35,7 @@ data class ResultsItemDiscoverResponse(
 	val title: String? = null,
 
 	@field:SerializedName("genre_ids")
-	val genreIds: List<Int?>? = null,
+	val genreIds: List<Int>? = null,
 
 	@field:SerializedName("poster_path")
 	val posterPath: String? = null,

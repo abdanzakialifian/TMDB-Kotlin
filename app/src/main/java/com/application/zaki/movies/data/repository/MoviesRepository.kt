@@ -4,13 +4,13 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.application.zaki.movies.data.source.remote.RemoteDataSource
 import com.application.zaki.movies.domain.interfaces.IMoviesRepository
-import com.application.zaki.movies.domain.model.genre.Genres
+import com.application.zaki.movies.domain.model.other.Genres
 import com.application.zaki.movies.domain.model.movies.DetailMovies
 import com.application.zaki.movies.domain.model.movies.ListMovies
-import com.application.zaki.movies.utils.DataMapperMovies
-import com.application.zaki.movies.utils.DataMapperMovies.toGenreItemMovies
+import com.application.zaki.movies.utils.DataMapperMovies.toDetailMovie
 import com.application.zaki.movies.utils.DataMapperMovies.toListMovies
-import com.application.zaki.movies.utils.Genre
+import com.application.zaki.movies.utils.DataMapperOther.toGenres
+import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.Movie
 import com.application.zaki.movies.utils.Page
 import io.reactivex.Flowable
@@ -22,19 +22,18 @@ class MoviesRepository @Inject constructor(private val remoteDataSource: RemoteD
     IMoviesRepository {
     override fun getDetailMovies(movieId: String): Flowable<DetailMovies> =
         remoteDataSource.getDetailMovies(movieId).map { data ->
-            DataMapperMovies.mapDetailMovieResponseToDetailMovie(data)
+            data.toDetailMovie()
         }
 
-    override fun getGenres(genre: Genre): Flowable<Genres> = remoteDataSource.getGenre(genre)
-        .map {
-            it.toGenreItemMovies()
+    override fun getGenres(category: Category): Flowable<Genres> =
+        remoteDataSource.getGenre(category).map { data ->
+            data.toGenres()
         }
 
     override fun getMovies(movie: Movie, page: Page): Flowable<PagingData<ListMovies>> =
-        remoteDataSource.getMovies(movie, page)
-            .map { pagingData ->
-                pagingData.map {
-                    it.toListMovies()
-                }
+        remoteDataSource.getMovies(movie, page).map { pagingData ->
+            pagingData.map { data ->
+                data.toListMovies()
             }
+        }
 }

@@ -1,5 +1,6 @@
 package com.application.zaki.movies.data.source.remote.response.movies
 
+import com.application.zaki.movies.data.source.remote.response.other.ReviewsResponse
 import com.google.gson.annotations.SerializedName
 
 data class DetailMoviesResponse(
@@ -29,13 +30,13 @@ data class DetailMoviesResponse(
 	val credits: CreditsResponse? = null,
 
 	@field:SerializedName("genres")
-	val genres: List<GenresItemResponse?>? = null,
+	val genres: List<GenresItemResponse>? = null,
 
 	@field:SerializedName("popularity")
 	val popularity: Any? = null,
 
 	@field:SerializedName("production_countries")
-	val productionCountries: List<ProductionCountriesItemResponse?>? = null,
+	val productionCountries: List<ProductionCountriesItemResponse>? = null,
 
 	@field:SerializedName("id")
 	val id: Int? = null,
@@ -59,10 +60,10 @@ data class DetailMoviesResponse(
 	val posterPath: String? = null,
 
 	@field:SerializedName("spoken_languages")
-	val spokenLanguages: List<SpokenLanguagesItemResponse?>? = null,
+	val spokenLanguages: List<SpokenLanguagesItemResponse>? = null,
 
 	@field:SerializedName("production_companies")
-	val productionCompanies: List<ProductionCompaniesItemResponse?>? = null,
+	val productionCompanies: List<ProductionCompaniesItemResponse>? = null,
 
 	@field:SerializedName("release_date")
 	val releaseDate: String? = null,
@@ -83,7 +84,10 @@ data class DetailMoviesResponse(
 	val homepage: String? = null,
 
 	@field:SerializedName("status")
-	val status: String? = null
+	val status: String? = null,
+
+	@field:SerializedName("reviews")
+	val reviews: ReviewsResponse? = null
 )
 
 data class CrewItemResponse(
@@ -140,16 +144,16 @@ data class ProductionCompaniesItemResponse(
 data class VideosResponse(
 
 	@field:SerializedName("results")
-	val results: List<ResultsItemResponse?>? = null
+	val results: List<ResultsItemResponse>? = null
 )
 
 data class CreditsResponse(
 
 	@field:SerializedName("cast")
-	val cast: List<CastItemResponse?>? = null,
+	val cast: List<CastItemResponse>? = null,
 
 	@field:SerializedName("crew")
-	val crew: List<CrewItemResponse?>? = null
+	val crew: List<CrewItemResponse>? = null
 )
 
 data class CastItemResponse(

@@ -1,6 +1,6 @@
 package com.application.zaki.movies.domain.model.tvshows
 
-import com.application.zaki.movies.domain.model.genre.GenresItem
+import com.application.zaki.movies.domain.model.other.GenresItem
 
 data class DetailTvShows(
     val originalLanguage: String? = null,
@@ -18,12 +18,12 @@ data class DetailTvShows(
     val voteCount: Int? = null,
     val firstAirDate: String? = null,
     val overview: String? = null,
-    val seasons: List<SeasonsItem?>? = null,
+    val seasons: List<SeasonsItem>? = null,
     val languages: List<String>? = null,
     val createdBy: List<Any>? = null,
     val lastEpisodeToAir: LastEpisodeToAir? = null,
     val posterPath: String? = null,
-    val originCountry: List<String?>? = null,
+    val originCountry: List<String>? = null,
     val spokenLanguages: List<SpokenLanguagesItem>? = null,
     val productionCompanies: List<ProductionCompaniesItem>? = null,
     val originalName: String? = null,

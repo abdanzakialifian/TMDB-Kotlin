@@ -1,6 +1,6 @@
 package com.application.zaki.movies.domain.model.tvshows
 
-import com.application.zaki.movies.domain.model.genre.GenresItem
+import com.application.zaki.movies.domain.model.other.GenresItem
 
 data class ListTvShows(
     val originalLanguage: String? = null,

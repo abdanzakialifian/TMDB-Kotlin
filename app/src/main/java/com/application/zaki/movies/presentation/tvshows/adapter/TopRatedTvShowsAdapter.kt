@@ -7,12 +7,12 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListHorizontalBinding
-import com.application.zaki.movies.domain.model.tvshows.ListTopRatedTvShows
+import com.application.zaki.movies.domain.model.tvshows.ListTvShows
 import com.application.zaki.movies.utils.loadImageUrl
 import javax.inject.Inject
 
 class TopRatedTvShowsAdapter @Inject constructor() :
-    PagingDataAdapter<ListTopRatedTvShows, TopRatedTvShowsAdapter.TopRatedTvShowsViewHolder>(
+    PagingDataAdapter<ListTvShows, TopRatedTvShowsAdapter.TopRatedTvShowsViewHolder>(
         DIFF_CALLBACK
     ) {
 
@@ -24,7 +24,7 @@ class TopRatedTvShowsAdapter @Inject constructor() :
 
     inner class TopRatedTvShowsViewHolder(val binding: ItemListHorizontalBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ListTopRatedTvShows?) {
+        fun bind(item: ListTvShows?) {
             item?.posterPath?.let {
                 binding.imgHorizontal.loadImageUrl(it)
             }
@@ -72,19 +72,19 @@ class TopRatedTvShowsAdapter @Inject constructor() :
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: ListTopRatedTvShows?)
+        fun onItemClicked(data: ListTvShows?)
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListTopRatedTvShows>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListTvShows>() {
             override fun areItemsTheSame(
-                oldItem: ListTopRatedTvShows,
-                newItem: ListTopRatedTvShows
+                oldItem: ListTvShows,
+                newItem: ListTvShows
             ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
-                oldItem: ListTopRatedTvShows,
-                newItem: ListTopRatedTvShows
+                oldItem: ListTvShows,
+                newItem: ListTvShows
             ): Boolean = oldItem == newItem
         }
     }

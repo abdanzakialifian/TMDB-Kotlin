@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListGenreBinding
-import com.application.zaki.movies.domain.model.genre.GenresItem
+import com.application.zaki.movies.domain.model.other.GenresItem
 
 class GenresAdapter(private val onItemClickCallback: OnItemClickCallback) :
     ListAdapter<GenresItem, GenresAdapter.GenresViewHolder>(DIFF_CALLBACK) {

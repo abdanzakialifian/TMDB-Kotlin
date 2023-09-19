@@ -6,9 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.application.zaki.movies.domain.interfaces.IMoviesUseCase
 import com.application.zaki.movies.domain.model.movies.ListMovies
-import com.application.zaki.movies.utils.*
+import com.application.zaki.movies.domain.usecase.GetListMovies
+import com.application.zaki.movies.utils.Category
+import com.application.zaki.movies.utils.Movie
+import com.application.zaki.movies.utils.Page
+import com.application.zaki.movies.utils.RxDisposer
+import com.application.zaki.movies.utils.addToDisposer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.BackpressureStrategy
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -18,17 +22,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MoviesViewModel @Inject constructor(private val moviesUseCase: IMoviesUseCase) : ViewModel() {
+class MoviesViewModel @Inject constructor(private val getListMovies: GetListMovies) : ViewModel() {
     fun getMovies(
-        movie: Movie,
-        genre: Genre,
-        page: Page,
-        rxDisposer: RxDisposer
+        movie: Movie, category: Category, page: Page, rxDisposer: RxDisposer
     ): LiveData<PagingData<ListMovies>> {
         val subject = PublishSubject.create<PagingData<ListMovies>>()
 
         viewModelScope.launch {
-            moviesUseCase.getMovies(movie, genre, page)
+            getListMovies(movie, category, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { data ->

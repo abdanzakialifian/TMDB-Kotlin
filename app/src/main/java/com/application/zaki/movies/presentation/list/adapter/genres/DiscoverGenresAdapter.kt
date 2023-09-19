@@ -6,12 +6,12 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListDiscoverBinding
-import com.application.zaki.movies.domain.model.movies.ResultsItemDiscover
+import com.application.zaki.movies.domain.model.other.DiscoverItem
 import com.application.zaki.movies.utils.loadImageUrl
 import javax.inject.Inject
 
 class DiscoverGenresAdapter @Inject constructor() :
-    PagingDataAdapter<ResultsItemDiscover, DiscoverGenresAdapter.DiscoverGenresViewHolder>(
+    PagingDataAdapter<DiscoverItem, DiscoverGenresAdapter.DiscoverGenresViewHolder>(
         DIFF_CALLBACK
     ) {
 
@@ -22,7 +22,7 @@ class DiscoverGenresAdapter @Inject constructor() :
     }
     inner class DiscoverGenresViewHolder(private val binding: ItemListDiscoverBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ResultsItemDiscover?) {
+        fun bind(item: DiscoverItem?) {
             binding.imgDiscover.loadImageUrl(item?.posterPath ?: "")
             itemView.setOnClickListener {
                 onItemClickCallback.onItemClicked(item)
@@ -42,19 +42,19 @@ class DiscoverGenresAdapter @Inject constructor() :
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: ResultsItemDiscover?)
+        fun onItemClicked(data: DiscoverItem?)
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ResultsItemDiscover>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DiscoverItem>() {
             override fun areItemsTheSame(
-                oldItem: ResultsItemDiscover,
-                newItem: ResultsItemDiscover
+                oldItem: DiscoverItem,
+                newItem: DiscoverItem
             ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
-                oldItem: ResultsItemDiscover,
-                newItem: ResultsItemDiscover
+                oldItem: DiscoverItem,
+                newItem: DiscoverItem
             ): Boolean = oldItem == newItem
         }
     }

@@ -2,20 +2,20 @@ package com.application.zaki.movies.utils
 
 import com.application.zaki.movies.data.source.remote.response.tvshows.DetailTvShowsResponse
 import com.application.zaki.movies.data.source.remote.response.tvshows.ListTvShowsResponse
-import com.application.zaki.movies.domain.model.genre.Genres
-import com.application.zaki.movies.domain.model.genre.GenresItem
+import com.application.zaki.movies.domain.model.other.Genres
+import com.application.zaki.movies.domain.model.other.GenresItem
 import com.application.zaki.movies.domain.model.tvshows.*
 
 object DataMapperTvShows {
 
     fun ListTvShowsResponse.toListTvShows(): ListTvShows = ListTvShows(
-        originalLanguage = this.originalLanguage,
-        genreIds = this.genreIds,
-        posterPath = this.posterPath,
-        voteAverage = this.voteAverage,
-        originalName = this.originalName,
-        name = this.name,
-        id = this.id,
+        originalLanguage = originalLanguage,
+        genreIds = genreIds,
+        posterPath = posterPath,
+        voteAverage = voteAverage,
+        originalName = originalName,
+        name = name,
+        id = id,
         genres = listOf()
     )
 
@@ -25,20 +25,20 @@ object DataMapperTvShows {
         }
 
         return ListTvShows(
-            originalLanguage = this.originalLanguage,
-            genreIds = this.genreIds,
-            posterPath = this.posterPath,
-            voteAverage = this.voteAverage,
-            originalName = this.originalName,
-            name = this.name,
-            id = this.id,
+            originalLanguage = originalLanguage,
+            genreIds = genreIds,
+            posterPath = posterPath,
+            voteAverage = voteAverage,
+            originalName = originalName,
+            name = name,
+            id = id,
             genres = listGenresTvShows
         )
     }
 
-    fun mapDetailTvShowsResponseToDetailTvShows(detailTvShowsResponse: DetailTvShowsResponse): DetailTvShows {
+    fun DetailTvShowsResponse.toDetailTvShows(): DetailTvShows {
         val results = ArrayList<ResultsItem>()
-        detailTvShowsResponse.videos?.results?.forEach {
+        videos?.results?.forEach {
             it.let { data ->
                 results.add(
                     ResultsItem(
@@ -59,7 +59,7 @@ object DataMapperTvShows {
         val videos = Videos(results = results)
 
         val networks = ArrayList<NetworksItem>()
-        detailTvShowsResponse.networks?.forEach {
+        networks.forEach {
             it.let { data ->
                 networks.add(
                     NetworksItem(
@@ -73,7 +73,7 @@ object DataMapperTvShows {
         }
 
         val cast = ArrayList<CastItem>()
-        detailTvShowsResponse.credits?.cast?.forEach {
+        credits?.cast?.forEach {
             it.let { data ->
                 cast.add(
                     CastItem(
@@ -93,7 +93,7 @@ object DataMapperTvShows {
             }
         }
         val crew = ArrayList<CrewItem>()
-        detailTvShowsResponse.credits?.crew?.forEach {
+        credits?.crew?.forEach {
             it.let { data ->
                 crew.add(
                     CrewItem(
@@ -115,14 +115,14 @@ object DataMapperTvShows {
         val credits = Credits(cast = cast, crew = crew)
 
         val genres = ArrayList<GenresItem>()
-        detailTvShowsResponse.genres?.forEach {
+        genres.forEach {
             it.let { data ->
                 genres.add(GenresItem(name = data.name, id = data.id))
             }
         }
 
         val productionCountries = ArrayList<ProductionCountriesItem>()
-        detailTvShowsResponse.productionCountries?.forEach {
+        productionCountries.forEach {
             it.let { data ->
                 productionCountries.add(
                     ProductionCountriesItem(
@@ -134,7 +134,7 @@ object DataMapperTvShows {
         }
 
         val seasons = ArrayList<SeasonsItem>()
-        detailTvShowsResponse.seasons?.forEach {
+        seasons.forEach {
             it.let { data ->
                 seasons.add(
                     SeasonsItem(
@@ -151,22 +151,22 @@ object DataMapperTvShows {
         }
 
         val lastEpisodeToAir = LastEpisodeToAir(
-            productionCode = detailTvShowsResponse.lastEpisodeToAir?.productionCode,
-            airDate = detailTvShowsResponse.lastEpisodeToAir?.airDate,
-            overview = detailTvShowsResponse.lastEpisodeToAir?.overview,
-            episodeNumber = detailTvShowsResponse.lastEpisodeToAir?.episodeNumber,
-            showId = detailTvShowsResponse.lastEpisodeToAir?.showId,
-            voteAverage = detailTvShowsResponse.lastEpisodeToAir?.voteAverage,
-            name = detailTvShowsResponse.lastEpisodeToAir?.name,
-            seasonNumber = detailTvShowsResponse.lastEpisodeToAir?.seasonNumber,
-            runtime = detailTvShowsResponse.lastEpisodeToAir?.runtime,
-            id = detailTvShowsResponse.lastEpisodeToAir?.id,
-            stillPath = detailTvShowsResponse.lastEpisodeToAir?.stillPath,
-            voteCount = detailTvShowsResponse.lastEpisodeToAir?.voteCount,
+            productionCode = lastEpisodeToAir?.productionCode,
+            airDate = lastEpisodeToAir?.airDate,
+            overview = lastEpisodeToAir?.overview,
+            episodeNumber = lastEpisodeToAir?.episodeNumber,
+            showId = lastEpisodeToAir?.showId,
+            voteAverage = lastEpisodeToAir?.voteAverage,
+            name = lastEpisodeToAir?.name,
+            seasonNumber = lastEpisodeToAir?.seasonNumber,
+            runtime = lastEpisodeToAir?.runtime,
+            id = lastEpisodeToAir?.id,
+            stillPath = lastEpisodeToAir?.stillPath,
+            voteCount = lastEpisodeToAir?.voteCount,
         )
 
         val spokenLanguages = ArrayList<SpokenLanguagesItem>()
-        detailTvShowsResponse.spokenLanguages?.forEach {
+        spokenLanguages.forEach {
             it.let { data ->
                 spokenLanguages.add(
                     SpokenLanguagesItem(
@@ -179,7 +179,7 @@ object DataMapperTvShows {
         }
 
         val productionCompanies = ArrayList<ProductionCompaniesItem>()
-        detailTvShowsResponse.productionCompanies?.forEach {
+        productionCompanies.forEach {
             it.let { data ->
                 productionCompanies.add(
                     ProductionCompaniesItem(
@@ -193,40 +193,40 @@ object DataMapperTvShows {
         }
 
         return DetailTvShows(
-            originalLanguage = detailTvShowsResponse.originalLanguage,
-            numberOfEpisodes = detailTvShowsResponse.numberOfEpisodes,
+            originalLanguage = originalLanguage,
+            numberOfEpisodes = numberOfEpisodes,
             videos = videos,
             networks = networks,
-            type = detailTvShowsResponse.type,
-            backdropPath = detailTvShowsResponse.backdropPath,
+            type = type,
+            backdropPath = backdropPath,
             credits = credits,
             genres = genres,
-            popularity = detailTvShowsResponse.popularity,
+            popularity = popularity,
             productionCountries = productionCountries,
-            id = detailTvShowsResponse.id,
-            numberOfSeasons = detailTvShowsResponse.numberOfSeasons,
-            voteCount = detailTvShowsResponse.voteCount,
-            firstAirDate = detailTvShowsResponse.firstAirDate,
-            overview = detailTvShowsResponse.overview,
+            id = id,
+            numberOfSeasons = numberOfSeasons,
+            voteCount = voteCount,
+            firstAirDate = firstAirDate,
+            overview = overview,
             seasons = seasons,
-            languages = detailTvShowsResponse.languages,
-            createdBy = detailTvShowsResponse.createdBy,
+            languages = languages,
+            createdBy = createdBy,
             lastEpisodeToAir = lastEpisodeToAir,
-            posterPath = detailTvShowsResponse.posterPath,
-            originCountry = detailTvShowsResponse.originCountry,
+            posterPath = posterPath,
+            originCountry = originCountry,
             spokenLanguages = spokenLanguages,
             productionCompanies = productionCompanies,
-            originalName = detailTvShowsResponse.originalName,
-            voteAverage = detailTvShowsResponse.voteAverage,
-            name = detailTvShowsResponse.name,
-            tagline = detailTvShowsResponse.tagline,
-            episodeRunTime = detailTvShowsResponse.episodeRunTime,
-            adult = detailTvShowsResponse.adult,
-            nextEpisodeToAir = detailTvShowsResponse.nextEpisodeToAir,
-            inProduction = detailTvShowsResponse.inProduction,
-            lastAirDate = detailTvShowsResponse.lastAirDate,
-            homepage = detailTvShowsResponse.homepage,
-            status = detailTvShowsResponse.status,
+            originalName = originalName,
+            voteAverage = voteAverage,
+            name = name,
+            tagline = tagline,
+            episodeRunTime = episodeRunTime,
+            adult = adult,
+            nextEpisodeToAir = nextEpisodeToAir,
+            inProduction = inProduction,
+            lastAirDate = lastAirDate,
+            homepage = homepage,
+            status = status,
         )
     }
 }

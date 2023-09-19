@@ -7,12 +7,12 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListHorizontalBinding
-import com.application.zaki.movies.domain.model.tvshows.ListPopularTvShows
+import com.application.zaki.movies.domain.model.tvshows.ListTvShows
 import com.application.zaki.movies.utils.loadImageUrl
 import javax.inject.Inject
 
 class PopularTvShowsAdapter @Inject constructor() :
-    PagingDataAdapter<ListPopularTvShows, PopularTvShowsAdapter.PopularTvShowsViewHolder>(
+    PagingDataAdapter<ListTvShows, PopularTvShowsAdapter.PopularTvShowsViewHolder>(
         DIFF_CALLBACK
     ) {
 
@@ -24,7 +24,7 @@ class PopularTvShowsAdapter @Inject constructor() :
 
     inner class PopularTvShowsViewHolder(val binding: ItemListHorizontalBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ListPopularTvShows?) {
+        fun bind(item: ListTvShows?) {
             item?.posterPath?.let {
                 binding.imgHorizontal.loadImageUrl(it)
             }
@@ -72,19 +72,19 @@ class PopularTvShowsAdapter @Inject constructor() :
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: ListPopularTvShows?)
+        fun onItemClicked(data: ListTvShows?)
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListPopularTvShows>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListTvShows>() {
             override fun areItemsTheSame(
-                oldItem: ListPopularTvShows,
-                newItem: ListPopularTvShows
+                oldItem: ListTvShows,
+                newItem: ListTvShows
             ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
-                oldItem: ListPopularTvShows,
-                newItem: ListPopularTvShows
+                oldItem: ListTvShows,
+                newItem: ListTvShows
             ): Boolean = oldItem == newItem
         }
     }

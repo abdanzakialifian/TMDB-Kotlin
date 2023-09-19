@@ -9,10 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.application.zaki.movies.databinding.FragmentTvShowsBinding
-import com.application.zaki.movies.domain.model.tvshows.ListAiringTodayTvShows
-import com.application.zaki.movies.domain.model.tvshows.ListOnTheAirTvShows
-import com.application.zaki.movies.domain.model.tvshows.ListPopularTvShows
-import com.application.zaki.movies.domain.model.tvshows.ListTopRatedTvShows
+import com.application.zaki.movies.domain.model.tvshows.ListTvShows
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.view.DetailFragment.Companion.INTENT_FROM_TV_SHOWS
 import com.application.zaki.movies.presentation.home.HomeFragmentDirections
@@ -24,7 +21,12 @@ import com.application.zaki.movies.presentation.tvshows.adapter.OnTheAirTvShowsA
 import com.application.zaki.movies.presentation.tvshows.adapter.PopularTvShowsAdapter
 import com.application.zaki.movies.presentation.tvshows.adapter.TopRatedTvShowsAdapter
 import com.application.zaki.movies.presentation.tvshows.viewmodel.TvShowsViewModel
-import com.application.zaki.movies.utils.*
+import com.application.zaki.movies.utils.Category
+import com.application.zaki.movies.utils.Page
+import com.application.zaki.movies.utils.RxDisposer
+import com.application.zaki.movies.utils.TvShow
+import com.application.zaki.movies.utils.gone
+import com.application.zaki.movies.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.math.abs
@@ -79,75 +81,82 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
     private fun setImageSlider() {
         airingTodayTvShowsAdapter.setOnItemClickCallback(object :
             AiringTodayTvShowsAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: ListAiringTodayTvShows) {
-                navigateToDetailPage(data.id ?: 0)
+            override fun onItemClicked(data: ListTvShows?) {
+                navigateToDetailPage(data?.id ?: 0)
             }
         })
-        tvShowsViewModel.airingTodayTvShows(RxDisposer().apply { bind(lifecycle) })
-            .observe(viewLifecycleOwner) { result ->
-                if (result != null) {
-                    when (result) {
-                        is UiState.Loading -> {
-                            binding?.apply {
-                                shimmerImageSlider.startShimmer()
-                                shimmerImageSlider.visible()
-                                viewPagerImageSlider.gone()
-                            }
+        tvShowsViewModel.airingTodayTvShows(
+            RxDisposer().apply { bind(lifecycle) },
+            TvShow.AIRING_TODAY_TV_SHOWS,
+            Category.TV_SHOWS,
+            Page.ONE
+        ).observe(viewLifecycleOwner) { result ->
+            airingTodayTvShowsAdapter.submitData(lifecycle, result)
+
+            binding?.viewPagerImageSlider.apply {
+                this?.adapter = airingTodayTvShowsAdapter
+                this?.clipToPadding = false
+                this?.clipChildren = false
+                this?.offscreenPageLimit = 3
+                this?.getChildAt(0)?.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+
+                val compositePageTransformer = CompositePageTransformer()
+                compositePageTransformer.addTransformer { page, position ->
+                    val r = 1 - abs(position)
+                    page.scaleY = 0.95f + r * 0.10f
+                }
+                this?.setPageTransformer(compositePageTransformer)
+
+                this?.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                    override fun onPageSelected(position: Int) {
+                        super.onPageSelected(position)
+                        sliderHandler.removeCallbacks(sliderRunnable)
+                        sliderHandler.postDelayed(sliderRunnable, 3000) // slide duration 3 seconds
+                    }
+                })
+            }
+            airingTodayTvShowsAdapter.addLoadStateListener { loadState ->
+                when (loadState.refresh) {
+                    is LoadState.Loading -> {
+                        binding?.apply {
+                            shimmerImageSlider.startShimmer()
+                            shimmerImageSlider.visible()
+                            viewPagerImageSlider.gone()
                         }
-                        is UiState.Success -> {
-                            binding?.apply {
-                                shimmerImageSlider.stopShimmer()
-                                shimmerImageSlider.gone()
-                                viewPagerImageSlider.visible()
-                            }
-                            airingTodayTvShowsAdapter.submitList(result.data.results)
+                    }
+
+                    is LoadState.NotLoading -> {
+                        binding?.apply {
+                            shimmerImageSlider.stopShimmer()
+                            shimmerImageSlider.gone()
+                            viewPagerImageSlider.visible()
                         }
-                        is UiState.Error -> {
-                            binding?.apply {
-                                shimmerImageSlider.stopShimmer()
-                                shimmerImageSlider.gone()
-                                viewPagerImageSlider.gone()
-                            }
+                    }
+
+                    is LoadState.Error -> {
+                        binding?.apply {
+                            shimmerImageSlider.stopShimmer()
+                            shimmerImageSlider.gone()
+                            viewPagerImageSlider.gone()
                         }
-                        is UiState.Empty -> {}
                     }
                 }
             }
-        binding?.viewPagerImageSlider.apply {
-            this?.adapter = airingTodayTvShowsAdapter
-            this?.clipToPadding = false
-            this?.clipChildren = false
-            this?.offscreenPageLimit = 3
-            this?.getChildAt(0)?.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-
-            val compositePageTransformer = CompositePageTransformer()
-            compositePageTransformer.addTransformer { page, position ->
-                val r = 1 - abs(position)
-                page.scaleY = 0.95f + r * 0.10f
-            }
-            this?.setPageTransformer(compositePageTransformer)
-
-            this?.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    super.onPageSelected(position)
-                    sliderHandler.removeCallbacks(sliderRunnable)
-                    sliderHandler.postDelayed(sliderRunnable, 3000) // slide duration 3 seconds
-                }
-            })
         }
     }
 
     private fun setTopRatedTvShows() {
         topRatedTvShowsAdapter.setOnItemClickCallback(object :
             TopRatedTvShowsAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: ListTopRatedTvShows?) {
+            override fun onItemClicked(data: ListTvShows?) {
                 navigateToDetailPage(data?.id ?: 0)
             }
         })
         tvShowsViewModel.topRatedTvShowsPaging(
             RxDisposer().apply { bind(lifecycle) },
-            Genre.TV_SHOWS,
-            TopRatedTvShowsRxPagingSource.ONE
+            TvShow.TOP_RATED_TV_SHOWS,
+            Category.TV_SHOWS,
+            Page.ONE
         ).observe(viewLifecycleOwner) { result ->
             topRatedTvShowsAdapter.submitData(lifecycle, result)
             binding?.apply {
@@ -186,14 +195,15 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
     private fun setPopularTvShows() {
         popularTvShowsAdapter.setOnItemClickCallback(object :
             PopularTvShowsAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: ListPopularTvShows?) {
+            override fun onItemClicked(data: ListTvShows?) {
                 navigateToDetailPage(data?.id ?: 0)
             }
         })
         tvShowsViewModel.popularTvShowsPaging(
             RxDisposer().apply { bind(lifecycle) },
-            Genre.TV_SHOWS,
-            PopularTvShowsRxPagingSource.ONE
+            TvShow.POPULAR_TV_SHOWS,
+            Category.TV_SHOWS,
+            Page.ONE
         ).observe(viewLifecycleOwner) { result ->
             popularTvShowsAdapter.submitData(lifecycle, result)
             binding?.apply {
@@ -232,14 +242,15 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
     private fun setOnTheAirTvShows() {
         onTheAirTvShowsAdapter.setOnItemClickCallback(object :
             OnTheAirTvShowsAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: ListOnTheAirTvShows?) {
+            override fun onItemClicked(data: ListTvShows?) {
                 navigateToDetailPage(data?.id ?: 0)
             }
         })
         tvShowsViewModel.onTheAirTvShowsPaging(
             RxDisposer().apply { bind(lifecycle) },
-            Genre.TV_SHOWS,
-            OnTheAirTvShowsRxPagingSource.ONE
+            TvShow.ON_THE_AIR_TV_SHOWS,
+            Category.TV_SHOWS,
+            Page.ONE
         ).observe(viewLifecycleOwner) { result ->
             onTheAirTvShowsAdapter.submitData(lifecycle, result)
             binding?.apply {

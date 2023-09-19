@@ -4,17 +4,18 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.rxjava2.flowable
-import com.application.zaki.movies.data.source.remote.paging.combine.DiscoverRxPagingSource
-import com.application.zaki.movies.data.source.remote.paging.combine.ReviewsRxPagingSource
-import com.application.zaki.movies.data.source.remote.paging.movies.*
+import com.application.zaki.movies.data.source.remote.paging.movies.MoviesRxPagingSource
+import com.application.zaki.movies.data.source.remote.paging.other.DiscoverRxPagingSource
+import com.application.zaki.movies.data.source.remote.paging.other.ReviewsRxPagingSource
 import com.application.zaki.movies.data.source.remote.paging.tvshows.TvShowsRxPagingSource
-import com.application.zaki.movies.data.source.remote.response.combine.GenreResponse
-import com.application.zaki.movies.data.source.remote.response.combine.ResultsItemDiscoverResponse
-import com.application.zaki.movies.data.source.remote.response.combine.ReviewItemResponse
 import com.application.zaki.movies.data.source.remote.response.movies.DetailMoviesResponse
 import com.application.zaki.movies.data.source.remote.response.movies.ListMoviesResponse
-import com.application.zaki.movies.data.source.remote.response.tvshows.*
-import com.application.zaki.movies.utils.Genre
+import com.application.zaki.movies.data.source.remote.response.other.GenreResponse
+import com.application.zaki.movies.data.source.remote.response.other.ResultsItemDiscoverResponse
+import com.application.zaki.movies.data.source.remote.response.other.ReviewItemResponse
+import com.application.zaki.movies.data.source.remote.response.tvshows.DetailTvShowsResponse
+import com.application.zaki.movies.data.source.remote.response.tvshows.ListTvShowsResponse
+import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.Movie
 import com.application.zaki.movies.utils.Page
 import com.application.zaki.movies.utils.TvShow
@@ -36,8 +37,8 @@ class RemoteDataSource @Inject constructor(
     private val popularTvShowsRxPagingSource: TvShowsRxPagingSource,
     private val topRatedTvShowsRxPagingSource: TvShowsRxPagingSource,
 ) {
-    fun getGenre(genre: Genre): Flowable<GenreResponse> =
-        if (genre == Genre.MOVIES) apiService.getGenreMovies() else apiService.getGenreTvShows()
+    fun getGenre(category: Category): Flowable<GenreResponse> =
+        if (category == Category.MOVIES) apiService.getGenreMovies() else apiService.getGenreTvShows()
 
     fun getDetailMovies(movieId: String): Flowable<DetailMoviesResponse> =
         apiService.getDetailMovies(movieId)
@@ -46,75 +47,69 @@ class RemoteDataSource @Inject constructor(
         apiService.getDetailTvShows(tvId)
 
     fun getReviewsPaging(
-        id: String, totalPage: String, type: String
+        id: String, page: Page, category: Category
     ): Flowable<PagingData<ReviewItemResponse>> = Pager(config = PagingConfig(
-        pageSize = 10, enablePlaceholders = true, prefetchDistance = 2
+        pageSize = 10, initialLoadSize = 10
     ), pagingSourceFactory = {
         reviewsRxPagingSource.apply {
-            setDataReviews(id, totalPage, type)
+            setDataReviews(id, page, category)
         }
     }).flowable
 
     fun getDiscoverPaging(
-        genreId: String,
-        type: String
-    ): Flowable<PagingData<ResultsItemDiscoverResponse>> =
-        Pager(config = PagingConfig(
-            pageSize = 10, enablePlaceholders = true, prefetchDistance = 2
-        ), pagingSourceFactory = {
-            discoverRxPagingSource.apply {
-                setDataDiscover(genreId, type)
-            }
-        }).flowable
+        genreId: String, category: Category
+    ): Flowable<PagingData<ResultsItemDiscoverResponse>> = Pager(config = PagingConfig(
+        pageSize = 10, initialLoadSize = 10
+    ), pagingSourceFactory = {
+        discoverRxPagingSource.apply {
+            setDataDiscover(genreId, category)
+        }
+    }).flowable
 
     fun getMovies(
-        movie: Movie,
-        page: Page
-    ): Flowable<PagingData<ListMoviesResponse>> = Pager(
-        config = PagingConfig(
-            pageSize = 10,
-            initialLoadSize = 10,
-            enablePlaceholders = true
-        ),
-        pagingSourceFactory = {
-            when (movie) {
-                Movie.NOW_PLAYING_MOVIES -> nowPlayingMoviesRxPagingSource.apply {
-                    setData(movie, page)
-                }
-                Movie.POPULAR_MOVIES -> popularMoviesRxPagingSource.apply {
-                    setData(movie, page)
-                }
-                Movie.TOP_RATED_MOVIES -> topRatedMoviesRxPagingSource.apply {
-                    setData(movie, page)
-                }
-                Movie.UP_COMING_MOVIES -> upComingMoviesRxPagingSource.apply {
-                    setData(movie, page)
-                }
+        movie: Movie, page: Page
+    ): Flowable<PagingData<ListMoviesResponse>> = Pager(config = PagingConfig(
+        pageSize = 10, initialLoadSize = 10
+    ), pagingSourceFactory = {
+        when (movie) {
+            Movie.NOW_PLAYING_MOVIES -> nowPlayingMoviesRxPagingSource.apply {
+                setData(movie, page)
+            }
+
+            Movie.POPULAR_MOVIES -> popularMoviesRxPagingSource.apply {
+                setData(movie, page)
+            }
+
+            Movie.TOP_RATED_MOVIES -> topRatedMoviesRxPagingSource.apply {
+                setData(movie, page)
+            }
+
+            Movie.UP_COMING_MOVIES -> upComingMoviesRxPagingSource.apply {
+                setData(movie, page)
             }
         }
-    ).flowable
+    }).flowable
 
-    fun getTvShows(tvShow: TvShow, page: Page): Flowable<PagingData<ListTvShowsResponse>> = Pager(
-        config = PagingConfig(
-            pageSize = 10,
-            initialLoadSize = 10,
-            enablePlaceholders = true
-        ),
-        pagingSourceFactory = {
+    fun getTvShows(tvShow: TvShow, page: Page): Flowable<PagingData<ListTvShowsResponse>> =
+        Pager(config = PagingConfig(
+            pageSize = 10, initialLoadSize = 10
+        ), pagingSourceFactory = {
             when (tvShow) {
                 TvShow.AIRING_TODAY_TV_SHOWS -> airingTodayTvShowsRxPagingSource.apply {
                     setData(tvShow, page)
                 }
+
                 TvShow.TOP_RATED_TV_SHOWS -> topRatedTvShowsRxPagingSource.apply {
                     setData(tvShow, page)
                 }
+
                 TvShow.POPULAR_TV_SHOWS -> popularTvShowsRxPagingSource.apply {
                     setData(tvShow, page)
                 }
+
                 TvShow.ON_THE_AIR_TV_SHOWS -> onTheAirTvShowsRxPagingSource.apply {
                     setData(tvShow, page)
                 }
             }
-        }
-    ).flowable
+        }).flowable
 }

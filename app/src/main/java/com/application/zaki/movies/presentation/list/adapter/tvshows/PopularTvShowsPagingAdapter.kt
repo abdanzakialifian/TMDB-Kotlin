@@ -6,14 +6,14 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListVerticalBinding
-import com.application.zaki.movies.domain.model.genre.GenresItem
-import com.application.zaki.movies.domain.model.tvshows.ListPopularTvShows
+import com.application.zaki.movies.domain.model.other.GenresItem
+import com.application.zaki.movies.domain.model.tvshows.ListTvShows
 import com.application.zaki.movies.presentation.list.adapter.genres.GenresAdapter
 import com.application.zaki.movies.utils.loadImageUrl
 import javax.inject.Inject
 
 class PopularTvShowsPagingAdapter @Inject constructor() :
-    PagingDataAdapter<ListPopularTvShows, PopularTvShowsPagingAdapter.PopularTvShowsPagingViewHolder>(
+    PagingDataAdapter<ListTvShows, PopularTvShowsPagingAdapter.PopularTvShowsPagingViewHolder>(
         DIFF_CALLBACK
     ) {
 
@@ -25,7 +25,7 @@ class PopularTvShowsPagingAdapter @Inject constructor() :
 
     inner class PopularTvShowsPagingViewHolder(private val binding: ItemListVerticalBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ListPopularTvShows?) {
+        fun bind(item: ListTvShows?) {
             binding.apply {
                 item?.apply {
                     posterPath?.let { url ->
@@ -40,11 +40,11 @@ class PopularTvShowsPagingAdapter @Inject constructor() :
                     val genre = ArrayList<GenresItem>()
                     genreIds?.forEach { genreId ->
                         genres?.forEach { genres ->
-                            if (genreId == genres?.id) {
+                            if (genreId == genres.id) {
                                 genre.add(
                                     GenresItem(
-                                        name = genres?.name ?: "",
-                                        id = genres?.id ?: 0
+                                        name = genres.name ?: "",
+                                        id = genres.id
                                     )
                                 )
                             }
@@ -86,20 +86,20 @@ class PopularTvShowsPagingAdapter @Inject constructor() :
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: ListPopularTvShows?)
+        fun onItemClicked(data: ListTvShows?)
         fun onItemGenreClicked(data: GenresItem)
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListPopularTvShows>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListTvShows>() {
             override fun areItemsTheSame(
-                oldItem: ListPopularTvShows,
-                newItem: ListPopularTvShows
+                oldItem: ListTvShows,
+                newItem: ListTvShows
             ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
-                oldItem: ListPopularTvShows,
-                newItem: ListPopularTvShows
+                oldItem: ListTvShows,
+                newItem: ListTvShows
             ): Boolean = oldItem == newItem
         }
     }

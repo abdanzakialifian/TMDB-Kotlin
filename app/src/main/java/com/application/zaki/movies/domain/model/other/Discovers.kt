@@ -1,12 +1,12 @@
-package com.application.zaki.movies.domain.model.movies
+package com.application.zaki.movies.domain.model.other
 
-data class ResultsItemDiscover(
+data class DiscoverItem(
     val overview: String? = null,
     val originalLanguage: String? = null,
     val originalTitle: String? = null,
     val video: Boolean? = null,
     val title: String? = null,
-    val genreIds: List<Int?>? = null,
+    val genreIds: List<Int>? = null,
     val posterPath: String? = null,
     val backdropPath: String? = null,
     val releaseDate: String? = null,

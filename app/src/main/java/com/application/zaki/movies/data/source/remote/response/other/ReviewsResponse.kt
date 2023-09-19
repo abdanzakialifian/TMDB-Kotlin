@@ -1,4 +1,4 @@
-package com.application.zaki.movies.data.source.remote.response.combine
+package com.application.zaki.movies.data.source.remote.response.other
 
 import com.google.gson.annotations.SerializedName
 
@@ -14,7 +14,7 @@ data class ReviewsResponse(
 	val totalPages: Int? = null,
 
 	@field:SerializedName("results")
-	val results: List<ReviewItemResponse?>? = null,
+	val results: List<ReviewItemResponse>? = null,
 
 	@field:SerializedName("total_results")
 	val totalResults: Int? = null
