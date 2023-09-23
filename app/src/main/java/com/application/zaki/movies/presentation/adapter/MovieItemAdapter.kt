@@ -1,4 +1,4 @@
-package com.application.zaki.movies.presentation.movies.adapter
+package com.application.zaki.movies.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,12 +7,11 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListHorizontalBinding
-import com.application.zaki.movies.domain.model.movies.ListMovies
+import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.utils.loadImageUrl
-import javax.inject.Inject
 
-class MovieItemAdapter @Inject constructor() :
-    PagingDataAdapter<ListMovies, MovieItemAdapter.MovieItemViewHolder>(DIFF_CALLBACK) {
+class MovieItemAdapter :
+    PagingDataAdapter<MovieTvShow, MovieItemAdapter.MovieItemViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
 
@@ -22,7 +21,7 @@ class MovieItemAdapter @Inject constructor() :
 
     inner class MovieItemViewHolder(val binding: ItemListHorizontalBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ListMovies?) {
+        fun bind(item: MovieTvShow?) {
             item?.posterPath?.let {
                 binding.imgHorizontal.loadImageUrl(it)
             }
@@ -50,6 +49,7 @@ class MovieItemAdapter @Inject constructor() :
                 params.setMargins(15, 0, 15, 0)
                 holder.binding.layoutList.layoutParams = params
             }
+
             else -> {
                 val params = ConstraintLayout.LayoutParams(
                     ConstraintLayout.LayoutParams.WRAP_CONTENT,
@@ -62,19 +62,19 @@ class MovieItemAdapter @Inject constructor() :
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: ListMovies?)
+        fun onItemClicked(data: MovieTvShow?)
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListMovies>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<MovieTvShow>() {
             override fun areItemsTheSame(
-                oldItem: ListMovies,
-                newItem: ListMovies
+                oldItem: MovieTvShow,
+                newItem: MovieTvShow
             ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
-                oldItem: ListMovies,
-                newItem: ListMovies
+                oldItem: MovieTvShow,
+                newItem: MovieTvShow
             ): Boolean = oldItem == newItem
         }
     }

@@ -5,7 +5,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import com.application.zaki.movies.databinding.FragmentListDiscoverBinding
-import com.application.zaki.movies.domain.model.other.DiscoverItem
+import com.application.zaki.movies.domain.model.DiscoverItem
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.view.DetailFragment
 import com.application.zaki.movies.presentation.list.adapter.genres.DiscoverGenresAdapter

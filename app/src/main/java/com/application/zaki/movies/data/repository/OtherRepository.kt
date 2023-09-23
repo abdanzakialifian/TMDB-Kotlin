@@ -4,11 +4,11 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.application.zaki.movies.data.source.remote.RemoteDataSource
 import com.application.zaki.movies.domain.interfaces.IOtherRepository
-import com.application.zaki.movies.domain.model.other.DiscoverItem
-import com.application.zaki.movies.domain.model.other.ReviewItem
+import com.application.zaki.movies.domain.model.DiscoverItem
+import com.application.zaki.movies.domain.model.ReviewItem
 import com.application.zaki.movies.utils.Category
-import com.application.zaki.movies.utils.DataMapperOther.toResultItemDiscover
-import com.application.zaki.movies.utils.DataMapperOther.toReviewItem
+import com.application.zaki.movies.utils.DataMapper.toResultItemDiscover
+import com.application.zaki.movies.utils.DataMapper.toReviewItem
 import com.application.zaki.movies.utils.Page
 import io.reactivex.Flowable
 import javax.inject.Inject

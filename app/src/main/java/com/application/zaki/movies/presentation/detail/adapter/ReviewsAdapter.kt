@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListReviewBinding
-import com.application.zaki.movies.domain.model.other.ReviewItem
+import com.application.zaki.movies.domain.model.ReviewItem
 import com.application.zaki.movies.utils.getInitialName
 import javax.inject.Inject
 

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.ViewModel
 import androidx.paging.PagingData
-import com.application.zaki.movies.domain.model.tvshows.ListTvShows
+import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.domain.usecase.GetListTvShows
 import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.Page
@@ -22,19 +22,13 @@ import javax.inject.Inject
 class TvShowsViewModel @Inject constructor(private val getListTvShows: GetListTvShows) :
     ViewModel() {
     fun airingTodayTvShows(
-        rxDisposer: RxDisposer,
-        tvShow: TvShow,
-        category: Category,
-        page: Page
-    ): LiveData<PagingData<ListTvShows>> {
-        val subject = ReplaySubject.create<PagingData<ListTvShows>>()
-        getListTvShows(tvShow, category, page)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { data ->
+        rxDisposer: RxDisposer, tvShow: TvShow, category: Category, page: Page
+    ): LiveData<PagingData<MovieTvShow>> {
+        val subject = ReplaySubject.create<PagingData<MovieTvShow>>()
+        getListTvShows(tvShow, category, page).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).subscribe { data ->
                 subject.onNext(data)
-            }
-            .addToDisposer(rxDisposer)
+            }.addToDisposer(rxDisposer)
 
         // convert flowable to livedata
         return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
@@ -42,13 +36,11 @@ class TvShowsViewModel @Inject constructor(private val getListTvShows: GetListTv
 
     fun onTheAirTvShowsPaging(
         rxDisposer: RxDisposer, tvShow: TvShow, category: Category, page: Page
-    ): LiveData<PagingData<ListTvShows>> {
-        val subject = ReplaySubject.create<PagingData<ListTvShows>>()
+    ): LiveData<PagingData<MovieTvShow>> {
+        val subject = ReplaySubject.create<PagingData<MovieTvShow>>()
 
-        getListTvShows(tvShow, category, page)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { data ->
+        getListTvShows(tvShow, category, page).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).subscribe { data ->
                 subject.onNext(data)
             }.addToDisposer(rxDisposer)
 
@@ -57,40 +49,28 @@ class TvShowsViewModel @Inject constructor(private val getListTvShows: GetListTv
     }
 
     fun popularTvShowsPaging(
-        rxDisposer: RxDisposer,
-        tvShow: TvShow,
-        category: Category,
-        page: Page
-    ): LiveData<PagingData<ListTvShows>> {
-        val subject = ReplaySubject.create<PagingData<ListTvShows>>()
+        rxDisposer: RxDisposer, tvShow: TvShow, category: Category, page: Page
+    ): LiveData<PagingData<MovieTvShow>> {
+        val subject = ReplaySubject.create<PagingData<MovieTvShow>>()
 
-        getListTvShows(tvShow, category, page)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { data ->
+        getListTvShows(tvShow, category, page).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).subscribe { data ->
                 subject.onNext(data)
-            }
-            .addToDisposer(rxDisposer)
+            }.addToDisposer(rxDisposer)
 
         // convert flowable to livedata
         return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
     }
 
     fun topRatedTvShowsPaging(
-        rxDisposer: RxDisposer,
-        tvShow: TvShow,
-        category: Category,
-        page: Page
-    ): LiveData<PagingData<ListTvShows>> {
-        val subject = ReplaySubject.create<PagingData<ListTvShows>>()
+        rxDisposer: RxDisposer, tvShow: TvShow, category: Category, page: Page
+    ): LiveData<PagingData<MovieTvShow>> {
+        val subject = ReplaySubject.create<PagingData<MovieTvShow>>()
 
-        getListTvShows(tvShow, category, page)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { data ->
+        getListTvShows(tvShow, category, page).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).subscribe { data ->
                 subject.onNext(data)
-            }
-            .addToDisposer(rxDisposer)
+            }.addToDisposer(rxDisposer)
 
         // convert flowable to livedata
         return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))

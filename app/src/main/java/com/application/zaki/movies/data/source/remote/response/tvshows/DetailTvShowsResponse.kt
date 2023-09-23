@@ -1,5 +1,6 @@
 package com.application.zaki.movies.data.source.remote.response.tvshows
 
+import com.application.zaki.movies.data.source.remote.response.other.ReviewsResponse
 import com.google.gson.annotations.SerializedName
 
 data class DetailTvShowsResponse(
@@ -104,7 +105,10 @@ data class DetailTvShowsResponse(
     val homepage: String? = null,
 
     @field:SerializedName("status")
-    val status: String? = null
+    val status: String? = null,
+
+    @field:SerializedName("reviews")
+    val reviews: ReviewsResponse? = null
 )
 
 data class LastEpisodeToAirResponse(

@@ -1,8 +1,8 @@
 package com.application.zaki.movies.domain.interfaces
 
 import androidx.paging.PagingData
-import com.application.zaki.movies.domain.model.other.DiscoverItem
-import com.application.zaki.movies.domain.model.other.ReviewItem
+import com.application.zaki.movies.domain.model.DiscoverItem
+import com.application.zaki.movies.domain.model.ReviewItem
 import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.Page
 import io.reactivex.Flowable

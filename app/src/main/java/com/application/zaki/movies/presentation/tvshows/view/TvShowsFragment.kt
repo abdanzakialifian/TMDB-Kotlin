@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.application.zaki.movies.databinding.FragmentTvShowsBinding
-import com.application.zaki.movies.domain.model.tvshows.ListTvShows
+import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.view.DetailFragment.Companion.INTENT_FROM_TV_SHOWS
 import com.application.zaki.movies.presentation.home.HomeFragmentDirections
@@ -81,7 +81,7 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
     private fun setImageSlider() {
         airingTodayTvShowsAdapter.setOnItemClickCallback(object :
             AiringTodayTvShowsAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: ListTvShows?) {
+            override fun onItemClicked(data: MovieTvShow?) {
                 navigateToDetailPage(data?.id ?: 0)
             }
         })
@@ -148,7 +148,7 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
     private fun setTopRatedTvShows() {
         topRatedTvShowsAdapter.setOnItemClickCallback(object :
             TopRatedTvShowsAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: ListTvShows?) {
+            override fun onItemClicked(data: MovieTvShow?) {
                 navigateToDetailPage(data?.id ?: 0)
             }
         })
@@ -195,7 +195,7 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
     private fun setPopularTvShows() {
         popularTvShowsAdapter.setOnItemClickCallback(object :
             PopularTvShowsAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: ListTvShows?) {
+            override fun onItemClicked(data: MovieTvShow?) {
                 navigateToDetailPage(data?.id ?: 0)
             }
         })
@@ -242,7 +242,7 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>() {
     private fun setOnTheAirTvShows() {
         onTheAirTvShowsAdapter.setOnItemClickCallback(object :
             OnTheAirTvShowsAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: ListTvShows?) {
+            override fun onItemClicked(data: MovieTvShow?) {
                 navigateToDetailPage(data?.id ?: 0)
             }
         })

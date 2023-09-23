@@ -58,7 +58,7 @@ interface ApiService {
     @GET("genre/tv/list")
     fun getGenreTvShows(): Flowable<GenreResponse>
 
-    @GET("movie/{movie_id}?append_to_response=credits,videos")
+    @GET("movie/{movie_id}?append_to_response=credits,videos,reviews")
     fun getDetailMovies(
         @Path("movie_id") movieId: String
     ): Flowable<DetailMoviesResponse>

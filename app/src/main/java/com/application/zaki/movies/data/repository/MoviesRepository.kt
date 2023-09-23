@@ -4,13 +4,13 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.application.zaki.movies.data.source.remote.RemoteDataSource
 import com.application.zaki.movies.domain.interfaces.IMoviesRepository
-import com.application.zaki.movies.domain.model.other.Genres
-import com.application.zaki.movies.domain.model.movies.DetailMovies
-import com.application.zaki.movies.domain.model.movies.ListMovies
-import com.application.zaki.movies.utils.DataMapperMovies.toDetailMovie
-import com.application.zaki.movies.utils.DataMapperMovies.toListMovies
-import com.application.zaki.movies.utils.DataMapperOther.toGenres
+import com.application.zaki.movies.domain.model.MovieTvShow
+import com.application.zaki.movies.domain.model.Detail
+import com.application.zaki.movies.domain.model.Genres
 import com.application.zaki.movies.utils.Category
+import com.application.zaki.movies.utils.DataMapper.toDetailMovie
+import com.application.zaki.movies.utils.DataMapper.toGenres
+import com.application.zaki.movies.utils.DataMapper.toMovie
 import com.application.zaki.movies.utils.Movie
 import com.application.zaki.movies.utils.Page
 import io.reactivex.Flowable
@@ -20,7 +20,7 @@ import javax.inject.Singleton
 @Singleton
 class MoviesRepository @Inject constructor(private val remoteDataSource: RemoteDataSource) :
     IMoviesRepository {
-    override fun getDetailMovies(movieId: String): Flowable<DetailMovies> =
+    override fun getDetailMovies(movieId: String): Flowable<Detail> =
         remoteDataSource.getDetailMovies(movieId).map { data ->
             data.toDetailMovie()
         }
@@ -30,10 +30,10 @@ class MoviesRepository @Inject constructor(private val remoteDataSource: RemoteD
             data.toGenres()
         }
 
-    override fun getMovies(movie: Movie, page: Page): Flowable<PagingData<ListMovies>> =
+    override fun getMovies(movie: Movie, page: Page): Flowable<PagingData<MovieTvShow>> =
         remoteDataSource.getMovies(movie, page).map { pagingData ->
             pagingData.map { data ->
-                data.toListMovies()
+                data.toMovie()
             }
         }
 }

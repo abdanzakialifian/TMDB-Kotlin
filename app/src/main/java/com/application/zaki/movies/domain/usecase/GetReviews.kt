@@ -2,7 +2,7 @@ package com.application.zaki.movies.domain.usecase
 
 import androidx.paging.PagingData
 import com.application.zaki.movies.domain.interfaces.IOtherRepository
-import com.application.zaki.movies.domain.model.other.ReviewItem
+import com.application.zaki.movies.domain.model.ReviewItem
 import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.Page
 import io.reactivex.Flowable

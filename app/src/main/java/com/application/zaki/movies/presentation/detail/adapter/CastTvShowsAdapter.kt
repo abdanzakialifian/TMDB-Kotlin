@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListCastBinding
-import com.application.zaki.movies.domain.model.tvshows.CastItem
+import com.application.zaki.movies.domain.model.CastItem
 import com.application.zaki.movies.utils.loadImageUrl
 
 class CastTvShowsAdapter : ListAdapter<CastItem, CastTvShowsAdapter.CastViewHolder>(DIFF_CALLBACK) {

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.ViewModel
 import androidx.paging.PagingData
-import com.application.zaki.movies.domain.model.other.DiscoverItem
+import com.application.zaki.movies.domain.model.DiscoverItem
 import com.application.zaki.movies.domain.usecase.GetDiscover
 import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.RxDisposer

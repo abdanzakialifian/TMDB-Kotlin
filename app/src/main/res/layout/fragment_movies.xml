@@ -37,7 +37,7 @@
         android:id="@+id/view_pager_image_slider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="110dp"
+        android:paddingHorizontal="95dp"
         android:paddingVertical="20dp"
         android:visibility="gone" />
 

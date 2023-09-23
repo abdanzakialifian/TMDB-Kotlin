@@ -6,10 +6,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListCastBinding
-import com.application.zaki.movies.domain.model.movies.CastItem
+import com.application.zaki.movies.domain.model.CastItem
 import com.application.zaki.movies.utils.loadImageUrl
+import javax.inject.Inject
 
-class CastMovieAdapter : ListAdapter<CastItem, CastMovieAdapter.CastViewHolder>(DIFF_CALLBACK) {
+class CastMoviesAdapter @Inject constructor() :
+    ListAdapter<CastItem, CastMoviesAdapter.CastViewHolder>(DIFF_CALLBACK) {
     inner class CastViewHolder(private val binding: ItemListCastBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CastItem) {

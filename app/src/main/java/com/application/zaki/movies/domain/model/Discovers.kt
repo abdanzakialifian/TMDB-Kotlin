@@ -1,4 +1,4 @@
-package com.application.zaki.movies.domain.model.other
+package com.application.zaki.movies.domain.model
 
 data class DiscoverItem(
     val overview: String? = null,

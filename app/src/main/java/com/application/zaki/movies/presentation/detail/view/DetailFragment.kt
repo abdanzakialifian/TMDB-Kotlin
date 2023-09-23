@@ -2,17 +2,15 @@ package com.application.zaki.movies.presentation.detail.view
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.application.zaki.movies.databinding.FragmentDetailBinding
-import com.application.zaki.movies.domain.model.movies.DetailMovies
-import com.application.zaki.movies.domain.model.tvshows.DetailTvShows
+import com.application.zaki.movies.domain.model.Detail
 import com.application.zaki.movies.presentation.base.BaseVBFragment
-import com.application.zaki.movies.presentation.detail.adapter.CastMovieAdapter
-import com.application.zaki.movies.presentation.detail.adapter.CastTvShowsAdapter
+import com.application.zaki.movies.presentation.detail.adapter.CastMoviesAdapter
 import com.application.zaki.movies.presentation.detail.adapter.ReviewsAdapter
-import com.application.zaki.movies.presentation.detail.adapter.ReviewsMoviesPagingAdapter
 import com.application.zaki.movies.presentation.detail.viewmodel.DetailViewModel
 import com.application.zaki.movies.utils.RxDisposer
 import com.application.zaki.movies.utils.UiState
@@ -29,10 +27,14 @@ import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
+    @Inject
+    lateinit var castMoviesAdapter: CastMoviesAdapter
 
     @Inject
-    lateinit var adapter: ReviewsMoviesPagingAdapter
+    lateinit var reviewsAdapter: ReviewsAdapter
+
     private val args: DetailFragmentArgs by navArgs()
+
     private val detailViewModel by viewModels<DetailViewModel>()
 
     override fun getViewBinding(): FragmentDetailBinding =
@@ -40,7 +42,6 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
 
     override fun initView() {
         setDetailInformation(args.id.toString(), args.intentFrom)
-//        setReviews(args.id.toString())
         binding?.tvSeeAll?.setOnClickListener {
             navigateToReviewsPage()
         }
@@ -53,7 +54,7 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                     when (result) {
                         is UiState.Loading -> {}
                         is UiState.Success -> {
-                            showDataMovie(result.data)
+                            showDataDetail(result.data)
                         }
                         is UiState.Error -> {}
                         is UiState.Empty -> {}
@@ -65,9 +66,12 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                     when (result) {
                         is UiState.Loading -> {}
                         is UiState.Success -> {
-                            showDataTvShow(result.data)
+                            Log.d("CEK", result.data.toString())
+                            showDataDetail(result.data)
                         }
-                        is UiState.Error -> {}
+                        is UiState.Error -> {
+
+                        }
                         is UiState.Empty -> {}
                     }
                 }
@@ -103,31 +107,7 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
         }
     }
 
-//    private fun setReviews(id: String) {
-//        detailViewModel.reviewsPaging(
-//            RxDisposer().apply { bind(lifecycle) },
-//            id,
-//            ReviewsRxPagingSource.ONE,
-//            if (args.intentFrom == INTENT_FROM_MOVIE) ReviewsRxPagingSource.MOVIES else ReviewsRxPagingSource.TV_SHOWS
-//        )
-//            .observe(viewLifecycleOwner) { result ->
-//                adapter.submitData(lifecycle, result)
-//                adapter.addLoadStateListener { loadState ->
-//                    when (loadState.refresh) {
-//                        is LoadState.Loading -> {}
-//                        is LoadState.NotLoading -> {
-//                            binding?.apply {
-//                                rvReviews.adapter = adapter
-//                                rvReviews.setHasFixedSize(true)
-//                            }
-//                        }
-//                        is LoadState.Error -> {}
-//                    }
-//                }
-//            }
-//    }
-
-    private fun showDataMovie(data: DetailMovies) {
+    private fun showDataDetail(data: Detail) {
         val rating = data.voteAverage.toString().toDouble()
         val convertRating = (rating * 100.0).roundToInt() / 100.0
         val genres = ArrayList<String>()
@@ -135,8 +115,8 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
             genres.add(it.name ?: "")
         }
         val listKey = ArrayList<String>()
-        if (data.videos?.results?.isNotEmpty() == true) {
-            data.videos.results.forEach {
+        if (data.videos?.isNotEmpty() == true) {
+            data.videos.forEach {
                 listKey.add(it.key ?: "")
             }
         } else {
@@ -167,63 +147,63 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                         )
                     )
             tvOverview.text = data.overview
-            val adapter = CastMovieAdapter()
-            adapter.submitList(data.credits?.cast)
-            rvCast.adapter = adapter
+
+            castMoviesAdapter.submitList(data.cast)
+            rvCast.adapter = castMoviesAdapter
             rvCast.setHasFixedSize(true)
-            val reviewsAdapter = ReviewsAdapter()
+
             reviewsAdapter.submitList(data.reviews)
             rvReviews.adapter = reviewsAdapter
             rvReviews.setHasFixedSize(true)
         }
     }
 
-    private fun showDataTvShow(data: DetailTvShows) {
-        binding?.apply {
-            val rating = data.voteAverage.toString().toDouble()
-            val convertRating = (rating * 100.0).roundToInt() / 100.0
-            val genres = ArrayList<String>()
-            data.genres?.forEach {
-                genres.add(it.name ?: "")
-            }
-            val listKey = ArrayList<String>()
-            if (data.videos?.results?.isNotEmpty() == true) {
-                data.videos.results.forEach {
-                    listKey.add(it.key ?: "")
-                }
-            } else {
-                listKey.add("")
-            }
-            val randomKey = listKey.random()
-
-            imgDetail.loadBackdropImageUrl(data.backdropPath ?: "")
-            playAnimation.setOnClickListener {
-                playAnimation.playAnimation()
-                Handler(Looper.getMainLooper()).postDelayed({
-                    setYoutubeTrailer(randomKey)
-                    imgDetail.gone()
-                    playAnimation.gone()
-                    youtubePlayerView.visible()
-                }, DELAY_PLAY_TRAILER_YOUTUBE)
-            }
-            tvRating.text = convertRating.toString()
-            tvVote.text = data.voteCount.toString()
-            tvTitle.text = data.name
-            tvSubTitle.text =
-                StringBuilder().append(genres.joinToString(", "))
-                    .append(" \u25CF ").append(
-                        data.firstAirDate?.convertDateText(
-                            "dd MMM yy",
-                            "yyyy-MM-dd"
-                        )
-                    )
-            tvOverview.text = data.overview
-            val adapter = CastTvShowsAdapter()
-            adapter.submitList(data.credits?.cast)
-            rvCast.adapter = adapter
-            rvCast.setHasFixedSize(true)
-        }
-    }
+//    private fun showDataTvShow(data: DetailTvShows) {
+//        binding?.apply {
+//            val rating = data.voteAverage.toString().toDouble()
+//            val convertRating = (rating * 100.0).roundToInt() / 100.0
+//            val genres = ArrayList<String>()
+//            data.genres?.forEach {
+//                genres.add(it.name ?: "")
+//            }
+//            val listKey = ArrayList<String>()
+//            if (data.videos?.results?.isNotEmpty() == true) {
+//                data.videos.results.forEach {
+//                    listKey.add(it.key ?: "")
+//                }
+//            } else {
+//                listKey.add("")
+//            }
+//            val randomKey = listKey.random()
+//
+//            imgDetail.loadBackdropImageUrl(data.backdropPath ?: "")
+//            playAnimation.setOnClickListener {
+//                playAnimation.playAnimation()
+//                Handler(Looper.getMainLooper()).postDelayed({
+//                    setYoutubeTrailer(randomKey)
+//                    imgDetail.gone()
+//                    playAnimation.gone()
+//                    youtubePlayerView.visible()
+//                }, DELAY_PLAY_TRAILER_YOUTUBE)
+//            }
+//            tvRating.text = convertRating.toString()
+//            tvVote.text = data.voteCount.toString()
+//            tvTitle.text = data.name
+//            tvSubTitle.text =
+//                StringBuilder().append(genres.joinToString(", "))
+//                    .append(" \u25CF ").append(
+//                        data.firstAirDate?.convertDateText(
+//                            "dd MMM yy",
+//                            "yyyy-MM-dd"
+//                        )
+//                    )
+//            tvOverview.text = data.overview
+//            val adapter = CastTvShowsAdapter()
+//            adapter.submitList(data.credits?.cast)
+//            rvCast.adapter = adapter
+//            rvCast.setHasFixedSize(true)
+//        }
+//    }
 
     private fun navigateToReviewsPage() {
         val navigateToReviewsFragment =

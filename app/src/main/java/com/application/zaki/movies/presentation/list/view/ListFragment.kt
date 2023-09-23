@@ -5,8 +5,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import com.application.zaki.movies.databinding.FragmentListBinding
-import com.application.zaki.movies.domain.model.other.GenresItem
-import com.application.zaki.movies.domain.model.movies.ListMovies
+import com.application.zaki.movies.domain.model.GenresItem
+import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.view.DetailFragment
 import com.application.zaki.movies.presentation.list.adapter.movies.PopularMoviesPagingAdapter
@@ -51,117 +51,117 @@ class ListFragment : BaseVBFragment<FragmentListBinding>() {
         FragmentListBinding.inflate(layoutInflater)
 
     override fun initView() {
-        when (args.intentFrom) {
+//        when (args.intentFrom) {
             // set list from movies
-            Movie.TOP_RATED_MOVIES -> setListTopRatedMoviesPaging()
-            Movie.POPULAR_MOVIES -> setListPopularMoviesPaging()
-            else -> setListUpComingMoviesPaging()
+//            Movie.TOP_RATED_MOVIES -> setListTopRatedMoviesPaging()
+//            Movie.POPULAR_MOVIES -> setListPopularMoviesPaging()
+//            else -> setListUpComingMoviesPaging()
             // set list from tv shows
 //            INTENT_FROM_TOP_RATED_TV_SHOWS -> setListTopRatedTvShowsPaging()
 //            INTENT_FROM_POPULAR_TV_SHOWS -> setListPopularTvShowsPaging()
 //            INTENT_FROM_ON_THE_AIR_TV_SHOWS -> setListOnTheAirTvShowsPaging()
-        }
+//        }
     }
 
-    private fun setListTopRatedMoviesPaging() {
-        moviesViewModel.getMovies(
-            movie = Movie.TOP_RATED_MOVIES,
-            category = MOVIES,
-            page = Page.MORE_THAN_ONE,
-            rxDisposer =  RxDisposer().apply { bind(lifecycle) },
-        )
-            .observe(viewLifecycleOwner) { result ->
-                topRatedMoviesAdapter.setOnItemClickCallback(object :
-                    TopRatedMoviesPagingAdapter.OnItemClickCallback {
-                    override fun onItemClicked(data: ListMovies?) {
-                        navigateToDetailPage(data?.id ?: 0)
-                    }
-
-                    override fun onItemGenreClicked(data: GenresItem) {
-                        navigateToDiscoverPage(data, ListDiscoverFragment.INTENT_FROM_MOVIE)
-                    }
-                })
-                topRatedMoviesAdapter.submitData(lifecycle, result)
-                binding?.apply {
-                    rvListMovies.adapter = topRatedMoviesAdapter
-                    rvListMovies.setHasFixedSize(true)
-                }
-                topRatedMoviesAdapter.addLoadStateListener { loadState ->
-                    when (loadState.refresh) {
-                        is LoadState.Loading -> showLoading()
-                        is LoadState.NotLoading -> visibleDataList()
-                        is LoadState.Error -> goneDataList()
-                    }
-                }
-            }
-    }
-
-    private fun setListPopularMoviesPaging() {
-        moviesViewModel.getMovies(
-            movie = Movie.POPULAR_MOVIES,
-            category = MOVIES,
-            page = Page.MORE_THAN_ONE,
-            rxDisposer =  RxDisposer().apply { bind(lifecycle) },
-        )
-            .observe(viewLifecycleOwner) { result ->
-
-                popularMoviesAdapter.setOnItemClickCallback(object :
-                    PopularMoviesPagingAdapter.OnItemClickCallback {
-                    override fun onItemClicked(data: ListMovies?) {
-                        navigateToDetailPage(data?.id ?: 0)
-                    }
-
-                    override fun onItemGenreClicked(data: GenresItem) {
-                        navigateToDiscoverPage(data, ListDiscoverFragment.INTENT_FROM_MOVIE)
-                    }
-                })
-                popularMoviesAdapter.submitData(lifecycle, result)
-                binding?.apply {
-                    rvListMovies.adapter = popularMoviesAdapter
-                    rvListMovies.setHasFixedSize(true)
-                }
-                popularMoviesAdapter.addLoadStateListener { loadState ->
-                    when (loadState.refresh) {
-                        is LoadState.Loading -> showLoading()
-                        is LoadState.NotLoading -> visibleDataList()
-                        is LoadState.Error -> goneDataList()
-                    }
-                }
-            }
-    }
-
-    private fun setListUpComingMoviesPaging() {
-        moviesViewModel.getMovies(
-            movie = Movie.UP_COMING_MOVIES,
-            category = MOVIES,
-            page = Page.MORE_THAN_ONE,
-            rxDisposer =  RxDisposer().apply { bind(lifecycle) },
-        )
-            .observe(viewLifecycleOwner) { result ->
-                upComingMoviesAdapter.setOnItemClickCallback(object :
-                    UpComingMoviesPagingAdapter.OnItemClickCallback {
-                    override fun onItemClicked(data: ListMovies?) {
-                        navigateToDetailPage(data?.id ?: 0)
-                    }
-
-                    override fun onItemGenreClicked(data: GenresItem) {
-                        navigateToDiscoverPage(data, ListDiscoverFragment.INTENT_FROM_MOVIE)
-                    }
-                })
-                upComingMoviesAdapter.submitData(lifecycle, result)
-                binding?.apply {
-                    rvListMovies.adapter = upComingMoviesAdapter
-                    rvListMovies.setHasFixedSize(true)
-                }
-                upComingMoviesAdapter.addLoadStateListener { loadState ->
-                    when (loadState.refresh) {
-                        is LoadState.Loading -> showLoading()
-                        is LoadState.NotLoading -> visibleDataList()
-                        is LoadState.Error -> goneDataList()
-                    }
-                }
-            }
-    }
+//    private fun setListTopRatedMoviesPaging() {
+//        moviesViewModel.getMovies(
+//            movie = Movie.TOP_RATED_MOVIES,
+//            category = MOVIES,
+//            page = Page.MORE_THAN_ONE,
+//            rxDisposer =  RxDisposer().apply { bind(lifecycle) },
+//        )
+//            .observe(viewLifecycleOwner) { result ->
+//                topRatedMoviesAdapter.setOnItemClickCallback(object :
+//                    TopRatedMoviesPagingAdapter.OnItemClickCallback {
+//                    override fun onItemClicked(data: MovieTvShow?) {
+//                        navigateToDetailPage(data?.id ?: 0)
+//                    }
+//
+//                    override fun onItemGenreClicked(data: GenresItem) {
+//                        navigateToDiscoverPage(data, ListDiscoverFragment.INTENT_FROM_MOVIE)
+//                    }
+//                })
+//                topRatedMoviesAdapter.submitData(lifecycle, result)
+//                binding?.apply {
+//                    rvListMovies.adapter = topRatedMoviesAdapter
+//                    rvListMovies.setHasFixedSize(true)
+//                }
+//                topRatedMoviesAdapter.addLoadStateListener { loadState ->
+//                    when (loadState.refresh) {
+//                        is LoadState.Loading -> showLoading()
+//                        is LoadState.NotLoading -> visibleDataList()
+//                        is LoadState.Error -> goneDataList()
+//                    }
+//                }
+//            }
+//    }
+//
+//    private fun setListPopularMoviesPaging() {
+//        moviesViewModel.getMovies(
+//            movie = Movie.POPULAR_MOVIES,
+//            category = MOVIES,
+//            page = Page.MORE_THAN_ONE,
+//            rxDisposer =  RxDisposer().apply { bind(lifecycle) },
+//        )
+//            .observe(viewLifecycleOwner) { result ->
+//
+//                popularMoviesAdapter.setOnItemClickCallback(object :
+//                    PopularMoviesPagingAdapter.OnItemClickCallback {
+//                    override fun onItemClicked(data: MovieTvShow?) {
+//                        navigateToDetailPage(data?.id ?: 0)
+//                    }
+//
+//                    override fun onItemGenreClicked(data: GenresItem) {
+//                        navigateToDiscoverPage(data, ListDiscoverFragment.INTENT_FROM_MOVIE)
+//                    }
+//                })
+//                popularMoviesAdapter.submitData(lifecycle, result)
+//                binding?.apply {
+//                    rvListMovies.adapter = popularMoviesAdapter
+//                    rvListMovies.setHasFixedSize(true)
+//                }
+//                popularMoviesAdapter.addLoadStateListener { loadState ->
+//                    when (loadState.refresh) {
+//                        is LoadState.Loading -> showLoading()
+//                        is LoadState.NotLoading -> visibleDataList()
+//                        is LoadState.Error -> goneDataList()
+//                    }
+//                }
+//            }
+//    }
+//
+//    private fun setListUpComingMoviesPaging() {
+//        moviesViewModel.getMovies(
+//            movie = Movie.UP_COMING_MOVIES,
+//            category = MOVIES,
+//            page = Page.MORE_THAN_ONE,
+//            rxDisposer =  RxDisposer().apply { bind(lifecycle) },
+//        )
+//            .observe(viewLifecycleOwner) { result ->
+//                upComingMoviesAdapter.setOnItemClickCallback(object :
+//                    UpComingMoviesPagingAdapter.OnItemClickCallback {
+//                    override fun onItemClicked(data: MovieTvShow?) {
+//                        navigateToDetailPage(data?.id ?: 0)
+//                    }
+//
+//                    override fun onItemGenreClicked(data: GenresItem) {
+//                        navigateToDiscoverPage(data, ListDiscoverFragment.INTENT_FROM_MOVIE)
+//                    }
+//                })
+//                upComingMoviesAdapter.submitData(lifecycle, result)
+//                binding?.apply {
+//                    rvListMovies.adapter = upComingMoviesAdapter
+//                    rvListMovies.setHasFixedSize(true)
+//                }
+//                upComingMoviesAdapter.addLoadStateListener { loadState ->
+//                    when (loadState.refresh) {
+//                        is LoadState.Loading -> showLoading()
+//                        is LoadState.NotLoading -> visibleDataList()
+//                        is LoadState.Error -> goneDataList()
+//                    }
+//                }
+//            }
+//    }
 
 //    private fun setListTopRatedTvShowsPaging() {
 //        tvShowsViewModel.topRatedTvShowsPaging(

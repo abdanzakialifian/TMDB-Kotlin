@@ -6,7 +6,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListDiscoverBinding
-import com.application.zaki.movies.domain.model.other.DiscoverItem
+import com.application.zaki.movies.domain.model.DiscoverItem
 import com.application.zaki.movies.utils.loadImageUrl
 import javax.inject.Inject
 

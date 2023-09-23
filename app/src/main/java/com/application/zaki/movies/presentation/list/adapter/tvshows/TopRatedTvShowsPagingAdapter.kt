@@ -6,14 +6,14 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListVerticalBinding
-import com.application.zaki.movies.domain.model.other.GenresItem
-import com.application.zaki.movies.domain.model.tvshows.ListTvShows
+import com.application.zaki.movies.domain.model.GenresItem
+import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.presentation.list.adapter.genres.GenresAdapter
 import com.application.zaki.movies.utils.loadImageUrl
 import javax.inject.Inject
 
 class TopRatedTvShowsPagingAdapter @Inject constructor() :
-    PagingDataAdapter<ListTvShows, TopRatedTvShowsPagingAdapter.TopRatedTvShowsPagingViewHolder>(
+    PagingDataAdapter<MovieTvShow, TopRatedTvShowsPagingAdapter.TopRatedTvShowsPagingViewHolder>(
         DIFF_CALLBACK
     ) {
 
@@ -25,7 +25,7 @@ class TopRatedTvShowsPagingAdapter @Inject constructor() :
 
     inner class TopRatedTvShowsPagingViewHolder(private val binding: ItemListVerticalBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ListTvShows?) {
+        fun bind(item: MovieTvShow?) {
             binding.apply {
                 item?.apply {
                     posterPath?.let { url ->
@@ -82,20 +82,20 @@ class TopRatedTvShowsPagingAdapter @Inject constructor() :
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: ListTvShows?)
+        fun onItemClicked(data: MovieTvShow?)
         fun onItemGenreClicked(data: GenresItem)
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListTvShows>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<MovieTvShow>() {
             override fun areItemsTheSame(
-                oldItem: ListTvShows,
-                newItem: ListTvShows
+                oldItem: MovieTvShow,
+                newItem: MovieTvShow
             ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
-                oldItem: ListTvShows,
-                newItem: ListTvShows
+                oldItem: MovieTvShow,
+                newItem: MovieTvShow
             ): Boolean = oldItem == newItem
         }
     }

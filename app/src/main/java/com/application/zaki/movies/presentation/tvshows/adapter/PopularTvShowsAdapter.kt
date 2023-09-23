@@ -7,12 +7,12 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListHorizontalBinding
-import com.application.zaki.movies.domain.model.tvshows.ListTvShows
+import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.utils.loadImageUrl
 import javax.inject.Inject
 
 class PopularTvShowsAdapter @Inject constructor() :
-    PagingDataAdapter<ListTvShows, PopularTvShowsAdapter.PopularTvShowsViewHolder>(
+    PagingDataAdapter<MovieTvShow, PopularTvShowsAdapter.PopularTvShowsViewHolder>(
         DIFF_CALLBACK
     ) {
 
@@ -24,7 +24,7 @@ class PopularTvShowsAdapter @Inject constructor() :
 
     inner class PopularTvShowsViewHolder(val binding: ItemListHorizontalBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ListTvShows?) {
+        fun bind(item: MovieTvShow?) {
             item?.posterPath?.let {
                 binding.imgHorizontal.loadImageUrl(it)
             }
@@ -72,19 +72,19 @@ class PopularTvShowsAdapter @Inject constructor() :
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: ListTvShows?)
+        fun onItemClicked(data: MovieTvShow?)
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListTvShows>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<MovieTvShow>() {
             override fun areItemsTheSame(
-                oldItem: ListTvShows,
-                newItem: ListTvShows
+                oldItem: MovieTvShow,
+                newItem: MovieTvShow
             ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
-                oldItem: ListTvShows,
-                newItem: ListTvShows
+                oldItem: MovieTvShow,
+                newItem: MovieTvShow
             ): Boolean = oldItem == newItem
         }
     }

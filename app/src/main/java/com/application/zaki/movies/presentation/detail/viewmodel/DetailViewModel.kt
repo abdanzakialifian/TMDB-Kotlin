@@ -4,9 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.ViewModel
 import androidx.paging.PagingData
-import com.application.zaki.movies.domain.model.movies.DetailMovies
-import com.application.zaki.movies.domain.model.other.ReviewItem
-import com.application.zaki.movies.domain.model.tvshows.DetailTvShows
+import com.application.zaki.movies.domain.model.Detail
+import com.application.zaki.movies.domain.model.ReviewItem
 import com.application.zaki.movies.domain.usecase.GetDetailMovie
 import com.application.zaki.movies.domain.usecase.GetDetailTvShow
 import com.application.zaki.movies.domain.usecase.GetReviews
@@ -31,8 +30,8 @@ class DetailViewModel @Inject constructor(
     fun detailMovies(
         rxDisposer: RxDisposer,
         movieId: String,
-    ): LiveData<UiState<DetailMovies>> {
-        val subject = ReplaySubject.create<UiState<DetailMovies>>()
+    ): LiveData<UiState<Detail>> {
+        val subject = ReplaySubject.create<UiState<Detail>>()
 
         subject.onNext(UiState.Loading(null))
         getDetailMovie(movieId)
@@ -59,8 +58,8 @@ class DetailViewModel @Inject constructor(
     fun detailTvShows(
         rxDisposer: RxDisposer,
         tvId: String,
-    ): LiveData<UiState<DetailTvShows>> {
-        val subject = ReplaySubject.create<UiState<DetailTvShows>>()
+    ): LiveData<UiState<Detail>> {
+        val subject = ReplaySubject.create<UiState<Detail>>()
 
         subject.onNext(UiState.Loading(null))
         getDetailTvShow(tvId)
