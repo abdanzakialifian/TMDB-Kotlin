@@ -1,4 +1,4 @@
-package com.application.zaki.movies.presentation.list.adapter.genres
+package com.application.zaki.movies.presentation.listmovietvshow.adapter.genres
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

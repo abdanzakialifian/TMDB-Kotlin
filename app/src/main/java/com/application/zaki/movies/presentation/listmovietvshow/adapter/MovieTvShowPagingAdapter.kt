@@ -1,4 +1,4 @@
-package com.application.zaki.movies.presentation.list.adapter.tvshows
+package com.application.zaki.movies.presentation.listmovietvshow.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,12 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListVerticalBinding
 import com.application.zaki.movies.domain.model.GenresItem
 import com.application.zaki.movies.domain.model.MovieTvShow
-import com.application.zaki.movies.presentation.list.adapter.genres.GenresAdapter
+import com.application.zaki.movies.presentation.listmovietvshow.adapter.genres.GenresAdapter
 import com.application.zaki.movies.utils.loadImageUrl
 import javax.inject.Inject
 
-class PopularTvShowsPagingAdapter @Inject constructor() :
-    PagingDataAdapter<MovieTvShow, PopularTvShowsPagingAdapter.PopularTvShowsPagingViewHolder>(
+class MovieTvShowPagingAdapter @Inject constructor() :
+    PagingDataAdapter<MovieTvShow, MovieTvShowPagingAdapter.PopularMoviesPagingViewHolder>(
         DIFF_CALLBACK
     ) {
 
@@ -23,7 +23,7 @@ class PopularTvShowsPagingAdapter @Inject constructor() :
         this.onItemClickCallback = onItemClickCallback
     }
 
-    inner class PopularTvShowsPagingViewHolder(private val binding: ItemListVerticalBinding) :
+    inner class PopularMoviesPagingViewHolder(private val binding: ItemListVerticalBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: MovieTvShow?) {
             binding.apply {
@@ -38,19 +38,13 @@ class PopularTvShowsPagingAdapter @Inject constructor() :
 
                     // mapping data genre
                     val genre = ArrayList<GenresItem>()
-                    genreIds?.forEach { genreId ->
-                        genres?.forEach { genres ->
+                    genreIds?.map { genreId ->
+                        genres?.map { genres ->
                             if (genreId == genres.id) {
-                                genre.add(
-                                    GenresItem(
-                                        name = genres.name ?: "",
-                                        id = genres.id
-                                    )
-                                )
+                                genre.add(GenresItem(name = genres.name ?: "", id = genres.id))
                             }
                         }
                     }
-
                     // convert list to adapter
                     val adapter = GenresAdapter(object : GenresAdapter.OnItemClickCallback {
                         override fun onItemClicked(data: GenresItem) {
@@ -59,6 +53,7 @@ class PopularTvShowsPagingAdapter @Inject constructor() :
                     })
                     adapter.submitList(genre)
                     rvGenre.adapter = adapter
+                    rvGenre.setHasFixedSize(true)
 
                     tvRate.text = voteAverage.toString()
                 }
@@ -72,16 +67,12 @@ class PopularTvShowsPagingAdapter @Inject constructor() :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): PopularTvShowsPagingViewHolder = ItemListVerticalBinding.inflate(
-        LayoutInflater.from(parent.context), parent, false
-    ).run {
-        PopularTvShowsPagingViewHolder(this)
-    }
+    ): PopularMoviesPagingViewHolder =
+        ItemListVerticalBinding.inflate(LayoutInflater.from(parent.context), parent, false).run {
+            PopularMoviesPagingViewHolder(this)
+        }
 
-    override fun onBindViewHolder(
-        holder: PopularTvShowsPagingViewHolder,
-        position: Int
-    ) {
+    override fun onBindViewHolder(holder: PopularMoviesPagingViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 

@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_listFragment"
-            app:destination="@id/listFragment" />
+            app:destination="@id/movieTvShowFragment" />
         <action
             android:id="@+id/action_homeFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
@@ -28,8 +28,8 @@
         android:label="fragment_favorite"
         tools:layout="@layout/fragment_favorite" />
     <fragment
-        android:id="@+id/listFragment"
-        android:name="com.application.zaki.movies.presentation.list.view.ListFragment"
+        android:id="@+id/movieTvShowFragment"
+        android:name="com.application.zaki.movies.presentation.listmovietvshow.view.MovieTvShowFragment"
         android:label="fragment_list"
         tools:layout="@layout/fragment_list">
         <action
@@ -40,7 +40,16 @@
             app:destination="@id/listDiscoverFragment" />
         <argument
             android:name="intentFrom"
-            app:argType="string" />
+            app:argType="string"
+            android:defaultValue="" />
+        <argument
+            android:name="movie"
+            app:argType="com.application.zaki.movies.utils.Movie"
+            android:defaultValue="POPULAR_MOVIES" />
+        <argument
+            android:name="tvShow"
+            app:argType="com.application.zaki.movies.utils.TvShow"
+            android:defaultValue="POPULAR_TV_SHOWS" />
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
@@ -61,7 +70,7 @@
     </fragment>
     <fragment
         android:id="@+id/listDiscoverFragment"
-        android:name="com.application.zaki.movies.presentation.list.view.ListDiscoverFragment"
+        android:name="com.application.zaki.movies.presentation.listmovietvshow.view.ListDiscoverFragment"
         android:label="fragment_list_discover"
         tools:layout="@layout/fragment_list_discover">
         <argument
@@ -108,7 +117,7 @@
     </fragment>
     <fragment
         android:id="@+id/moviesFragment"
-        android:name="com.application.zaki.movies.presentation.movies.view.MoviesFragment"
+        android:name="com.application.zaki.movies.presentation.home.movies.view.MoviesFragment"
         android:label="fragment_tv_shows"
         tools:layout="@layout/fragment_tv_shows" />
 

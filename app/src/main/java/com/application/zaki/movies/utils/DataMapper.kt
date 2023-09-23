@@ -7,13 +7,13 @@ import com.application.zaki.movies.data.source.remote.response.other.ResultsItem
 import com.application.zaki.movies.data.source.remote.response.other.ReviewItemResponse
 import com.application.zaki.movies.data.source.remote.response.tvshows.DetailTvShowsResponse
 import com.application.zaki.movies.data.source.remote.response.tvshows.ListTvShowsResponse
-import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.domain.model.AuthorDetails
 import com.application.zaki.movies.domain.model.CastItem
 import com.application.zaki.movies.domain.model.Detail
 import com.application.zaki.movies.domain.model.DiscoverItem
 import com.application.zaki.movies.domain.model.Genres
 import com.application.zaki.movies.domain.model.GenresItem
+import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.domain.model.ReviewItem
 import com.application.zaki.movies.domain.model.Videos
 
@@ -42,6 +42,7 @@ object DataMapper {
         }
 
         return MovieTvShow(
+            name = name,
             genreIds = genreIds,
             posterPath = posterPath,
             voteAverage = voteAverage,

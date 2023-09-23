@@ -4,8 +4,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.application.zaki.movies.presentation.movies.view.MoviesFragment
-import com.application.zaki.movies.presentation.tvshows.view.TvShowsFragment
+import com.application.zaki.movies.presentation.home.movies.view.MoviesFragment
+import com.application.zaki.movies.presentation.home.tvshows.view.TvShowsFragment
 
 class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fragmentManager, lifecycle) {

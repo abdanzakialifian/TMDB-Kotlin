@@ -1,4 +1,4 @@
-package com.application.zaki.movies.presentation.adapter
+package com.application.zaki.movies.presentation.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -1,7 +1,9 @@
 package com.application.zaki.movies.domain.usecase
 
+import androidx.paging.PagingData
 import androidx.paging.map
 import com.application.zaki.movies.domain.interfaces.IMoviesRepository
+import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.DataMapper.toMovieTvShowWithGenres
 import com.application.zaki.movies.utils.Movie
@@ -16,7 +18,7 @@ class GetListMovies @Inject constructor(private val iMoviesRepository: IMoviesRe
         movie: Movie,
         category: Category,
         page: Page
-    ) = Flowable.zip(
+    ): Flowable<PagingData<MovieTvShow>> = Flowable.zip(
         iMoviesRepository.getMovies(movie, page),
         iMoviesRepository.getGenres(category),
     ) { movies, genres ->

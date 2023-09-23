@@ -1,4 +1,4 @@
-package com.application.zaki.movies.presentation.list.viewmodel
+package com.application.zaki.movies.presentation.listmovietvshow.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams

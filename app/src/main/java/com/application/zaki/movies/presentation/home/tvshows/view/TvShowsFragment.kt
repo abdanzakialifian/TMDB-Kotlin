@@ -1,4 +1,4 @@
-package com.application.zaki.movies.presentation.tvshows.view
+package com.application.zaki.movies.presentation.home.tvshows.view
 
 import android.os.Handler
 import android.os.Looper
@@ -13,13 +13,14 @@ import com.application.zaki.movies.R
 import com.application.zaki.movies.databinding.FragmentTvShowsBinding
 import com.application.zaki.movies.domain.model.CategoryItem
 import com.application.zaki.movies.domain.model.MovieTvShow
-import com.application.zaki.movies.presentation.adapter.MovieTvShowAdapter
-import com.application.zaki.movies.presentation.adapter.MovieTvShowSliderAdapter
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.view.DetailFragment.Companion.INTENT_FROM_TV_SHOWS
 import com.application.zaki.movies.presentation.home.HomeFragmentDirections
-import com.application.zaki.movies.presentation.tvshows.viewmodel.TvShowsViewModel
+import com.application.zaki.movies.presentation.home.adapter.MovieTvShowAdapter
+import com.application.zaki.movies.presentation.home.adapter.MovieTvShowSliderAdapter
+import com.application.zaki.movies.presentation.home.tvshows.viewmodel.TvShowsViewModel
 import com.application.zaki.movies.utils.Category
+import com.application.zaki.movies.utils.Movie
 import com.application.zaki.movies.utils.Page
 import com.application.zaki.movies.utils.RxDisposer
 import com.application.zaki.movies.utils.TvShow
@@ -43,9 +44,7 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>(),
 
     private val tvShowsViewModel by viewModels<TvShowsViewModel>()
 
-    private val categoryItems = mutableListOf(
-        CategoryItem(), CategoryItem(), CategoryItem()
-    )
+    private val categoryItems = mutableListOf<CategoryItem>()
 
     private val sliderHandler = Handler(Looper.getMainLooper())
 
@@ -98,10 +97,9 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>(),
                             categoryId = index,
                             categoryTitle = title,
                             categories = tvShowPaging,
-                            category = Category.TV_SHOWS
+                            category = Category.TV_SHOWS,
+                            tvShow = tvShow
                         )
-                        // remove first dummy model before add to list
-                        categoryItems.removeAt(0)
                         categoryItems.add(data)
                     }
                 }
@@ -159,7 +157,15 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>(),
     }
 
     private fun setAllTvShowsAdapter() {
-        movieTvShowAdapter.submitList(categoryItems)
+        movieTvShowAdapter.submitList(
+            categoryItems.ifEmpty {
+                listOf(
+                    CategoryItem(),
+                    CategoryItem(),
+                    CategoryItem()
+                )
+            }
+        )
         binding?.apply {
             rvTvShows.adapter = movieTvShowAdapter
             rvTvShows.setHasFixedSize(true)
@@ -173,14 +179,20 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>(),
         findNavController().navigate(navigateToDetailFragment)
     }
 
-    private fun navigateToListPage(category: Category) {
-        val navigateToListFragment =
-            HomeFragmentDirections.actionHomeFragmentToListFragment(category.name)
+    private fun navigateToListPage(category: Category, movie: Movie, tvShow: TvShow) {
+        val navigateToListFragment = HomeFragmentDirections.actionHomeFragmentToListFragment()
+        navigateToListFragment.intentFrom = category.name
+        navigateToListFragment.movie = movie
+        navigateToListFragment.tvShow = tvShow
         findNavController().navigate(navigateToListFragment)
     }
 
-    override fun onSeeAllClicked(category: Category?) {
-        navigateToListPage(category ?: Category.TV_SHOWS)
+    override fun onSeeAllClicked(category: Category?, movie: Movie?, tvShow: TvShow?) {
+        navigateToListPage(
+            category ?: Category.TV_SHOWS,
+            movie ?: Movie.POPULAR_MOVIES,
+            tvShow ?: TvShow.POPULAR_TV_SHOWS
+        )
     }
 
     override fun onItemClicked(data: MovieTvShow?) {

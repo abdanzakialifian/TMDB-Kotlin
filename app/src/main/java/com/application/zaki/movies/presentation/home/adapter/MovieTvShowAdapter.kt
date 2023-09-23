@@ -1,4 +1,4 @@
-package com.application.zaki.movies.presentation.adapter
+package com.application.zaki.movies.presentation.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -13,6 +13,8 @@ import com.application.zaki.movies.databinding.ItemListCategoryMoviesBinding
 import com.application.zaki.movies.domain.model.CategoryItem
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.utils.Category
+import com.application.zaki.movies.utils.Movie
+import com.application.zaki.movies.utils.TvShow
 import com.application.zaki.movies.utils.gone
 import com.application.zaki.movies.utils.visible
 import kotlinx.coroutines.CoroutineScope
@@ -53,7 +55,7 @@ class MovieTvShowAdapter @Inject constructor() :
                             movieTvShowItemAdapter.submitData(item.categories)
                         }
                     }
-                    eventListeners(tvSeeAllMovies, item.category)
+                    eventListeners(tvSeeAllMovies, item.category, item.movie, item.tvShow)
                 }
             }
         }
@@ -108,9 +110,14 @@ class MovieTvShowAdapter @Inject constructor() :
         }
     }
 
-    private fun eventListeners(tvSeeAllMovies: TextView, category: Category?) {
+    private fun eventListeners(
+        tvSeeAllMovies: TextView,
+        category: Category?,
+        movie: Movie?,
+        tvShow: TvShow?
+    ) {
         tvSeeAllMovies.setOnClickListener {
-            onEventClickCallback.onSeeAllClicked(category)
+            onEventClickCallback.onSeeAllClicked(category, movie, tvShow)
         }
 
         movieTvShowItemAdapter.setOnItemClickCallback(object :
@@ -124,7 +131,7 @@ class MovieTvShowAdapter @Inject constructor() :
     }
 
     interface OnEventClickCallback {
-        fun onSeeAllClicked(category: Category?)
+        fun onSeeAllClicked(category: Category?, movie: Movie?, tvShow: TvShow?)
         fun onItemClicked(data: MovieTvShow?)
     }
 
