@@ -6,14 +6,13 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
-import androidx.paging.PagingData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListCategoryMoviesBinding
+import com.application.zaki.movies.domain.model.CategoryItem
 import com.application.zaki.movies.domain.model.MovieTvShow
-import com.application.zaki.movies.domain.model.MoviesCategoryItem
-import com.application.zaki.movies.utils.Movie
+import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.gone
 import com.application.zaki.movies.utils.visible
 import kotlinx.coroutines.CoroutineScope
@@ -21,10 +20,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class MovieAdapter @Inject constructor() :
-    ListAdapter<MoviesCategoryItem, MovieAdapter.MovieCategoryViewHolder>(DIFF_CALLBACK) {
+class MovieTvShowAdapter @Inject constructor() :
+    ListAdapter<CategoryItem, MovieTvShowAdapter.MovieCategoryViewHolder>(DIFF_CALLBACK) {
 
-    private lateinit var movieItemAdapter: MovieItemAdapter
+    private lateinit var movieTvShowItemAdapter: MovieTvShowItemAdapter
 
     private lateinit var onEventClickCallback: OnEventClickCallback
 
@@ -34,7 +33,7 @@ class MovieAdapter @Inject constructor() :
 
     inner class MovieCategoryViewHolder(val binding: ItemListCategoryMoviesBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: MoviesCategoryItem) {
+        fun bind(item: CategoryItem) {
             binding.apply {
                 if (item.categories == null) {
                     shimmerMovies.startShimmer()
@@ -43,18 +42,18 @@ class MovieAdapter @Inject constructor() :
                     layoutMovies.gone()
                 } else {
                     tvTitlesMovies.text = item.categoryTitle
-                    movieItemAdapter = MovieItemAdapter()
-                    if (this@MovieAdapter::movieItemAdapter.isInitialized) {
-                        rvMovies.adapter = movieItemAdapter
+                    movieTvShowItemAdapter = MovieTvShowItemAdapter()
+                    if (this@MovieTvShowAdapter::movieTvShowItemAdapter.isInitialized) {
+                        rvMovies.adapter = movieTvShowItemAdapter
                         rvMovies.setHasFixedSize(true)
-                        movieItemAdapter.addLoadStateListener { loadState ->
+                        movieTvShowItemAdapter.addLoadStateListener { loadState ->
                             setLoadStatePaging(loadState, binding)
                         }
                         CoroutineScope(Dispatchers.IO).launch {
-                            movieItemAdapter.submitData(item.categories ?: PagingData.empty())
+                            movieTvShowItemAdapter.submitData(item.categories)
                         }
                     }
-                    eventListeners(tvSeeAllMovies, item.movie)
+                    eventListeners(tvSeeAllMovies, item.category)
                 }
             }
         }
@@ -109,14 +108,15 @@ class MovieAdapter @Inject constructor() :
         }
     }
 
-    private fun eventListeners(tvSeeAllMovies: TextView, movie: Movie?) {
+    private fun eventListeners(tvSeeAllMovies: TextView, category: Category?) {
         tvSeeAllMovies.setOnClickListener {
-            onEventClickCallback.onSeeAllClicked(movie)
+            onEventClickCallback.onSeeAllClicked(category)
         }
 
-        movieItemAdapter.setOnItemClickCallback(object : MovieItemAdapter.OnItemClickCallback {
+        movieTvShowItemAdapter.setOnItemClickCallback(object :
+            MovieTvShowItemAdapter.OnItemClickCallback {
             override fun onItemClicked(data: MovieTvShow?) {
-                if (this@MovieAdapter::onEventClickCallback.isInitialized) {
+                if (this@MovieTvShowAdapter::onEventClickCallback.isInitialized) {
                     onEventClickCallback.onItemClicked(data)
                 }
             }
@@ -124,19 +124,18 @@ class MovieAdapter @Inject constructor() :
     }
 
     interface OnEventClickCallback {
-        fun onSeeAllClicked(movie: Movie?)
+        fun onSeeAllClicked(category: Category?)
         fun onItemClicked(data: MovieTvShow?)
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<MoviesCategoryItem>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CategoryItem>() {
             override fun areItemsTheSame(
-                oldItem: MoviesCategoryItem, newItem: MoviesCategoryItem
+                oldItem: CategoryItem, newItem: CategoryItem
             ): Boolean = oldItem.categoryId == newItem.categoryId
 
             override fun areContentsTheSame(
-                oldItem: MoviesCategoryItem,
-                newItem: MoviesCategoryItem
+                oldItem: CategoryItem, newItem: CategoryItem
             ): Boolean = oldItem == newItem
         }
     }

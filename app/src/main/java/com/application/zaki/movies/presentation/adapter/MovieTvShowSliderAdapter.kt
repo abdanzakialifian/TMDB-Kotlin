@@ -1,4 +1,4 @@
-package com.application.zaki.movies.presentation.tvshows.adapter
+package com.application.zaki.movies.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,10 +10,8 @@ import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.utils.loadImageUrl
 import javax.inject.Inject
 
-class AiringTodayTvShowsAdapter @Inject constructor() :
-    PagingDataAdapter<MovieTvShow, AiringTodayTvShowsAdapter.AiringTodayTvShowsViewHolder>(
-        DIFF_CALLBACK
-    ) {
+class MovieTvShowSliderAdapter @Inject constructor() :
+    PagingDataAdapter<MovieTvShow, MovieTvShowSliderAdapter.SliderViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
 
@@ -21,7 +19,7 @@ class AiringTodayTvShowsAdapter @Inject constructor() :
         this.onItemClickCallback = onItemClickCallback
     }
 
-    inner class AiringTodayTvShowsViewHolder(private val binding: ItemListSliderBinding) :
+    inner class SliderViewHolder(private val binding: ItemListSliderBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: MovieTvShow?) {
             item?.posterPath?.let {
@@ -33,19 +31,16 @@ class AiringTodayTvShowsAdapter @Inject constructor() :
         }
     }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): AiringTodayTvShowsViewHolder =
-        ItemListSliderBinding.inflate(LayoutInflater.from(parent.context), parent, false).run {
-            AiringTodayTvShowsViewHolder(this)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SliderViewHolder =
+        ItemListSliderBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        ).run {
+            SliderViewHolder(this)
         }
 
-    override fun onBindViewHolder(holder: AiringTodayTvShowsViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SliderViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
-
-//    override fun getItemCount(): Int = if (currentList.size > 8) 8 else currentList.size
 
     interface OnItemClickCallback {
         fun onItemClicked(data: MovieTvShow?)
@@ -56,12 +51,14 @@ class AiringTodayTvShowsAdapter @Inject constructor() :
             override fun areItemsTheSame(
                 oldItem: MovieTvShow,
                 newItem: MovieTvShow
-            ): Boolean = oldItem.id == newItem.id
+            ): Boolean =
+                oldItem.id == newItem.id
 
             override fun areContentsTheSame(
                 oldItem: MovieTvShow,
                 newItem: MovieTvShow
-            ): Boolean = oldItem == newItem
+            ): Boolean =
+                oldItem == newItem
         }
     }
 }

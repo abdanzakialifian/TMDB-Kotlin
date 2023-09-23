@@ -10,8 +10,8 @@ import com.application.zaki.movies.databinding.ItemListHorizontalBinding
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.utils.loadImageUrl
 
-class MovieItemAdapter :
-    PagingDataAdapter<MovieTvShow, MovieItemAdapter.MovieItemViewHolder>(DIFF_CALLBACK) {
+class MovieTvShowItemAdapter :
+    PagingDataAdapter<MovieTvShow, MovieTvShowItemAdapter.MovieItemViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
 

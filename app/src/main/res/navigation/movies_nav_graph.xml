@@ -40,8 +40,7 @@
             app:destination="@id/listDiscoverFragment" />
         <argument
             android:name="intentFrom"
-            android:defaultValue="POPULAR_MOVIES"
-            app:argType="com.application.zaki.movies.utils.Movie" />
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/detailFragment"

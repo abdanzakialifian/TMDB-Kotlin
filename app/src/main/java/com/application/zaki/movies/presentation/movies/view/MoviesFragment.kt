@@ -11,13 +11,13 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.application.zaki.movies.R
 import com.application.zaki.movies.databinding.FragmentMoviesBinding
+import com.application.zaki.movies.domain.model.CategoryItem
 import com.application.zaki.movies.domain.model.MovieTvShow
-import com.application.zaki.movies.domain.model.MoviesCategoryItem
+import com.application.zaki.movies.presentation.adapter.MovieTvShowAdapter
+import com.application.zaki.movies.presentation.adapter.MovieTvShowSliderAdapter
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.view.DetailFragment.Companion.INTENT_FROM_MOVIE
 import com.application.zaki.movies.presentation.home.HomeFragmentDirections
-import com.application.zaki.movies.presentation.adapter.MovieAdapter
-import com.application.zaki.movies.presentation.adapter.NowPlayingMoviesAdapter
 import com.application.zaki.movies.presentation.movies.viewmodel.MoviesViewModel
 import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.Movie
@@ -31,24 +31,21 @@ import kotlin.math.abs
 
 @AndroidEntryPoint
 class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>(),
-    NowPlayingMoviesAdapter.OnItemClickCallback, MovieAdapter.OnEventClickCallback {
+    MovieTvShowSliderAdapter.OnItemClickCallback, MovieTvShowAdapter.OnEventClickCallback {
 
     @Inject
-    lateinit var nowPlayingMoviesAdapter: NowPlayingMoviesAdapter
+    lateinit var movieTvShowSliderAdapter: MovieTvShowSliderAdapter
 
     @Inject
-    lateinit var movieAdapter: MovieAdapter
+    lateinit var movieTvShowAdapter: MovieTvShowAdapter
 
     private lateinit var sliderRunnable: Runnable
 
     private val moviesViewModel by viewModels<MoviesViewModel>()
 
-    private val movieCategories =
-        mutableListOf(
-            MoviesCategoryItem(),
-            MoviesCategoryItem(),
-            MoviesCategoryItem()
-        )
+    private val categoryItems = mutableListOf(
+        CategoryItem(), CategoryItem(), CategoryItem()
+    )
 
     private val sliderHandler = Handler(Looper.getMainLooper())
 
@@ -66,8 +63,8 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>(),
     }
 
     private fun eventListeners() {
-        nowPlayingMoviesAdapter.setOnItemClickCallback(this)
-        movieAdapter.setOnEventClickCallback(this)
+        movieTvShowSliderAdapter.setOnItemClickCallback(this)
+        movieTvShowAdapter.setOnEventClickCallback(this)
     }
 
     private fun setAllMovies() {
@@ -86,8 +83,8 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>(),
 
                     if (movie == Movie.NOW_PLAYING_MOVIES) {
                         configureImageSlider()
-                        nowPlayingMoviesAdapter.submitData(lifecycle, moviePaging)
-                        nowPlayingMoviesAdapter.addLoadStateListener { loadState ->
+                        movieTvShowSliderAdapter.submitData(lifecycle, moviePaging)
+                        movieTvShowSliderAdapter.addLoadStateListener { loadState ->
                             setLoadStatePagingSlider(loadState)
                         }
                     } else {
@@ -97,15 +94,15 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>(),
                             else -> resources.getString(R.string.up_coming_movies)
                         }
 
-                        val data = MoviesCategoryItem(
+                        val data = CategoryItem(
                             categoryId = index,
                             categoryTitle = title,
                             categories = moviePaging,
-                            movie = movie
+                            category = Category.MOVIES
                         )
                         // remove first dummy model before add to list
-                        movieCategories.removeAt(0)
-                        movieCategories.add(data)
+                        categoryItems.removeAt(0)
+                        categoryItems.add(data)
                     }
                 }
                 setAllMoviesAdapter()
@@ -114,7 +111,7 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>(),
 
     private fun configureImageSlider() {
         binding?.viewPagerImageSlider?.apply {
-            adapter = nowPlayingMoviesAdapter
+            adapter = movieTvShowSliderAdapter
             clipToPadding = false
             clipChildren = false
             offscreenPageLimit = 3
@@ -161,9 +158,9 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>(),
     }
 
     private fun setAllMoviesAdapter() {
-        movieAdapter.submitList(movieCategories)
+        movieTvShowAdapter.submitList(categoryItems)
         binding?.apply {
-            rvMovies.adapter = movieAdapter
+            rvMovies.adapter = movieTvShowAdapter
             rvMovies.setHasFixedSize(true)
         }
     }
@@ -175,15 +172,14 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>(),
         findNavController().navigate(navigateToDetailFragment)
     }
 
-    private fun navigateToListPage(movie: Movie) {
+    private fun navigateToListPage(category: Category) {
         val navigateToListFragment =
-            HomeFragmentDirections.actionHomeFragmentToListFragment()
-        navigateToListFragment.intentFrom = movie
+            HomeFragmentDirections.actionHomeFragmentToListFragment(category.name)
         findNavController().navigate(navigateToListFragment)
     }
 
-    override fun onSeeAllClicked(movie: Movie?) {
-        navigateToListPage(movie ?: Movie.POPULAR_MOVIES)
+    override fun onSeeAllClicked(category: Category?) {
+        navigateToListPage(category ?: Category.MOVIES)
     }
 
     override fun onItemClicked(data: MovieTvShow?) {
@@ -205,7 +201,7 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>(),
     }
 
     override fun onDestroyView() {
-        movieCategories.clear()
+        categoryItems.clear()
         super.onDestroyView()
     }
 }
