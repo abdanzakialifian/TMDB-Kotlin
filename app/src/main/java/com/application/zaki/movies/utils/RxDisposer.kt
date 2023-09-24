@@ -1,7 +1,8 @@
 package com.application.zaki.movies.utils
 
-import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
@@ -22,13 +23,12 @@ class RxDisposer @Inject constructor() : DefaultLifecycleObserver {
     }
 
     override fun onDestroy(owner: LifecycleOwner) {
-        Log.d("CEK", "ON DESTROY")
         compositeDisposable?.dispose()
+        owner.lifecycle.removeObserver(this)
         super.onDestroy(owner)
     }
 
     override fun onPause(owner: LifecycleOwner) {
-        Log.d("CEK", "ON PAUSE")
         compositeDisposable?.clear()
         super.onPause(owner)
     }

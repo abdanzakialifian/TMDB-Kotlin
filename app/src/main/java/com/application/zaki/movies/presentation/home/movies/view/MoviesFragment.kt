@@ -57,7 +57,21 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>(),
                 currentItem += 1
             }
         }
+
+        if (moviesViewModel.listMovies.value == null) {
+            moviesViewModel.getListAllMovies(
+                nowPlayingMovie = Movie.NOW_PLAYING_MOVIES,
+                topRatedMovie = Movie.TOP_RATED_MOVIES,
+                popularMovie = Movie.POPULAR_MOVIES,
+                upComingMovie = Movie.UP_COMING_MOVIES,
+                category = Category.MOVIES,
+                page = Page.ONE,
+                rxDisposer = RxDisposer().apply { bind(lifecycle) }
+            )
+        }
+
         setAllMovies()
+
         eventListeners()
     }
 
@@ -68,43 +82,36 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>(),
 
     private fun setAllMovies() {
         setAllMoviesAdapter()
-        moviesViewModel.getListAllMovies(nowPlayingMovie = Movie.NOW_PLAYING_MOVIES,
-            topRatedMovie = Movie.TOP_RATED_MOVIES,
-            popularMovie = Movie.POPULAR_MOVIES,
-            upComingMovie = Movie.UP_COMING_MOVIES,
-            category = Category.MOVIES,
-            page = Page.ONE,
-            rxDisposer = RxDisposer().apply { bind(lifecycle) })
-            .observe(viewLifecycleOwner) { result ->
-                result.forEachIndexed { index, pairMovie ->
-                    val movie = pairMovie.first
-                    val moviePaging = pairMovie.second
+        moviesViewModel.listMovies.observe(viewLifecycleOwner) { result ->
+            result.forEachIndexed { index, pairMovie ->
+                val movie = pairMovie.first
+                val moviePaging = pairMovie.second
 
-                    if (movie == Movie.NOW_PLAYING_MOVIES) {
-                        configureImageSlider()
-                        movieTvShowSliderAdapter.submitData(lifecycle, moviePaging)
-                        movieTvShowSliderAdapter.addLoadStateListener { loadState ->
-                            setLoadStatePagingSlider(loadState)
-                        }
-                    } else {
-                        val title = when (movie) {
-                            Movie.TOP_RATED_MOVIES -> resources.getString(R.string.top_rated_movies)
-                            Movie.POPULAR_MOVIES -> resources.getString(R.string.popular_movies)
-                            else -> resources.getString(R.string.up_coming_movies)
-                        }
-
-                        val data = CategoryItem(
-                            categoryId = index,
-                            categoryTitle = title,
-                            categories = moviePaging,
-                            category = Category.MOVIES,
-                            movie = movie
-                        )
-                        categoryItems.add(data)
+                if (movie == Movie.NOW_PLAYING_MOVIES) {
+                    configureImageSlider()
+                    movieTvShowSliderAdapter.submitData(lifecycle, moviePaging)
+                    movieTvShowSliderAdapter.addLoadStateListener { loadState ->
+                        setLoadStatePagingSlider(loadState)
                     }
+                } else {
+                    val title = when (movie) {
+                        Movie.TOP_RATED_MOVIES -> resources.getString(R.string.top_rated_movies)
+                        Movie.POPULAR_MOVIES -> resources.getString(R.string.popular_movies)
+                        else -> resources.getString(R.string.up_coming_movies)
+                    }
+
+                    val data = CategoryItem(
+                        categoryId = index,
+                        categoryTitle = title,
+                        categories = moviePaging,
+                        category = Category.MOVIES,
+                        movie = movie
+                    )
+                    categoryItems.add(data)
                 }
-                setAllMoviesAdapter()
             }
+            setAllMoviesAdapter()
+        }
     }
 
     private fun configureImageSlider() {
@@ -141,6 +148,7 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>(),
                 shimmerImageSlider.gone()
                 viewPagerImageSlider.visible()
             }
+
             LoadState.Loading -> binding?.apply {
                 shimmerImageSlider.startShimmer()
                 shimmerImageSlider.visible()
@@ -179,8 +187,7 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>(),
     }
 
     private fun navigateToListPage(category: Category, movie: Movie, tvShow: TvShow) {
-        val navigateToListFragment =
-            HomeFragmentDirections.actionHomeFragmentToListFragment()
+        val navigateToListFragment = HomeFragmentDirections.actionHomeFragmentToListFragment()
         navigateToListFragment.intentFrom = category.name
         navigateToListFragment.movie = movie
         navigateToListFragment.tvShow = tvShow

@@ -9,7 +9,6 @@ import com.application.zaki.movies.databinding.FragmentListBinding
 import com.application.zaki.movies.domain.model.GenresItem
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.presentation.base.BaseVBFragment
-import com.application.zaki.movies.presentation.detail.view.DetailFragment
 import com.application.zaki.movies.presentation.listmovietvshow.adapter.MovieTvShowPagingAdapter
 import com.application.zaki.movies.presentation.listmovietvshow.viewmodel.MovieTvShowViewModel
 import com.application.zaki.movies.utils.Category
@@ -47,23 +46,29 @@ class MovieTvShowFragment : BaseVBFragment<FragmentListBinding>(),
     }
 
     private fun setListMovies(movie: Movie) {
-        movieTvShowViewModel.getListMovies(
-            movie = movie,
-            category = Category.MOVIES,
-            page = Page.MORE_THAN_ONE,
-            rxDisposer = RxDisposer().apply { bind(lifecycle) },
-        ).observe(viewLifecycleOwner) { result ->
+        if (movieTvShowViewModel.listMovies.value == null) {
+            movieTvShowViewModel.getListMovies(
+                movie = movie,
+                category = Category.MOVIES,
+                page = Page.MORE_THAN_ONE,
+                rxDisposer = RxDisposer().apply { bind(lifecycle) },
+            )
+        }
+        movieTvShowViewModel.listMovies.observe(viewLifecycleOwner) { result ->
             setDataMovieTvShow(result)
         }
     }
 
     private fun setListTvShows(tvShow: TvShow) {
-        movieTvShowViewModel.getListTvShows(
-            tvShow = tvShow,
-            category = Category.MOVIES,
-            page = Page.MORE_THAN_ONE,
-            rxDisposer = RxDisposer().apply { bind(lifecycle) },
-        ).observe(viewLifecycleOwner) { result ->
+        if (movieTvShowViewModel.listTvShows.value == null) {
+            movieTvShowViewModel.getListTvShows(
+                tvShow = tvShow,
+                category = Category.MOVIES,
+                page = Page.MORE_THAN_ONE,
+                rxDisposer = RxDisposer().apply { bind(lifecycle) },
+            )
+        }
+        movieTvShowViewModel.listTvShows.observe(viewLifecycleOwner) { result ->
             setDataMovieTvShow(result)
         }
     }
@@ -102,15 +107,15 @@ class MovieTvShowFragment : BaseVBFragment<FragmentListBinding>(),
         val navigateToDetailFragment =
             MovieTvShowFragmentDirections.actionListFragmentToDetailFragment()
         navigateToDetailFragment.id = id
-        navigateToDetailFragment.intentFrom = DetailFragment.INTENT_FROM_MOVIE
+        navigateToDetailFragment.intentFrom = args.intentFrom
         findNavController().navigate(navigateToDetailFragment)
     }
 
-    private fun navigateToDiscoverPage(data: GenresItem, intentFrom: String) {
+    private fun navigateToDiscoverPage(data: GenresItem) {
         val navigateToDetailFragment =
             MovieTvShowFragmentDirections.actionListFragmentToListDiscoverFragment()
         navigateToDetailFragment.genreId = data.id ?: 0
-        navigateToDetailFragment.intentFrom = intentFrom
+        navigateToDetailFragment.intentFrom = args.intentFrom
         navigateToDetailFragment.genreName = data.name ?: ""
         findNavController().navigate(navigateToDetailFragment)
     }
@@ -120,6 +125,6 @@ class MovieTvShowFragment : BaseVBFragment<FragmentListBinding>(),
     }
 
     override fun onItemGenreClicked(data: GenresItem) {
-        navigateToDiscoverPage(data, ListDiscoverFragment.INTENT_FROM_MOVIE)
+        navigateToDiscoverPage(data)
     }
 }

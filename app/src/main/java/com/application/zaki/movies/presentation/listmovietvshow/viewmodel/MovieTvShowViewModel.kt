@@ -1,8 +1,8 @@
 package com.application.zaki.movies.presentation.listmovietvshow.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.LiveDataReactiveStreams
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.domain.usecase.movietvshow.MovieTvShowWrapper
@@ -12,33 +12,35 @@ import com.application.zaki.movies.utils.Page
 import com.application.zaki.movies.utils.RxDisposer
 import com.application.zaki.movies.utils.TvShow
 import com.application.zaki.movies.utils.addToDisposer
+import com.application.zaki.movies.utils.toLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.BackpressureStrategy
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 @HiltViewModel
 class MovieTvShowViewModel @Inject constructor(private val movieTvShowWrapper: MovieTvShowWrapper) :
     ViewModel() {
+
+    private val _listMovies: MutableLiveData<PagingData<MovieTvShow>> = MutableLiveData()
+    val listMovies get() = _listMovies.toLiveData()
+
+    private val _listTvShows: MutableLiveData<PagingData<MovieTvShow>> = MutableLiveData()
+    val listTvShows get() = _listTvShows.toLiveData()
+
     fun getListMovies(
         movie: Movie,
         category: Category,
         page: Page,
         rxDisposer: RxDisposer
-    ): LiveData<PagingData<MovieTvShow>> {
-        val subject = PublishSubject.create<PagingData<MovieTvShow>>()
-
-        movieTvShowWrapper.getListMovies(movie, category, page)
+    ) {
+        movieTvShowWrapper.getListMovies(movie, category, page, viewModelScope)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->
-                subject.onNext(data)
+                _listMovies.postValue(data)
             }
             .addToDisposer(rxDisposer)
-
-        return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
     }
 
     fun getListTvShows(
@@ -46,17 +48,13 @@ class MovieTvShowViewModel @Inject constructor(private val movieTvShowWrapper: M
         category: Category,
         page: Page,
         rxDisposer: RxDisposer
-    ): LiveData<PagingData<MovieTvShow>> {
-        val subject = PublishSubject.create<PagingData<MovieTvShow>>()
-
-        movieTvShowWrapper.getListTvShows(tvShow, category, page)
+    ) {
+        movieTvShowWrapper.getListTvShows(tvShow, category, page, viewModelScope)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->
-                subject.onNext(data)
+                _listTvShows.postValue(data)
             }
             .addToDisposer(rxDisposer)
-
-        return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
     }
 }

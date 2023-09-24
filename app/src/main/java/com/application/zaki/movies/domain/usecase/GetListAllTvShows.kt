@@ -2,6 +2,7 @@ package com.application.zaki.movies.domain.usecase
 
 import androidx.paging.PagingData
 import androidx.paging.map
+import androidx.paging.rxjava2.cachedIn
 import com.application.zaki.movies.domain.interfaces.ITvShowsRepository
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.utils.Category
@@ -10,9 +11,12 @@ import com.application.zaki.movies.utils.Page
 import com.application.zaki.movies.utils.TvShow
 import io.reactivex.Flowable
 import io.reactivex.functions.Function4
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 import javax.inject.Singleton
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Singleton
 class GetListAllTvShows @Inject constructor(private val iTvShowsRepository: ITvShowsRepository) {
     operator fun invoke(
@@ -21,10 +25,11 @@ class GetListAllTvShows @Inject constructor(private val iTvShowsRepository: ITvS
         popularTvShow: TvShow,
         onTheAirTvShow: TvShow,
         category: Category,
-        page: Page
+        page: Page,
+        scope: CoroutineScope
     ): Flowable<List<Pair<TvShow, PagingData<MovieTvShow>>>> {
         val airingTodayTvShowFlowable = Flowable.zip(
-            iTvShowsRepository.getTvShows(airingTodayTvShow, page),
+            iTvShowsRepository.getTvShows(airingTodayTvShow, page).cachedIn(scope),
             iTvShowsRepository.getGenres(category)
         ) { tvShows, genres ->
             return@zip tvShows.map { map ->
@@ -33,7 +38,7 @@ class GetListAllTvShows @Inject constructor(private val iTvShowsRepository: ITvS
         }
 
         val topRatedTvShowFlowable = Flowable.zip(
-            iTvShowsRepository.getTvShows(topRatedTvShow, page),
+            iTvShowsRepository.getTvShows(topRatedTvShow, page).cachedIn(scope),
             iTvShowsRepository.getGenres(category)
         ) { tvShows, genres ->
             return@zip tvShows.map { map ->
@@ -42,7 +47,7 @@ class GetListAllTvShows @Inject constructor(private val iTvShowsRepository: ITvS
         }
 
         val popularTvShowFlowable = Flowable.zip(
-            iTvShowsRepository.getTvShows(popularTvShow, page),
+            iTvShowsRepository.getTvShows(popularTvShow, page).cachedIn(scope),
             iTvShowsRepository.getGenres(category)
         ) { tvShows, genres ->
             return@zip tvShows.map { map ->
@@ -51,7 +56,7 @@ class GetListAllTvShows @Inject constructor(private val iTvShowsRepository: ITvS
         }
 
         val onTheAirTvShowFlowable = Flowable.zip(
-            iTvShowsRepository.getTvShows(onTheAirTvShow, page),
+            iTvShowsRepository.getTvShows(onTheAirTvShow, page).cachedIn(scope),
             iTvShowsRepository.getGenres(category)
         ) { tvShows, genres ->
             return@zip tvShows.map { map ->

@@ -12,6 +12,7 @@ import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.adapter.CastMoviesAdapter
 import com.application.zaki.movies.presentation.detail.adapter.ReviewsAdapter
 import com.application.zaki.movies.presentation.detail.viewmodel.DetailViewModel
+import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.RxDisposer
 import com.application.zaki.movies.utils.UiState
 import com.application.zaki.movies.utils.convertDateText
@@ -48,7 +49,7 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
     }
 
     private fun setDetailInformation(id: String, intentFrom: String) {
-        if (intentFrom == INTENT_FROM_MOVIE) {
+        if (intentFrom == Category.MOVIES.name) {
             detailViewModel.detailMovies(RxDisposer().apply { bind(lifecycle) }, id)
                 .observe(viewLifecycleOwner) { result ->
                     when (result) {
@@ -66,7 +67,6 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                     when (result) {
                         is UiState.Loading -> {}
                         is UiState.Success -> {
-                            Log.d("CEK", result.data.toString())
                             showDataDetail(result.data)
                         }
                         is UiState.Error -> {

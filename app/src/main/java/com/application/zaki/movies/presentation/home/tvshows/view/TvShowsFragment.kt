@@ -40,6 +40,7 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>(),
     @Inject
     lateinit var movieTvShowAdapter: MovieTvShowAdapter
 
+
     private lateinit var sliderRunnable: Runnable
 
     private val tvShowsViewModel by viewModels<TvShowsViewModel>()
@@ -57,6 +58,18 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>(),
             binding?.viewPagerImageSlider?.currentItem =
                 binding?.viewPagerImageSlider?.currentItem?.plus(1) ?: 0
         }
+
+        if (tvShowsViewModel.listTvShows.value == null) {
+            tvShowsViewModel.getListAllTvShows(
+                airingTodayTvShow = TvShow.AIRING_TODAY_TV_SHOWS,
+                topRatedTvShow = TvShow.TOP_RATED_TV_SHOWS,
+                popularTvShow = TvShow.POPULAR_TV_SHOWS,
+                onTheAirTvShow = TvShow.ON_THE_AIR_TV_SHOWS,
+                category = Category.TV_SHOWS,
+                page = Page.ONE,
+                rxDisposer = RxDisposer().apply { bind(lifecycle) }
+            )
+        }
         setAllTvShows()
         eventListeners()
     }
@@ -68,35 +81,28 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>(),
 
     private fun setAllTvShows() {
         setAllTvShowsAdapter()
-        tvShowsViewModel.getListAllTvShows(airingTodayTvShow = TvShow.AIRING_TODAY_TV_SHOWS,
-            topRatedTvShow = TvShow.TOP_RATED_TV_SHOWS,
-            popularTvShow = TvShow.POPULAR_TV_SHOWS,
-            onTheAirTvShow = TvShow.ON_THE_AIR_TV_SHOWS,
-            category = Category.TV_SHOWS,
-            page = Page.ONE,
-            rxDisposer = RxDisposer().apply { bind(lifecycle) })
-            .observe(viewLifecycleOwner) { result ->
-                result.forEachIndexed { index, pairTvShow ->
-                    val tvShow = pairTvShow.first
-                    val tvShowPaging = pairTvShow.second
+        tvShowsViewModel.listTvShows.observe(viewLifecycleOwner) { result ->
+            result.forEachIndexed { index, pairTvShow ->
+                val tvShow = pairTvShow.first
+                val tvShowPaging = pairTvShow.second
 
-                    if (tvShow == TvShow.AIRING_TODAY_TV_SHOWS) {
-                        configureImageSlider()
-                        movieTvShowSliderAdapter.submitData(lifecycle, tvShowPaging)
-                        movieTvShowSliderAdapter.addLoadStateListener { loadState ->
-                            setLoadStatePagingSlider(loadState)
-                        }
-                    } else {
-                        val title = when (tvShow) {
-                            TvShow.TOP_RATED_TV_SHOWS -> resources.getString(R.string.top_rated_tv_shows)
-                            TvShow.POPULAR_TV_SHOWS -> resources.getString(R.string.popular_tv_shows)
-                            else -> resources.getString(R.string.on_the_air_tv_shows)
-                        }
+                if (tvShow == TvShow.AIRING_TODAY_TV_SHOWS) {
+                    configureImageSlider()
+                    movieTvShowSliderAdapter.submitData(lifecycle, tvShowPaging)
+                    movieTvShowSliderAdapter.addLoadStateListener { loadState ->
+                        setLoadStatePagingSlider(loadState)
+                    }
+                } else {
+                    val title = when (tvShow) {
+                        TvShow.TOP_RATED_TV_SHOWS -> resources.getString(R.string.top_rated_tv_shows)
+                        TvShow.POPULAR_TV_SHOWS -> resources.getString(R.string.popular_tv_shows)
+                        else -> resources.getString(R.string.on_the_air_tv_shows)
+                    }
 
-                        val data = CategoryItem(
-                            categoryId = index,
-                            categoryTitle = title,
-                            categories = tvShowPaging,
+                    val data = CategoryItem(
+                        categoryId = index,
+                        categoryTitle = title,
+                        categories = tvShowPaging,
                             category = Category.TV_SHOWS,
                             tvShow = tvShow
                         )

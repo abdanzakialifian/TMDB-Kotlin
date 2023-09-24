@@ -1,5 +1,6 @@
 package com.application.zaki.movies.presentation.home.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter

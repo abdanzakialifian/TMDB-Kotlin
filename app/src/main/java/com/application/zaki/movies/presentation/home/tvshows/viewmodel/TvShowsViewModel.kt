@@ -1,8 +1,8 @@
 package com.application.zaki.movies.presentation.home.tvshows.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.LiveDataReactiveStreams
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.domain.usecase.GetListAllTvShows
@@ -11,16 +11,19 @@ import com.application.zaki.movies.utils.Page
 import com.application.zaki.movies.utils.RxDisposer
 import com.application.zaki.movies.utils.TvShow
 import com.application.zaki.movies.utils.addToDisposer
+import com.application.zaki.movies.utils.toLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.BackpressureStrategy
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.ReplaySubject
 import javax.inject.Inject
 
 @HiltViewModel
 class TvShowsViewModel @Inject constructor(private val getListAllTvShows: GetListAllTvShows) :
     ViewModel() {
+
+    private val _listTvShows: MutableLiveData<List<Pair<TvShow, PagingData<MovieTvShow>>>> =
+        MutableLiveData()
+    val listTvShows get() = _listTvShows.toLiveData()
 
     fun getListAllTvShows(
         airingTodayTvShow: TvShow,
@@ -30,22 +33,20 @@ class TvShowsViewModel @Inject constructor(private val getListAllTvShows: GetLis
         category: Category,
         page: Page,
         rxDisposer: RxDisposer
-    ): LiveData<List<Pair<TvShow, PagingData<MovieTvShow>>>> {
-        val subject = ReplaySubject.create<List<Pair<TvShow, PagingData<MovieTvShow>>>>()
-
+    ) {
         getListAllTvShows(
             airingTodayTvShow,
             topRatedTvShow,
             popularTvShow,
             onTheAirTvShow,
             category,
-            page
+            page,
+            viewModelScope
         )
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread()).subscribe { data ->
-                subject.onNext(data)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { data ->
+                _listTvShows.postValue(data)
             }.addToDisposer(rxDisposer)
-
-        return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
     }
 }

@@ -30,7 +30,7 @@ class ListDiscoverFragment : BaseVBFragment<FragmentListDiscoverBinding>() {
         discoverViewModel.getDiscover(
             RxDisposer().apply { bind(lifecycle) },
             args.genreId.toString(),
-            if (args.intentFrom == DetailFragment.INTENT_FROM_MOVIE) Category.MOVIES else Category.TV_SHOWS
+            if (args.intentFrom == Category.MOVIES.name) Category.MOVIES else Category.TV_SHOWS
         ).observe(viewLifecycleOwner) { result ->
             binding?.apply {
                 tvTitleAppBar.text = args.genreName
@@ -59,10 +59,5 @@ class ListDiscoverFragment : BaseVBFragment<FragmentListDiscoverBinding>() {
         navigateToDetailFragment.id = id
         navigateToDetailFragment.intentFrom = DetailFragment.INTENT_FROM_MOVIE
         findNavController().navigate(navigateToDetailFragment)
-    }
-
-    companion object {
-        const val INTENT_FROM_MOVIE = "Intent From Movie"
-        const val INTENT_FROM_TV_SHOWS = "Intent From Tv Shows"
     }
 }

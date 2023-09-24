@@ -99,6 +99,7 @@ dependencies {
     def nav_version = "2.5.2"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+    implementation("androidx.fragment:fragment-ktx:1.5.1")
 
     // dots indicator image slider
     def dots_indicator_version = "4.3"

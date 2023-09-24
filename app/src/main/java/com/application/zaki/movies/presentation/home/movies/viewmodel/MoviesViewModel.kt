@@ -1,8 +1,8 @@
 package com.application.zaki.movies.presentation.home.movies.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.LiveDataReactiveStreams
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.domain.usecase.GetListAllMovies
@@ -11,16 +11,19 @@ import com.application.zaki.movies.utils.Movie
 import com.application.zaki.movies.utils.Page
 import com.application.zaki.movies.utils.RxDisposer
 import com.application.zaki.movies.utils.addToDisposer
+import com.application.zaki.movies.utils.toLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.BackpressureStrategy
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 @HiltViewModel
 class MoviesViewModel @Inject constructor(private val getListAllMovies: GetListAllMovies) :
     ViewModel() {
+
+    private val _listMovies = MutableLiveData<List<Pair<Movie, PagingData<MovieTvShow>>>>()
+    val listMovies get() = _listMovies.toLiveData()
+
     fun getListAllMovies(
         nowPlayingMovie: Movie,
         topRatedMovie: Movie,
@@ -29,24 +32,21 @@ class MoviesViewModel @Inject constructor(private val getListAllMovies: GetListA
         category: Category,
         page: Page,
         rxDisposer: RxDisposer
-    ): LiveData<List<Pair<Movie, PagingData<MovieTvShow>>>> {
-        val subject = PublishSubject.create<List<Pair<Movie, PagingData<MovieTvShow>>>>()
-
+    ) {
         getListAllMovies(
             nowPlayingMovie,
             topRatedMovie,
             popularMovie,
             upComingMovie,
             category,
-            page
+            page,
+            viewModelScope
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->
-                subject.onNext(data)
+                _listMovies.postValue(data)
 
             }.addToDisposer(rxDisposer)
-
-        return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
     }
 }

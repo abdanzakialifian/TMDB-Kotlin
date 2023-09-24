@@ -2,10 +2,12 @@ package com.application.zaki.movies.utils
 
 import android.view.View
 import android.widget.ImageView
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.application.zaki.movies.R
 import com.bumptech.glide.Glide
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 fun ImageView.loadImageUrl(url: String) {
     Glide.with(context)
@@ -50,3 +52,5 @@ fun String.getInitialName(): String {
         (first + second).uppercase()
     } else first.uppercase()
 }
+
+fun <T> MutableLiveData<T>.toLiveData(): LiveData<T> = this
