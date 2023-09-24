@@ -64,7 +64,6 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>(),
                 topRatedMovie = Movie.TOP_RATED_MOVIES,
                 popularMovie = Movie.POPULAR_MOVIES,
                 upComingMovie = Movie.UP_COMING_MOVIES,
-                category = Category.MOVIES,
                 page = Page.ONE,
                 rxDisposer = RxDisposer().apply { bind(lifecycle) }
             )

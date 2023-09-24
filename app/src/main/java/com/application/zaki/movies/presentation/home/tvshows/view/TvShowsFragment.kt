@@ -65,7 +65,6 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>(),
                 topRatedTvShow = TvShow.TOP_RATED_TV_SHOWS,
                 popularTvShow = TvShow.POPULAR_TV_SHOWS,
                 onTheAirTvShow = TvShow.ON_THE_AIR_TV_SHOWS,
-                category = Category.TV_SHOWS,
                 page = Page.ONE,
                 rxDisposer = RxDisposer().apply { bind(lifecycle) }
             )

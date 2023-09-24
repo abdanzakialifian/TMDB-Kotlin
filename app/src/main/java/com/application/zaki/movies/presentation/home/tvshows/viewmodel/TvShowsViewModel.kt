@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.domain.usecase.GetListAllTvShows
-import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.Page
 import com.application.zaki.movies.utils.RxDisposer
 import com.application.zaki.movies.utils.TvShow
@@ -30,7 +29,6 @@ class TvShowsViewModel @Inject constructor(private val getListAllTvShows: GetLis
         topRatedTvShow: TvShow,
         popularTvShow: TvShow,
         onTheAirTvShow: TvShow,
-        category: Category,
         page: Page,
         rxDisposer: RxDisposer
     ) {
@@ -39,7 +37,6 @@ class TvShowsViewModel @Inject constructor(private val getListAllTvShows: GetLis
             topRatedTvShow,
             popularTvShow,
             onTheAirTvShow,
-            category,
             page,
             viewModelScope
         )

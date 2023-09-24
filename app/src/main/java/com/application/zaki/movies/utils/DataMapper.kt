@@ -2,7 +2,6 @@ package com.application.zaki.movies.utils
 
 import com.application.zaki.movies.data.source.remote.response.movies.DetailMoviesResponse
 import com.application.zaki.movies.data.source.remote.response.movies.ListMoviesResponse
-import com.application.zaki.movies.data.source.remote.response.other.GenreResponse
 import com.application.zaki.movies.data.source.remote.response.other.ResultsItemDiscoverResponse
 import com.application.zaki.movies.data.source.remote.response.other.ReviewItemResponse
 import com.application.zaki.movies.data.source.remote.response.tvshows.DetailTvShowsResponse
@@ -11,7 +10,6 @@ import com.application.zaki.movies.domain.model.AuthorDetails
 import com.application.zaki.movies.domain.model.CastItem
 import com.application.zaki.movies.domain.model.Detail
 import com.application.zaki.movies.domain.model.DiscoverItem
-import com.application.zaki.movies.domain.model.Genres
 import com.application.zaki.movies.domain.model.GenresItem
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.domain.model.ReviewItem
@@ -24,7 +22,8 @@ object DataMapper {
         voteAverage = voteAverage,
         name = title,
         id = id,
-        genres = listOf()
+        overview = overview,
+        releaseDate = releaseDate
     )
 
     fun ListTvShowsResponse.toTvShow(): MovieTvShow = MovieTvShow(
@@ -33,23 +32,9 @@ object DataMapper {
         voteAverage = voteAverage,
         name = name,
         id = id,
-        genres = listOf()
+        overview = overview,
+        releaseDate = firstAirDate
     )
-
-    fun MovieTvShow.toMovieTvShowWithGenres(genres: Genres): MovieTvShow {
-        val listGenreMovies = genres.genres?.map { genreItem ->
-            GenresItem(name = genreItem.name, id = genreItem.id)
-        }
-
-        return MovieTvShow(
-            name = name,
-            genreIds = genreIds,
-            posterPath = posterPath,
-            voteAverage = voteAverage,
-            id = id,
-            genres = listGenreMovies
-        )
-    }
 
     fun ReviewItemResponse.toReviewItem(): ReviewItem {
         val authorDetails = AuthorDetails(
@@ -86,13 +71,6 @@ object DataMapper {
             adult = adult,
             voteCount = voteCount
         )
-    }
-
-    fun GenreResponse.toGenres(): Genres {
-        val listGenresItem = genres?.map {
-            GenresItem(name = it.name, id = it.id)
-        }
-        return Genres(genres = listGenresItem)
     }
 
     fun DetailMoviesResponse.toDetailMovie(): Detail {

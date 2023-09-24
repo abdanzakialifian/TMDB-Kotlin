@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.domain.usecase.GetListAllMovies
-import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.Movie
 import com.application.zaki.movies.utils.Page
 import com.application.zaki.movies.utils.RxDisposer
@@ -29,7 +28,6 @@ class MoviesViewModel @Inject constructor(private val getListAllMovies: GetListA
         topRatedMovie: Movie,
         popularMovie: Movie,
         upComingMovie: Movie,
-        category: Category,
         page: Page,
         rxDisposer: RxDisposer
     ) {
@@ -38,7 +36,6 @@ class MoviesViewModel @Inject constructor(private val getListAllMovies: GetListA
             topRatedMovie,
             popularMovie,
             upComingMovie,
-            category,
             page,
             viewModelScope
         )

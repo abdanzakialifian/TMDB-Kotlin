@@ -11,7 +11,7 @@ import io.reactivex.Flowable
 
 interface IMoviesRepository {
     fun getDetailMovies(movieId: String): Flowable<Detail>
-    fun getGenres(category: Category): Flowable<Genres>
+
     fun getMovies(
         movie: Movie,
         page: Page

@@ -13,7 +13,5 @@ interface ITvShowsRepository {
 
     fun getDetailTvShows(tvId: String): Flowable<Detail>
 
-    fun getGenres(category: Category): Flowable<Genres>
-
     fun getTvShows(tvShow: TvShow, page: Page): Flowable<PagingData<MovieTvShow>>
 }

@@ -5,6 +5,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.paging.PagingData
+import com.application.zaki.movies.R
 import com.application.zaki.movies.databinding.FragmentListBinding
 import com.application.zaki.movies.domain.model.GenresItem
 import com.application.zaki.movies.domain.model.MovieTvShow
@@ -40,8 +41,27 @@ class MovieTvShowFragment : BaseVBFragment<FragmentListBinding>(),
         val tvShow = args.tvShow
 
         when (intentFrom) {
-            Category.MOVIES.name -> setListMovies(movie)
-            Category.TV_SHOWS.name -> setListTvShows(tvShow)
+            Category.MOVIES.name -> {
+                binding?.tvTitleAppbar?.text = when (movie) {
+                    Movie.POPULAR_MOVIES -> resources.getString(R.string.popular_movies)
+                    Movie.TOP_RATED_MOVIES -> resources.getString(R.string.top_rated_movies)
+                    else -> resources.getString(R.string.up_coming_movies)
+                }
+                setListMovies(movie)
+            }
+
+            Category.TV_SHOWS.name -> {
+                binding?.tvTitleAppbar?.text = when (tvShow) {
+                    TvShow.TOP_RATED_TV_SHOWS -> resources.getString(R.string.top_rated_tv_shows)
+                    TvShow.POPULAR_TV_SHOWS -> resources.getString(R.string.popular_tv_shows)
+                    else -> resources.getString(R.string.on_the_air_tv_shows)
+                }
+                setListTvShows(tvShow)
+            }
+        }
+
+        binding?.imgBack?.setOnClickListener {
+            findNavController().navigateUp()
         }
     }
 
@@ -49,7 +69,6 @@ class MovieTvShowFragment : BaseVBFragment<FragmentListBinding>(),
         if (movieTvShowViewModel.listMovies.value == null) {
             movieTvShowViewModel.getListMovies(
                 movie = movie,
-                category = Category.MOVIES,
                 page = Page.MORE_THAN_ONE,
                 rxDisposer = RxDisposer().apply { bind(lifecycle) },
             )
@@ -63,7 +82,6 @@ class MovieTvShowFragment : BaseVBFragment<FragmentListBinding>(),
         if (movieTvShowViewModel.listTvShows.value == null) {
             movieTvShowViewModel.getListTvShows(
                 tvShow = tvShow,
-                category = Category.MOVIES,
                 page = Page.MORE_THAN_ONE,
                 rxDisposer = RxDisposer().apply { bind(lifecycle) },
             )
@@ -77,27 +95,27 @@ class MovieTvShowFragment : BaseVBFragment<FragmentListBinding>(),
         movieTvShowPagingAdapter.submitData(lifecycle, movieTvShowPaging)
         movieTvShowPagingAdapter.setOnItemClickCallback(this)
         binding?.apply {
-            rvListMovies.adapter = movieTvShowPagingAdapter
-            rvListMovies.setHasFixedSize(true)
+            rvMovieTvShow.adapter = movieTvShowPagingAdapter
+            rvMovieTvShow.setHasFixedSize(true)
         }
         movieTvShowPagingAdapter.addLoadStateListener { loadState ->
             when (loadState.refresh) {
                 is LoadState.Loading -> binding?.apply {
                     shimmerList.visible()
                     shimmerList.startShimmer()
-                    rvListMovies.gone()
+                    rvMovieTvShow.gone()
                 }
 
                 is LoadState.NotLoading -> binding?.apply {
                     shimmerList.gone()
                     shimmerList.stopShimmer()
-                    rvListMovies.visible()
+                    rvMovieTvShow.visible()
                 }
 
                 is LoadState.Error -> binding?.apply {
                     shimmerList.gone()
                     shimmerList.stopShimmer()
-                    rvListMovies.gone()
+                    rvMovieTvShow.gone()
                 }
             }
         }

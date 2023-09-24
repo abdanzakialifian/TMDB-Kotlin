@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.rxjava2.cachedIn
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.domain.usecase.movietvshow.MovieTvShowWrapper
 import com.application.zaki.movies.utils.Category
@@ -16,8 +17,10 @@ import com.application.zaki.movies.utils.toLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class MovieTvShowViewModel @Inject constructor(private val movieTvShowWrapper: MovieTvShowWrapper) :
     ViewModel() {
@@ -30,13 +33,13 @@ class MovieTvShowViewModel @Inject constructor(private val movieTvShowWrapper: M
 
     fun getListMovies(
         movie: Movie,
-        category: Category,
         page: Page,
         rxDisposer: RxDisposer
     ) {
-        movieTvShowWrapper.getListMovies(movie, category, page, viewModelScope)
+        movieTvShowWrapper.getListMovies(movie, page)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .cachedIn(viewModelScope)
             .subscribe { data ->
                 _listMovies.postValue(data)
             }
@@ -45,13 +48,13 @@ class MovieTvShowViewModel @Inject constructor(private val movieTvShowWrapper: M
 
     fun getListTvShows(
         tvShow: TvShow,
-        category: Category,
         page: Page,
         rxDisposer: RxDisposer
     ) {
-        movieTvShowWrapper.getListTvShows(tvShow, category, page, viewModelScope)
+        movieTvShowWrapper.getListTvShows(tvShow, page)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .cachedIn(viewModelScope)
             .subscribe { data ->
                 _listTvShows.postValue(data)
             }

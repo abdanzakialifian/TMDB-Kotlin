@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListVerticalBinding
 import com.application.zaki.movies.domain.model.GenresItem
 import com.application.zaki.movies.domain.model.MovieTvShow
-import com.application.zaki.movies.presentation.listmovietvshow.adapter.genres.GenresAdapter
+import com.application.zaki.movies.utils.convertDateText
 import com.application.zaki.movies.utils.loadImageUrl
 import javax.inject.Inject
 
@@ -32,30 +32,22 @@ class MovieTvShowPagingAdapter @Inject constructor() :
                         imgPoster.loadImageUrl(url)
                     }
 
+                    releaseDate?.let { releaseDate ->
+                        tvYear.text = releaseDate.convertDateText("dd MMMM yyyy", "yyyy-MM-dd")
+                    }
+
                     name?.let { name ->
                         tvTitle.text = name
                     }
 
-                    // mapping data genre
-                    val genre = ArrayList<GenresItem>()
-                    genreIds?.map { genreId ->
-                        genres?.map { genres ->
-                            if (genreId == genres.id) {
-                                genre.add(GenresItem(name = genres.name ?: "", id = genres.id))
-                            }
-                        }
+                    voteAverage?.let { voteAverage ->
+                        ratingBar.rating = (voteAverage / 2).toFloat()
+                        tvRating.text = voteAverage.toString()
                     }
-                    // convert list to adapter
-                    val adapter = GenresAdapter(object : GenresAdapter.OnItemClickCallback {
-                        override fun onItemClicked(data: GenresItem) {
-                            onItemClickCallback.onItemGenreClicked(data)
-                        }
-                    })
-                    adapter.submitList(genre)
-                    rvGenre.adapter = adapter
-                    rvGenre.setHasFixedSize(true)
 
-                    tvRate.text = voteAverage.toString()
+                    overview?.let { overview ->
+                        tvOverview.text = overview
+                    }
                 }
             }
             itemView.setOnClickListener {

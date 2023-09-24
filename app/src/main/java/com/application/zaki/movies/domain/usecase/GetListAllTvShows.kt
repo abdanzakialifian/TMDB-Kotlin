@@ -1,12 +1,9 @@
 package com.application.zaki.movies.domain.usecase
 
 import androidx.paging.PagingData
-import androidx.paging.map
 import androidx.paging.rxjava2.cachedIn
 import com.application.zaki.movies.domain.interfaces.ITvShowsRepository
 import com.application.zaki.movies.domain.model.MovieTvShow
-import com.application.zaki.movies.utils.Category
-import com.application.zaki.movies.utils.DataMapper.toMovieTvShowWithGenres
 import com.application.zaki.movies.utils.Page
 import com.application.zaki.movies.utils.TvShow
 import io.reactivex.Flowable
@@ -24,51 +21,14 @@ class GetListAllTvShows @Inject constructor(private val iTvShowsRepository: ITvS
         topRatedTvShow: TvShow,
         popularTvShow: TvShow,
         onTheAirTvShow: TvShow,
-        category: Category,
         page: Page,
         scope: CoroutineScope
     ): Flowable<List<Pair<TvShow, PagingData<MovieTvShow>>>> {
-        val airingTodayTvShowFlowable = Flowable.zip(
-            iTvShowsRepository.getTvShows(airingTodayTvShow, page).cachedIn(scope),
-            iTvShowsRepository.getGenres(category)
-        ) { tvShows, genres ->
-            return@zip tvShows.map { map ->
-                map.toMovieTvShowWithGenres(genres)
-            }
-        }
-
-        val topRatedTvShowFlowable = Flowable.zip(
-            iTvShowsRepository.getTvShows(topRatedTvShow, page).cachedIn(scope),
-            iTvShowsRepository.getGenres(category)
-        ) { tvShows, genres ->
-            return@zip tvShows.map { map ->
-                map.toMovieTvShowWithGenres(genres)
-            }
-        }
-
-        val popularTvShowFlowable = Flowable.zip(
-            iTvShowsRepository.getTvShows(popularTvShow, page).cachedIn(scope),
-            iTvShowsRepository.getGenres(category)
-        ) { tvShows, genres ->
-            return@zip tvShows.map { map ->
-                map.toMovieTvShowWithGenres(genres)
-            }
-        }
-
-        val onTheAirTvShowFlowable = Flowable.zip(
-            iTvShowsRepository.getTvShows(onTheAirTvShow, page).cachedIn(scope),
-            iTvShowsRepository.getGenres(category)
-        ) { tvShows, genres ->
-            return@zip tvShows.map { map ->
-                map.toMovieTvShowWithGenres(genres)
-            }
-        }
-
         return Flowable.zip(
-            airingTodayTvShowFlowable,
-            topRatedTvShowFlowable,
-            popularTvShowFlowable,
-            onTheAirTvShowFlowable,
+            iTvShowsRepository.getTvShows(airingTodayTvShow, page).cachedIn(scope),
+            iTvShowsRepository.getTvShows(topRatedTvShow, page).cachedIn(scope),
+            iTvShowsRepository.getTvShows(popularTvShow, page).cachedIn(scope),
+            iTvShowsRepository.getTvShows(onTheAirTvShow, page).cachedIn(scope),
             Function4 { airingTodayTvShowPaging, topRatedTvShowPaging, popularTvShowPaging, onTheAirTvShowPaging ->
                 return@Function4 listOf(
                     Pair(TvShow.AIRING_TODAY_TV_SHOWS, airingTodayTvShowPaging),
