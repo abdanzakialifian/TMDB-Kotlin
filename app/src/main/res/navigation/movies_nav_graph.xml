@@ -3,41 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/movies_nav_graph"
-    app:startDestination="@id/splashScreenFragment">
+    app:startDestination="@id/splash_screen_fragment">
 
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.application.zaki.movies.presentation.home.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home">
-        <action
-            android:id="@+id/action_homeFragment_to_listFragment"
-            app:destination="@id/movieTvShowFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_detailFragment"
-            app:destination="@id/detailFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/searchFragment"
+        android:id="@+id/search_fragment"
         android:name="com.application.zaki.movies.presentation.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
     <fragment
-        android:id="@+id/favoriteFragment"
+        android:id="@+id/favorite_fragment"
         android:name="com.application.zaki.movies.presentation.favorite.FavoriteFragment"
         android:label="fragment_favorite"
         tools:layout="@layout/fragment_favorite" />
     <fragment
-        android:id="@+id/movieTvShowFragment"
+        android:id="@+id/movie_tv_show_fragment"
         android:name="com.application.zaki.movies.presentation.listmovietvshow.view.MovieTvShowFragment"
         android:label="fragment_list"
-        tools:layout="@layout/fragment_list">
+        tools:layout="@layout/fragment_movie_tv_show">
         <action
             android:id="@+id/action_listFragment_to_detailFragment"
-            app:destination="@id/detailFragment" />
+            app:destination="@id/detail_fragment" />
         <action
             android:id="@+id/action_listFragment_to_listDiscoverFragment"
-            app:destination="@id/listDiscoverFragment" />
+            app:destination="@id/list_discover_fragment" />
         <argument
             android:name="intentFrom"
             app:argType="string"
@@ -52,7 +40,7 @@
             android:defaultValue="POPULAR_TV_SHOWS" />
     </fragment>
     <fragment
-        android:id="@+id/detailFragment"
+        android:id="@+id/detail_fragment"
         android:name="com.application.zaki.movies.presentation.detail.view.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail">
@@ -66,10 +54,10 @@
             app:argType="string" />
         <action
             android:id="@+id/action_detailFragment_to_reviewsFragment"
-            app:destination="@id/reviewsFragment" />
+            app:destination="@id/reviews_fragment" />
     </fragment>
     <fragment
-        android:id="@+id/listDiscoverFragment"
+        android:id="@+id/list_discover_fragment"
         android:name="com.application.zaki.movies.presentation.listmovietvshow.view.ListDiscoverFragment"
         android:label="fragment_list_discover"
         tools:layout="@layout/fragment_list_discover">
@@ -87,22 +75,19 @@
             app:argType="string" />
         <action
             android:id="@+id/action_listDiscoverFragment_to_detailFragment"
-            app:destination="@id/detailFragment" />
+            app:destination="@id/detail_fragment" />
     </fragment>
     <fragment
-        android:id="@+id/splashScreenFragment"
+        android:id="@+id/splash_screen_fragment"
         android:name="com.application.zaki.movies.presentation.splash.SplashScreenFragment"
         android:label="fragment_splash_screen"
         tools:layout="@layout/fragment_splash_screen">
         <action
-            android:id="@+id/action_splashScreenFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
-            app:launchSingleTop="true"
-            app:popUpTo="@id/splashScreenFragment"
-            app:popUpToInclusive="true" />
+            android:id="@+id/action_splashScreenFragment_to_movie_fragment"
+            app:destination="@id/movie_fragment" />
     </fragment>
     <fragment
-        android:id="@+id/reviewsFragment"
+        android:id="@+id/reviews_fragment"
         android:name="com.application.zaki.movies.presentation.reviews.ReviewsFragment"
         android:label="fragment_reviews"
         tools:layout="@layout/fragment_reviews">
@@ -115,10 +100,30 @@
             android:defaultValue=""
             app:argType="string" />
     </fragment>
+
     <fragment
-        android:id="@+id/moviesFragment"
-        android:name="com.application.zaki.movies.presentation.home.movies.view.MoviesFragment"
+        android:id="@+id/movie_fragment"
+        android:name="com.application.zaki.movies.presentation.movies.view.MoviesFragment"
         android:label="fragment_tv_shows"
-        tools:layout="@layout/fragment_tv_shows" />
+        tools:layout="@layout/fragment_movies">
+        <action
+            android:id="@+id/action_movie_fragment_to_detailFragment"
+            app:destination="@id/detail_fragment" />
+        <action
+            android:id="@+id/action_movie_fragment_to_movieTvShowFragment"
+            app:destination="@id/movie_tv_show_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/tv_show_fragment"
+        tools:layout="@layout/fragment_tv_shows"
+        android:name="com.application.zaki.movies.presentation.tvshows.view.TvShowsFragment"
+        android:label="TvShowsFragment" >
+        <action
+            android:id="@+id/action_tvShowsFragment_to_detailFragment"
+            app:destination="@id/detail_fragment" />
+        <action
+            android:id="@+id/action_tv_show_fragment_to_movieTvShowFragment"
+            app:destination="@id/movie_tv_show_fragment" />
+    </fragment>
 
 </navigation>

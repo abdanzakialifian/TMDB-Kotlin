@@ -1,12 +1,11 @@
-package com.application.zaki.movies.presentation.home.adapter
+package com.application.zaki.movies.presentation.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.application.zaki.movies.databinding.ItemListSliderBinding
+import com.application.zaki.movies.databinding.ItemListMovieTvShowSliderBinding
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.utils.loadImageUrl
 import javax.inject.Inject
@@ -20,10 +19,10 @@ class MovieTvShowSliderAdapter @Inject constructor() :
         this.onItemClickCallback = onItemClickCallback
     }
 
-    inner class SliderViewHolder(private val binding: ItemListSliderBinding) :
+    inner class SliderViewHolder(private val binding: ItemListMovieTvShowSliderBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: MovieTvShow?) {
-            item?.posterPath?.let {
+            item?.backdropPath?.let {
                 binding.imgSlider.loadImageUrl(it)
             }
             itemView.setOnClickListener {
@@ -33,7 +32,7 @@ class MovieTvShowSliderAdapter @Inject constructor() :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SliderViewHolder =
-        ItemListSliderBinding.inflate(
+        ItemListMovieTvShowSliderBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         ).run {
             SliderViewHolder(this)

@@ -3,7 +3,6 @@ package com.application.zaki.movies.presentation.reviews
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
-import com.application.zaki.movies.data.source.remote.paging.other.ReviewsRxPagingSource
 import com.application.zaki.movies.databinding.FragmentReviewsBinding
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.adapter.ReviewsMoviesPagingAdapter

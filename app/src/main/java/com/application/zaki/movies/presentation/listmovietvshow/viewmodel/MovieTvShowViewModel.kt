@@ -7,7 +7,6 @@ import androidx.paging.PagingData
 import androidx.paging.rxjava2.cachedIn
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.domain.usecase.movietvshow.MovieTvShowWrapper
-import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.Movie
 import com.application.zaki.movies.utils.Page
 import com.application.zaki.movies.utils.RxDisposer

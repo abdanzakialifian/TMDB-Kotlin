@@ -1,9 +1,8 @@
 package com.application.zaki.movies.data.source.remote
 
-import com.application.zaki.movies.data.source.remote.response.other.DiscoverResponse
-import com.application.zaki.movies.data.source.remote.response.other.GenreResponse
-import com.application.zaki.movies.data.source.remote.response.other.ReviewsResponse
 import com.application.zaki.movies.data.source.remote.response.movies.*
+import com.application.zaki.movies.data.source.remote.response.other.DiscoverResponse
+import com.application.zaki.movies.data.source.remote.response.other.ReviewsResponse
 import com.application.zaki.movies.data.source.remote.response.tvshows.*
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -51,12 +50,6 @@ interface ApiService {
     fun getOnTheAirTvShowsPaging(
         @Query("page") page: Int
     ): Single<TvShowsResponse>
-
-    @GET("genre/movie/list")
-    fun getGenreMovies(): Flowable<GenreResponse>
-
-    @GET("genre/tv/list")
-    fun getGenreTvShows(): Flowable<GenreResponse>
 
     @GET("movie/{movie_id}?append_to_response=credits,videos,reviews")
     fun getDetailMovies(

@@ -2,7 +2,6 @@ package com.application.zaki.movies.presentation.detail.view
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs

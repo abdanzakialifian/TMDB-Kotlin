@@ -1,52 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".presentation.home.movies.view.MoviesFragment">
+    tools:context=".presentation.movies.view.MoviesFragment">
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmer_image_slider"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:paddingVertical="20dp">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_image_slider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginStart="50dp"
+            android:paddingTop="20dp">
 
-            <include layout="@layout/item_list_slider_shimmer_placeholder" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-            <include layout="@layout/item_list_slider_shimmer_placeholder" />
+                <LinearLayout
+                    android:layout_width="290dp"
+                    android:layout_height="wrap_content">
 
-            <include layout="@layout/item_list_slider_shimmer_placeholder" />
+                    <include layout="@layout/item_list_movie_tv_show_slider_shimmer_placeholder" />
 
-            <include layout="@layout/item_list_slider_shimmer_placeholder" />
+                </LinearLayout>
 
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-    </com.facebook.shimmer.ShimmerFrameLayout>
+                    <include layout="@layout/item_list_movie_tv_show_slider_shimmer_placeholder" />
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/view_pager_image_slider"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="95dp"
-        android:paddingVertical="20dp"
-        android:visibility="gone" />
+                </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_tv_shows"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical"
-        android:visibility="visible"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_list_category_movies" />
+            </LinearLayout>
 
-</LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager_image_slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="40dp"
+            android:paddingTop="20dp"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_tv_shows"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:orientation="vertical"
+            android:visibility="visible"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_list_movie_tv_show" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

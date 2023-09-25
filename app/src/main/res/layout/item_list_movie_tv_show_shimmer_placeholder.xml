@@ -39,25 +39,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_see_all">
 
-        <include layout="@layout/item_list_horizontal_shimmer_placeholder" />
+        <include layout="@layout/item_list_movie_tv_show_item_shimmer_placeholder" />
 
-        <include layout="@layout/item_list_horizontal_shimmer_placeholder" />
+        <include layout="@layout/item_list_movie_tv_show_item_shimmer_placeholder" />
 
-        <include layout="@layout/item_list_horizontal_shimmer_placeholder" />
+        <include layout="@layout/item_list_movie_tv_show_item_shimmer_placeholder" />
 
-        <include layout="@layout/item_list_horizontal_shimmer_placeholder" />
+        <include layout="@layout/item_list_movie_tv_show_item_shimmer_placeholder" />
 
-        <include layout="@layout/item_list_horizontal_shimmer_placeholder" />
+        <include layout="@layout/item_list_movie_tv_show_item_shimmer_placeholder" />
 
-        <include layout="@layout/item_list_horizontal_shimmer_placeholder" />
+        <include layout="@layout/item_list_movie_tv_show_item_shimmer_placeholder" />
 
-        <include layout="@layout/item_list_horizontal_shimmer_placeholder" />
+        <include layout="@layout/item_list_movie_tv_show_item_shimmer_placeholder" />
 
-        <include layout="@layout/item_list_horizontal_shimmer_placeholder" />
+        <include layout="@layout/item_list_movie_tv_show_item_shimmer_placeholder" />
 
-        <include layout="@layout/item_list_horizontal_shimmer_placeholder" />
+        <include layout="@layout/item_list_movie_tv_show_item_shimmer_placeholder" />
 
-        <include layout="@layout/item_list_horizontal_shimmer_placeholder" />
+        <include layout="@layout/item_list_movie_tv_show_item_shimmer_placeholder" />
 
     </LinearLayout>
 

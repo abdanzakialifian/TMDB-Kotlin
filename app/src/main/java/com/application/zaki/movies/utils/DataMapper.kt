@@ -23,7 +23,8 @@ object DataMapper {
         name = title,
         id = id,
         overview = overview,
-        releaseDate = releaseDate
+        releaseDate = releaseDate,
+        backdropPath = backdropPath
     )
 
     fun ListTvShowsResponse.toTvShow(): MovieTvShow = MovieTvShow(
@@ -33,7 +34,8 @@ object DataMapper {
         name = name,
         id = id,
         overview = overview,
-        releaseDate = firstAirDate
+        releaseDate = firstAirDate,
+        backdropPath = backdropPath
     )
 
     fun ReviewItemResponse.toReviewItem(): ReviewItem {

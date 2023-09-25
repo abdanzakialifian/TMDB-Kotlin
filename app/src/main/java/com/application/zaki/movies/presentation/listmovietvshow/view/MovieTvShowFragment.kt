@@ -6,7 +6,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import com.application.zaki.movies.R
-import com.application.zaki.movies.databinding.FragmentListBinding
+import com.application.zaki.movies.databinding.FragmentMovieTvShowBinding
 import com.application.zaki.movies.domain.model.GenresItem
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.presentation.base.BaseVBFragment
@@ -23,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MovieTvShowFragment : BaseVBFragment<FragmentListBinding>(),
+class MovieTvShowFragment : BaseVBFragment<FragmentMovieTvShowBinding>(),
     MovieTvShowPagingAdapter.OnItemClickCallback {
 
     @Inject
@@ -33,7 +33,8 @@ class MovieTvShowFragment : BaseVBFragment<FragmentListBinding>(),
 
     private val movieTvShowViewModel by viewModels<MovieTvShowViewModel>()
 
-    override fun getViewBinding(): FragmentListBinding = FragmentListBinding.inflate(layoutInflater)
+    override fun getViewBinding(): FragmentMovieTvShowBinding =
+        FragmentMovieTvShowBinding.inflate(layoutInflater)
 
     override fun initView() {
         val intentFrom = args.intentFrom

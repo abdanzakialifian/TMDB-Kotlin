@@ -7,5 +7,6 @@ data class MovieTvShow(
     val voteAverage: Double? = null,
     val id: Int? = null,
     val overview: String? = null,
-    val releaseDate: String? = null
+    val releaseDate: String? = null,
+    val backdropPath: String? = null
 )

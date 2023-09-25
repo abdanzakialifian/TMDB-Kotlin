@@ -1,4 +1,4 @@
-package com.application.zaki.movies.presentation.home.tvshows.view
+package com.application.zaki.movies.presentation.tvshows.view
 
 import android.os.Handler
 import android.os.Looper
@@ -15,10 +15,9 @@ import com.application.zaki.movies.domain.model.CategoryItem
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.view.DetailFragment.Companion.INTENT_FROM_TV_SHOWS
-import com.application.zaki.movies.presentation.home.HomeFragmentDirections
-import com.application.zaki.movies.presentation.home.adapter.MovieTvShowAdapter
-import com.application.zaki.movies.presentation.home.adapter.MovieTvShowSliderAdapter
-import com.application.zaki.movies.presentation.home.tvshows.viewmodel.TvShowsViewModel
+import com.application.zaki.movies.presentation.adapter.MovieTvShowAdapter
+import com.application.zaki.movies.presentation.adapter.MovieTvShowSliderAdapter
+import com.application.zaki.movies.presentation.tvshows.viewmodel.TvShowsViewModel
 import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.Movie
 import com.application.zaki.movies.utils.Page
@@ -178,14 +177,14 @@ class TvShowsFragment : BaseVBFragment<FragmentTvShowsBinding>(),
     }
 
     private fun navigateToDetailPage(id: Int) {
-        val navigateToDetailFragment = HomeFragmentDirections.actionHomeFragmentToDetailFragment()
+        val navigateToDetailFragment = TvShowsFragmentDirections.actionTvShowsFragmentToDetailFragment()
         navigateToDetailFragment.id = id
         navigateToDetailFragment.intentFrom = INTENT_FROM_TV_SHOWS
         findNavController().navigate(navigateToDetailFragment)
     }
 
     private fun navigateToListPage(category: Category, movie: Movie, tvShow: TvShow) {
-        val navigateToListFragment = HomeFragmentDirections.actionHomeFragmentToListFragment()
+        val navigateToListFragment = TvShowsFragmentDirections.actionTvShowFragmentToMovieTvShowFragment()
         navigateToListFragment.intentFrom = category.name
         navigateToListFragment.movie = movie
         navigateToListFragment.tvShow = tvShow

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.application.zaki.movies.databinding.ItemListVerticalBinding
+import com.application.zaki.movies.databinding.ItemListMovieTvShowPagingBinding
 import com.application.zaki.movies.domain.model.GenresItem
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.utils.convertDateText
@@ -23,7 +23,7 @@ class MovieTvShowPagingAdapter @Inject constructor() :
         this.onItemClickCallback = onItemClickCallback
     }
 
-    inner class PopularMoviesPagingViewHolder(private val binding: ItemListVerticalBinding) :
+    inner class PopularMoviesPagingViewHolder(private val binding: ItemListMovieTvShowPagingBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: MovieTvShow?) {
             binding.apply {
@@ -41,8 +41,8 @@ class MovieTvShowPagingAdapter @Inject constructor() :
                     }
 
                     voteAverage?.let { voteAverage ->
-                        ratingBar.rating = (voteAverage / 2).toFloat()
-                        tvRating.text = voteAverage.toString()
+                        ratingBar.rating = (voteAverage - 5.0).toFloat()
+                        tvRating.text = (voteAverage - 5.0).toFloat().toString()
                     }
 
                     overview?.let { overview ->
@@ -60,9 +60,10 @@ class MovieTvShowPagingAdapter @Inject constructor() :
         parent: ViewGroup,
         viewType: Int
     ): PopularMoviesPagingViewHolder =
-        ItemListVerticalBinding.inflate(LayoutInflater.from(parent.context), parent, false).run {
-            PopularMoviesPagingViewHolder(this)
-        }
+        ItemListMovieTvShowPagingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            .run {
+                PopularMoviesPagingViewHolder(this)
+            }
 
     override fun onBindViewHolder(holder: PopularMoviesPagingViewHolder, position: Int) {
         holder.bind(getItem(position))

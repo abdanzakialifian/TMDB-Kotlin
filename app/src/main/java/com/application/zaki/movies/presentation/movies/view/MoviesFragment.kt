@@ -1,4 +1,4 @@
-package com.application.zaki.movies.presentation.home.movies.view
+package com.application.zaki.movies.presentation.movies.view
 
 import android.os.Handler
 import android.os.Looper
@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.ViewPager2
@@ -15,10 +16,9 @@ import com.application.zaki.movies.domain.model.CategoryItem
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.view.DetailFragment.Companion.INTENT_FROM_MOVIE
-import com.application.zaki.movies.presentation.home.HomeFragmentDirections
-import com.application.zaki.movies.presentation.home.adapter.MovieTvShowAdapter
-import com.application.zaki.movies.presentation.home.adapter.MovieTvShowSliderAdapter
-import com.application.zaki.movies.presentation.home.movies.viewmodel.MoviesViewModel
+import com.application.zaki.movies.presentation.adapter.MovieTvShowAdapter
+import com.application.zaki.movies.presentation.adapter.MovieTvShowSliderAdapter
+import com.application.zaki.movies.presentation.movies.viewmodel.MoviesViewModel
 import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.Movie
 import com.application.zaki.movies.utils.Page
@@ -179,14 +179,14 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>(),
     }
 
     private fun navigateToDetailPage(id: Int) {
-        val navigateToDetailFragment = HomeFragmentDirections.actionHomeFragmentToDetailFragment()
+        val navigateToDetailFragment = MoviesFragmentDirections.actionMovieFragmentToDetailFragment()
         navigateToDetailFragment.id = id
         navigateToDetailFragment.intentFrom = INTENT_FROM_MOVIE
         findNavController().navigate(navigateToDetailFragment)
     }
 
     private fun navigateToListPage(category: Category, movie: Movie, tvShow: TvShow) {
-        val navigateToListFragment = HomeFragmentDirections.actionHomeFragmentToListFragment()
+        val navigateToListFragment = MoviesFragmentDirections.actionMovieFragmentToMovieTvShowFragment()
         navigateToListFragment.intentFrom = category.name
         navigateToListFragment.movie = movie
         navigateToListFragment.tvShow = tvShow

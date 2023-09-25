@@ -1,12 +1,11 @@
-package com.application.zaki.movies.presentation.home.adapter
+package com.application.zaki.movies.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.application.zaki.movies.databinding.ItemListHorizontalBinding
+import com.application.zaki.movies.databinding.ItemListMovieTvShowItemBinding
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.utils.loadImageUrl
 
@@ -19,7 +18,7 @@ class MovieTvShowItemAdapter :
         this.onItemClickCallback = onItemClickCallback
     }
 
-    inner class MovieItemViewHolder(val binding: ItemListHorizontalBinding) :
+    inner class MovieItemViewHolder(val binding: ItemListMovieTvShowItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: MovieTvShow?) {
             item?.posterPath?.let {
@@ -32,7 +31,7 @@ class MovieTvShowItemAdapter :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieItemViewHolder =
-        ItemListHorizontalBinding.inflate(
+        ItemListMovieTvShowItemBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         ).run {
             MovieItemViewHolder(this)
@@ -40,25 +39,6 @@ class MovieTvShowItemAdapter :
 
     override fun onBindViewHolder(holder: MovieItemViewHolder, position: Int) {
         holder.bind(getItem(position))
-        when (position) {
-            0 -> {
-                val params = ConstraintLayout.LayoutParams(
-                    ConstraintLayout.LayoutParams.WRAP_CONTENT,
-                    ConstraintLayout.LayoutParams.WRAP_CONTENT
-                )
-                params.setMargins(15, 0, 15, 0)
-                holder.binding.layoutList.layoutParams = params
-            }
-
-            else -> {
-                val params = ConstraintLayout.LayoutParams(
-                    ConstraintLayout.LayoutParams.WRAP_CONTENT,
-                    ConstraintLayout.LayoutParams.WRAP_CONTENT
-                )
-                params.setMargins(0, 0, 15, 0)
-                holder.binding.layoutList.layoutParams = params
-            }
-        }
     }
 
     interface OnItemClickCallback {

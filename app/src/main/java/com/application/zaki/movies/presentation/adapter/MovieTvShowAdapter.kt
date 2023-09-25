@@ -1,15 +1,14 @@
-package com.application.zaki.movies.presentation.home.adapter
+package com.application.zaki.movies.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.application.zaki.movies.databinding.ItemListCategoryMoviesBinding
+import com.application.zaki.movies.databinding.ItemListMovieTvShowBinding
 import com.application.zaki.movies.domain.model.CategoryItem
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.utils.Category
@@ -33,21 +32,21 @@ class MovieTvShowAdapter @Inject constructor() :
         this.onEventClickCallback = onEventClickCallback
     }
 
-    inner class MovieCategoryViewHolder(val binding: ItemListCategoryMoviesBinding) :
+    inner class MovieCategoryViewHolder(val binding: ItemListMovieTvShowBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CategoryItem) {
             binding.apply {
                 if (item.categories == null) {
-                    shimmerMovies.startShimmer()
-                    shimmerMovies.visible()
-                    rvMovies.gone()
-                    layoutMovies.gone()
+                    shimmerMovieTvShow.startShimmer()
+                    shimmerMovieTvShow.visible()
+                    rvMovieTvShow.gone()
+                    layoutMovieTvShow.gone()
                 } else {
-                    tvTitlesMovies.text = item.categoryTitle
+                    tvTitleMovieTvShow.text = item.categoryTitle
                     movieTvShowItemAdapter = MovieTvShowItemAdapter()
                     if (this@MovieTvShowAdapter::movieTvShowItemAdapter.isInitialized) {
-                        rvMovies.adapter = movieTvShowItemAdapter
-                        rvMovies.setHasFixedSize(true)
+                        rvMovieTvShow.adapter = movieTvShowItemAdapter
+                        rvMovieTvShow.setHasFixedSize(true)
                         movieTvShowItemAdapter.addLoadStateListener { loadState ->
                             setLoadStatePaging(loadState, binding)
                         }
@@ -55,14 +54,14 @@ class MovieTvShowAdapter @Inject constructor() :
                             movieTvShowItemAdapter.submitData(item.categories)
                         }
                     }
-                    eventListeners(tvSeeAllMovies, item.category, item.movie, item.tvShow)
+                    eventListeners(tvSeeAllMovieTvShow, item.category, item.movie, item.tvShow)
                 }
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieCategoryViewHolder =
-        ItemListCategoryMoviesBinding.inflate(
+        ItemListMovieTvShowBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         ).run {
             MovieCategoryViewHolder(this)
@@ -70,41 +69,33 @@ class MovieTvShowAdapter @Inject constructor() :
 
     override fun onBindViewHolder(holder: MovieCategoryViewHolder, position: Int) {
         holder.bind(getItem(position))
-        if (position != 0) {
-            val params = ConstraintLayout.LayoutParams(
-                ConstraintLayout.LayoutParams.WRAP_CONTENT,
-                ConstraintLayout.LayoutParams.WRAP_CONTENT
-            )
-            params.setMargins(0, 60, 0, 0)
-            holder.binding.layoutCategory.layoutParams = params
-        }
     }
 
     private fun setLoadStatePaging(
         loadState: CombinedLoadStates,
-        binding: ItemListCategoryMoviesBinding
+        binding: ItemListMovieTvShowBinding
     ) {
         binding.apply {
             when (loadState.refresh) {
                 is LoadState.Loading -> {
-                    shimmerMovies.startShimmer()
-                    shimmerMovies.visible()
-                    rvMovies.gone()
-                    layoutMovies.gone()
+                    shimmerMovieTvShow.startShimmer()
+                    shimmerMovieTvShow.visible()
+                    rvMovieTvShow.gone()
+                    layoutMovieTvShow.gone()
                 }
 
                 is LoadState.NotLoading -> {
-                    shimmerMovies.stopShimmer()
-                    shimmerMovies.gone()
-                    rvMovies.visible()
-                    layoutMovies.visible()
+                    shimmerMovieTvShow.stopShimmer()
+                    shimmerMovieTvShow.gone()
+                    rvMovieTvShow.visible()
+                    layoutMovieTvShow.visible()
                 }
 
                 is LoadState.Error -> {
-                    shimmerMovies.stopShimmer()
-                    shimmerMovies.gone()
-                    rvMovies.gone()
-                    layoutMovies.gone()
+                    shimmerMovieTvShow.stopShimmer()
+                    shimmerMovieTvShow.gone()
+                    rvMovieTvShow.gone()
+                    layoutMovieTvShow.gone()
                 }
             }
         }

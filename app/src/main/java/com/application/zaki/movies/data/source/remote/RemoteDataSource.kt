@@ -10,7 +10,6 @@ import com.application.zaki.movies.data.source.remote.paging.other.ReviewsRxPagi
 import com.application.zaki.movies.data.source.remote.paging.tvshows.TvShowsRxPagingSource
 import com.application.zaki.movies.data.source.remote.response.movies.DetailMoviesResponse
 import com.application.zaki.movies.data.source.remote.response.movies.ListMoviesResponse
-import com.application.zaki.movies.data.source.remote.response.other.GenreResponse
 import com.application.zaki.movies.data.source.remote.response.other.ResultsItemDiscoverResponse
 import com.application.zaki.movies.data.source.remote.response.other.ReviewItemResponse
 import com.application.zaki.movies.data.source.remote.response.tvshows.DetailTvShowsResponse
@@ -37,8 +36,6 @@ class RemoteDataSource @Inject constructor(
     private val popularTvShowsRxPagingSource: TvShowsRxPagingSource,
     private val topRatedTvShowsRxPagingSource: TvShowsRxPagingSource,
 ) {
-    fun getGenre(category: Category): Flowable<GenreResponse> =
-        if (category == Category.MOVIES) apiService.getGenreMovies() else apiService.getGenreTvShows()
 
     fun getDetailMovies(movieId: String): Flowable<DetailMoviesResponse> =
         apiService.getDetailMovies(movieId)
@@ -69,7 +66,7 @@ class RemoteDataSource @Inject constructor(
     fun getMovies(
         movie: Movie, page: Page
     ): Flowable<PagingData<ListMoviesResponse>> = Pager(config = PagingConfig(
-        pageSize = 10, initialLoadSize = 10
+        pageSize = 5, initialLoadSize = 5
     ), pagingSourceFactory = {
         when (movie) {
             Movie.NOW_PLAYING_MOVIES -> nowPlayingMoviesRxPagingSource.apply {

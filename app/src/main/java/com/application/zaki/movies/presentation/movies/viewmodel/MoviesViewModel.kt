@@ -1,14 +1,14 @@
-package com.application.zaki.movies.presentation.home.tvshows.viewmodel
+package com.application.zaki.movies.presentation.movies.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.application.zaki.movies.domain.model.MovieTvShow
-import com.application.zaki.movies.domain.usecase.GetListAllTvShows
+import com.application.zaki.movies.domain.usecase.GetListAllMovies
+import com.application.zaki.movies.utils.Movie
 import com.application.zaki.movies.utils.Page
 import com.application.zaki.movies.utils.RxDisposer
-import com.application.zaki.movies.utils.TvShow
 import com.application.zaki.movies.utils.addToDisposer
 import com.application.zaki.movies.utils.toLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,33 +17,33 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 @HiltViewModel
-class TvShowsViewModel @Inject constructor(private val getListAllTvShows: GetListAllTvShows) :
+class MoviesViewModel @Inject constructor(private val getListAllMovies: GetListAllMovies) :
     ViewModel() {
 
-    private val _listTvShows: MutableLiveData<List<Pair<TvShow, PagingData<MovieTvShow>>>> =
-        MutableLiveData()
-    val listTvShows get() = _listTvShows.toLiveData()
+    private val _listMovies = MutableLiveData<List<Pair<Movie, PagingData<MovieTvShow>>>>()
+    val listMovies get() = _listMovies.toLiveData()
 
-    fun getListAllTvShows(
-        airingTodayTvShow: TvShow,
-        topRatedTvShow: TvShow,
-        popularTvShow: TvShow,
-        onTheAirTvShow: TvShow,
+    fun getListAllMovies(
+        nowPlayingMovie: Movie,
+        topRatedMovie: Movie,
+        popularMovie: Movie,
+        upComingMovie: Movie,
         page: Page,
         rxDisposer: RxDisposer
     ) {
-        getListAllTvShows(
-            airingTodayTvShow,
-            topRatedTvShow,
-            popularTvShow,
-            onTheAirTvShow,
+        getListAllMovies(
+            nowPlayingMovie,
+            topRatedMovie,
+            popularMovie,
+            upComingMovie,
             page,
             viewModelScope
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->
-                _listTvShows.postValue(data)
+                _listMovies.postValue(data)
+
             }.addToDisposer(rxDisposer)
     }
 }

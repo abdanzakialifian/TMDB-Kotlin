@@ -62,25 +62,25 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/item_list_vertical_shimmer_placeholder" />
+            <include layout="@layout/item_list_movie_tv_show_paging_shimmer_placeholder" />
 
-            <include layout="@layout/item_list_vertical_shimmer_placeholder" />
+            <include layout="@layout/item_list_movie_tv_show_paging_shimmer_placeholder" />
 
-            <include layout="@layout/item_list_vertical_shimmer_placeholder" />
+            <include layout="@layout/item_list_movie_tv_show_paging_shimmer_placeholder" />
 
-            <include layout="@layout/item_list_vertical_shimmer_placeholder" />
+            <include layout="@layout/item_list_movie_tv_show_paging_shimmer_placeholder" />
 
-            <include layout="@layout/item_list_vertical_shimmer_placeholder" />
+            <include layout="@layout/item_list_movie_tv_show_paging_shimmer_placeholder" />
 
-            <include layout="@layout/item_list_vertical_shimmer_placeholder" />
+            <include layout="@layout/item_list_movie_tv_show_paging_shimmer_placeholder" />
 
-            <include layout="@layout/item_list_vertical_shimmer_placeholder" />
+            <include layout="@layout/item_list_movie_tv_show_paging_shimmer_placeholder" />
 
-            <include layout="@layout/item_list_vertical_shimmer_placeholder" />
+            <include layout="@layout/item_list_movie_tv_show_paging_shimmer_placeholder" />
 
-            <include layout="@layout/item_list_vertical_shimmer_placeholder" />
+            <include layout="@layout/item_list_movie_tv_show_paging_shimmer_placeholder" />
 
-            <include layout="@layout/item_list_vertical_shimmer_placeholder" />
+            <include layout="@layout/item_list_movie_tv_show_paging_shimmer_placeholder" />
 
         </LinearLayout>
 
@@ -97,6 +97,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/app_bar_layout"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_list_vertical" />
+        tools:listitem="@layout/item_list_movie_tv_show_paging" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

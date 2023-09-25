@@ -3,8 +3,8 @@
     <string name="popular_movies">Popular movies</string>
     <string name="see_all">See all</string>
     <string name="top_rated_movies">Top rated movies</string>
-    <string name="home">Home</string>
-    <string name="search">Search</string>
+    <string name="movie">Movie</string>
+    <string name="tv_show">Tv Show</string>
     <string name="favorite">Favorite</string>
     <string name="up_coming_movies">Up coming movies</string>
     <string name="top_rated_tv_shows">Top rated tv shows</string>
