@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -36,26 +37,19 @@ class MovieTvShowAdapter @Inject constructor() :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CategoryItem) {
             binding.apply {
-                if (item.categories == null) {
-                    shimmerMovieTvShow.startShimmer()
-                    shimmerMovieTvShow.visible()
-                    rvMovieTvShow.gone()
-                    layoutMovieTvShow.gone()
-                } else {
-                    tvTitleMovieTvShow.text = item.categoryTitle
-                    movieTvShowItemAdapter = MovieTvShowItemAdapter()
-                    if (this@MovieTvShowAdapter::movieTvShowItemAdapter.isInitialized) {
-                        rvMovieTvShow.adapter = movieTvShowItemAdapter
-                        rvMovieTvShow.setHasFixedSize(true)
-                        movieTvShowItemAdapter.addLoadStateListener { loadState ->
-                            setLoadStatePaging(loadState, binding)
-                        }
-                        CoroutineScope(Dispatchers.IO).launch {
-                            movieTvShowItemAdapter.submitData(item.categories)
-                        }
+                tvTitleMovieTvShow.text = item.categoryTitle
+                movieTvShowItemAdapter = MovieTvShowItemAdapter()
+                if (this@MovieTvShowAdapter::movieTvShowItemAdapter.isInitialized) {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        movieTvShowItemAdapter.submitData(item.categories ?: PagingData.empty())
                     }
-                    eventListeners(tvSeeAllMovieTvShow, item.category, item.movie, item.tvShow)
+                    rvMovieTvShow.adapter = movieTvShowItemAdapter
+                    rvMovieTvShow.setHasFixedSize(true)
+                    movieTvShowItemAdapter.addLoadStateListener { loadState ->
+                        setLoadStatePaging(loadState, binding)
+                    }
                 }
+                eventListeners(tvSeeAllMovieTvShow, item.category, item.movie, item.tvShow)
             }
         }
     }

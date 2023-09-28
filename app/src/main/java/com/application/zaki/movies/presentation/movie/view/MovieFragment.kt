@@ -1,24 +1,27 @@
-package com.application.zaki.movies.presentation.movies.view
+package com.application.zaki.movies.presentation.movie.view
 
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
-import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.application.zaki.movies.R
-import com.application.zaki.movies.databinding.FragmentMoviesBinding
+import com.application.zaki.movies.databinding.FragmentMovieBinding
 import com.application.zaki.movies.domain.model.CategoryItem
 import com.application.zaki.movies.domain.model.MovieTvShow
-import com.application.zaki.movies.presentation.base.BaseVBFragment
-import com.application.zaki.movies.presentation.detail.view.DetailFragment.Companion.INTENT_FROM_MOVIE
 import com.application.zaki.movies.presentation.adapter.MovieTvShowAdapter
 import com.application.zaki.movies.presentation.adapter.MovieTvShowSliderAdapter
-import com.application.zaki.movies.presentation.movies.viewmodel.MoviesViewModel
+import com.application.zaki.movies.presentation.base.BaseVBFragment
+import com.application.zaki.movies.presentation.detail.view.DetailFragment.Companion.INTENT_FROM_MOVIE
+import com.application.zaki.movies.presentation.movie.viewmodel.MovieViewModel
+import com.application.zaki.movies.presentation.movietvshow.adapter.MovieTvShowPagingAdapter
 import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.Movie
 import com.application.zaki.movies.utils.Page
@@ -26,13 +29,16 @@ import com.application.zaki.movies.utils.RxDisposer
 import com.application.zaki.movies.utils.TvShow
 import com.application.zaki.movies.utils.gone
 import com.application.zaki.movies.utils.visible
+import com.mancj.materialsearchbar.MaterialSearchBar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.math.abs
 
 @AndroidEntryPoint
-class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>(),
-    MovieTvShowSliderAdapter.OnItemClickCallback, MovieTvShowAdapter.OnEventClickCallback {
+class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
+    MovieTvShowSliderAdapter.OnItemClickCallback, MovieTvShowAdapter.OnEventClickCallback,
+    MaterialSearchBar.OnSearchActionListener, MovieTvShowPagingAdapter.OnItemClickCallback,
+    TextWatcher {
 
     @Inject
     lateinit var movieTvShowSliderAdapter: MovieTvShowSliderAdapter
@@ -40,16 +46,19 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>(),
     @Inject
     lateinit var movieTvShowAdapter: MovieTvShowAdapter
 
+    @Inject
+    lateinit var movieTvShowPagingAdapter: MovieTvShowPagingAdapter
+
     private lateinit var sliderRunnable: Runnable
 
-    private val moviesViewModel by viewModels<MoviesViewModel>()
+    private val movieViewModel by viewModels<MovieViewModel>()
 
     private val categoryItems = mutableListOf<CategoryItem>()
 
     private val sliderHandler = Handler(Looper.getMainLooper())
 
-    override fun getViewBinding(): FragmentMoviesBinding =
-        FragmentMoviesBinding.inflate(layoutInflater)
+    override fun getViewBinding(): FragmentMovieBinding =
+        FragmentMovieBinding.inflate(layoutInflater)
 
     override fun initView() {
         sliderRunnable = Runnable {
@@ -58,18 +67,19 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>(),
             }
         }
 
-        if (moviesViewModel.listMovies.value == null) {
-            moviesViewModel.getListAllMovies(
+        if (movieViewModel.listMovies.value == null) {
+            movieViewModel.getListAllMovies(
                 nowPlayingMovie = Movie.NOW_PLAYING_MOVIES,
                 topRatedMovie = Movie.TOP_RATED_MOVIES,
                 popularMovie = Movie.POPULAR_MOVIES,
                 upComingMovie = Movie.UP_COMING_MOVIES,
                 page = Page.ONE,
+                query = null,
                 rxDisposer = RxDisposer().apply { bind(lifecycle) }
             )
         }
 
-        setAllMovies()
+        observeData()
 
         eventListeners()
     }
@@ -77,18 +87,21 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>(),
     private fun eventListeners() {
         movieTvShowSliderAdapter.setOnItemClickCallback(this)
         movieTvShowAdapter.setOnEventClickCallback(this)
+        binding?.apply {
+            searchBar.setOnSearchActionListener(this@MovieFragment)
+            searchBar.addTextChangeListener(this@MovieFragment)
+        }
     }
 
-    private fun setAllMovies() {
-        setAllMoviesAdapter()
-        moviesViewModel.listMovies.observe(viewLifecycleOwner) { result ->
+    private fun observeData() {
+        movieViewModel.listMovies.observe(viewLifecycleOwner) { result ->
             result.forEachIndexed { index, pairMovie ->
                 val movie = pairMovie.first
                 val moviePaging = pairMovie.second
 
                 if (movie == Movie.NOW_PLAYING_MOVIES) {
-                    configureImageSlider()
                     movieTvShowSliderAdapter.submitData(lifecycle, moviePaging)
+                    configureImageSlider()
                     movieTvShowSliderAdapter.addLoadStateListener { loadState ->
                         setLoadStatePagingSlider(loadState)
                     }
@@ -111,32 +124,53 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>(),
             }
             setAllMoviesAdapter()
         }
+
+        movieViewModel.listSearchMovies.observe(viewLifecycleOwner) { result ->
+            movieTvShowPagingAdapter.submitData(viewLifecycleOwner.lifecycle, result)
+            movieTvShowPagingAdapter.setOnItemClickCallback(this)
+            binding?.apply {
+                rvSearchMovies.adapter = movieTvShowPagingAdapter
+                rvSearchMovies.setHasFixedSize(true)
+            }
+            movieTvShowPagingAdapter.addLoadStateListener { loadState ->
+                setLoadStatePaging(loadState)
+            }
+        }
     }
 
     private fun configureImageSlider() {
-        binding?.viewPagerImageSlider?.apply {
-            adapter = movieTvShowSliderAdapter
-            clipToPadding = false
-            clipChildren = false
-            offscreenPageLimit = 3
-            getChildAt(0)?.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+        binding?.apply {
+            viewPagerImageSlider.apply {
+                adapter = movieTvShowSliderAdapter
+                offscreenPageLimit = 3
+                getChildAt(0)?.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
-            val compositePageTransformer = CompositePageTransformer()
-            compositePageTransformer.addTransformer { page, position ->
-                val r = 1 - abs(position)
-                page.scaleY = 0.95f + r * 0.1f
-            }
-            setPageTransformer(compositePageTransformer)
-
-            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    super.onPageSelected(position)
-                    if (this@MoviesFragment::sliderRunnable.isInitialized) {
-                        sliderHandler.removeCallbacks(sliderRunnable)
-                        sliderHandler.postDelayed(sliderRunnable, 2000L) // slide duration 2 seconds
-                    }
+                val compositePageTransformer = CompositePageTransformer()
+                compositePageTransformer.addTransformer { page, position ->
+                    val r = 1 - abs(position)
+                    page.scaleY = 0.95f + r * 0.1f
                 }
-            })
+                setPageTransformer(compositePageTransformer)
+
+                registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                    override fun onPageSelected(position: Int) {
+                        super.onPageSelected(position)
+                        if (this@MovieFragment::sliderRunnable.isInitialized) {
+                            sliderHandler.removeCallbacks(sliderRunnable)
+                            sliderHandler.postDelayed(
+                                sliderRunnable, 2000L
+                            ) // slide duration 2 seconds
+                        }
+
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            if (position == 4) {
+                                viewPagerImageSlider.setCurrentItem(0, false)
+                            }
+                        }, 2000L)
+                    }
+                })
+            }
+            dotsIndicator.attachTo(viewPagerImageSlider)
         }
     }
 
@@ -162,16 +196,30 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>(),
         }
     }
 
-    private fun setAllMoviesAdapter() {
-        movieTvShowAdapter.submitList(
-            categoryItems.ifEmpty {
-                listOf(
-                    CategoryItem(),
-                    CategoryItem(),
-                    CategoryItem()
-                )
+    private fun setLoadStatePaging(loadState: CombinedLoadStates) {
+        when (loadState.refresh) {
+            is LoadState.Loading -> binding?.apply {
+                shimmerList.visible()
+                shimmerList.startShimmer()
+                rvSearchMovies.gone()
             }
-        )
+
+            is LoadState.NotLoading -> binding?.apply {
+                shimmerList.gone()
+                shimmerList.stopShimmer()
+                rvSearchMovies.visible()
+            }
+
+            is LoadState.Error -> binding?.apply {
+                shimmerList.gone()
+                shimmerList.stopShimmer()
+                rvSearchMovies.gone()
+            }
+        }
+    }
+
+    private fun setAllMoviesAdapter() {
+        movieTvShowAdapter.submitList(categoryItems)
         binding?.apply {
             rvMovies.adapter = movieTvShowAdapter
             rvMovies.setHasFixedSize(true)
@@ -179,14 +227,15 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>(),
     }
 
     private fun navigateToDetailPage(id: Int) {
-        val navigateToDetailFragment = MoviesFragmentDirections.actionMovieFragmentToDetailFragment()
+        val navigateToDetailFragment = MovieFragmentDirections.actionMovieFragmentToDetailFragment()
         navigateToDetailFragment.id = id
         navigateToDetailFragment.intentFrom = INTENT_FROM_MOVIE
         findNavController().navigate(navigateToDetailFragment)
     }
 
     private fun navigateToListPage(category: Category, movie: Movie, tvShow: TvShow) {
-        val navigateToListFragment = MoviesFragmentDirections.actionMovieFragmentToMovieTvShowFragment()
+        val navigateToListFragment =
+            MovieFragmentDirections.actionMovieFragmentToMovieTvShowFragment()
         navigateToListFragment.intentFrom = category.name
         navigateToListFragment.movie = movie
         navigateToListFragment.tvShow = tvShow
@@ -204,6 +253,43 @@ class MoviesFragment : BaseVBFragment<FragmentMoviesBinding>(),
     override fun onItemClicked(data: MovieTvShow?) {
         navigateToDetailPage(data?.id ?: 0)
     }
+
+    override fun onSearchStateChanged(enabled: Boolean) {
+        binding?.apply {
+            if (enabled) {
+                rvSearchMovies.visible()
+                layoutMain.gone()
+            } else {
+                rvSearchMovies.gone()
+                layoutMain.visible()
+            }
+        }
+    }
+
+    override fun onSearchConfirmed(text: CharSequence?) {
+        movieViewModel.getListMovies(
+            movie = null,
+            page = Page.MORE_THAN_ONE,
+            query = text.toString(),
+            rxDisposer = RxDisposer().apply { bind(lifecycle) }
+        )
+    }
+
+    override fun onButtonClicked(buttonCode: Int) {}
+
+    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+    override fun afterTextChanged(text: Editable?) {
+        if (text.toString().isEmpty()) {
+            movieTvShowPagingAdapter.submitData(
+                viewLifecycleOwner.lifecycle,
+                PagingData.empty()
+            )
+        }
+    }
+
 
     override fun onResume() {
         super.onResume()

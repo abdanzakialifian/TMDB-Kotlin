@@ -1,4 +1,4 @@
-package com.application.zaki.movies.presentation.listmovietvshow.view
+package com.application.zaki.movies.presentation.movietvshow.view
 
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -8,8 +8,8 @@ import com.application.zaki.movies.databinding.FragmentListDiscoverBinding
 import com.application.zaki.movies.domain.model.DiscoverItem
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.view.DetailFragment
-import com.application.zaki.movies.presentation.listmovietvshow.adapter.genres.DiscoverGenresAdapter
-import com.application.zaki.movies.presentation.listmovietvshow.viewmodel.DiscoverViewModel
+import com.application.zaki.movies.presentation.movietvshow.adapter.genres.DiscoverGenresAdapter
+import com.application.zaki.movies.presentation.movietvshow.viewmodel.DiscoverViewModel
 import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.RxDisposer
 import dagger.hilt.android.AndroidEntryPoint

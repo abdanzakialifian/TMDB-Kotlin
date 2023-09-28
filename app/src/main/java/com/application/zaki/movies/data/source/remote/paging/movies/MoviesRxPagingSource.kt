@@ -14,8 +14,11 @@ import javax.inject.Inject
 class MoviesRxPagingSource @Inject constructor(private val apiService: ApiService) :
     RxPagingSource<Int, ListMoviesResponse>() {
 
-    private lateinit var page: Page
-    private lateinit var movie: Movie
+    private var page: Page? = null
+
+    private var movie: Movie? = null
+
+    private var query: String? = null
 
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, ListMoviesResponse>> {
         val position = if (page == Page.ONE) {
@@ -24,35 +27,48 @@ class MoviesRxPagingSource @Inject constructor(private val apiService: ApiServic
             params.key ?: INITIAL_POSITION
         }
 
-        return when (movie) {
-            Movie.NOW_PLAYING_MOVIES -> apiService.getNowPlayingMovies(position)
+        return if (query != null && query?.isNotEmpty() == true) {
+            apiService.getSearchMovies(query ?: "", position)
                 .subscribeOn(Schedulers.io())
                 .map { data ->
                     toLoadResult(data, position)
                 }.onErrorReturn { throwable ->
                     LoadResult.Error(throwable)
                 }
-            Movie.POPULAR_MOVIES -> apiService.getPopularMoviesPaging(position)
-                .subscribeOn(Schedulers.io())
-                .map { data ->
-                    toLoadResult(data, position)
-                }.onErrorReturn { throwable ->
-                    LoadResult.Error(throwable)
-                }
-            Movie.TOP_RATED_MOVIES -> apiService.getTopRatedMoviesPaging(position)
-                .subscribeOn(Schedulers.io())
-                .map { data ->
-                    toLoadResult(data, position)
-                }.onErrorReturn { throwable ->
-                    LoadResult.Error(throwable)
-                }
-            Movie.UP_COMING_MOVIES -> apiService.getUpComingMoviesPaging(position)
-                .subscribeOn(Schedulers.io())
-                .map { data ->
-                    toLoadResult(data, position)
-                }.onErrorReturn { throwable ->
-                    LoadResult.Error(throwable)
-                }
+        } else {
+            when (movie) {
+                Movie.NOW_PLAYING_MOVIES -> apiService.getNowPlayingMovies(position)
+                    .subscribeOn(Schedulers.io())
+                    .map { data ->
+                        toLoadResult(data, position)
+                    }.onErrorReturn { throwable ->
+                        LoadResult.Error(throwable)
+                    }
+
+                Movie.POPULAR_MOVIES -> apiService.getPopularMoviesPaging(position)
+                    .subscribeOn(Schedulers.io())
+                    .map { data ->
+                        toLoadResult(data, position)
+                    }.onErrorReturn { throwable ->
+                        LoadResult.Error(throwable)
+                    }
+
+                Movie.TOP_RATED_MOVIES -> apiService.getTopRatedMoviesPaging(position)
+                    .subscribeOn(Schedulers.io())
+                    .map { data ->
+                        toLoadResult(data, position)
+                    }.onErrorReturn { throwable ->
+                        LoadResult.Error(throwable)
+                    }
+
+                else -> apiService.getUpComingMoviesPaging(position)
+                    .subscribeOn(Schedulers.io())
+                    .map { data ->
+                        toLoadResult(data, position)
+                    }.onErrorReturn { throwable ->
+                        LoadResult.Error(throwable)
+                    }
+            }
         }
     }
 
@@ -77,9 +93,10 @@ class MoviesRxPagingSource @Inject constructor(private val apiService: ApiServic
         }
     }
 
-    fun setData(movie: Movie, page: Page) {
+    fun setData(movie: Movie?, page: Page?, query: String?) {
         this.movie = movie
         this.page = page
+        this.query = query
     }
 
     companion object {

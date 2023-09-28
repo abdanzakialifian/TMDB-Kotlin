@@ -22,8 +22,8 @@ class MoviesRepository @Inject constructor(private val remoteDataSource: RemoteD
             data.toDetailMovie()
         }
 
-    override fun getMovies(movie: Movie, page: Page): Flowable<PagingData<MovieTvShow>> =
-        remoteDataSource.getMovies(movie, page).map { pagingData ->
+    override fun getMovies(movie: Movie?, page: Page?, query: String?): Flowable<PagingData<MovieTvShow>> =
+        remoteDataSource.getMovies(movie, page, query).map { pagingData ->
             pagingData.map { data ->
                 data.toMovie()
             }

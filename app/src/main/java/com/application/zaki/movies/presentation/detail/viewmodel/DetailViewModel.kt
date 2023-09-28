@@ -1,8 +1,8 @@
 package com.application.zaki.movies.presentation.detail.viewmodel
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.toLiveData
 import androidx.paging.PagingData
 import com.application.zaki.movies.domain.model.Detail
 import com.application.zaki.movies.domain.model.ReviewItem
@@ -52,7 +52,7 @@ class DetailViewModel @Inject constructor(
             .addToDisposer(rxDisposer)
 
         // convert flowable to livedata
-        return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
+        return subject.toFlowable(BackpressureStrategy.BUFFER).toLiveData()
     }
 
     fun detailTvShows(
@@ -80,7 +80,7 @@ class DetailViewModel @Inject constructor(
             .addToDisposer(rxDisposer)
 
         // convert flowable to livedata
-        return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
+        return subject.toFlowable(BackpressureStrategy.BUFFER).toLiveData()
     }
 
     fun reviewsPaging(
@@ -100,6 +100,6 @@ class DetailViewModel @Inject constructor(
             .addToDisposer(rxDisposer)
 
         // convert flowable to livedata
-        return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
+        return subject.toFlowable(BackpressureStrategy.BUFFER).toLiveData()
     }
 }

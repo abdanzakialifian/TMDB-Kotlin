@@ -17,7 +17,7 @@
         tools:layout="@layout/fragment_favorite" />
     <fragment
         android:id="@+id/movie_tv_show_fragment"
-        android:name="com.application.zaki.movies.presentation.listmovietvshow.view.MovieTvShowFragment"
+        android:name="com.application.zaki.movies.presentation.movietvshow.view.MovieTvShowFragment"
         android:label="fragment_list"
         tools:layout="@layout/fragment_movie_tv_show">
         <action
@@ -58,7 +58,7 @@
     </fragment>
     <fragment
         android:id="@+id/list_discover_fragment"
-        android:name="com.application.zaki.movies.presentation.listmovietvshow.view.ListDiscoverFragment"
+        android:name="com.application.zaki.movies.presentation.movietvshow.view.ListDiscoverFragment"
         android:label="fragment_list_discover"
         tools:layout="@layout/fragment_list_discover">
         <argument
@@ -103,9 +103,9 @@
 
     <fragment
         android:id="@+id/movie_fragment"
-        android:name="com.application.zaki.movies.presentation.movies.view.MoviesFragment"
+        android:name="com.application.zaki.movies.presentation.movie.view.MovieFragment"
         android:label="fragment_tv_shows"
-        tools:layout="@layout/fragment_movies">
+        tools:layout="@layout/fragment_movie">
         <action
             android:id="@+id/action_movie_fragment_to_detailFragment"
             app:destination="@id/detail_fragment" />
@@ -115,8 +115,8 @@
     </fragment>
     <fragment
         android:id="@+id/tv_show_fragment"
-        tools:layout="@layout/fragment_tv_shows"
-        android:name="com.application.zaki.movies.presentation.tvshows.view.TvShowsFragment"
+        tools:layout="@layout/fragment_tv_show"
+        android:name="com.application.zaki.movies.presentation.tvshow.view.TvShowFragment"
         android:label="TvShowsFragment" >
         <action
             android:id="@+id/action_tvShowsFragment_to_detailFragment"

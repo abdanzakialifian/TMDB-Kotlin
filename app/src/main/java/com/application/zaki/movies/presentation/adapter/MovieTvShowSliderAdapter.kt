@@ -39,8 +39,11 @@ class MovieTvShowSliderAdapter @Inject constructor() :
         }
 
     override fun onBindViewHolder(holder: SliderViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val newListRandom = snapshot().items.shuffled()
+        holder.bind(newListRandom[position])
     }
+
+    override fun getItemCount(): Int = 5
 
     interface OnItemClickCallback {
         fun onItemClicked(data: MovieTvShow?)

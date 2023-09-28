@@ -1,4 +1,4 @@
-package com.application.zaki.movies.presentation.listmovietvshow.adapter
+package com.application.zaki.movies.presentation.movietvshow.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -71,7 +71,6 @@ class MovieTvShowPagingAdapter @Inject constructor() :
 
     interface OnItemClickCallback {
         fun onItemClicked(data: MovieTvShow?)
-        fun onItemGenreClicked(data: GenresItem)
     }
 
     companion object {

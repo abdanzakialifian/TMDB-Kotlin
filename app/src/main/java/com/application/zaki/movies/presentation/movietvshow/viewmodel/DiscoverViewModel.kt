@@ -1,8 +1,8 @@
-package com.application.zaki.movies.presentation.listmovietvshow.viewmodel
+package com.application.zaki.movies.presentation.movietvshow.viewmodel
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.toLiveData
 import androidx.paging.PagingData
 import com.application.zaki.movies.domain.model.DiscoverItem
 import com.application.zaki.movies.domain.usecase.GetDiscover
@@ -35,6 +35,6 @@ class DiscoverViewModel @Inject constructor(private val getDiscover: GetDiscover
             .addToDisposer(rxDisposer)
 
         // convert flowable to livedata
-        return LiveDataReactiveStreams.fromPublisher(subject.toFlowable(BackpressureStrategy.BUFFER))
+        return subject.toFlowable(BackpressureStrategy.BUFFER).toLiveData()
     }
 }

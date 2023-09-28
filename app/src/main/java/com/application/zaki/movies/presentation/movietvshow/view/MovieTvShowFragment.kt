@@ -1,17 +1,17 @@
-package com.application.zaki.movies.presentation.listmovietvshow.view
+package com.application.zaki.movies.presentation.movietvshow.view
 
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
-import androidx.paging.PagingData
 import com.application.zaki.movies.R
 import com.application.zaki.movies.databinding.FragmentMovieTvShowBinding
 import com.application.zaki.movies.domain.model.GenresItem
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.presentation.base.BaseVBFragment
-import com.application.zaki.movies.presentation.listmovietvshow.adapter.MovieTvShowPagingAdapter
-import com.application.zaki.movies.presentation.listmovietvshow.viewmodel.MovieTvShowViewModel
+import com.application.zaki.movies.presentation.movietvshow.adapter.MovieTvShowPagingAdapter
+import com.application.zaki.movies.presentation.movietvshow.viewmodel.MovieTvShowViewModel
 import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.Movie
 import com.application.zaki.movies.utils.Page
@@ -48,7 +48,7 @@ class MovieTvShowFragment : BaseVBFragment<FragmentMovieTvShowBinding>(),
                     Movie.TOP_RATED_MOVIES -> resources.getString(R.string.top_rated_movies)
                     else -> resources.getString(R.string.up_coming_movies)
                 }
-                setListMovies(movie)
+                getListMovies(movie)
             }
 
             Category.TV_SHOWS.name -> {
@@ -57,7 +57,7 @@ class MovieTvShowFragment : BaseVBFragment<FragmentMovieTvShowBinding>(),
                     TvShow.POPULAR_TV_SHOWS -> resources.getString(R.string.popular_tv_shows)
                     else -> resources.getString(R.string.on_the_air_tv_shows)
                 }
-                setListTvShows(tvShow)
+                getListTvShows(tvShow)
             }
         }
 
@@ -66,58 +66,74 @@ class MovieTvShowFragment : BaseVBFragment<FragmentMovieTvShowBinding>(),
         }
     }
 
-    private fun setListMovies(movie: Movie) {
+    private fun getListMovies(movie: Movie) {
         if (movieTvShowViewModel.listMovies.value == null) {
             movieTvShowViewModel.getListMovies(
                 movie = movie,
                 page = Page.MORE_THAN_ONE,
+                query = null,
                 rxDisposer = RxDisposer().apply { bind(lifecycle) },
             )
         }
-        movieTvShowViewModel.listMovies.observe(viewLifecycleOwner) { result ->
-            setDataMovieTvShow(result)
-        }
+        observeData()
     }
 
-    private fun setListTvShows(tvShow: TvShow) {
+    private fun getListTvShows(tvShow: TvShow) {
         if (movieTvShowViewModel.listTvShows.value == null) {
             movieTvShowViewModel.getListTvShows(
                 tvShow = tvShow,
                 page = Page.MORE_THAN_ONE,
+                query = null,
                 rxDisposer = RxDisposer().apply { bind(lifecycle) },
             )
         }
+        observeData()
+    }
+
+    private fun observeData() {
+        movieTvShowViewModel.listMovies.observe(viewLifecycleOwner) { result ->
+            movieTvShowPagingAdapter.submitData(lifecycle, result)
+            movieTvShowPagingAdapter.setOnItemClickCallback(this)
+            binding?.apply {
+                rvMovieTvShow.adapter = movieTvShowPagingAdapter
+                rvMovieTvShow.setHasFixedSize(true)
+            }
+            movieTvShowPagingAdapter.addLoadStateListener { loadState ->
+                setLoadStatePaging(loadState)
+            }
+        }
+
         movieTvShowViewModel.listTvShows.observe(viewLifecycleOwner) { result ->
-            setDataMovieTvShow(result)
+            movieTvShowPagingAdapter.submitData(lifecycle, result)
+            movieTvShowPagingAdapter.setOnItemClickCallback(this)
+            binding?.apply {
+                rvMovieTvShow.adapter = movieTvShowPagingAdapter
+                rvMovieTvShow.setHasFixedSize(true)
+            }
+            movieTvShowPagingAdapter.addLoadStateListener { loadState ->
+                setLoadStatePaging(loadState)
+            }
         }
     }
 
-    private fun setDataMovieTvShow(movieTvShowPaging: PagingData<MovieTvShow>) {
-        movieTvShowPagingAdapter.submitData(lifecycle, movieTvShowPaging)
-        movieTvShowPagingAdapter.setOnItemClickCallback(this)
-        binding?.apply {
-            rvMovieTvShow.adapter = movieTvShowPagingAdapter
-            rvMovieTvShow.setHasFixedSize(true)
-        }
-        movieTvShowPagingAdapter.addLoadStateListener { loadState ->
-            when (loadState.refresh) {
-                is LoadState.Loading -> binding?.apply {
-                    shimmerList.visible()
-                    shimmerList.startShimmer()
-                    rvMovieTvShow.gone()
-                }
+    private fun setLoadStatePaging(loadState: CombinedLoadStates) {
+        when (loadState.refresh) {
+            is LoadState.Loading -> binding?.apply {
+                shimmerList.visible()
+                shimmerList.startShimmer()
+                rvMovieTvShow.gone()
+            }
 
-                is LoadState.NotLoading -> binding?.apply {
-                    shimmerList.gone()
-                    shimmerList.stopShimmer()
-                    rvMovieTvShow.visible()
-                }
+            is LoadState.NotLoading -> binding?.apply {
+                shimmerList.gone()
+                shimmerList.stopShimmer()
+                rvMovieTvShow.visible()
+            }
 
-                is LoadState.Error -> binding?.apply {
-                    shimmerList.gone()
-                    shimmerList.stopShimmer()
-                    rvMovieTvShow.gone()
-                }
+            is LoadState.Error -> binding?.apply {
+                shimmerList.gone()
+                shimmerList.stopShimmer()
+                rvMovieTvShow.gone()
             }
         }
     }
@@ -141,9 +157,5 @@ class MovieTvShowFragment : BaseVBFragment<FragmentMovieTvShowBinding>(),
 
     override fun onItemClicked(data: MovieTvShow?) {
         navigateToDetailPage(data?.id ?: 0)
-    }
-
-    override fun onItemGenreClicked(data: GenresItem) {
-        navigateToDiscoverPage(data)
     }
 }

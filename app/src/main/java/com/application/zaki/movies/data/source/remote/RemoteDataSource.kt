@@ -64,49 +64,60 @@ class RemoteDataSource @Inject constructor(
     }).flowable
 
     fun getMovies(
-        movie: Movie, page: Page
-    ): Flowable<PagingData<ListMoviesResponse>> = Pager(config = PagingConfig(
-        pageSize = 5, initialLoadSize = 5
-    ), pagingSourceFactory = {
-        when (movie) {
-            Movie.NOW_PLAYING_MOVIES -> nowPlayingMoviesRxPagingSource.apply {
-                setData(movie, page)
-            }
+        movie: Movie?,
+        page: Page?,
+        query: String?
+    ): Flowable<PagingData<ListMoviesResponse>> = Pager(
+        config = PagingConfig(
+            pageSize = 10,
+            initialLoadSize = 10
+        ), pagingSourceFactory = {
+            when (movie) {
+                Movie.NOW_PLAYING_MOVIES -> nowPlayingMoviesRxPagingSource.apply {
+                    setData(movie, page, query)
+                }
 
-            Movie.POPULAR_MOVIES -> popularMoviesRxPagingSource.apply {
-                setData(movie, page)
-            }
+                Movie.POPULAR_MOVIES -> popularMoviesRxPagingSource.apply {
+                    setData(movie, page, query)
+                }
 
-            Movie.TOP_RATED_MOVIES -> topRatedMoviesRxPagingSource.apply {
-                setData(movie, page)
-            }
+                Movie.TOP_RATED_MOVIES -> topRatedMoviesRxPagingSource.apply {
+                    setData(movie, page, query)
+                }
 
-            Movie.UP_COMING_MOVIES -> upComingMoviesRxPagingSource.apply {
-                setData(movie, page)
+                else -> upComingMoviesRxPagingSource.apply {
+                    setData(movie, page, query)
+                }
             }
         }
-    }).flowable
+    ).flowable
 
-    fun getTvShows(tvShow: TvShow, page: Page): Flowable<PagingData<ListTvShowsResponse>> =
-        Pager(config = PagingConfig(
-            pageSize = 10, initialLoadSize = 10
-        ), pagingSourceFactory = {
-            when (tvShow) {
-                TvShow.AIRING_TODAY_TV_SHOWS -> airingTodayTvShowsRxPagingSource.apply {
-                    setData(tvShow, page)
-                }
+    fun getTvShows(
+        tvShow: TvShow?,
+        page: Page?,
+        query: String?
+    ): Flowable<PagingData<ListTvShowsResponse>> =
+        Pager(
+            config = PagingConfig(
+                pageSize = 10, initialLoadSize = 10
+            ), pagingSourceFactory = {
+                when (tvShow) {
+                    TvShow.AIRING_TODAY_TV_SHOWS -> airingTodayTvShowsRxPagingSource.apply {
+                        setData(tvShow, page, query)
+                    }
 
-                TvShow.TOP_RATED_TV_SHOWS -> topRatedTvShowsRxPagingSource.apply {
-                    setData(tvShow, page)
-                }
+                    TvShow.TOP_RATED_TV_SHOWS -> topRatedTvShowsRxPagingSource.apply {
+                        setData(tvShow, page, query)
+                    }
 
-                TvShow.POPULAR_TV_SHOWS -> popularTvShowsRxPagingSource.apply {
-                    setData(tvShow, page)
-                }
+                    TvShow.POPULAR_TV_SHOWS -> popularTvShowsRxPagingSource.apply {
+                        setData(tvShow, page, query)
+                    }
 
-                TvShow.ON_THE_AIR_TV_SHOWS -> onTheAirTvShowsRxPagingSource.apply {
-                    setData(tvShow, page)
+                    else -> onTheAirTvShowsRxPagingSource.apply {
+                        setData(tvShow, page, query)
+                    }
                 }
             }
-        }).flowable
+        ).flowable
 }

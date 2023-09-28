@@ -84,4 +84,16 @@ interface ApiService {
         @Query("page") page: Int,
         @Query("with_genres") withGenres: String
     ): Single<DiscoverResponse>
+
+    @GET("search/movie")
+    fun getSearchMovies(
+        @Query("query") query: String,
+        @Query("page") page: Int
+    ): Single<MoviesResponse>
+
+    @GET("search/tv")
+    fun getSearchTvShows(
+        @Query("query") query: String,
+        @Query("page") page: Int
+    ): Single<TvShowsResponse>
 }

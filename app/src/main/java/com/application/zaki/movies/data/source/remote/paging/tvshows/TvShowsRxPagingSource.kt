@@ -14,8 +14,11 @@ import javax.inject.Inject
 class TvShowsRxPagingSource @Inject constructor(private val apiService: ApiService) :
     RxPagingSource<Int, ListTvShowsResponse>() {
 
-    private lateinit var page: Page
-    private lateinit var tvShow: TvShow
+    private var page: Page? = null
+
+    private var tvShow: TvShow? = null
+
+    private var query: String? = null
 
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, ListTvShowsResponse>> {
         val position = if (page == Page.ONE) {
@@ -24,39 +27,49 @@ class TvShowsRxPagingSource @Inject constructor(private val apiService: ApiServi
             params.key ?: INITIAL_POSITION
         }
 
-        return when (tvShow) {
-            TvShow.AIRING_TODAY_TV_SHOWS -> apiService.getAiringTodayTvShows(position)
+        return if (query != null && query?.isNotEmpty() == true) {
+            apiService.getSearchTvShows(query ?: "", position)
                 .subscribeOn(Schedulers.io())
                 .map { data ->
                     toLoadResult(data, position)
-                }
-                .onErrorReturn { throwable ->
+                }.onErrorReturn { throwable ->
                     LoadResult.Error(throwable)
                 }
-            TvShow.TOP_RATED_TV_SHOWS -> apiService.getTopRatedTvShowsPaging(position)
-                .subscribeOn(Schedulers.io())
-                .map { data ->
-                    toLoadResult(data, position)
-                }
-                .onErrorReturn { throwable ->
-                    LoadResult.Error(throwable)
-                }
-            TvShow.POPULAR_TV_SHOWS -> apiService.getPopularTvShowsPaging(position)
-                .subscribeOn(Schedulers.io())
-                .map { data ->
-                    toLoadResult(data, position)
-                }
-                .onErrorReturn { throwable ->
-                    LoadResult.Error(throwable)
-                }
-            TvShow.ON_THE_AIR_TV_SHOWS -> apiService.getOnTheAirTvShowsPaging(position)
-                .subscribeOn(Schedulers.io())
-                .map { data ->
-                    toLoadResult(data, position)
-                }
-                .onErrorReturn { throwable ->
-                    LoadResult.Error(throwable)
-                }
+        } else {
+            when (tvShow) {
+                TvShow.AIRING_TODAY_TV_SHOWS -> apiService.getAiringTodayTvShows(position)
+                    .subscribeOn(
+                        Schedulers.io()
+                    ).map { data ->
+                        toLoadResult(data, position)
+                    }.onErrorReturn { throwable ->
+                        LoadResult.Error(throwable)
+                    }
+
+                TvShow.TOP_RATED_TV_SHOWS -> apiService.getTopRatedTvShowsPaging(position)
+                    .subscribeOn(Schedulers.io())
+                    .map { data ->
+                        toLoadResult(data, position)
+                    }.onErrorReturn { throwable ->
+                        LoadResult.Error(throwable)
+                    }
+
+                TvShow.POPULAR_TV_SHOWS -> apiService.getPopularTvShowsPaging(position)
+                    .subscribeOn(Schedulers.io())
+                    .map { data ->
+                        toLoadResult(data, position)
+                    }.onErrorReturn { throwable ->
+                        LoadResult.Error(throwable)
+                    }
+
+                else -> apiService.getOnTheAirTvShowsPaging(position)
+                    .subscribeOn(Schedulers.io())
+                    .map { data ->
+                        toLoadResult(data, position)
+                    }.onErrorReturn { throwable ->
+                        LoadResult.Error(throwable)
+                    }
+            }
         }
     }
 
@@ -82,9 +95,10 @@ class TvShowsRxPagingSource @Inject constructor(private val apiService: ApiServi
         }
     }
 
-    fun setData(tvShow: TvShow, page: Page) {
+    fun setData(tvShow: TvShow?, page: Page?, query: String?) {
         this.tvShow = tvShow
         this.page = page
+        this.query = query
     }
 
     companion object {

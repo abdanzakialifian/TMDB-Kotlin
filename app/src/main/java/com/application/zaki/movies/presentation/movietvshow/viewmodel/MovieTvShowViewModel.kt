@@ -1,4 +1,4 @@
-package com.application.zaki.movies.presentation.listmovietvshow.viewmodel
+package com.application.zaki.movies.presentation.movietvshow.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,11 +31,12 @@ class MovieTvShowViewModel @Inject constructor(private val movieTvShowWrapper: M
     val listTvShows get() = _listTvShows.toLiveData()
 
     fun getListMovies(
-        movie: Movie,
-        page: Page,
+        movie: Movie?,
+        page: Page?,
+        query: String?,
         rxDisposer: RxDisposer
     ) {
-        movieTvShowWrapper.getListMovies(movie, page)
+        movieTvShowWrapper.getListMovies(movie, page, query)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .cachedIn(viewModelScope)
@@ -46,11 +47,12 @@ class MovieTvShowViewModel @Inject constructor(private val movieTvShowWrapper: M
     }
 
     fun getListTvShows(
-        tvShow: TvShow,
-        page: Page,
+        tvShow: TvShow?,
+        page: Page?,
+        query: String?,
         rxDisposer: RxDisposer
     ) {
-        movieTvShowWrapper.getListTvShows(tvShow, page)
+        movieTvShowWrapper.getListTvShows(tvShow, page, query)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .cachedIn(viewModelScope)

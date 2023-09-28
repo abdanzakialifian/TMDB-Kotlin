@@ -17,18 +17,19 @@ import javax.inject.Singleton
 @Singleton
 class GetListAllTvShows @Inject constructor(private val iTvShowsRepository: ITvShowsRepository) {
     operator fun invoke(
-        airingTodayTvShow: TvShow,
-        topRatedTvShow: TvShow,
-        popularTvShow: TvShow,
-        onTheAirTvShow: TvShow,
-        page: Page,
+        airingTodayTvShow: TvShow?,
+        topRatedTvShow: TvShow?,
+        popularTvShow: TvShow?,
+        onTheAirTvShow: TvShow?,
+        page: Page?,
+        query: String?,
         scope: CoroutineScope
     ): Flowable<List<Pair<TvShow, PagingData<MovieTvShow>>>> {
         return Flowable.zip(
-            iTvShowsRepository.getTvShows(airingTodayTvShow, page).cachedIn(scope),
-            iTvShowsRepository.getTvShows(topRatedTvShow, page).cachedIn(scope),
-            iTvShowsRepository.getTvShows(popularTvShow, page).cachedIn(scope),
-            iTvShowsRepository.getTvShows(onTheAirTvShow, page).cachedIn(scope),
+            iTvShowsRepository.getTvShows(airingTodayTvShow, page, query).cachedIn(scope),
+            iTvShowsRepository.getTvShows(topRatedTvShow, page, query).cachedIn(scope),
+            iTvShowsRepository.getTvShows(popularTvShow, page, query).cachedIn(scope),
+            iTvShowsRepository.getTvShows(onTheAirTvShow, page, query).cachedIn(scope),
             Function4 { airingTodayTvShowPaging, topRatedTvShowPaging, popularTvShowPaging, onTheAirTvShowPaging ->
                 return@Function4 listOf(
                     Pair(TvShow.AIRING_TODAY_TV_SHOWS, airingTodayTvShowPaging),

@@ -11,7 +11,8 @@ interface IMoviesRepository {
     fun getDetailMovies(movieId: String): Flowable<Detail>
 
     fun getMovies(
-        movie: Movie,
-        page: Page
+        movie: Movie?,
+        page: Page?,
+        query: String?
     ): Flowable<PagingData<MovieTvShow>>
 }
