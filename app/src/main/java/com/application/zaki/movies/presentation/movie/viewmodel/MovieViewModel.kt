@@ -27,6 +27,9 @@ class MovieViewModel @Inject constructor(private val movieWrapper: MovieWrapper)
     private val _listSearchMovies = MutableLiveData<PagingData<MovieTvShow>>()
     val listSearchMovies get() = _listSearchMovies.toLiveData()
 
+    private val _isSearchStateChanged = MutableLiveData(false)
+    val isSearchStateChanged get() = _isSearchStateChanged.toLiveData()
+
     fun getListAllMovies(
         nowPlayingMovie: Movie?,
         topRatedMovie: Movie?,
@@ -68,5 +71,9 @@ class MovieViewModel @Inject constructor(private val movieWrapper: MovieWrapper)
                 _listSearchMovies.postValue(data)
             }
             .addToDisposer(rxDisposer)
+    }
+
+    fun setIsSearchStateChanged(isSearchStateChanged: Boolean) {
+        this._isSearchStateChanged.postValue(isSearchStateChanged)
     }
 }

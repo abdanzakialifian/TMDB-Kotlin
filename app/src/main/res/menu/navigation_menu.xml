@@ -14,4 +14,9 @@
         android:id="@+id/favorite_fragment"
         android:icon="@drawable/ic_favorite_32_outline"
         android:title="@string/favorite" />
+
+    <item
+        android:id="@+id/search_fragment"
+        android:icon="@drawable/ic_setting_32_outline"
+        android:title="@string/setting" />
 </menu>

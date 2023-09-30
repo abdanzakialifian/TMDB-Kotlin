@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:backgroundTint="@color/blue"
     app:cardCornerRadius="10dp"
     app:cardUseCompatPadding="true">
 
@@ -16,11 +15,11 @@
             android:id="@+id/img_poster"
             android:layout_width="120dp"
             android:layout_height="0dp"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/avatars"
-            android:scaleType="centerCrop" />
+            tools:src="@tools:sample/avatars" />
 
         <TextView
             android:id="@+id/tv_year"
@@ -41,11 +40,9 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="10dp"
-            android:elevation="10dp"
             android:ellipsize="end"
             android:fontFamily="@font/montserrat_semi_bold"
             android:maxLines="1"
-            android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/img_poster"
@@ -63,6 +60,7 @@
             android:max="5"
             android:progressTint="@color/yellow"
             android:rating="3"
+            android:numStars="5"
             android:secondaryProgressTint="@color/yellow"
             android:stepSize="0.1"
             android:transformPivotX="0dp"
@@ -70,7 +68,6 @@
             app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
         <TextView
-            android:textColor="@color/white"
             android:id="@+id/tv_rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -81,8 +78,8 @@
             android:textSize="10sp"
             app:layout_constraintStart_toEndOf="@id/img_poster"
             app:layout_constraintTop_toBottomOf="@id/rating_bar"
-            tools:text="8.7"
-            tools:ignore="SmallSp" />
+            tools:ignore="SmallSp"
+            tools:text="8.7" />
 
         <TextView
             android:id="@+id/tv_overview"

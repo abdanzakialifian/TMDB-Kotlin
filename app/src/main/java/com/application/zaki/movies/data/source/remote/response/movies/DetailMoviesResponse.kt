@@ -69,7 +69,7 @@ data class DetailMoviesResponse(
 	val releaseDate: String? = null,
 
 	@field:SerializedName("vote_average")
-	val voteAverage: Any? = null,
+	val voteAverage: Float? = null,
 
 	@field:SerializedName("belongs_to_collection")
 	val belongsToCollection: BelongsToCollectionResponse? = null,

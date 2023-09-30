@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Movies</string>
+    <string name="app_name">TMDB</string>
     <string name="popular_movies">Popular movies</string>
     <string name="see_all">See all</string>
     <string name="top_rated_movies">Top rated movies</string>
@@ -12,4 +12,11 @@
     <string name="popular_tv_shows">Popular tv shows</string>
     <string name="top_cast">Top Cast</string>
     <string name="reviews">Reviews</string>
+    <string name="search_movies">Search Movies</string>
+    <string name="search_tv_shows">Search Tv Shows</string>
+    <string name="setting">Setting</string>
+    <string name="genres">Genres : </string>
+    <string name="play_trailer">Play Trailer</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

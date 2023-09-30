@@ -161,7 +161,8 @@ object DataMapper {
             homepage = homepage,
             status = status,
             reviews = reviews,
-            videos = videos
+            videos = videos,
+            runtime = runtime
         )
     }
 
@@ -251,7 +252,8 @@ object DataMapper {
             homepage = homepage,
             status = status,
             reviews = reviews,
-            videos = videos
+            videos = videos,
+            runtime = lastEpisodeToAir?.runtime
         )
     }
 }

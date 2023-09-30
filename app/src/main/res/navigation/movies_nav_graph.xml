@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/search_fragment"
-        android:name="com.application.zaki.movies.presentation.search.SearchFragment"
+        android:name="com.application.zaki.movies.presentation.setting.SettingFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_setting" />
     <fragment
         android:id="@+id/favorite_fragment"
         android:name="com.application.zaki.movies.presentation.favorite.FavoriteFragment"
@@ -88,7 +88,7 @@
     </fragment>
     <fragment
         android:id="@+id/reviews_fragment"
-        android:name="com.application.zaki.movies.presentation.reviews.ReviewsFragment"
+        android:name="com.application.zaki.movies.presentation.detail.view.ReviewsFragment"
         android:label="fragment_reviews"
         tools:layout="@layout/fragment_reviews">
         <argument

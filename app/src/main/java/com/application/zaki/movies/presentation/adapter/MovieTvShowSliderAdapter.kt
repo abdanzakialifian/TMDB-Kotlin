@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListMovieTvShowSliderBinding
 import com.application.zaki.movies.domain.model.MovieTvShow
-import com.application.zaki.movies.utils.loadImageUrl
+import com.application.zaki.movies.utils.loadBackdropImageUrl
 import javax.inject.Inject
 
 class MovieTvShowSliderAdapter @Inject constructor() :
@@ -23,7 +23,7 @@ class MovieTvShowSliderAdapter @Inject constructor() :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: MovieTvShow?) {
             item?.backdropPath?.let {
-                binding.imgSlider.loadImageUrl(it)
+                binding.imgSlider.loadBackdropImageUrl(it)
             }
             itemView.setOnClickListener {
                 onItemClickCallback.onItemClicked(item)

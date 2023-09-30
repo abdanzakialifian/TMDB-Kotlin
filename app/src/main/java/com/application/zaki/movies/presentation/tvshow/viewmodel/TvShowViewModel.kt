@@ -30,6 +30,9 @@ class TvShowViewModel @Inject constructor(private val tvShowWrapper: TvShowWrapp
         MutableLiveData()
     val listSearchTvShows get() = _listSearchTvShows.toLiveData()
 
+    private val _isSearchStateChanged = MutableLiveData(false)
+    val isSearchStateChanged get() = _isSearchStateChanged.toLiveData()
+
     fun getListAllTvShows(
         airingTodayTvShow: TvShow?,
         topRatedTvShow: TvShow?,
@@ -70,5 +73,9 @@ class TvShowViewModel @Inject constructor(private val tvShowWrapper: TvShowWrapp
                 _listSearchTvShows.postValue(data)
             }
             .addToDisposer(rxDisposer)
+    }
+
+    fun setIsSearchStateChanged(isSearchStateChanged: Boolean) {
+        this._isSearchStateChanged.postValue(isSearchStateChanged)
     }
 }

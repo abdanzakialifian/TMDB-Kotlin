@@ -10,8 +10,8 @@
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        android:background="@color/dark_blue"
         app:elevation="0dp"
+        android:background="@color/dark_red"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,10 +22,11 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/img_back"
+                style="@style/StyleIconTint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:src="@drawable/ic_arrow_back_white_28"
+                android:src="@drawable/ic_arrow_back_28"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -36,8 +37,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/montserrat_semi_bold"
-                android:textColor="@color/white"
                 android:textSize="18sp"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/img_back"
                 app:layout_constraintTop_toTopOf="parent"
@@ -90,13 +91,13 @@
         android:id="@+id/rv_movie_tv_show"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone"
         android:layout_marginHorizontal="8dp"
+        android:visibility="gone"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/app_bar_layout"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_list_movie_tv_show_paging" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

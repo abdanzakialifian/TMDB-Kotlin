@@ -11,7 +11,11 @@
     <color name="light_blue">#01b4e4</color>
     <color name="grey200">#DDDDDD</color>
     <color name="grey_fifty_percent">#807F8487</color>
+    <color name="grey_twenty_percent">#337F8487</color>
+    <color name="white_fifty_percent">#80FFFFFF</color>
     <color name="blue">#194473</color>
     <color name="blue_thirty_percent">#4D194473</color>
     <color name="yellow">#FDCC0D</color>
+    <color name="red">#F30404</color>
+    <color name="dark_red">#A50404</color>
 </resources>

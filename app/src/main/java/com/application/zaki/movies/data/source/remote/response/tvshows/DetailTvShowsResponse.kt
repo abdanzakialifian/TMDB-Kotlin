@@ -78,7 +78,7 @@ data class DetailTvShowsResponse(
     val originalName: String? = null,
 
     @field:SerializedName("vote_average")
-    val voteAverage: Any? = null,
+    val voteAverage: Float? = null,
 
     @field:SerializedName("name")
     val name: String? = null,

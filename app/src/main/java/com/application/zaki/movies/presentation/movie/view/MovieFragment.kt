@@ -19,7 +19,6 @@ import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.presentation.adapter.MovieTvShowAdapter
 import com.application.zaki.movies.presentation.adapter.MovieTvShowSliderAdapter
 import com.application.zaki.movies.presentation.base.BaseVBFragment
-import com.application.zaki.movies.presentation.detail.view.DetailFragment.Companion.INTENT_FROM_MOVIE
 import com.application.zaki.movies.presentation.movie.viewmodel.MovieViewModel
 import com.application.zaki.movies.presentation.movietvshow.adapter.MovieTvShowPagingAdapter
 import com.application.zaki.movies.utils.Category
@@ -28,6 +27,7 @@ import com.application.zaki.movies.utils.Page
 import com.application.zaki.movies.utils.RxDisposer
 import com.application.zaki.movies.utils.TvShow
 import com.application.zaki.movies.utils.gone
+import com.application.zaki.movies.utils.hideKeyboard
 import com.application.zaki.movies.utils.visible
 import com.mancj.materialsearchbar.MaterialSearchBar
 import dagger.hilt.android.AndroidEntryPoint
@@ -136,6 +136,22 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
                 setLoadStatePaging(loadState)
             }
         }
+
+        movieViewModel.isSearchStateChanged.observe(viewLifecycleOwner) { isSearchStateChanged ->
+            binding?.apply {
+                if (isSearchStateChanged) {
+                    rvSearchMovies.visible()
+                    layoutMain.gone()
+                } else {
+                    rvSearchMovies.gone()
+                    layoutMain.visible()
+                    movieTvShowPagingAdapter.submitData(
+                        viewLifecycleOwner.lifecycle,
+                        PagingData.empty()
+                    )
+                }
+            }
+        }
     }
 
     private fun configureImageSlider() {
@@ -229,7 +245,7 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
     private fun navigateToDetailPage(id: Int) {
         val navigateToDetailFragment = MovieFragmentDirections.actionMovieFragmentToDetailFragment()
         navigateToDetailFragment.id = id
-        navigateToDetailFragment.intentFrom = INTENT_FROM_MOVIE
+        navigateToDetailFragment.intentFrom = Category.MOVIES.name
         findNavController().navigate(navigateToDetailFragment)
     }
 
@@ -255,15 +271,7 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
     }
 
     override fun onSearchStateChanged(enabled: Boolean) {
-        binding?.apply {
-            if (enabled) {
-                rvSearchMovies.visible()
-                layoutMain.gone()
-            } else {
-                rvSearchMovies.gone()
-                layoutMain.visible()
-            }
-        }
+        movieViewModel.setIsSearchStateChanged(enabled)
     }
 
     override fun onSearchConfirmed(text: CharSequence?) {
@@ -273,6 +281,9 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
             query = text.toString(),
             rxDisposer = RxDisposer().apply { bind(lifecycle) }
         )
+
+        // hide keyboard after search
+        requireActivity().hideKeyboard()
     }
 
     override fun onButtonClicked(buttonCode: Int) {}

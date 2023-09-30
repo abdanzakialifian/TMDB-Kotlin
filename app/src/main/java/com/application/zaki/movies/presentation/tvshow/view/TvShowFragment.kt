@@ -28,6 +28,7 @@ import com.application.zaki.movies.utils.Page
 import com.application.zaki.movies.utils.RxDisposer
 import com.application.zaki.movies.utils.TvShow
 import com.application.zaki.movies.utils.gone
+import com.application.zaki.movies.utils.hideKeyboard
 import com.application.zaki.movies.utils.visible
 import com.mancj.materialsearchbar.MaterialSearchBar
 import dagger.hilt.android.AndroidEntryPoint
@@ -134,6 +135,22 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
             }
             movieTvShowPagingAdapter.addLoadStateListener { loadState ->
                 setLoadStatePaging(loadState)
+            }
+        }
+
+        tvShowViewModel.isSearchStateChanged.observe(viewLifecycleOwner) { isSearchStateChanged ->
+            binding?.apply {
+                if (isSearchStateChanged) {
+                    rvSearchTvShows.visible()
+                    layoutMain.gone()
+                } else {
+                    rvSearchTvShows.gone()
+                    layoutMain.visible()
+                    movieTvShowPagingAdapter.submitData(
+                        viewLifecycleOwner.lifecycle,
+                        PagingData.empty()
+                    )
+                }
             }
         }
     }
@@ -256,15 +273,7 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
     }
 
     override fun onSearchStateChanged(enabled: Boolean) {
-        binding?.apply {
-            if (enabled) {
-                rvSearchTvShows.visible()
-                layoutMain.gone()
-            } else {
-                rvSearchTvShows.gone()
-                layoutMain.visible()
-            }
-        }
+        tvShowViewModel.setIsSearchStateChanged(enabled)
     }
 
     override fun onSearchConfirmed(text: CharSequence?) {
@@ -274,6 +283,9 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
             query = text.toString(),
             rxDisposer = RxDisposer().apply { bind(lifecycle) }
         )
+
+        // hide keyboard after search
+        requireActivity().hideKeyboard()
     }
 
     override fun onButtonClicked(buttonCode: Int) {}

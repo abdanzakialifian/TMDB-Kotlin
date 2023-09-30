@@ -12,10 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:visibility="visible">
 
         <include layout="@layout/item_list_movie_tv_show_shimmer_placeholder" />
 
@@ -34,9 +31,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="@font/montserrat_regular"
+            android:fontFamily="@font/montserrat_medium"
             android:text="@string/top_rated_movies"
-            android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -44,13 +40,12 @@
             android:id="@+id/tv_see_all_movie_tv_show"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_rounded_see_all"
-            android:fontFamily="@font/montserrat_regular"
+            android:fontFamily="@font/montserrat_medium"
             android:paddingHorizontal="10dp"
             android:paddingVertical="4dp"
+            android:textColor="@color/red"
             android:text="@string/see_all"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
 
     </LinearLayout>
 
@@ -58,7 +53,7 @@
         android:id="@+id/rv_movie_tv_show"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="6dp"
         android:clipToPadding="false"
         android:orientation="horizontal"
         android:paddingHorizontal="16dp"

@@ -6,10 +6,10 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListMovieTvShowPagingBinding
-import com.application.zaki.movies.domain.model.GenresItem
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.utils.convertDateText
 import com.application.zaki.movies.utils.loadImageUrl
+import java.math.RoundingMode
 import javax.inject.Inject
 
 class MovieTvShowPagingAdapter @Inject constructor() :
@@ -33,7 +33,7 @@ class MovieTvShowPagingAdapter @Inject constructor() :
                     }
 
                     releaseDate?.let { releaseDate ->
-                        tvYear.text = releaseDate.convertDateText("dd MMMM yyyy", "yyyy-MM-dd")
+                        tvYear.text = releaseDate.convertDateText("dd MMM yyyy", "yyyy-MM-dd")
                     }
 
                     name?.let { name ->
@@ -41,8 +41,10 @@ class MovieTvShowPagingAdapter @Inject constructor() :
                     }
 
                     voteAverage?.let { voteAverage ->
-                        ratingBar.rating = (voteAverage - 5.0).toFloat()
-                        tvRating.text = (voteAverage - 5.0).toFloat().toString()
+                        val convertRating =
+                            voteAverage.toBigDecimal().setScale(1, RoundingMode.UP).toDouble()
+                        ratingBar.rating = (convertRating / 2).toFloat()
+                        tvRating.text = convertRating.toFloat().toString()
                     }
 
                     overview?.let { overview ->

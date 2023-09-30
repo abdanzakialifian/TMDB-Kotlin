@@ -12,13 +12,14 @@ data class Detail(
     val overview: String? = null,
     val posterPath: String? = null,
     val releaseDate: String? = null,
-    val voteAverage: Any? = null,
+    val voteAverage: Float? = null,
     val tagline: String? = null,
     val adult: Boolean? = null,
     val homepage: String? = null,
     val status: String? = null,
     val reviews: List<ReviewItem>? = null,
     val videos: List<Videos>? = null,
+    val runtime: Int? = null
 )
 
 data class CastItem(
