@@ -72,7 +72,8 @@ class MovieTvShowFragment : BaseVBFragment<FragmentMovieTvShowBinding>(),
                 movie = movie,
                 page = Page.MORE_THAN_ONE,
                 query = null,
-                rxDisposer = RxDisposer().apply { bind(lifecycle) },
+                movieId = null,
+                rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) },
             )
         }
         observeData()
@@ -84,7 +85,7 @@ class MovieTvShowFragment : BaseVBFragment<FragmentMovieTvShowBinding>(),
                 tvShow = tvShow,
                 page = Page.MORE_THAN_ONE,
                 query = null,
-                rxDisposer = RxDisposer().apply { bind(lifecycle) },
+                rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) },
             )
         }
         observeData()
@@ -92,7 +93,7 @@ class MovieTvShowFragment : BaseVBFragment<FragmentMovieTvShowBinding>(),
 
     private fun observeData() {
         movieTvShowViewModel.listMovies.observe(viewLifecycleOwner) { result ->
-            movieTvShowPagingAdapter.submitData(lifecycle, result)
+            movieTvShowPagingAdapter.submitData(viewLifecycleOwner.lifecycle, result)
             movieTvShowPagingAdapter.setOnItemClickCallback(this)
             binding?.apply {
                 rvMovieTvShow.adapter = movieTvShowPagingAdapter
@@ -104,7 +105,7 @@ class MovieTvShowFragment : BaseVBFragment<FragmentMovieTvShowBinding>(),
         }
 
         movieTvShowViewModel.listTvShows.observe(viewLifecycleOwner) { result ->
-            movieTvShowPagingAdapter.submitData(lifecycle, result)
+            movieTvShowPagingAdapter.submitData(viewLifecycleOwner.lifecycle, result)
             movieTvShowPagingAdapter.setOnItemClickCallback(this)
             binding?.apply {
                 rvMovieTvShow.adapter = movieTvShowPagingAdapter

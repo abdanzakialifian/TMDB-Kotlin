@@ -76,7 +76,7 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
                 onTheAirTvShow = TvShow.ON_THE_AIR_TV_SHOWS,
                 page = Page.ONE,
                 query = null,
-                rxDisposer = RxDisposer().apply { bind(lifecycle) }
+                rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
             )
         }
         observeData()
@@ -102,7 +102,7 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
 
                 if (tvShow == TvShow.AIRING_TODAY_TV_SHOWS) {
                     configureImageSlider()
-                    movieTvShowSliderAdapter.submitData(lifecycle, tvShowPaging)
+                    movieTvShowSliderAdapter.submitData(viewLifecycleOwner.lifecycle, tvShowPaging)
                     movieTvShowSliderAdapter.addLoadStateListener { loadState ->
                         setLoadStatePagingSlider(loadState)
                     }
@@ -281,7 +281,7 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
             tvShow = null,
             page = Page.MORE_THAN_ONE,
             query = text.toString(),
-            rxDisposer = RxDisposer().apply { bind(lifecycle) }
+            rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
         )
 
         // hide keyboard after search

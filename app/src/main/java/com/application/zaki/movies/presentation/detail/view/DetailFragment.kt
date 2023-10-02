@@ -1,8 +1,8 @@
 package com.application.zaki.movies.presentation.detail.view
 
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.application.zaki.movies.R
 import com.application.zaki.movies.databinding.FragmentDetailBinding
@@ -12,6 +12,7 @@ import com.application.zaki.movies.presentation.detail.adapter.CastMoviesAdapter
 import com.application.zaki.movies.presentation.detail.adapter.DetailPagerAdapter
 import com.application.zaki.movies.presentation.detail.adapter.ReviewsAdapter
 import com.application.zaki.movies.presentation.detail.viewmodel.DetailViewModel
+import com.application.zaki.movies.utils.AppBarStateChangedListener
 import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.RxDisposer
 import com.application.zaki.movies.utils.UiState
@@ -19,6 +20,7 @@ import com.application.zaki.movies.utils.convertDateText
 import com.application.zaki.movies.utils.fromMinutesToHHmm
 import com.application.zaki.movies.utils.loadBackdropImageUrl
 import com.application.zaki.movies.utils.loadImageUrl
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.tabs.TabLayoutMediator
@@ -43,91 +45,48 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
         FragmentDetailBinding.inflate(layoutInflater)
 
     override fun initView() {
-        setDetailInformation(args.id.toString(), args.intentFrom)
-//        binding?.tvSeeAll?.setOnClickListener {
-//            navigateToReviewsPage()
-//        }
-    }
+        val id = args.id.toString()
+        val intentFrom = args.intentFrom
 
-    private fun setDetailInformation(id: String, intentFrom: String) {
         if (intentFrom == Category.MOVIES.name) {
-            detailViewModel.detailMovies(RxDisposer().apply { bind(lifecycle) }, id)
-                .observe(viewLifecycleOwner) { result ->
-                    when (result) {
-                        is UiState.Loading -> {}
-                        is UiState.Success -> {
-                            showDataDetail(result.data)
-                        }
-
-                        is UiState.Error -> {}
-                        is UiState.Empty -> {}
-                    }
-                }
+            if (detailViewModel.detailData.value == null) {
+                detailViewModel.detailMovies(
+                    movieId = id,
+                    rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) })
+            }
         } else {
-            detailViewModel.detailTvShows(RxDisposer().apply { bind(lifecycle) }, id)
-                .observe(viewLifecycleOwner) { result ->
-                    when (result) {
-                        is UiState.Loading -> {}
-                        is UiState.Success -> {
-                            showDataDetail(result.data)
-                        }
-
-                        is UiState.Error -> {
-
-                        }
-
-                        is UiState.Empty -> {}
-                    }
-                }
+            if (detailViewModel.detailData.value == null) {
+                detailViewModel.detailTvShows(
+                    tvId = id,
+                    rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) })
+            }
         }
+
+        observeData(intentFrom)
     }
 
-    private fun setYoutubeTrailer(keyYoutube: String) {
-//        binding?.apply {
-//            viewLifecycleOwner.lifecycle.addObserver(youtubePlayerView)
-//            youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-//                override fun onError(
-//                    youTubePlayer: YouTubePlayer,
-//                    error: PlayerConstants.PlayerError,
-//                ) {
-//                    showBackdropImage()
-//                    youTubePlayer.seekTo(0F)
-//                }
-//
-//                override fun onReady(youTubePlayer: YouTubePlayer) {
-//                    youTubePlayer.loadVideo(keyYoutube, 0F)
-//                }
-//
-//                override fun onStateChange(
-//                    youTubePlayer: YouTubePlayer,
-//                    state: PlayerConstants.PlayerState,
-//                ) {
-//                    if (state == PlayerConstants.PlayerState.ENDED) {
-//                        showBackdropImage()
-//                        youTubePlayer.seekTo(0F)
-//                    }
-//                }
-//            })
-//        }
+    private fun observeData(intentFrom: String) {
+        detailViewModel.detailDataState.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is UiState.Loading -> {}
+                is UiState.Success -> {
+                    showDataDetail(result.data)
+                    detailViewModel.setDetailData(intentFrom, result.data)
+                }
+
+                is UiState.Error -> {}
+                is UiState.Empty -> {}
+            }
+        }
     }
 
     private fun showDataDetail(data: Detail) {
         val convertRating =
             data.voteAverage?.toBigDecimal()?.setScale(1, RoundingMode.UP)?.toDouble()
-        val genres = ArrayList<String>()
         data.genres?.forEach {
-            genres.add(it.name ?: "")
             addChipToGroup(it.name ?: "")
         }
-        val listKey = ArrayList<String>()
-        if (data.videos?.isNotEmpty() == true) {
-            data.videos.forEach {
-                listKey.add(it.key ?: "")
-            }
-        } else {
-            listKey.add("")
-        }
-        val randomKey = listKey.random()
+        setViewPager(data)
 
         binding?.apply {
             imgBackdrop.loadBackdropImageUrl(data.backdropPath ?: "")
@@ -139,45 +98,31 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                 .append(" \u25CF ")
                 .append(data.releaseDate?.convertDateText("dd MMM yyyy", "yyyy-MM-dd"))
             tvRating.text = (convertRating ?: 0).toString()
+            appBarLayout.addOnOffsetChangedListener(object : AppBarStateChangedListener() {
+                override fun onStateChanged(appBarLayout: AppBarLayout?, state: State?) {
+                    if (state == State.COLLAPSED) {
+                        collapsingToolbarLayout.title = data.title
+                        toolbar.setBackgroundColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.dark_red
+                            )
+                        )
+                    } else {
+                        collapsingToolbarLayout.title = ""
+                        toolbar.setBackgroundColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                android.R.color.transparent
+                            )
+                        )
+                    }
+                }
+            })
         }
-
-        setViewPager()
-
-//        binding?.apply {
-//            imgDetail.loadBackdropImageUrl(data.backdropPath ?: "")
-//            playAnimation.setOnClickListener {
-//                playAnimation.playAnimation()
-//                Handler(Looper.getMainLooper()).postDelayed({
-//                    setYoutubeTrailer(randomKey)
-//                    imgDetail.gone()
-//                    playAnimation.gone()
-//                    youtubePlayerView.visible()
-//                }, DELAY_PLAY_TRAILER_YOUTUBE)
-//            }
-//            tvRating.text = convertRating.toString()
-//            tvVote.text = data.voteCount.toString()
-//            tvTitle.text = data.title
-//            tvSubTitle.text =
-//                StringBuilder().append(genres.joinToString(", "))
-//                    .append(" \u25CF ").append(
-//                        data.releaseDate?.convertDateText(
-//                            "dd MMM yy",
-//                            "yyyy-MM-dd"
-//                        )
-//                    )
-//            tvOverview.text = data.overview
-//
-//            castMoviesAdapter.submitList(data.cast)
-//            rvCast.adapter = castMoviesAdapter
-//            rvCast.setHasFixedSize(true)
-//
-//            reviewsAdapter.submitList(data.reviews)
-//            rvReviews.adapter = reviewsAdapter
-//            rvReviews.setHasFixedSize(true)
-//        }
     }
 
-    private fun setViewPager() {
+    private fun setViewPager(data: Detail) {
         val fragments =
             listOf(OverviewFragment(), CastCrewFragment(), ReviewsFragment(), SimilarFragment())
         val titles = listOf("Overview", "Cast & Crew", "Reviews", "Similar")
@@ -187,7 +132,9 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
             val detailPagerAdapter =
                 DetailPagerAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
             detailPagerAdapter.setFragments(fragments)
+            detailPagerAdapter.setDataForOverviewFragment(data.overview ?: "")
             viewPager?.adapter = detailPagerAdapter
+            viewPager?.isUserInputEnabled = false
             if (tabLayout != null && viewPager != null) {
                 TabLayoutMediator(tabLayout, viewPager) { tab, position ->
                     tab.text = titles[position]
@@ -207,74 +154,6 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
         chip.isCloseIconVisible = false
         chip.isClickable = false
         binding?.chipGroup?.addView(chip as View)
-    }
-
-//    private fun showDataTvShow(data: DetailTvShows) {
-//        binding?.apply {
-//            val rating = data.voteAverage.toString().toDouble()
-//            val convertRating = (rating * 100.0).roundToInt() / 100.0
-//            val genres = ArrayList<String>()
-//            data.genres?.forEach {
-//                genres.add(it.name ?: "")
-//            }
-//            val listKey = ArrayList<String>()
-//            if (data.videos?.results?.isNotEmpty() == true) {
-//                data.videos.results.forEach {
-//                    listKey.add(it.key ?: "")
-//                }
-//            } else {
-//                listKey.add("")
-//            }
-//            val randomKey = listKey.random()
-//
-//            imgDetail.loadBackdropImageUrl(data.backdropPath ?: "")
-//            playAnimation.setOnClickListener {
-//                playAnimation.playAnimation()
-//                Handler(Looper.getMainLooper()).postDelayed({
-//                    setYoutubeTrailer(randomKey)
-//                    imgDetail.gone()
-//                    playAnimation.gone()
-//                    youtubePlayerView.visible()
-//                }, DELAY_PLAY_TRAILER_YOUTUBE)
-//            }
-//            tvRating.text = convertRating.toString()
-//            tvVote.text = data.voteCount.toString()
-//            tvTitle.text = data.name
-//            tvSubTitle.text =
-//                StringBuilder().append(genres.joinToString(", "))
-//                    .append(" \u25CF ").append(
-//                        data.firstAirDate?.convertDateText(
-//                            "dd MMM yy",
-//                            "yyyy-MM-dd"
-//                        )
-//                    )
-//            tvOverview.text = data.overview
-//            val adapter = CastTvShowsAdapter()
-//            adapter.submitList(data.credits?.cast)
-//            rvCast.adapter = adapter
-//            rvCast.setHasFixedSize(true)
-//        }
-//    }
-
-    private fun navigateToReviewsPage() {
-        val navigateToReviewsFragment =
-            DetailFragmentDirections.actionDetailFragmentToReviewsFragment()
-        navigateToReviewsFragment.id = args.id.toString()
-        navigateToReviewsFragment.intentFrom = args.intentFrom
-        findNavController().navigate(navigateToReviewsFragment)
-    }
-
-    private fun showBackdropImage() {
-//        binding?.apply {
-//            imgDetail.visible()
-//            playAnimation.visible()
-//            youtubePlayerView.gone()
-//        }
-    }
-
-    override fun onDestroy() {
-//        binding?.youtubePlayerView?.release()
-        super.onDestroy()
     }
 
     companion object {

@@ -120,7 +120,7 @@ dependencies {
     implementation("androidx.paging:paging-rxjava2-ktx:$paging_version")
 
     // android youtube player
-    def android_youtube_player_version = "11.1.0"
+    def android_youtube_player_version = "12.1.0"
     implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:$android_youtube_player_version"
 
     // circle image

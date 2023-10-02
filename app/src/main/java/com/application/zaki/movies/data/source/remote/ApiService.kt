@@ -96,4 +96,10 @@ interface ApiService {
         @Query("query") query: String,
         @Query("page") page: Int
     ): Single<TvShowsResponse>
+
+    @GET("movie/{movie_id}/similar")
+    fun getSimilarMovies(
+        @Path("movie_id") movieId: Int,
+        @Query("page") page: Int
+    ): Single<MoviesResponse>
 }

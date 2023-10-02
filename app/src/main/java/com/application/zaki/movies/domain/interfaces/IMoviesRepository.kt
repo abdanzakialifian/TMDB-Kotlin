@@ -13,6 +13,7 @@ interface IMoviesRepository {
     fun getMovies(
         movie: Movie?,
         page: Page?,
-        query: String?
+        query: String?,
+        movieId: Int?
     ): Flowable<PagingData<MovieTvShow>>
 }

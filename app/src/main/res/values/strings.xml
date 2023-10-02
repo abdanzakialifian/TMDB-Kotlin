@@ -17,6 +17,8 @@
     <string name="setting">Setting</string>
     <string name="genres">Genres : </string>
     <string name="play_trailer">Play Trailer</string>
+    <string name="resizable_text_read_more">Show More</string>
+    <string name="resizable_text_read_less">Show Less</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -75,7 +75,8 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
                 upComingMovie = Movie.UP_COMING_MOVIES,
                 page = Page.ONE,
                 query = null,
-                rxDisposer = RxDisposer().apply { bind(lifecycle) }
+                movieId = null,
+                rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
             )
         }
 
@@ -100,7 +101,7 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
                 val moviePaging = pairMovie.second
 
                 if (movie == Movie.NOW_PLAYING_MOVIES) {
-                    movieTvShowSliderAdapter.submitData(lifecycle, moviePaging)
+                    movieTvShowSliderAdapter.submitData(viewLifecycleOwner.lifecycle, moviePaging)
                     configureImageSlider()
                     movieTvShowSliderAdapter.addLoadStateListener { loadState ->
                         setLoadStatePagingSlider(loadState)
@@ -279,7 +280,8 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
             movie = null,
             page = Page.MORE_THAN_ONE,
             query = text.toString(),
-            rxDisposer = RxDisposer().apply { bind(lifecycle) }
+            movieId = null,
+            rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
         )
 
         // hide keyboard after search

@@ -10,11 +10,17 @@ class DetailPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle)
 
     private var fragments = listOf<Fragment>()
 
+    private var overview = ""
+
     override fun getItemCount(): Int = fragments.size
 
     override fun createFragment(position: Int): Fragment = fragments[position]
 
     fun setFragments(fragments: List<Fragment>) {
         this.fragments = fragments
+    }
+
+    fun setDataForOverviewFragment(overview: String) {
+        this.overview = overview
     }
 }

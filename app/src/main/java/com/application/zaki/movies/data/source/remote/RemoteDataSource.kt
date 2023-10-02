@@ -27,10 +27,12 @@ class RemoteDataSource @Inject constructor(
     private val apiService: ApiService,
     private val reviewsRxPagingSource: ReviewsRxPagingSource,
     private val discoverRxPagingSource: DiscoverRxPagingSource,
+    private val moviesRxPagingSource: MoviesRxPagingSource,
     private val nowPlayingMoviesRxPagingSource: MoviesRxPagingSource,
     private val topRatedMoviesRxPagingSource: MoviesRxPagingSource,
     private val popularMoviesRxPagingSource: MoviesRxPagingSource,
     private val upComingMoviesRxPagingSource: MoviesRxPagingSource,
+    private val tvShowsRxPagingSource: TvShowsRxPagingSource,
     private val airingTodayTvShowsRxPagingSource: TvShowsRxPagingSource,
     private val onTheAirTvShowsRxPagingSource: TvShowsRxPagingSource,
     private val popularTvShowsRxPagingSource: TvShowsRxPagingSource,
@@ -66,7 +68,8 @@ class RemoteDataSource @Inject constructor(
     fun getMovies(
         movie: Movie?,
         page: Page?,
-        query: String?
+        query: String?,
+        movieId: Int?
     ): Flowable<PagingData<ListMoviesResponse>> = Pager(
         config = PagingConfig(
             pageSize = 10,
@@ -74,19 +77,23 @@ class RemoteDataSource @Inject constructor(
         ), pagingSourceFactory = {
             when (movie) {
                 Movie.NOW_PLAYING_MOVIES -> nowPlayingMoviesRxPagingSource.apply {
-                    setData(movie, page, query)
+                    setData(movie, page, query, movieId)
                 }
 
                 Movie.POPULAR_MOVIES -> popularMoviesRxPagingSource.apply {
-                    setData(movie, page, query)
+                    setData(movie, page, query, movieId)
                 }
 
                 Movie.TOP_RATED_MOVIES -> topRatedMoviesRxPagingSource.apply {
-                    setData(movie, page, query)
+                    setData(movie, page, query, movieId)
                 }
 
-                else -> upComingMoviesRxPagingSource.apply {
-                    setData(movie, page, query)
+                Movie.UP_COMING_MOVIES -> upComingMoviesRxPagingSource.apply {
+                    setData(movie, page, query, movieId)
+                }
+
+                else -> moviesRxPagingSource.apply {
+                    setData(movie, page, query, movieId)
                 }
             }
         }
@@ -114,7 +121,11 @@ class RemoteDataSource @Inject constructor(
                         setData(tvShow, page, query)
                     }
 
-                    else -> onTheAirTvShowsRxPagingSource.apply {
+                    TvShow.ON_THE_AIR_TV_SHOWS -> onTheAirTvShowsRxPagingSource.apply {
+                        setData(tvShow, page, query)
+                    }
+
+                    else -> tvShowsRxPagingSource.apply {
                         setData(tvShow, page, query)
                     }
                 }

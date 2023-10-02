@@ -12,6 +12,6 @@ import javax.inject.Singleton
 @Singleton
 class GetListMovies @Inject constructor(private val iMoviesRepository: IMoviesRepository) {
     operator fun invoke(
-        movie: Movie?, page: Page?, query: String?
-    ): Flowable<PagingData<MovieTvShow>> = iMoviesRepository.getMovies(movie, page, query)
+        movie: Movie?, page: Page?, query: String?, movieId: Int?
+    ): Flowable<PagingData<MovieTvShow>> = iMoviesRepository.getMovies(movie, page, query, movieId)
 }

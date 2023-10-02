@@ -76,7 +76,7 @@ object DataMapper {
     }
 
     fun DetailMoviesResponse.toDetailMovie(): Detail {
-        val videos = ArrayList<Videos>()
+        val videos = mutableListOf<Videos>()
         this.videos?.results?.forEach { resultItemResponse ->
             resultItemResponse.let { data ->
                 videos.add(
@@ -96,7 +96,7 @@ object DataMapper {
             }
         }
 
-        val cast = ArrayList<CastItem>()
+        val cast = mutableListOf<CastItem>()
         credits?.cast?.forEach { castItemResponse ->
             castItemResponse.let { data ->
                 cast.add(
@@ -118,7 +118,7 @@ object DataMapper {
             }
         }
 
-        val genres = ArrayList<GenresItem>()
+        val genres = mutableListOf<GenresItem>()
         this.genres?.forEach { genreItemResponse ->
             genreItemResponse.let { data ->
                 genres.add(GenresItem(name = data.name, id = data.id))
@@ -167,7 +167,7 @@ object DataMapper {
     }
 
     fun DetailTvShowsResponse.toDetailTvShow(): Detail {
-        val videos = ArrayList<Videos>()
+        val videos = mutableListOf<Videos>()
         this.videos?.results?.forEach { resultItemResponse ->
             resultItemResponse.let { data ->
                 videos.add(
@@ -187,7 +187,7 @@ object DataMapper {
             }
         }
 
-        val cast = ArrayList<CastItem>()
+        val cast = mutableListOf<CastItem>()
         credits?.cast?.forEach { castItemResponse ->
             castItemResponse.let { data ->
                 cast.add(
@@ -209,7 +209,7 @@ object DataMapper {
             }
         }
 
-        val genres = ArrayList<GenresItem>()
+        val genres = mutableListOf<GenresItem>()
         this.genres?.forEach { genreItemResponse ->
             genreItemResponse.let { data ->
                 genres.add(GenresItem(name = data.name, id = data.id))

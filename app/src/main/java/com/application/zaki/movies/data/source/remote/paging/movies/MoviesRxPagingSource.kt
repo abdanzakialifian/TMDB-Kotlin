@@ -20,6 +20,8 @@ class MoviesRxPagingSource @Inject constructor(private val apiService: ApiServic
 
     private var query: String? = null
 
+    private var movieId: Int? = null
+
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, ListMoviesResponse>> {
         val position = if (page == Page.ONE) {
             INITIAL_POSITION
@@ -29,6 +31,14 @@ class MoviesRxPagingSource @Inject constructor(private val apiService: ApiServic
 
         return if (query != null && query?.isNotEmpty() == true) {
             apiService.getSearchMovies(query ?: "", position)
+                .subscribeOn(Schedulers.io())
+                .map { data ->
+                    toLoadResult(data, position)
+                }.onErrorReturn { throwable ->
+                    LoadResult.Error(throwable)
+                }
+        } else if (movieId != null) {
+            apiService.getSimilarMovies(movieId ?: 0, position)
                 .subscribeOn(Schedulers.io())
                 .map { data ->
                     toLoadResult(data, position)
@@ -93,10 +103,11 @@ class MoviesRxPagingSource @Inject constructor(private val apiService: ApiServic
         }
     }
 
-    fun setData(movie: Movie?, page: Page?, query: String?) {
+    fun setData(movie: Movie?, page: Page?, query: String?, movieId: Int?) {
         this.movie = movie
         this.page = page
         this.query = query
+        this.movieId = movieId
     }
 
     companion object {

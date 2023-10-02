@@ -37,6 +37,7 @@ class MovieViewModel @Inject constructor(private val movieWrapper: MovieWrapper)
         upComingMovie: Movie?,
         page: Page?,
         query: String?,
+        movieId: Int?,
         rxDisposer: RxDisposer
     ) {
         movieWrapper.getListAllMovies(
@@ -46,6 +47,7 @@ class MovieViewModel @Inject constructor(private val movieWrapper: MovieWrapper)
             upComingMovie,
             page,
             query,
+            movieId,
             viewModelScope
         )
             .subscribeOn(Schedulers.io())
@@ -61,9 +63,10 @@ class MovieViewModel @Inject constructor(private val movieWrapper: MovieWrapper)
         movie: Movie?,
         page: Page?,
         query: String?,
+        movieId: Int?,
         rxDisposer: RxDisposer
     ) {
-        movieWrapper.getListMovies(movie, page, query)
+        movieWrapper.getListMovies(movie, page, query, movieId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .cachedIn(viewModelScope)
