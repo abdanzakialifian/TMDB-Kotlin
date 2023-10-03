@@ -9,9 +9,8 @@ import io.reactivex.Flowable
 
 interface IOtherRepository {
     fun getReviewsPaging(
-        id: String,
-        page: Page,
-        category: Category
+        id: String?,
+        category: Category?
     ): Flowable<PagingData<ReviewItem>>
 
     fun getDiscoverPaging(

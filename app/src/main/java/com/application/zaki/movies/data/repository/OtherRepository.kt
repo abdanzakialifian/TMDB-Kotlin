@@ -18,11 +18,10 @@ import javax.inject.Singleton
 class OtherRepository @Inject constructor(private val remoteDataSource: RemoteDataSource) :
     IOtherRepository {
     override fun getReviewsPaging(
-        id: String,
-        page: Page,
-        category: Category
+        id: String?,
+        category: Category?
     ): Flowable<PagingData<ReviewItem>> =
-        remoteDataSource.getReviewsPaging(id, page, category)
+        remoteDataSource.getReviewsPaging(id, category)
             .map { pagingData ->
                 pagingData.map { data ->
                     data.toReviewItem()

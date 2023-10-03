@@ -10,7 +10,6 @@ import com.application.zaki.movies.domain.model.Detail
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.adapter.CastMoviesAdapter
 import com.application.zaki.movies.presentation.detail.adapter.DetailPagerAdapter
-import com.application.zaki.movies.presentation.detail.adapter.ReviewsAdapter
 import com.application.zaki.movies.presentation.detail.viewmodel.DetailViewModel
 import com.application.zaki.movies.utils.AppBarStateChangedListener
 import com.application.zaki.movies.utils.Category
@@ -33,9 +32,6 @@ import javax.inject.Inject
 class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
     @Inject
     lateinit var castMoviesAdapter: CastMoviesAdapter
-
-    @Inject
-    lateinit var reviewsAdapter: ReviewsAdapter
 
     private val args: DetailFragmentArgs by navArgs()
 

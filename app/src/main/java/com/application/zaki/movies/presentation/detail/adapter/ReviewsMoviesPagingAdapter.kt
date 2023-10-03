@@ -5,9 +5,12 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.application.zaki.movies.R
 import com.application.zaki.movies.databinding.ItemListReviewBinding
 import com.application.zaki.movies.domain.model.ReviewItem
+import com.application.zaki.movies.utils.convertDateText
 import com.application.zaki.movies.utils.getInitialName
+import com.application.zaki.movies.utils.setResizableText
 import javax.inject.Inject
 
 class ReviewsMoviesPagingAdapter @Inject constructor() : PagingDataAdapter<ReviewItem, ReviewsMoviesPagingAdapter.ReviewsPagingViewHolder>(
@@ -19,8 +22,12 @@ class ReviewsMoviesPagingAdapter @Inject constructor() : PagingDataAdapter<Revie
         fun bind(item: ReviewItem?) {
             binding.apply {
                 tvInitialUser.text = item?.author?.getInitialName()
-                tvAuthor.text = item?.author
-                tvReview.text = item?.content
+                tvUserName.text = item?.author
+                tvCreatedAt.text = itemView.resources.getString(
+                    R.string.on,
+                    item?.createdAt?.convertDateText("dd MMM yyyy", "yyyy-MM-dd")
+                )
+                tvReview.setResizableText(item?.content ?: "", 5, true, layoutText)
             }
         }
     }

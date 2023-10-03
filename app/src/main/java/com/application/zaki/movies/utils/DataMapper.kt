@@ -6,7 +6,6 @@ import com.application.zaki.movies.data.source.remote.response.other.ResultsItem
 import com.application.zaki.movies.data.source.remote.response.other.ReviewItemResponse
 import com.application.zaki.movies.data.source.remote.response.tvshows.DetailTvShowsResponse
 import com.application.zaki.movies.data.source.remote.response.tvshows.ListTvShowsResponse
-import com.application.zaki.movies.domain.model.AuthorDetails
 import com.application.zaki.movies.domain.model.CastItem
 import com.application.zaki.movies.domain.model.Detail
 import com.application.zaki.movies.domain.model.DiscoverItem
@@ -39,20 +38,12 @@ object DataMapper {
     )
 
     fun ReviewItemResponse.toReviewItem(): ReviewItem {
-        val authorDetails = AuthorDetails(
-            avatarPath = authorDetails?.avatarPath,
-            name = authorDetails?.name,
-            rating = authorDetails?.rating,
-            username = authorDetails?.username
-        )
         return ReviewItem(
-            authorDetails = authorDetails,
-            updatedAt = updatedAt,
             author = author,
             createdAt = createdAt,
             id = id,
             content = content,
-            url = url
+            rating = authorDetails?.rating
         )
     }
 
@@ -125,24 +116,6 @@ object DataMapper {
             }
         }
 
-        val reviews = this.reviews?.results?.map { reviewItemResponse ->
-            val authorDetail = AuthorDetails(
-                avatarPath = reviewItemResponse.authorDetails?.avatarPath,
-                name = reviewItemResponse.authorDetails?.name,
-                rating = reviewItemResponse.authorDetails?.rating,
-                username = reviewItemResponse.authorDetails?.username
-            )
-
-            ReviewItem(
-                authorDetails = authorDetail,
-                updatedAt = reviewItemResponse.updatedAt,
-                author = reviewItemResponse.author,
-                createdAt = reviewItemResponse.createdAt,
-                content = reviewItemResponse.content,
-                url = reviewItemResponse.url
-            )
-        }
-
         return Detail(
             originalLanguage = originalLanguage,
             title = title,
@@ -160,7 +133,6 @@ object DataMapper {
             adult = adult,
             homepage = homepage,
             status = status,
-            reviews = reviews,
             videos = videos,
             runtime = runtime
         )
@@ -216,24 +188,6 @@ object DataMapper {
             }
         }
 
-        val reviews = this.reviews?.results?.map { reviewItemResponse ->
-            val authorDetail = AuthorDetails(
-                avatarPath = reviewItemResponse.authorDetails?.avatarPath,
-                name = reviewItemResponse.authorDetails?.name,
-                rating = reviewItemResponse.authorDetails?.rating,
-                username = reviewItemResponse.authorDetails?.username
-            )
-
-            ReviewItem(
-                authorDetails = authorDetail,
-                updatedAt = reviewItemResponse.updatedAt,
-                author = reviewItemResponse.author,
-                createdAt = reviewItemResponse.createdAt,
-                content = reviewItemResponse.content,
-                url = reviewItemResponse.url
-            )
-        }
-
         return Detail(
             originalLanguage = originalLanguage,
             title = name,
@@ -251,7 +205,6 @@ object DataMapper {
             adult = adult,
             homepage = homepage,
             status = status,
-            reviews = reviews,
             videos = videos,
             runtime = lastEpisodeToAir?.runtime
         )

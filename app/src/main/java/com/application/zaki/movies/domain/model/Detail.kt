@@ -17,7 +17,6 @@ data class Detail(
     val adult: Boolean? = null,
     val homepage: String? = null,
     val status: String? = null,
-    val reviews: List<ReviewItem>? = null,
     val videos: List<Videos>? = null,
     val runtime: Int? = null
 )

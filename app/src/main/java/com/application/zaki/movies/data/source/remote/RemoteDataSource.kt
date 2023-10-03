@@ -46,12 +46,12 @@ class RemoteDataSource @Inject constructor(
         apiService.getDetailTvShows(tvId)
 
     fun getReviewsPaging(
-        id: String, page: Page, category: Category
+        id: String?, category: Category?
     ): Flowable<PagingData<ReviewItemResponse>> = Pager(config = PagingConfig(
         pageSize = 10, initialLoadSize = 10
     ), pagingSourceFactory = {
         reviewsRxPagingSource.apply {
-            setDataReviews(id, page, category)
+            setDataReviews(id, category)
         }
     }).flowable
 

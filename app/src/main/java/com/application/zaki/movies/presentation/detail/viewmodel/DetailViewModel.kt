@@ -1,9 +1,7 @@
 package com.application.zaki.movies.presentation.detail.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.toLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.rxjava2.cachedIn
@@ -19,10 +17,8 @@ import com.application.zaki.movies.utils.UiState
 import com.application.zaki.movies.utils.addToDisposer
 import com.application.zaki.movies.utils.toLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.BackpressureStrategy
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.ReplaySubject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
@@ -35,6 +31,9 @@ class DetailViewModel @Inject constructor(private val detailWrapper: DetailWrapp
 
     private val _listMoviesPaging: MutableLiveData<PagingData<MovieTvShow>> = MutableLiveData()
     val listMoviesPaging get() = _listMoviesPaging.toLiveData()
+
+    private val _listReviewsPaging: MutableLiveData<PagingData<ReviewItem>> = MutableLiveData()
+    val listReviewsPaging get() = _listReviewsPaging.toLiveData()
 
     private val _detailData = MutableLiveData<Pair<String, Detail>>()
     val detailData get() = _detailData.toLiveData()
@@ -80,20 +79,15 @@ class DetailViewModel @Inject constructor(private val detailWrapper: DetailWrapp
     }
 
     fun reviewsPaging(
-        rxDisposer: RxDisposer, id: String, page: Page, category: Category
-    ): LiveData<PagingData<ReviewItem>> {
-        val subject = ReplaySubject.create<PagingData<ReviewItem>>()
-
-        detailWrapper.getReviews(id, page, category)
+        id: String?, category: Category?, rxDisposer: RxDisposer,
+    ) {
+        detailWrapper.getReviews(id, category)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->
-                subject.onNext(data)
+                _listReviewsPaging.postValue(data)
             }
             .addToDisposer(rxDisposer)
-
-        // convert flowable to livedata
-        return subject.toFlowable(BackpressureStrategy.BUFFER).toLiveData()
     }
 
     fun getSimilarMovies(
