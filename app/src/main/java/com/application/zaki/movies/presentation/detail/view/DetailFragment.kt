@@ -8,12 +8,12 @@ import com.application.zaki.movies.R
 import com.application.zaki.movies.databinding.FragmentDetailBinding
 import com.application.zaki.movies.domain.model.Detail
 import com.application.zaki.movies.presentation.base.BaseVBFragment
-import com.application.zaki.movies.presentation.detail.adapter.CastMoviesAdapter
 import com.application.zaki.movies.presentation.detail.adapter.DetailPagerAdapter
 import com.application.zaki.movies.presentation.detail.viewmodel.DetailViewModel
 import com.application.zaki.movies.utils.AppBarStateChangedListener
 import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.RxDisposer
+import com.application.zaki.movies.utils.State
 import com.application.zaki.movies.utils.UiState
 import com.application.zaki.movies.utils.convertDateText
 import com.application.zaki.movies.utils.fromMinutesToHHmm
@@ -25,14 +25,9 @@ import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import java.math.RoundingMode
-import javax.inject.Inject
-
 
 @AndroidEntryPoint
 class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
-    @Inject
-    lateinit var castMoviesAdapter: CastMoviesAdapter
-
     private val args: DetailFragmentArgs by navArgs()
 
     private val detailViewModel by viewModels<DetailViewModel>()
@@ -48,13 +43,15 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
             if (detailViewModel.detailData.value == null) {
                 detailViewModel.detailMovies(
                     movieId = id,
-                    rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) })
+                    rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
+                )
             }
         } else {
             if (detailViewModel.detailData.value == null) {
                 detailViewModel.detailTvShows(
                     tvId = id,
-                    rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) })
+                    rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
+                )
             }
         }
 
@@ -82,6 +79,7 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
         data.genres?.forEach {
             addChipToGroup(it.name ?: "")
         }
+        setAppBarLayout(data.title)
         setViewPager(data)
 
         binding?.apply {
@@ -94,10 +92,15 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                 .append(" \u25CF ")
                 .append(data.releaseDate?.convertDateText("dd MMM yyyy", "yyyy-MM-dd"))
             tvRating.text = (convertRating ?: 0).toString()
+        }
+    }
+
+    private fun setAppBarLayout(title: String?) {
+        binding?.apply {
             appBarLayout.addOnOffsetChangedListener(object : AppBarStateChangedListener() {
                 override fun onStateChanged(appBarLayout: AppBarLayout?, state: State?) {
                     if (state == State.COLLAPSED) {
-                        collapsingToolbarLayout.title = data.title
+                        collapsingToolbarLayout.title = title
                         toolbar.setBackgroundColor(
                             ContextCompat.getColor(
                                 requireContext(),
@@ -119,23 +122,28 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
     }
 
     private fun setViewPager(data: Detail) {
-        val fragments =
-            listOf(OverviewFragment(), CastCrewFragment(), ReviewsFragment(), SimilarFragment())
-        val titles = listOf("Overview", "Cast & Crew", "Reviews", "Similar")
+        val fragments = listOf(
+            OverviewFragment(),
+            CastCrewFragment(),
+            ReviewsFragment(),
+            SimilarFragment()
+        )
+        val titles = listOf(
+            REGEX.replace(resources.getString(R.string.overview), ""),
+            resources.getString(R.string.castandcrew),
+            resources.getString(R.string.reviews),
+            resources.getString(R.string.similar)
+        )
         binding?.apply {
-            val tabLayout = binding?.tabLayout
-            val viewPager = binding?.viewPager
             val detailPagerAdapter =
                 DetailPagerAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
             detailPagerAdapter.setFragments(fragments)
             detailPagerAdapter.setDataForOverviewFragment(data.overview ?: "")
-            viewPager?.adapter = detailPagerAdapter
-            viewPager?.isUserInputEnabled = false
-            if (tabLayout != null && viewPager != null) {
-                TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-                    tab.text = titles[position]
-                }.attach()
-            }
+            viewPager.adapter = detailPagerAdapter
+            viewPager.isUserInputEnabled = false
+            TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+                tab.text = titles[position]
+            }.attach()
         }
     }
 
@@ -153,8 +161,7 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
     }
 
     companion object {
-        private const val DELAY_PLAY_TRAILER_YOUTUBE = 600L
-        const val INTENT_FROM_MOVIE = "Intent From Movie"
+        private val REGEX = Regex("[^A-Za-z0-9 ]")
         const val INTENT_FROM_TV_SHOWS = "Intent From Tv Shows"
     }
 }

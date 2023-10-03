@@ -5,23 +5,26 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.application.zaki.movies.databinding.ItemListCastBinding
+import com.application.zaki.movies.databinding.ItemListCastCrewBinding
 import com.application.zaki.movies.domain.model.CastItem
 import com.application.zaki.movies.utils.loadImageUrl
+import javax.inject.Inject
 
-class CastTvShowsAdapter : ListAdapter<CastItem, CastTvShowsAdapter.CastViewHolder>(DIFF_CALLBACK) {
-    inner class CastViewHolder(private val binding: ItemListCastBinding) :
+class CastCrewAdapter @Inject constructor() :
+    ListAdapter<CastItem, CastCrewAdapter.CastViewHolder>(DIFF_CALLBACK) {
+    inner class CastViewHolder(private val binding: ItemListCastCrewBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CastItem) {
             binding.apply {
-                imgCast.loadImageUrl(item.profilePath ?: "")
-                tvCast.text = item.name
+                imgPeople.loadImageUrl(item.profilePath ?: "")
+                tvTitle.text = item.name
+                tvSubTitle.text = item.character
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CastViewHolder =
-        ItemListCastBinding.inflate(
+        ItemListCastCrewBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         ).run {
             CastViewHolder(this)

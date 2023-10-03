@@ -109,6 +109,26 @@ object DataMapper {
             }
         }
 
+        val crew = mutableListOf<CastItem>()
+        credits?.crew?.forEach { crewItemResponse ->
+            crewItemResponse.let { data ->
+                crew.add(
+                    CastItem(
+                        character = data.job,
+                        gender = data.gender,
+                        creditId = data.creditId,
+                        knownForDepartment = data.knownForDepartment,
+                        originalName = data.originalName,
+                        popularity = data.popularity,
+                        name = data.name,
+                        profilePath = data.profilePath,
+                        id = data.id,
+                        adult = data.adult,
+                    )
+                )
+            }
+        }
+
         val genres = mutableListOf<GenresItem>()
         this.genres?.forEach { genreItemResponse ->
             genreItemResponse.let { data ->
@@ -121,6 +141,7 @@ object DataMapper {
             title = title,
             backdropPath = backdropPath,
             cast = cast,
+            crew = crew,
             genres = genres,
             popularity = popularity,
             id = id,

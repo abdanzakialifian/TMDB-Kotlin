@@ -5,6 +5,7 @@ data class Detail(
     val title: String? = null,
     val backdropPath: String? = null,
     val cast: List<CastItem>? = null,
+    val crew: List<CastItem>? = null,
     val genres: List<GenresItem>? = null,
     val popularity: Any? = null,
     val id: Int? = null,

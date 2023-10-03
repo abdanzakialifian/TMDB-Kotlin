@@ -51,12 +51,12 @@ interface ApiService {
         @Query("page") page: Int
     ): Single<TvShowsResponse>
 
-    @GET("movie/{movie_id}?append_to_response=credits,videos,reviews")
+    @GET("movie/{movie_id}?append_to_response=credits,videos")
     fun getDetailMovies(
         @Path("movie_id") movieId: String
     ): Flowable<DetailMoviesResponse>
 
-    @GET("tv/{tv_id}?append_to_response=credits,videos,reviews")
+    @GET("tv/{tv_id}?append_to_response=credits,videos")
     fun getDetailTvShows(
         @Path("tv_id") tvId: String
     ): Flowable<DetailTvShowsResponse>
