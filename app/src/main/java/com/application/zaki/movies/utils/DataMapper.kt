@@ -6,7 +6,7 @@ import com.application.zaki.movies.data.source.remote.response.other.ResultsItem
 import com.application.zaki.movies.data.source.remote.response.other.ReviewItemResponse
 import com.application.zaki.movies.data.source.remote.response.tvshows.DetailTvShowsResponse
 import com.application.zaki.movies.data.source.remote.response.tvshows.ListTvShowsResponse
-import com.application.zaki.movies.domain.model.CastItem
+import com.application.zaki.movies.domain.model.CastCrewItem
 import com.application.zaki.movies.domain.model.Detail
 import com.application.zaki.movies.domain.model.DiscoverItem
 import com.application.zaki.movies.domain.model.GenresItem
@@ -16,7 +16,6 @@ import com.application.zaki.movies.domain.model.Videos
 
 object DataMapper {
     fun ListMoviesResponse.toMovie(): MovieTvShow = MovieTvShow(
-        genreIds = genreIds,
         posterPath = posterPath,
         voteAverage = voteAverage,
         name = title,
@@ -27,7 +26,6 @@ object DataMapper {
     )
 
     fun ListTvShowsResponse.toTvShow(): MovieTvShow = MovieTvShow(
-        genreIds = genreIds,
         posterPath = posterPath,
         voteAverage = voteAverage,
         name = name,
@@ -37,13 +35,104 @@ object DataMapper {
         backdropPath = backdropPath
     )
 
-    fun ReviewItemResponse.toReviewItem(): ReviewItem {
-        return ReviewItem(
-            author = author,
-            createdAt = createdAt,
+    fun ReviewItemResponse.toReviewItem(): ReviewItem = ReviewItem(
+        author = author,
+        createdAt = createdAt,
+        id = id,
+        content = content,
+    )
+
+    fun DetailMoviesResponse.toDetailMovie(): Detail {
+        val videos = videos?.results?.map { video ->
+            Videos(
+                id = video.id,
+                key = video.key,
+            )
+        }
+
+        val cast = credits?.cast?.map { cast ->
+            CastCrewItem(
+                character = cast.character,
+                name = cast.name,
+                profilePath = cast.profilePath,
+                id = cast.id,
+            )
+        }
+
+        val crew = credits?.crew?.map { crew ->
+            CastCrewItem(
+                job = crew.job,
+                name = crew.name,
+                profilePath = crew.profilePath,
+                id = crew.id,
+            )
+        }
+
+        val genres = genres?.map { genre ->
+            GenresItem(name = genre.name, id = genre.id)
+        }
+
+        return Detail(
+            originalLanguage = originalLanguage,
+            title = title,
+            backdropPath = backdropPath,
+            cast = cast,
+            crew = crew,
+            genres = genres,
             id = id,
-            content = content,
-            rating = authorDetails?.rating
+            overview = overview,
+            posterPath = posterPath,
+            releaseDate = releaseDate,
+            voteAverage = voteAverage,
+            videos = videos,
+            runtime = runtime
+        )
+    }
+
+    fun DetailTvShowsResponse.toDetailTvShow(): Detail {
+        val videos = videos?.results?.map { video ->
+            Videos(
+                id = video.id,
+                key = video.key,
+            )
+        }
+
+        val cast = credits?.cast?.map { cast ->
+            CastCrewItem(
+                character = cast.character,
+                name = cast.name,
+                profilePath = cast.profilePath,
+                id = cast.id,
+            )
+        }
+
+        val crew = credits?.crew?.map { crew ->
+            CastCrewItem(
+                job = crew.job,
+                name = crew.name,
+                profilePath = crew.profilePath,
+                id = crew.id,
+            )
+        }
+
+        val genres = genres?.map { genre ->
+            GenresItem(name = genre.name, id = genre.id)
+        }
+
+        return Detail(
+            originalLanguage = originalLanguage,
+            title = name,
+            backdropPath = backdropPath,
+            cast = cast,
+            crew = crew,
+            genres = genres,
+            id = id,
+            overview = overview,
+            posterPath = posterPath,
+            releaseDate = firstAirDate,
+            voteAverage = voteAverage,
+            videos = videos,
+            runtime = lastEpisodeToAir?.runtime
         )
     }
 
@@ -63,171 +152,6 @@ object DataMapper {
             id = id,
             adult = adult,
             voteCount = voteCount
-        )
-    }
-
-    fun DetailMoviesResponse.toDetailMovie(): Detail {
-        val videos = mutableListOf<Videos>()
-        this.videos?.results?.forEach { resultItemResponse ->
-            resultItemResponse.let { data ->
-                videos.add(
-                    Videos(
-                        site = data.site,
-                        size = data.size,
-                        iso31661 = data.iso31661,
-                        name = data.name,
-                        official = data.official,
-                        id = data.id,
-                        type = data.type,
-                        publishedAt = data.publishedAt,
-                        iso6391 = data.iso6391,
-                        key = data.key,
-                    ),
-                )
-            }
-        }
-
-        val cast = mutableListOf<CastItem>()
-        credits?.cast?.forEach { castItemResponse ->
-            castItemResponse.let { data ->
-                cast.add(
-                    CastItem(
-                        castId = data.castId,
-                        character = data.character,
-                        gender = data.gender,
-                        creditId = data.creditId,
-                        knownForDepartment = data.knownForDepartment,
-                        originalName = data.originalName,
-                        popularity = data.popularity,
-                        name = data.name,
-                        profilePath = data.profilePath,
-                        id = data.id,
-                        adult = data.adult,
-                        order = data.order,
-                    ),
-                )
-            }
-        }
-
-        val crew = mutableListOf<CastItem>()
-        credits?.crew?.forEach { crewItemResponse ->
-            crewItemResponse.let { data ->
-                crew.add(
-                    CastItem(
-                        character = data.job,
-                        gender = data.gender,
-                        creditId = data.creditId,
-                        knownForDepartment = data.knownForDepartment,
-                        originalName = data.originalName,
-                        popularity = data.popularity,
-                        name = data.name,
-                        profilePath = data.profilePath,
-                        id = data.id,
-                        adult = data.adult,
-                    )
-                )
-            }
-        }
-
-        val genres = mutableListOf<GenresItem>()
-        this.genres?.forEach { genreItemResponse ->
-            genreItemResponse.let { data ->
-                genres.add(GenresItem(name = data.name, id = data.id))
-            }
-        }
-
-        return Detail(
-            originalLanguage = originalLanguage,
-            title = title,
-            backdropPath = backdropPath,
-            cast = cast,
-            crew = crew,
-            genres = genres,
-            popularity = popularity,
-            id = id,
-            voteCount = voteCount,
-            overview = overview,
-            posterPath = posterPath,
-            releaseDate = releaseDate,
-            voteAverage = voteAverage,
-            tagline = tagline,
-            adult = adult,
-            homepage = homepage,
-            status = status,
-            videos = videos,
-            runtime = runtime
-        )
-    }
-
-    fun DetailTvShowsResponse.toDetailTvShow(): Detail {
-        val videos = mutableListOf<Videos>()
-        this.videos?.results?.forEach { resultItemResponse ->
-            resultItemResponse.let { data ->
-                videos.add(
-                    Videos(
-                        site = data.site,
-                        size = data.size,
-                        iso31661 = data.iso31661,
-                        name = data.name,
-                        official = data.official,
-                        id = data.id,
-                        type = data.type,
-                        publishedAt = data.publishedAt,
-                        iso6391 = data.iso6391,
-                        key = data.key,
-                    ),
-                )
-            }
-        }
-
-        val cast = mutableListOf<CastItem>()
-        credits?.cast?.forEach { castItemResponse ->
-            castItemResponse.let { data ->
-                cast.add(
-                    CastItem(
-                        castId = data.id,
-                        character = data.character,
-                        gender = data.gender,
-                        creditId = data.creditId,
-                        knownForDepartment = data.knownForDepartment,
-                        originalName = data.originalName,
-                        popularity = data.popularity,
-                        name = data.name,
-                        profilePath = data.profilePath,
-                        id = data.id,
-                        adult = data.adult,
-                        order = data.order,
-                    ),
-                )
-            }
-        }
-
-        val genres = mutableListOf<GenresItem>()
-        this.genres?.forEach { genreItemResponse ->
-            genreItemResponse.let { data ->
-                genres.add(GenresItem(name = data.name, id = data.id))
-            }
-        }
-
-        return Detail(
-            originalLanguage = originalLanguage,
-            title = name,
-            backdropPath = backdropPath,
-            cast = cast,
-            genres = genres,
-            popularity = popularity,
-            id = id,
-            voteCount = voteCount,
-            overview = overview,
-            posterPath = posterPath,
-            releaseDate = firstAirDate,
-            voteAverage = voteAverage,
-            tagline = tagline,
-            adult = adult,
-            homepage = homepage,
-            status = status,
-            videos = videos,
-            runtime = lastEpisodeToAir?.runtime
         )
     }
 }

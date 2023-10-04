@@ -5,5 +5,4 @@ data class ReviewItem(
     val createdAt: String? = null,
     val id: String? = null,
     val content: String? = null,
-    val rating: Double? = null,
 )

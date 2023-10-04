@@ -339,7 +339,7 @@ data class CrewItemResponse(
     val name: String? = null,
 
     @field:SerializedName("profile_path")
-    val profilePath: Any? = null,
+    val profilePath: String? = null,
 
     @field:SerializedName("id")
     val id: Int? = null,

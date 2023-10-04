@@ -6,19 +6,19 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListCastCrewBinding
-import com.application.zaki.movies.domain.model.CastItem
+import com.application.zaki.movies.domain.model.CastCrewItem
 import com.application.zaki.movies.utils.loadImageUrl
 import javax.inject.Inject
 
 class CastCrewAdapter @Inject constructor() :
-    ListAdapter<CastItem, CastCrewAdapter.CastViewHolder>(DIFF_CALLBACK) {
+    ListAdapter<CastCrewItem, CastCrewAdapter.CastViewHolder>(DIFF_CALLBACK) {
     inner class CastViewHolder(private val binding: ItemListCastCrewBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: CastItem) {
+        fun bind(item: CastCrewItem) {
             binding.apply {
                 imgPeople.loadImageUrl(item.profilePath ?: "")
                 tvTitle.text = item.name
-                tvSubTitle.text = item.character
+                tvSubTitle.text = item.character ?: item.job
             }
         }
     }
@@ -35,11 +35,11 @@ class CastCrewAdapter @Inject constructor() :
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CastItem>() {
-            override fun areItemsTheSame(oldItem: CastItem, newItem: CastItem): Boolean =
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CastCrewItem>() {
+            override fun areItemsTheSame(oldItem: CastCrewItem, newItem: CastCrewItem): Boolean =
                 oldItem.id == newItem.id
 
-            override fun areContentsTheSame(oldItem: CastItem, newItem: CastItem): Boolean =
+            override fun areContentsTheSame(oldItem: CastCrewItem, newItem: CastCrewItem): Boolean =
                 oldItem == newItem
         }
     }

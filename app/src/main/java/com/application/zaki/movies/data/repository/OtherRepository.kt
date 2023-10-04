@@ -9,7 +9,6 @@ import com.application.zaki.movies.domain.model.ReviewItem
 import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.DataMapper.toResultItemDiscover
 import com.application.zaki.movies.utils.DataMapper.toReviewItem
-import com.application.zaki.movies.utils.Page
 import io.reactivex.Flowable
 import javax.inject.Inject
 import javax.inject.Singleton
