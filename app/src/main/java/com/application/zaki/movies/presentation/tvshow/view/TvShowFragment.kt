@@ -17,9 +17,8 @@ import com.application.zaki.movies.databinding.FragmentTvShowBinding
 import com.application.zaki.movies.domain.model.CategoryItem
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.presentation.adapter.MovieTvShowAdapter
-import com.application.zaki.movies.presentation.adapter.MovieTvShowSliderAdapter
+import com.application.zaki.movies.presentation.adapter.MovieTvShowSliderPagingAdapter
 import com.application.zaki.movies.presentation.base.BaseVBFragment
-import com.application.zaki.movies.presentation.detail.view.DetailFragment.Companion.INTENT_FROM_TV_SHOWS
 import com.application.zaki.movies.presentation.movietvshow.adapter.MovieTvShowPagingAdapter
 import com.application.zaki.movies.presentation.tvshow.viewmodel.TvShowViewModel
 import com.application.zaki.movies.utils.Category
@@ -37,12 +36,12 @@ import kotlin.math.abs
 
 @AndroidEntryPoint
 class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
-    MovieTvShowSliderAdapter.OnItemClickCallback, MovieTvShowAdapter.OnEventClickCallback,
+    MovieTvShowSliderPagingAdapter.OnItemClickCallback, MovieTvShowAdapter.OnEventClickCallback,
     MaterialSearchBar.OnSearchActionListener, TextWatcher,
     MovieTvShowPagingAdapter.OnItemClickCallback {
 
     @Inject
-    lateinit var movieTvShowSliderAdapter: MovieTvShowSliderAdapter
+    lateinit var movieTvShowSliderPagingAdapter: MovieTvShowSliderPagingAdapter
 
     @Inject
     lateinit var movieTvShowAdapter: MovieTvShowAdapter
@@ -85,7 +84,7 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
     }
 
     private fun eventListeners() {
-        movieTvShowSliderAdapter.setOnItemClickCallback(this)
+        movieTvShowSliderPagingAdapter.setOnItemClickCallback(this)
         movieTvShowAdapter.setOnEventClickCallback(this)
         binding?.apply {
             searchBar.setOnSearchActionListener(this@TvShowFragment)
@@ -102,8 +101,8 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
 
                 if (tvShow == TvShow.AIRING_TODAY_TV_SHOWS) {
                     configureImageSlider()
-                    movieTvShowSliderAdapter.submitData(viewLifecycleOwner.lifecycle, tvShowPaging)
-                    movieTvShowSliderAdapter.addLoadStateListener { loadState ->
+                    movieTvShowSliderPagingAdapter.submitData(viewLifecycleOwner.lifecycle, tvShowPaging)
+                    movieTvShowSliderPagingAdapter.addLoadStateListener { loadState ->
                         setLoadStatePagingSlider(loadState)
                     }
                 } else {
@@ -158,7 +157,7 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
     private fun configureImageSlider() {
         binding?.apply {
             viewPagerImageSlider.apply {
-                adapter = movieTvShowSliderAdapter
+                adapter = movieTvShowSliderPagingAdapter
                 offscreenPageLimit = 3
                 getChildAt(0)?.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
@@ -247,24 +246,22 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
         val navigateToDetailFragment =
             TvShowFragmentDirections.actionTvShowsFragmentToDetailFragment()
         navigateToDetailFragment.id = id
-        navigateToDetailFragment.intentFrom = INTENT_FROM_TV_SHOWS
+        navigateToDetailFragment.intentFrom = Category.TV_SHOWS.name
         findNavController().navigate(navigateToDetailFragment)
     }
 
-    private fun navigateToListPage(category: Category, movie: Movie, tvShow: TvShow) {
+    private fun navigateToListPage(category: Category, tvShow: TvShow) {
         val navigateToListFragment =
             TvShowFragmentDirections.actionTvShowFragmentToMovieTvShowFragment()
         navigateToListFragment.intentFrom = category.name
-        navigateToListFragment.movie = movie
         navigateToListFragment.tvShow = tvShow
         findNavController().navigate(navigateToListFragment)
     }
 
     override fun onSeeAllClicked(category: Category?, movie: Movie?, tvShow: TvShow?) {
         navigateToListPage(
-            category ?: Category.TV_SHOWS,
-            movie ?: Movie.POPULAR_MOVIES,
-            tvShow ?: TvShow.POPULAR_TV_SHOWS
+            category = category ?: Category.TV_SHOWS,
+            tvShow = tvShow ?: TvShow.POPULAR_TV_SHOWS
         )
     }
 

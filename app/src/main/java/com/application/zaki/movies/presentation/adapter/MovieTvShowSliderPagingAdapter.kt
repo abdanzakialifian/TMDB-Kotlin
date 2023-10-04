@@ -10,8 +10,8 @@ import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.utils.loadBackdropImageUrl
 import javax.inject.Inject
 
-class MovieTvShowSliderAdapter @Inject constructor() :
-    PagingDataAdapter<MovieTvShow, MovieTvShowSliderAdapter.SliderViewHolder>(DIFF_CALLBACK) {
+class MovieTvShowSliderPagingAdapter @Inject constructor() :
+    PagingDataAdapter<MovieTvShow, MovieTvShowSliderPagingAdapter.SliderViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
 

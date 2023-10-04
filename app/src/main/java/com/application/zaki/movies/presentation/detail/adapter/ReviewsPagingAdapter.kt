@@ -13,7 +13,7 @@ import com.application.zaki.movies.utils.getInitialName
 import com.application.zaki.movies.utils.setResizableText
 import javax.inject.Inject
 
-class ReviewsMoviesPagingAdapter @Inject constructor() : PagingDataAdapter<ReviewItem, ReviewsMoviesPagingAdapter.ReviewsPagingViewHolder>(
+class ReviewsPagingAdapter @Inject constructor() : PagingDataAdapter<ReviewItem, ReviewsPagingAdapter.ReviewsPagingViewHolder>(
         DIFF_CALLBACK
     ) {
 

@@ -7,7 +7,6 @@ import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import com.application.zaki.movies.R
 import com.application.zaki.movies.databinding.FragmentMovieTvShowBinding
-import com.application.zaki.movies.domain.model.GenresItem
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.movietvshow.adapter.MovieTvShowPagingAdapter
@@ -144,15 +143,6 @@ class MovieTvShowFragment : BaseVBFragment<FragmentMovieTvShowBinding>(),
             MovieTvShowFragmentDirections.actionListFragmentToDetailFragment()
         navigateToDetailFragment.id = id
         navigateToDetailFragment.intentFrom = args.intentFrom
-        findNavController().navigate(navigateToDetailFragment)
-    }
-
-    private fun navigateToDiscoverPage(data: GenresItem) {
-        val navigateToDetailFragment =
-            MovieTvShowFragmentDirections.actionListFragmentToListDiscoverFragment()
-        navigateToDetailFragment.genreId = data.id ?: 0
-        navigateToDetailFragment.intentFrom = args.intentFrom
-        navigateToDetailFragment.genreName = data.name ?: ""
         findNavController().navigate(navigateToDetailFragment)
     }
 

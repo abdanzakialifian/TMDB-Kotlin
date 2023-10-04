@@ -25,7 +25,7 @@ import javax.inject.Inject
 class MovieTvShowAdapter @Inject constructor() :
     ListAdapter<CategoryItem, MovieTvShowAdapter.MovieCategoryViewHolder>(DIFF_CALLBACK) {
 
-    private lateinit var movieTvShowItemAdapter: MovieTvShowItemAdapter
+    private lateinit var movieTvShowItemPagingAdapter: MovieTvShowItemPagingAdapter
 
     private lateinit var onEventClickCallback: OnEventClickCallback
 
@@ -38,14 +38,14 @@ class MovieTvShowAdapter @Inject constructor() :
         fun bind(item: CategoryItem) {
             binding.apply {
                 tvTitleMovieTvShow.text = item.categoryTitle
-                movieTvShowItemAdapter = MovieTvShowItemAdapter()
-                if (this@MovieTvShowAdapter::movieTvShowItemAdapter.isInitialized) {
+                movieTvShowItemPagingAdapter = MovieTvShowItemPagingAdapter()
+                if (this@MovieTvShowAdapter::movieTvShowItemPagingAdapter.isInitialized) {
                     CoroutineScope(Dispatchers.IO).launch {
-                        movieTvShowItemAdapter.submitData(item.categories ?: PagingData.empty())
+                        movieTvShowItemPagingAdapter.submitData(item.categories ?: PagingData.empty())
                     }
-                    rvMovieTvShow.adapter = movieTvShowItemAdapter
+                    rvMovieTvShow.adapter = movieTvShowItemPagingAdapter
                     rvMovieTvShow.setHasFixedSize(true)
-                    movieTvShowItemAdapter.addLoadStateListener { loadState ->
+                    movieTvShowItemPagingAdapter.addLoadStateListener { loadState ->
                         setLoadStatePaging(loadState, binding)
                     }
                 }
@@ -105,8 +105,8 @@ class MovieTvShowAdapter @Inject constructor() :
             onEventClickCallback.onSeeAllClicked(category, movie, tvShow)
         }
 
-        movieTvShowItemAdapter.setOnItemClickCallback(object :
-            MovieTvShowItemAdapter.OnItemClickCallback {
+        movieTvShowItemPagingAdapter.setOnItemClickCallback(object :
+            MovieTvShowItemPagingAdapter.OnItemClickCallback {
             override fun onItemClicked(data: MovieTvShow?) {
                 if (this@MovieTvShowAdapter::onEventClickCallback.isInitialized) {
                     onEventClickCallback.onItemClicked(data)

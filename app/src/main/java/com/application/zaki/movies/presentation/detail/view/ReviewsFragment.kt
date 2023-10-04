@@ -4,7 +4,7 @@ import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
 import com.application.zaki.movies.databinding.FragmentReviewsBinding
 import com.application.zaki.movies.presentation.base.BaseVBFragment
-import com.application.zaki.movies.presentation.detail.adapter.ReviewsMoviesPagingAdapter
+import com.application.zaki.movies.presentation.detail.adapter.ReviewsPagingAdapter
 import com.application.zaki.movies.presentation.detail.viewmodel.DetailViewModel
 import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.RxDisposer
@@ -21,7 +21,7 @@ class ReviewsFragment : BaseVBFragment<FragmentReviewsBinding>() {
     private val detailViewModel by viewModels<DetailViewModel>(ownerProducer = { requireParentFragment() })
 
     @Inject
-    lateinit var reviewsPagingAdapter: ReviewsMoviesPagingAdapter
+    lateinit var reviewsPagingAdapter: ReviewsPagingAdapter
 
     override fun getViewBinding(): FragmentReviewsBinding =
         FragmentReviewsBinding.inflate(layoutInflater)

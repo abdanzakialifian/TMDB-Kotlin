@@ -96,27 +96,28 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_sub_title"
                     tools:text="en" />
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/img_star"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:src="@drawable/ic_star_18"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_language"
+                    app:layout_constraintStart_toEndOf="@id/tv_language"
+                    app:layout_constraintTop_toTopOf="@id/tv_language" />
+
                 <TextView
                     android:id="@+id/tv_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:fontFamily="@font/montserrat_medium"
+                    android:layout_marginStart="2dp"
                     android:textColor="@color/yellow"
                     android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_language"
-                    app:layout_constraintStart_toEndOf="@id/tv_language"
-                    app:layout_constraintTop_toTopOf="@id/tv_language"
+                    android:fontFamily="@font/montserrat_semi_bold"
+                    app:layout_constraintBottom_toBottomOf="@id/img_star"
+                    app:layout_constraintStart_toEndOf="@id/img_star"
+                    app:layout_constraintTop_toTopOf="@id/img_star"
                     tools:text="7.0" />
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:src="@drawable/ic_star_18_outline"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_rating"
-                    app:layout_constraintStart_toEndOf="@id/tv_rating"
-                    app:layout_constraintTop_toTopOf="@id/tv_rating" />
 
                 <TextView
                     android:id="@+id/tv_genres"

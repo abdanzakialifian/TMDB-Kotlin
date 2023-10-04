@@ -17,7 +17,7 @@ import com.application.zaki.movies.databinding.FragmentMovieBinding
 import com.application.zaki.movies.domain.model.CategoryItem
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.presentation.adapter.MovieTvShowAdapter
-import com.application.zaki.movies.presentation.adapter.MovieTvShowSliderAdapter
+import com.application.zaki.movies.presentation.adapter.MovieTvShowSliderPagingAdapter
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.movie.viewmodel.MovieViewModel
 import com.application.zaki.movies.presentation.movietvshow.adapter.MovieTvShowPagingAdapter
@@ -36,12 +36,12 @@ import kotlin.math.abs
 
 @AndroidEntryPoint
 class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
-    MovieTvShowSliderAdapter.OnItemClickCallback, MovieTvShowAdapter.OnEventClickCallback,
+    MovieTvShowSliderPagingAdapter.OnItemClickCallback, MovieTvShowAdapter.OnEventClickCallback,
     MaterialSearchBar.OnSearchActionListener, MovieTvShowPagingAdapter.OnItemClickCallback,
     TextWatcher {
 
     @Inject
-    lateinit var movieTvShowSliderAdapter: MovieTvShowSliderAdapter
+    lateinit var movieTvShowSliderPagingAdapter: MovieTvShowSliderPagingAdapter
 
     @Inject
     lateinit var movieTvShowAdapter: MovieTvShowAdapter
@@ -86,7 +86,7 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
     }
 
     private fun eventListeners() {
-        movieTvShowSliderAdapter.setOnItemClickCallback(this)
+        movieTvShowSliderPagingAdapter.setOnItemClickCallback(this)
         movieTvShowAdapter.setOnEventClickCallback(this)
         binding?.apply {
             searchBar.setOnSearchActionListener(this@MovieFragment)
@@ -101,9 +101,9 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
                 val moviePaging = pairMovie.second
 
                 if (movie == Movie.NOW_PLAYING_MOVIES) {
-                    movieTvShowSliderAdapter.submitData(viewLifecycleOwner.lifecycle, moviePaging)
+                    movieTvShowSliderPagingAdapter.submitData(viewLifecycleOwner.lifecycle, moviePaging)
                     configureImageSlider()
-                    movieTvShowSliderAdapter.addLoadStateListener { loadState ->
+                    movieTvShowSliderPagingAdapter.addLoadStateListener { loadState ->
                         setLoadStatePagingSlider(loadState)
                     }
                 } else {
@@ -158,7 +158,7 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
     private fun configureImageSlider() {
         binding?.apply {
             viewPagerImageSlider.apply {
-                adapter = movieTvShowSliderAdapter
+                adapter = movieTvShowSliderPagingAdapter
                 offscreenPageLimit = 3
                 getChildAt(0)?.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
@@ -250,20 +250,18 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
         findNavController().navigate(navigateToDetailFragment)
     }
 
-    private fun navigateToListPage(category: Category, movie: Movie, tvShow: TvShow) {
+    private fun navigateToListPage(category: Category, movie: Movie) {
         val navigateToListFragment =
             MovieFragmentDirections.actionMovieFragmentToMovieTvShowFragment()
         navigateToListFragment.intentFrom = category.name
         navigateToListFragment.movie = movie
-        navigateToListFragment.tvShow = tvShow
         findNavController().navigate(navigateToListFragment)
     }
 
     override fun onSeeAllClicked(category: Category?, movie: Movie?, tvShow: TvShow?) {
         navigateToListPage(
-            category ?: Category.MOVIES,
-            movie ?: Movie.POPULAR_MOVIES,
-            tvShow ?: TvShow.POPULAR_TV_SHOWS
+            category = category ?: Category.MOVIES,
+            movie = movie ?: Movie.POPULAR_MOVIES
         )
     }
 

@@ -162,6 +162,5 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
 
     companion object {
         private val REGEX = Regex("[^A-Za-z0-9 ]")
-        const val INTENT_FROM_TV_SHOWS = "Intent From Tv Shows"
     }
 }
