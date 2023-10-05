@@ -75,6 +75,7 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
                 onTheAirTvShow = TvShow.ON_THE_AIR_TV_SHOWS,
                 page = Page.ONE,
                 query = null,
+                tvId = null,
                 rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
             )
         }
@@ -278,6 +279,7 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
             tvShow = null,
             page = Page.MORE_THAN_ONE,
             query = text.toString(),
+            tvId = null,
             rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
         )
 

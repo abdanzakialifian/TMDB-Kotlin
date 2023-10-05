@@ -40,6 +40,7 @@ class TvShowViewModel @Inject constructor(private val tvShowWrapper: TvShowWrapp
         onTheAirTvShow: TvShow?,
         page: Page?,
         query: String?,
+        tvId: Int?,
         rxDisposer: RxDisposer
     ) {
         tvShowWrapper.getListAllTvShows(
@@ -49,6 +50,7 @@ class TvShowViewModel @Inject constructor(private val tvShowWrapper: TvShowWrapp
             onTheAirTvShow,
             page,
             query,
+            tvId,
             viewModelScope
         )
             .subscribeOn(Schedulers.io())
@@ -63,9 +65,10 @@ class TvShowViewModel @Inject constructor(private val tvShowWrapper: TvShowWrapp
         tvShow: TvShow?,
         page: Page?,
         query: String?,
+        tvId: Int?,
         rxDisposer: RxDisposer
     ) {
-        tvShowWrapper.getListTvShows(tvShow, page, query)
+        tvShowWrapper.getListTvShows(tvShow, page, query, tvId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .cachedIn(viewModelScope)

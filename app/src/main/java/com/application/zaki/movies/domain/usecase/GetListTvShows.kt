@@ -15,5 +15,6 @@ class GetListTvShows @Inject constructor(private val iTvShowsRepository: ITvShow
         tvShow: TvShow?,
         page: Page?,
         query: String?,
-    ): Flowable<PagingData<MovieTvShow>> = iTvShowsRepository.getTvShows(tvShow, page, query)
+        tvId: Int?
+    ): Flowable<PagingData<MovieTvShow>> = iTvShowsRepository.getTvShows(tvShow, page, query, tvId)
 }

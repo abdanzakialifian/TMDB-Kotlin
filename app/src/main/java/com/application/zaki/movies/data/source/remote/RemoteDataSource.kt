@@ -102,7 +102,8 @@ class RemoteDataSource @Inject constructor(
     fun getTvShows(
         tvShow: TvShow?,
         page: Page?,
-        query: String?
+        query: String?,
+        tvId: Int?
     ): Flowable<PagingData<ListTvShowsResponse>> =
         Pager(
             config = PagingConfig(
@@ -110,23 +111,23 @@ class RemoteDataSource @Inject constructor(
             ), pagingSourceFactory = {
                 when (tvShow) {
                     TvShow.AIRING_TODAY_TV_SHOWS -> airingTodayTvShowsRxPagingSource.apply {
-                        setData(tvShow, page, query)
+                        setData(tvShow, page, query, tvId)
                     }
 
                     TvShow.TOP_RATED_TV_SHOWS -> topRatedTvShowsRxPagingSource.apply {
-                        setData(tvShow, page, query)
+                        setData(tvShow, page, query, tvId)
                     }
 
                     TvShow.POPULAR_TV_SHOWS -> popularTvShowsRxPagingSource.apply {
-                        setData(tvShow, page, query)
+                        setData(tvShow, page, query, tvId)
                     }
 
                     TvShow.ON_THE_AIR_TV_SHOWS -> onTheAirTvShowsRxPagingSource.apply {
-                        setData(tvShow, page, query)
+                        setData(tvShow, page, query, tvId)
                     }
 
                     else -> tvShowsRxPagingSource.apply {
-                        setData(tvShow, page, query)
+                        setData(tvShow, page, query, tvId)
                     }
                 }
             }

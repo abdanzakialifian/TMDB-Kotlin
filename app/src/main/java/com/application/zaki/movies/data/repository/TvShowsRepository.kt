@@ -23,8 +23,8 @@ class TvShowsRepository @Inject constructor(private val remoteDataSource: Remote
             data.toDetailTvShow()
         }
 
-    override fun getTvShows(tvShow: TvShow?, page: Page?, query: String?): Flowable<PagingData<MovieTvShow>> =
-        remoteDataSource.getTvShows(tvShow, page, query).map { pagingData ->
+    override fun getTvShows(tvShow: TvShow?, page: Page?, query: String?, tvId: Int?): Flowable<PagingData<MovieTvShow>> =
+        remoteDataSource.getTvShows(tvShow, page, query, tvId).map { pagingData ->
             pagingData.map {
                 it.toTvShow()
             }

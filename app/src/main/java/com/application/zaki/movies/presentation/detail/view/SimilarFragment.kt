@@ -1,10 +1,8 @@
 package com.application.zaki.movies.presentation.detail.view
 
-import androidx.core.view.ViewCompat
 import androidx.fragment.app.viewModels
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.zaki.movies.databinding.FragmentSimilarBinding
 import com.application.zaki.movies.domain.model.MovieTvShow
 import com.application.zaki.movies.presentation.base.BaseVBFragment
@@ -39,22 +37,7 @@ class SimilarFragment : BaseVBFragment<FragmentSimilarBinding>(),
     }
 
     private fun observeData() {
-        detailViewModel.detailData.observe(viewLifecycleOwner) { pair ->
-            val intentFrom = pair.first
-            val detail = pair.second
-
-            if (intentFrom == Category.MOVIES.name) {
-                detailViewModel.getSimilarMovies(
-                    null,
-                    Page.MORE_THAN_ONE,
-                    null,
-                    detail.id,
-                    RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
-                )
-            }
-        }
-
-        detailViewModel.listMoviesPaging.observe(viewLifecycleOwner) { result ->
+        detailViewModel.listSimilarPaging.observe(viewLifecycleOwner) { result ->
             movieTvShowPagingAdapter.submitData(viewLifecycleOwner.lifecycle, result)
             movieTvShowPagingAdapter.setOnItemClickCallback(this)
             binding?.apply {
@@ -90,4 +73,32 @@ class SimilarFragment : BaseVBFragment<FragmentSimilarBinding>(),
     }
 
     override fun onItemClicked(data: MovieTvShow?) {}
+
+    override fun onResume() {
+        super.onResume()
+        if (detailViewModel.listSimilarPaging.value == null) {
+            detailViewModel.detailData.observe(viewLifecycleOwner) { pair ->
+                val intentFrom = pair.first
+                val detail = pair.second
+
+                if (intentFrom == Category.MOVIES.name) {
+                    detailViewModel.getSimilarMovies(
+                        null,
+                        Page.MORE_THAN_ONE,
+                        null,
+                        detail.id,
+                        RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
+                    )
+                } else {
+                    detailViewModel.getSimilarTvShows(
+                        null,
+                        Page.MORE_THAN_ONE,
+                        null,
+                        detail.id,
+                        RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
+                    )
+                }
+            }
+        }
+    }
 }

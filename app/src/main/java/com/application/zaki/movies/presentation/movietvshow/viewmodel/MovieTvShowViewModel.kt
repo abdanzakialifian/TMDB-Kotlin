@@ -51,9 +51,10 @@ class MovieTvShowViewModel @Inject constructor(private val movieTvShowWrapper: M
         tvShow: TvShow?,
         page: Page?,
         query: String?,
+        tvId: Int?,
         rxDisposer: RxDisposer
     ) {
-        movieTvShowWrapper.getListTvShows(tvShow, page, query)
+        movieTvShowWrapper.getListTvShows(tvShow, page, query, tvId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .cachedIn(viewModelScope)

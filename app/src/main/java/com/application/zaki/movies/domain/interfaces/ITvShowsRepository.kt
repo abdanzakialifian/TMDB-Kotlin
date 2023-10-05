@@ -14,6 +14,7 @@ interface ITvShowsRepository {
     fun getTvShows(
         tvShow: TvShow?,
         page: Page?,
-        query: String?
+        query: String?,
+        tvId: Int?
     ): Flowable<PagingData<MovieTvShow>>
 }

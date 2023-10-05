@@ -50,7 +50,7 @@ class ReviewsRxPagingSource @Inject constructor(private val apiService: ApiServi
         return LoadResult.Page(
             data = data.results ?: emptyList(),
             prevKey = if (position == 1) null else position - 1,
-            nextKey = if (position == data.totalPages) null else position + 1
+            nextKey = if (position == data.totalPages || data.totalPages == 0) null else position + 1
         )
     }
 

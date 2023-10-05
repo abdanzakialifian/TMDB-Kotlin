@@ -20,6 +20,8 @@ class TvShowsRxPagingSource @Inject constructor(private val apiService: ApiServi
 
     private var query: String? = null
 
+    private var tvId: Int? = null
+
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, ListTvShowsResponse>> {
         val position = if (page == Page.ONE) {
             INITIAL_POSITION
@@ -29,6 +31,14 @@ class TvShowsRxPagingSource @Inject constructor(private val apiService: ApiServi
 
         return if (query != null && query?.isNotEmpty() == true) {
             apiService.getSearchTvShows(query ?: "", position)
+                .subscribeOn(Schedulers.io())
+                .map { data ->
+                    toLoadResult(data, position)
+                }.onErrorReturn { throwable ->
+                    LoadResult.Error(throwable)
+                }
+        } else if (tvId != null) {
+            apiService.getSimilarTvShows(tvId ?: 0, position)
                 .subscribeOn(Schedulers.io())
                 .map { data ->
                     toLoadResult(data, position)
@@ -95,10 +105,11 @@ class TvShowsRxPagingSource @Inject constructor(private val apiService: ApiServi
         }
     }
 
-    fun setData(tvShow: TvShow?, page: Page?, query: String?) {
+    fun setData(tvShow: TvShow?, page: Page?, query: String?, tvId: Int?) {
         this.tvShow = tvShow
         this.page = page
         this.query = query
+        this.tvId = tvId
     }
 
     companion object {

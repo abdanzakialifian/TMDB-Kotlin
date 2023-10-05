@@ -102,4 +102,10 @@ interface ApiService {
         @Path("movie_id") movieId: Int,
         @Query("page") page: Int
     ): Single<MoviesResponse>
+
+    @GET("tv/{tv_id}/similar")
+    fun getSimilarTvShows(
+        @Path("tv_id") tvId: Int,
+        @Query("page") page: Int
+    ): Single<TvShowsResponse>
 }

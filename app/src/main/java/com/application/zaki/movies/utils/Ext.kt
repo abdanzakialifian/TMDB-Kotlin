@@ -27,7 +27,6 @@ import java.util.Locale
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 
-
 fun ImageView.loadImageUrl(url: String) {
     Glide.with(context)
         .load("https://image.tmdb.org/t/p/w500/$url")

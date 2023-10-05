@@ -25,6 +25,10 @@ class OverviewFragment : BaseVBFragment<FragmentOverviewBinding>() {
         FragmentOverviewBinding.inflate(layoutInflater)
 
     override fun initView() {
+        observeData()
+    }
+
+    private fun observeData() {
         detailViewModel.detailData.observe(viewLifecycleOwner) { pair ->
             val detail = pair.second
             binding?.apply {

@@ -27,15 +27,6 @@ class ReviewsFragment : BaseVBFragment<FragmentReviewsBinding>() {
         FragmentReviewsBinding.inflate(layoutInflater)
 
     override fun initView() {
-        detailViewModel.detailData.observe(viewLifecycleOwner) { pair ->
-            val intentFrom = pair.first
-            val detail = pair.second
-            detailViewModel.reviewsPaging(
-                detail.id?.toString(),
-                if (intentFrom == Category.MOVIES.name) Category.MOVIES else Category.TV_SHOWS,
-                RxDisposer().apply { bind(lifecycle) }
-            )
-        }
         observeData()
     }
 
@@ -54,6 +45,21 @@ class ReviewsFragment : BaseVBFragment<FragmentReviewsBinding>() {
 
                     is LoadState.Error -> {}
                 }
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (detailViewModel.listReviewsPaging.value == null) {
+            detailViewModel.detailData.observe(viewLifecycleOwner) { pair ->
+                val intentFrom = pair.first
+                val detail = pair.second
+                detailViewModel.reviewsPaging(
+                    detail.id?.toString(),
+                    if (intentFrom == Category.MOVIES.name) Category.MOVIES else Category.TV_SHOWS,
+                    RxDisposer().apply { bind(lifecycle) }
+                )
             }
         }
     }

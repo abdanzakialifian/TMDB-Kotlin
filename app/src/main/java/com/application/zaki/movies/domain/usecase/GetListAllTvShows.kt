@@ -23,13 +23,14 @@ class GetListAllTvShows @Inject constructor(private val iTvShowsRepository: ITvS
         onTheAirTvShow: TvShow?,
         page: Page?,
         query: String?,
+        tvId: Int?,
         scope: CoroutineScope
     ): Flowable<List<Pair<TvShow, PagingData<MovieTvShow>>>> {
         return Flowable.zip(
-            iTvShowsRepository.getTvShows(airingTodayTvShow, page, query).cachedIn(scope),
-            iTvShowsRepository.getTvShows(topRatedTvShow, page, query).cachedIn(scope),
-            iTvShowsRepository.getTvShows(popularTvShow, page, query).cachedIn(scope),
-            iTvShowsRepository.getTvShows(onTheAirTvShow, page, query).cachedIn(scope),
+            iTvShowsRepository.getTvShows(airingTodayTvShow, page, query, tvId).cachedIn(scope),
+            iTvShowsRepository.getTvShows(topRatedTvShow, page, query, tvId).cachedIn(scope),
+            iTvShowsRepository.getTvShows(popularTvShow, page, query, tvId).cachedIn(scope),
+            iTvShowsRepository.getTvShows(onTheAirTvShow, page, query, tvId).cachedIn(scope),
             Function4 { airingTodayTvShowPaging, topRatedTvShowPaging, popularTvShowPaging, onTheAirTvShowPaging ->
                 return@Function4 listOf(
                     Pair(TvShow.AIRING_TODAY_TV_SHOWS, airingTodayTvShowPaging),

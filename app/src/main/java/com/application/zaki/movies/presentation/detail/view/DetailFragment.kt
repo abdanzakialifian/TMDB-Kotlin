@@ -80,7 +80,7 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
             addChipToGroup(it.name ?: "")
         }
         setAppBarLayout(data.title)
-        setViewPager(data)
+        setViewPager()
 
         binding?.apply {
             imgBackdrop.loadBackdropImageUrl(data.backdropPath ?: "")
@@ -121,7 +121,7 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
         }
     }
 
-    private fun setViewPager(data: Detail) {
+    private fun setViewPager() {
         val fragments = listOf(
             OverviewFragment(),
             CastCrewFragment(),
@@ -138,7 +138,6 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
             val detailPagerAdapter =
                 DetailPagerAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
             detailPagerAdapter.setFragments(fragments)
-            detailPagerAdapter.setDataForOverviewFragment(data.overview ?: "")
             viewPager.adapter = detailPagerAdapter
             viewPager.isUserInputEnabled = false
             TabLayoutMediator(tabLayout, viewPager) { tab, position ->

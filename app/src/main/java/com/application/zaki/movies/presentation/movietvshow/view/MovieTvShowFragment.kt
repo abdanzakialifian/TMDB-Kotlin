@@ -84,6 +84,7 @@ class MovieTvShowFragment : BaseVBFragment<FragmentMovieTvShowBinding>(),
                 tvShow = tvShow,
                 page = Page.MORE_THAN_ONE,
                 query = null,
+                tvId = null,
                 rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) },
             )
         }

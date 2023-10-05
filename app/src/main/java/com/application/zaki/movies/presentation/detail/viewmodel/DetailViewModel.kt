@@ -13,6 +13,7 @@ import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.Movie
 import com.application.zaki.movies.utils.Page
 import com.application.zaki.movies.utils.RxDisposer
+import com.application.zaki.movies.utils.TvShow
 import com.application.zaki.movies.utils.UiState
 import com.application.zaki.movies.utils.addToDisposer
 import com.application.zaki.movies.utils.toLiveData
@@ -29,8 +30,8 @@ class DetailViewModel @Inject constructor(private val detailWrapper: DetailWrapp
     private val _detailDataState = MutableLiveData<UiState<Detail>>()
     val detailDataState get() = _detailDataState.toLiveData()
 
-    private val _listMoviesPaging: MutableLiveData<PagingData<MovieTvShow>> = MutableLiveData()
-    val listMoviesPaging get() = _listMoviesPaging.toLiveData()
+    private val _listSimilarPaging: MutableLiveData<PagingData<MovieTvShow>> = MutableLiveData()
+    val listSimilarPaging get() = _listSimilarPaging.toLiveData()
 
     private val _listReviewsPaging: MutableLiveData<PagingData<ReviewItem>> = MutableLiveData()
     val listReviewsPaging get() = _listReviewsPaging.toLiveData()
@@ -84,6 +85,7 @@ class DetailViewModel @Inject constructor(private val detailWrapper: DetailWrapp
         detailWrapper.getReviews(id, category)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .cachedIn(viewModelScope)
             .subscribe { data ->
                 _listReviewsPaging.postValue(data)
             }
@@ -102,7 +104,24 @@ class DetailViewModel @Inject constructor(private val detailWrapper: DetailWrapp
             .observeOn(AndroidSchedulers.mainThread())
             .cachedIn(viewModelScope)
             .subscribe { data ->
-                _listMoviesPaging.postValue(data)
+                _listSimilarPaging.postValue(data)
+            }
+            .addToDisposer(rxDisposer)
+    }
+
+    fun getSimilarTvShows(
+        tvShow: TvShow?,
+        page: Page?,
+        query: String?,
+        tvId: Int?,
+        rxDisposer: RxDisposer
+    ) {
+        detailWrapper.getListTvShows(tvShow, page, query, tvId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .cachedIn(viewModelScope)
+            .subscribe { data ->
+                _listSimilarPaging.postValue(data)
             }
             .addToDisposer(rxDisposer)
     }
