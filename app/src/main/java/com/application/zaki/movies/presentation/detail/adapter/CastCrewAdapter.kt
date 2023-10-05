@@ -11,6 +11,7 @@ import javax.inject.Inject
 
 class CastCrewAdapter @Inject constructor() :
     ListAdapter<CastCrewModel, CastCrewAdapter.CastViewHolder>(DIFF_CALLBACK) {
+
     inner class CastViewHolder(private val binding: ItemListCastCrewBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CastCrewModel) {

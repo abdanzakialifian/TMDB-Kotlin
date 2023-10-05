@@ -8,6 +8,8 @@ import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.adapter.CastCrewAdapter
 import com.application.zaki.movies.presentation.detail.viewmodel.DetailViewModel
 import com.application.zaki.movies.utils.UiState
+import com.application.zaki.movies.utils.gone
+import com.application.zaki.movies.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -37,13 +39,14 @@ class CastCrewFragment : BaseVBFragment<FragmentCastCrewBinding>() {
             when (result) {
                 is UiState.Loading -> {
                     binding?.apply {
-//                        shimmerOverview.visible()
-//                        layoutOverview.gone()
+                        shimmerCastCrew.visible()
+                        rvCastCrew.gone()
                     }
                 }
 
                 is UiState.Success -> {
                     val detail = result.data
+                    castCrewModels.clear()
                     castCrewModels.addAll(
                         listOf(
                             CastCrewModel(
@@ -60,6 +63,8 @@ class CastCrewFragment : BaseVBFragment<FragmentCastCrewBinding>() {
                     )
                     castCrewAdapter.submitList(castCrewModels)
                     binding?.apply {
+                        shimmerCastCrew.gone()
+                        rvCastCrew.visible()
                         rvCastCrew.adapter = castCrewAdapter
                         rvCastCrew.setHasFixedSize(true)
                     }
@@ -69,16 +74,5 @@ class CastCrewFragment : BaseVBFragment<FragmentCastCrewBinding>() {
                 is UiState.Empty -> {}
             }
         }
-//        detailViewModel.detailData.observe(viewLifecycleOwner) { pair ->
-//            val detail = pair.second
-//            castAdapter.submitList(detail.cast)
-//            crewAdapter.submitList(detail.crew)
-//            binding?.apply {
-//                rvCast.adapter = castAdapter
-//                rvCast.setHasFixedSize(true)
-//                rvCrew.adapter = crewAdapter
-//                rvCrew.setHasFixedSize(true)
-//            }
-//        }
     }
 }
