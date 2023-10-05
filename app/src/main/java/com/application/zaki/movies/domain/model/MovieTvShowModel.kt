@@ -1,6 +1,6 @@
 package com.application.zaki.movies.domain.model
 
-data class MovieTvShow(
+data class MovieTvShowModel(
     val name: String? = null,
     val posterPath: String? = null,
     val voteAverage: Double? = null,

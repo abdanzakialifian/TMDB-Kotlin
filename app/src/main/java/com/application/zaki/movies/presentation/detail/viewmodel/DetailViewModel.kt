@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.rxjava2.cachedIn
-import com.application.zaki.movies.domain.model.Detail
-import com.application.zaki.movies.domain.model.MovieTvShow
-import com.application.zaki.movies.domain.model.ReviewItem
+import com.application.zaki.movies.domain.model.DetailModel
+import com.application.zaki.movies.domain.model.MovieTvShowModel
+import com.application.zaki.movies.domain.model.ReviewModel
 import com.application.zaki.movies.domain.usecase.detail.DetailWrapper
 import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.Movie
@@ -27,16 +27,16 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(private val detailWrapper: DetailWrapper) : ViewModel() {
 
-    private val _detailDataState = MutableLiveData<UiState<Detail>>()
+    private val _detailDataState = MutableLiveData<UiState<DetailModel>>()
     val detailDataState get() = _detailDataState.toLiveData()
 
-    private val _listSimilarPaging: MutableLiveData<PagingData<MovieTvShow>> = MutableLiveData()
+    private val _listSimilarPaging: MutableLiveData<PagingData<MovieTvShowModel>> = MutableLiveData()
     val listSimilarPaging get() = _listSimilarPaging.toLiveData()
 
-    private val _listReviewsPaging: MutableLiveData<PagingData<ReviewItem>> = MutableLiveData()
+    private val _listReviewsPaging: MutableLiveData<PagingData<ReviewModel>> = MutableLiveData()
     val listReviewsPaging get() = _listReviewsPaging.toLiveData()
 
-    private val _detailData = MutableLiveData<Pair<String, Detail>>()
+    private val _detailData = MutableLiveData<Pair<String, DetailModel>>()
     val detailData get() = _detailData.toLiveData()
 
     fun detailMovies(
@@ -80,7 +80,9 @@ class DetailViewModel @Inject constructor(private val detailWrapper: DetailWrapp
     }
 
     fun reviewsPaging(
-        id: String?, category: Category?, rxDisposer: RxDisposer,
+        id: String?,
+        category: Category?,
+        rxDisposer: RxDisposer,
     ) {
         detailWrapper.getReviews(id, category)
             .subscribeOn(Schedulers.io())
@@ -126,7 +128,7 @@ class DetailViewModel @Inject constructor(private val detailWrapper: DetailWrapp
             .addToDisposer(rxDisposer)
     }
 
-    fun setDetailData(intentFrom: String, detail: Detail) {
+    fun setDetailData(intentFrom: String, detail: DetailModel) {
         _detailData.postValue(Pair(intentFrom, detail))
     }
 }

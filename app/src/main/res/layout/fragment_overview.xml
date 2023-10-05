@@ -7,65 +7,83 @@
     android:paddingVertical="16dp"
     tools:context=".presentation.detail.view.OverviewFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/layout_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_semi_bold"
-                android:text="@string/overview"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/tv_overview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/montserrat_regular"
-                android:lineSpacingExtra="4dp"
-                android:textSize="12sp"
-                tools:text="This is overview" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tv_trailer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/montserrat_semi_bold"
-            android:paddingHorizontal="16dp"
-            android:text="@string/trailer"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_text" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_trailer"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_overview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:clipToPadding="false"
-            android:orientation="horizontal"
-            android:paddingHorizontal="8dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_trailer"
-            tools:listitem="@layout/item_list_trailer" />
+            android:visibility="gone">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:id="@+id/layout_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semi_bold"
+                    android:text="@string/overview"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_overview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:lineSpacingExtra="4dp"
+                    android:textSize="12sp"
+                    tools:text="This is overview" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_trailer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/montserrat_semi_bold"
+                android:text="@string/trailer"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layout_text" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_trailer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingHorizontal="8dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_trailer"
+                tools:listitem="@layout/item_list_trailer" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_overview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/overview_shimmer_placeholder" />
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+    </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

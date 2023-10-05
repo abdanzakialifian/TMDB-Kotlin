@@ -6,7 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.application.zaki.movies.R
 import com.application.zaki.movies.databinding.FragmentDetailBinding
-import com.application.zaki.movies.domain.model.Detail
+import com.application.zaki.movies.domain.model.DetailModel
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.adapter.DetailPagerAdapter
 import com.application.zaki.movies.presentation.detail.viewmodel.DetailViewModel
@@ -17,8 +17,10 @@ import com.application.zaki.movies.utils.State
 import com.application.zaki.movies.utils.UiState
 import com.application.zaki.movies.utils.convertDateText
 import com.application.zaki.movies.utils.fromMinutesToHHmm
+import com.application.zaki.movies.utils.gone
 import com.application.zaki.movies.utils.loadBackdropImageUrl
 import com.application.zaki.movies.utils.loadImageUrl
+import com.application.zaki.movies.utils.visible
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
@@ -56,15 +58,29 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
         }
 
         observeData(intentFrom)
+        setViewPager()
     }
 
     private fun observeData(intentFrom: String) {
         detailViewModel.detailDataState.observe(viewLifecycleOwner) { result ->
             when (result) {
-                is UiState.Loading -> {}
+                is UiState.Loading -> {
+                    binding?.apply {
+                        shimmerDetail.visible()
+                        layoutDetail.gone()
+                    }
+                    setAppBarLayout("")
+                }
+
                 is UiState.Success -> {
-                    showDataDetail(result.data)
-                    detailViewModel.setDetailData(intentFrom, result.data)
+                    binding?.apply {
+                        shimmerDetail.gone()
+                        layoutDetail.visible()
+                    }
+                    val detail = result.data
+                    setAppBarLayout(detail.title)
+                    showDataDetail(detail)
+                    detailViewModel.setDetailData(intentFrom, detail)
                 }
 
                 is UiState.Error -> {}
@@ -73,14 +89,12 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
         }
     }
 
-    private fun showDataDetail(data: Detail) {
+    private fun showDataDetail(data: DetailModel) {
         val convertRating =
             data.voteAverage?.toBigDecimal()?.setScale(1, RoundingMode.UP)?.toDouble()
         data.genres?.forEach {
             addChipToGroup(it.name ?: "")
         }
-        setAppBarLayout(data.title)
-        setViewPager()
 
         binding?.apply {
             imgBackdrop.loadBackdropImageUrl(data.backdropPath ?: "")

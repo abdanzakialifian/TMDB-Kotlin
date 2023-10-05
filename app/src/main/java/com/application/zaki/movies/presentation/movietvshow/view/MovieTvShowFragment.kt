@@ -7,7 +7,7 @@ import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import com.application.zaki.movies.R
 import com.application.zaki.movies.databinding.FragmentMovieTvShowBinding
-import com.application.zaki.movies.domain.model.MovieTvShow
+import com.application.zaki.movies.domain.model.MovieTvShowModel
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.movietvshow.adapter.MovieTvShowPagingAdapter
 import com.application.zaki.movies.presentation.movietvshow.viewmodel.MovieTvShowViewModel
@@ -66,7 +66,7 @@ class MovieTvShowFragment : BaseVBFragment<FragmentMovieTvShowBinding>(),
     }
 
     private fun getListMovies(movie: Movie) {
-        if (movieTvShowViewModel.listMovies.value == null) {
+        if (movieTvShowViewModel.listMoviesPaging.value == null) {
             movieTvShowViewModel.getListMovies(
                 movie = movie,
                 page = Page.MORE_THAN_ONE,
@@ -79,7 +79,7 @@ class MovieTvShowFragment : BaseVBFragment<FragmentMovieTvShowBinding>(),
     }
 
     private fun getListTvShows(tvShow: TvShow) {
-        if (movieTvShowViewModel.listTvShows.value == null) {
+        if (movieTvShowViewModel.listTvShowsPaging.value == null) {
             movieTvShowViewModel.getListTvShows(
                 tvShow = tvShow,
                 page = Page.MORE_THAN_ONE,
@@ -92,7 +92,7 @@ class MovieTvShowFragment : BaseVBFragment<FragmentMovieTvShowBinding>(),
     }
 
     private fun observeData() {
-        movieTvShowViewModel.listMovies.observe(viewLifecycleOwner) { result ->
+        movieTvShowViewModel.listMoviesPaging.observe(viewLifecycleOwner) { result ->
             movieTvShowPagingAdapter.submitData(viewLifecycleOwner.lifecycle, result)
             movieTvShowPagingAdapter.setOnItemClickCallback(this)
             binding?.apply {
@@ -104,7 +104,7 @@ class MovieTvShowFragment : BaseVBFragment<FragmentMovieTvShowBinding>(),
             }
         }
 
-        movieTvShowViewModel.listTvShows.observe(viewLifecycleOwner) { result ->
+        movieTvShowViewModel.listTvShowsPaging.observe(viewLifecycleOwner) { result ->
             movieTvShowPagingAdapter.submitData(viewLifecycleOwner.lifecycle, result)
             movieTvShowPagingAdapter.setOnItemClickCallback(this)
             binding?.apply {
@@ -147,7 +147,7 @@ class MovieTvShowFragment : BaseVBFragment<FragmentMovieTvShowBinding>(),
         findNavController().navigate(navigateToDetailFragment)
     }
 
-    override fun onItemClicked(data: MovieTvShow?) {
+    override fun onItemClicked(data: MovieTvShowModel?) {
         navigateToDetailPage(data?.id ?: 0)
     }
 }

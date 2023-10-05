@@ -6,14 +6,14 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListMovieTvShowPagingBinding
-import com.application.zaki.movies.domain.model.MovieTvShow
+import com.application.zaki.movies.domain.model.MovieTvShowModel
 import com.application.zaki.movies.utils.convertDateText
 import com.application.zaki.movies.utils.loadImageUrl
 import java.math.RoundingMode
 import javax.inject.Inject
 
 class MovieTvShowPagingAdapter @Inject constructor() :
-    PagingDataAdapter<MovieTvShow, MovieTvShowPagingAdapter.PopularMoviesPagingViewHolder>(
+    PagingDataAdapter<MovieTvShowModel, MovieTvShowPagingAdapter.PopularMoviesPagingViewHolder>(
         DIFF_CALLBACK
     ) {
 
@@ -25,7 +25,7 @@ class MovieTvShowPagingAdapter @Inject constructor() :
 
     inner class PopularMoviesPagingViewHolder(private val binding: ItemListMovieTvShowPagingBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: MovieTvShow?) {
+        fun bind(item: MovieTvShowModel?) {
             binding.apply {
                 item?.apply {
                     posterPath?.let { url ->
@@ -43,7 +43,6 @@ class MovieTvShowPagingAdapter @Inject constructor() :
                     voteAverage?.let { voteAverage ->
                         val convertRating =
                             voteAverage.toBigDecimal().setScale(1, RoundingMode.UP).toDouble()
-                        ratingBar.rating = (convertRating / 2).toFloat()
                         tvRating.text = convertRating.toFloat().toString()
                     }
 
@@ -72,19 +71,19 @@ class MovieTvShowPagingAdapter @Inject constructor() :
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: MovieTvShow?)
+        fun onItemClicked(data: MovieTvShowModel?)
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<MovieTvShow>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<MovieTvShowModel>() {
             override fun areItemsTheSame(
-                oldItem: MovieTvShow,
-                newItem: MovieTvShow
+                oldItem: MovieTvShowModel,
+                newItem: MovieTvShowModel
             ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
-                oldItem: MovieTvShow,
-                newItem: MovieTvShow
+                oldItem: MovieTvShowModel,
+                newItem: MovieTvShowModel
             ): Boolean = oldItem == newItem
         }
     }

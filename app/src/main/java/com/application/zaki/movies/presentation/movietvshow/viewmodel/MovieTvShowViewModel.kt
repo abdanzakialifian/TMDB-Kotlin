@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.rxjava2.cachedIn
-import com.application.zaki.movies.domain.model.MovieTvShow
+import com.application.zaki.movies.domain.model.MovieTvShowModel
 import com.application.zaki.movies.domain.usecase.movietvshow.MovieTvShowWrapper
 import com.application.zaki.movies.utils.Movie
 import com.application.zaki.movies.utils.Page
@@ -24,11 +24,11 @@ import javax.inject.Inject
 class MovieTvShowViewModel @Inject constructor(private val movieTvShowWrapper: MovieTvShowWrapper) :
     ViewModel() {
 
-    private val _listMovies: MutableLiveData<PagingData<MovieTvShow>> = MutableLiveData()
-    val listMovies get() = _listMovies.toLiveData()
+    private val _listMoviesPaging: MutableLiveData<PagingData<MovieTvShowModel>> = MutableLiveData()
+    val listMoviesPaging get() = _listMoviesPaging.toLiveData()
 
-    private val _listTvShows: MutableLiveData<PagingData<MovieTvShow>> = MutableLiveData()
-    val listTvShows get() = _listTvShows.toLiveData()
+    private val _listTvShowsPaging: MutableLiveData<PagingData<MovieTvShowModel>> = MutableLiveData()
+    val listTvShowsPaging get() = _listTvShowsPaging.toLiveData()
 
     fun getListMovies(
         movie: Movie?,
@@ -42,7 +42,7 @@ class MovieTvShowViewModel @Inject constructor(private val movieTvShowWrapper: M
             .observeOn(AndroidSchedulers.mainThread())
             .cachedIn(viewModelScope)
             .subscribe { data ->
-                _listMovies.postValue(data)
+                _listMoviesPaging.postValue(data)
             }
             .addToDisposer(rxDisposer)
     }
@@ -59,7 +59,7 @@ class MovieTvShowViewModel @Inject constructor(private val movieTvShowWrapper: M
             .observeOn(AndroidSchedulers.mainThread())
             .cachedIn(viewModelScope)
             .subscribe { data ->
-                _listTvShows.postValue(data)
+                _listTvShowsPaging.postValue(data)
             }
             .addToDisposer(rxDisposer)
     }

@@ -49,36 +49,24 @@
             app:layout_constraintTop_toBottomOf="@id/tv_year"
             tools:text="The Dark Knight" />
 
-        <RatingBar
-            android:id="@+id/rating_bar"
-            style="@android:style/Widget.DeviceDefault.RatingBar.Small"
+        <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
-            android:isIndicator="true"
-            android:max="5"
-            android:progressTint="@color/yellow"
-            android:rating="3"
-            android:numStars="5"
-            android:secondaryProgressTint="@color/yellow"
-            android:stepSize="0.1"
-            android:transformPivotX="0dp"
-            app:layout_constraintStart_toEndOf="@id/img_poster"
+            android:id="@+id/img_star"
+            android:layout_marginTop="4dp"
+            android:src="@drawable/ic_star_18"
+            app:layout_constraintStart_toStartOf="@id/tv_title"
             app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
         <TextView
             android:id="@+id/tv_rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/background_border_rating"
-            android:padding="6dp"
-            android:textSize="10sp"
-            app:layout_constraintStart_toEndOf="@id/img_poster"
-            app:layout_constraintTop_toBottomOf="@id/rating_bar"
-            tools:ignore="SmallSp"
+            android:layout_marginStart="4dp"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/img_star"
+            app:layout_constraintStart_toEndOf="@id/img_star"
+            app:layout_constraintTop_toTopOf="@id/img_star"
             tools:text="8.7" />
 
         <TextView

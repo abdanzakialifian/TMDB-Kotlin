@@ -7,19 +7,19 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.R
 import com.application.zaki.movies.databinding.ItemListReviewBinding
-import com.application.zaki.movies.domain.model.ReviewItem
+import com.application.zaki.movies.domain.model.ReviewModel
 import com.application.zaki.movies.utils.convertDateText
 import com.application.zaki.movies.utils.getInitialName
 import com.application.zaki.movies.utils.setResizableText
 import javax.inject.Inject
 
-class ReviewsPagingAdapter @Inject constructor() : PagingDataAdapter<ReviewItem, ReviewsPagingAdapter.ReviewsPagingViewHolder>(
+class ReviewsPagingAdapter @Inject constructor() : PagingDataAdapter<ReviewModel, ReviewsPagingAdapter.ReviewsPagingViewHolder>(
         DIFF_CALLBACK
     ) {
 
     inner class ReviewsPagingViewHolder(private val binding: ItemListReviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ReviewItem?) {
+        fun bind(item: ReviewModel?) {
             binding.apply {
                 tvInitialUser.text = item?.author?.getInitialName()
                 tvUserName.text = item?.author
@@ -45,11 +45,11 @@ class ReviewsPagingAdapter @Inject constructor() : PagingDataAdapter<ReviewItem,
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ReviewItem>() {
-            override fun areItemsTheSame(oldItem: ReviewItem, newItem: ReviewItem): Boolean =
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ReviewModel>() {
+            override fun areItemsTheSame(oldItem: ReviewModel, newItem: ReviewModel): Boolean =
                 oldItem.id == newItem.id
 
-            override fun areContentsTheSame(oldItem: ReviewItem, newItem: ReviewItem): Boolean =
+            override fun areContentsTheSame(oldItem: ReviewModel, newItem: ReviewModel): Boolean =
                 oldItem == newItem
         }
     }

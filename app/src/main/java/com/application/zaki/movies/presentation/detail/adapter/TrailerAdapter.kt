@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListTrailerBinding
-import com.application.zaki.movies.domain.model.Videos
+import com.application.zaki.movies.domain.model.VideoItemModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import javax.inject.Inject
 
 class TrailerAdapter @Inject constructor() :
-    ListAdapter<Videos, TrailerAdapter.TrailerViewHolder>(DIFF_CALLBACK) {
+    ListAdapter<VideoItemModel, TrailerAdapter.TrailerViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var lifecycleOwner: LifecycleOwner
 
@@ -23,7 +23,7 @@ class TrailerAdapter @Inject constructor() :
 
     inner class TrailerViewHolder(private val binding: ItemListTrailerBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Videos) {
+        fun bind(item: VideoItemModel) {
             binding.apply {
                 if (this@TrailerAdapter::lifecycleOwner.isInitialized) {
                     lifecycleOwner.lifecycle.addObserver(youtubePlayer)
@@ -51,11 +51,11 @@ class TrailerAdapter @Inject constructor() :
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Videos>() {
-            override fun areItemsTheSame(oldItem: Videos, newItem: Videos): Boolean =
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<VideoItemModel>() {
+            override fun areItemsTheSame(oldItem: VideoItemModel, newItem: VideoItemModel): Boolean =
                 oldItem.id == newItem.id
 
-            override fun areContentsTheSame(oldItem: Videos, newItem: Videos): Boolean =
+            override fun areContentsTheSame(oldItem: VideoItemModel, newItem: VideoItemModel): Boolean =
                 oldItem == newItem
         }
     }

@@ -5,7 +5,10 @@ import com.application.zaki.movies.databinding.FragmentOverviewBinding
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.adapter.TrailerAdapter
 import com.application.zaki.movies.presentation.detail.viewmodel.DetailViewModel
+import com.application.zaki.movies.utils.UiState
+import com.application.zaki.movies.utils.gone
 import com.application.zaki.movies.utils.setResizableText
+import com.application.zaki.movies.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -29,14 +32,30 @@ class OverviewFragment : BaseVBFragment<FragmentOverviewBinding>() {
     }
 
     private fun observeData() {
-        detailViewModel.detailData.observe(viewLifecycleOwner) { pair ->
-            val detail = pair.second
-            binding?.apply {
-                tvOverview.setResizableText(detail.overview ?: "", 3, true, layoutText)
-                trailerAdapter.submitList(detail.videos)
-                trailerAdapter.setLifecycleOwner(viewLifecycleOwner)
-                rvTrailer.adapter = trailerAdapter
-                rvTrailer.setHasFixedSize(true)
+        detailViewModel.detailDataState.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is UiState.Loading -> {
+                    binding?.apply {
+                        shimmerOverview.visible()
+                        layoutOverview.gone()
+                    }
+                }
+
+                is UiState.Success -> {
+                    val detail = result.data
+                    binding?.apply {
+                        shimmerOverview.gone()
+                        layoutOverview.visible()
+                        tvOverview.setResizableText(detail.overview ?: "", 3, true, layoutText)
+                        trailerAdapter.submitList(detail.videos)
+                        trailerAdapter.setLifecycleOwner(viewLifecycleOwner)
+                        rvTrailer.adapter = trailerAdapter
+                        rvTrailer.setHasFixedSize(true)
+                    }
+                }
+
+                is UiState.Error -> {}
+                is UiState.Empty -> {}
             }
         }
     }

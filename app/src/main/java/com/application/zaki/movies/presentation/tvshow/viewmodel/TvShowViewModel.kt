@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.rxjava2.cachedIn
-import com.application.zaki.movies.domain.model.MovieTvShow
+import com.application.zaki.movies.domain.model.MovieTvShowModel
 import com.application.zaki.movies.domain.usecase.tvshow.TvShowWrapper
 import com.application.zaki.movies.utils.Page
 import com.application.zaki.movies.utils.RxDisposer
@@ -22,13 +22,13 @@ import javax.inject.Inject
 class TvShowViewModel @Inject constructor(private val tvShowWrapper: TvShowWrapper) :
     ViewModel() {
 
-    private val _listTvShows: MutableLiveData<List<Pair<TvShow, PagingData<MovieTvShow>>>> =
+    private val _listTvShowsPaging: MutableLiveData<List<Pair<TvShow, PagingData<MovieTvShowModel>>>> =
         MutableLiveData()
-    val listTvShows get() = _listTvShows.toLiveData()
+    val listTvShowsPaging get() = _listTvShowsPaging.toLiveData()
 
-    private val _listSearchTvShows: MutableLiveData<PagingData<MovieTvShow>> =
+    private val _listSearchTvShowsPaging: MutableLiveData<PagingData<MovieTvShowModel>> =
         MutableLiveData()
-    val listSearchTvShows get() = _listSearchTvShows.toLiveData()
+    val listSearchTvShowsPaging get() = _listSearchTvShowsPaging.toLiveData()
 
     private val _isSearchStateChanged = MutableLiveData(false)
     val isSearchStateChanged get() = _isSearchStateChanged.toLiveData()
@@ -56,7 +56,7 @@ class TvShowViewModel @Inject constructor(private val tvShowWrapper: TvShowWrapp
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->
-                _listTvShows.postValue(data)
+                _listTvShowsPaging.postValue(data)
             }.addToDisposer(rxDisposer)
     }
 
@@ -73,7 +73,7 @@ class TvShowViewModel @Inject constructor(private val tvShowWrapper: TvShowWrapp
             .observeOn(AndroidSchedulers.mainThread())
             .cachedIn(viewModelScope)
             .subscribe { data ->
-                _listSearchTvShows.postValue(data)
+                _listSearchTvShowsPaging.postValue(data)
             }
             .addToDisposer(rxDisposer)
     }

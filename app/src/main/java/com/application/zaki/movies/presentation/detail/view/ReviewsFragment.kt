@@ -8,6 +8,8 @@ import com.application.zaki.movies.presentation.detail.adapter.ReviewsPagingAdap
 import com.application.zaki.movies.presentation.detail.viewmodel.DetailViewModel
 import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.RxDisposer
+import com.application.zaki.movies.utils.gone
+import com.application.zaki.movies.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -35,15 +37,28 @@ class ReviewsFragment : BaseVBFragment<FragmentReviewsBinding>() {
             reviewsPagingAdapter.submitData(lifecycle, result)
             reviewsPagingAdapter.addLoadStateListener { loadState ->
                 when (loadState.refresh) {
-                    is LoadState.Loading -> {}
+                    is LoadState.Loading -> {
+                        binding?.apply {
+                            shimmerReviews.visible()
+                            rvReviews.gone()
+                        }
+                    }
+
                     is LoadState.NotLoading -> {
                         binding?.apply {
+                            shimmerReviews.gone()
+                            rvReviews.visible()
                             rvReviews.adapter = reviewsPagingAdapter
                             rvReviews.setHasFixedSize(true)
                         }
                     }
 
-                    is LoadState.Error -> {}
+                    is LoadState.Error -> {
+                        binding?.apply {
+                            shimmerReviews.gone()
+                            rvReviews.gone()
+                        }
+                    }
                 }
             }
         }

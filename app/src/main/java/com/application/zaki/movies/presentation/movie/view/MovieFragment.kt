@@ -14,8 +14,8 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.application.zaki.movies.R
 import com.application.zaki.movies.databinding.FragmentMovieBinding
-import com.application.zaki.movies.domain.model.CategoryItem
-import com.application.zaki.movies.domain.model.MovieTvShow
+import com.application.zaki.movies.domain.model.CategoryModel
+import com.application.zaki.movies.domain.model.MovieTvShowModel
 import com.application.zaki.movies.presentation.adapter.MovieTvShowAdapter
 import com.application.zaki.movies.presentation.adapter.MovieTvShowSliderPagingAdapter
 import com.application.zaki.movies.presentation.base.BaseVBFragment
@@ -53,7 +53,7 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
 
     private val movieViewModel by viewModels<MovieViewModel>()
 
-    private val categoryItems = mutableListOf<CategoryItem>()
+    private val categoryModels = mutableListOf<CategoryModel>()
 
     private val sliderHandler = Handler(Looper.getMainLooper())
 
@@ -67,7 +67,7 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
             }
         }
 
-        if (movieViewModel.listMovies.value == null) {
+        if (movieViewModel.listMoviesPaging.value == null) {
             movieViewModel.getListAllMovies(
                 nowPlayingMovie = Movie.NOW_PLAYING_MOVIES,
                 topRatedMovie = Movie.TOP_RATED_MOVIES,
@@ -95,7 +95,7 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
     }
 
     private fun observeData() {
-        movieViewModel.listMovies.observe(viewLifecycleOwner) { result ->
+        movieViewModel.listMoviesPaging.observe(viewLifecycleOwner) { result ->
             result.forEachIndexed { index, pairMovie ->
                 val movie = pairMovie.first
                 val moviePaging = pairMovie.second
@@ -113,20 +113,20 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
                         else -> resources.getString(R.string.up_coming_movies)
                     }
 
-                    val data = CategoryItem(
+                    val data = CategoryModel(
                         categoryId = index,
                         categoryTitle = title,
                         categories = moviePaging,
                         category = Category.MOVIES,
                         movie = movie
                     )
-                    categoryItems.add(data)
+                    categoryModels.add(data)
                 }
             }
             setAllMoviesAdapter()
         }
 
-        movieViewModel.listSearchMovies.observe(viewLifecycleOwner) { result ->
+        movieViewModel.listSearchMoviesPaging.observe(viewLifecycleOwner) { result ->
             movieTvShowPagingAdapter.submitData(viewLifecycleOwner.lifecycle, result)
             movieTvShowPagingAdapter.setOnItemClickCallback(this)
             binding?.apply {
@@ -236,7 +236,7 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
     }
 
     private fun setAllMoviesAdapter() {
-        movieTvShowAdapter.submitList(categoryItems)
+        movieTvShowAdapter.submitList(categoryModels)
         binding?.apply {
             rvMovies.adapter = movieTvShowAdapter
             rvMovies.setHasFixedSize(true)
@@ -265,7 +265,7 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
         )
     }
 
-    override fun onItemClicked(data: MovieTvShow?) {
+    override fun onItemClicked(data: MovieTvShowModel?) {
         navigateToDetailPage(data?.id ?: 0)
     }
 
@@ -317,7 +317,7 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
     }
 
     override fun onDestroyView() {
-        categoryItems.clear()
+        categoryModels.clear()
         super.onDestroyView()
     }
 }

@@ -6,16 +6,16 @@ import com.application.zaki.movies.data.source.remote.response.other.ResultsItem
 import com.application.zaki.movies.data.source.remote.response.other.ReviewItemResponse
 import com.application.zaki.movies.data.source.remote.response.tvshows.DetailTvShowsResponse
 import com.application.zaki.movies.data.source.remote.response.tvshows.ListTvShowsResponse
-import com.application.zaki.movies.domain.model.CastCrewItem
-import com.application.zaki.movies.domain.model.Detail
+import com.application.zaki.movies.domain.model.CastCrewItemModel
+import com.application.zaki.movies.domain.model.DetailModel
 import com.application.zaki.movies.domain.model.DiscoverItem
-import com.application.zaki.movies.domain.model.GenresItem
-import com.application.zaki.movies.domain.model.MovieTvShow
-import com.application.zaki.movies.domain.model.ReviewItem
-import com.application.zaki.movies.domain.model.Videos
+import com.application.zaki.movies.domain.model.GenreItemModel
+import com.application.zaki.movies.domain.model.MovieTvShowModel
+import com.application.zaki.movies.domain.model.ReviewModel
+import com.application.zaki.movies.domain.model.VideoItemModel
 
 object DataMapper {
-    fun ListMoviesResponse.toMovie(): MovieTvShow = MovieTvShow(
+    fun ListMoviesResponse.toMovie(): MovieTvShowModel = MovieTvShowModel(
         posterPath = posterPath,
         voteAverage = voteAverage,
         name = title,
@@ -25,7 +25,7 @@ object DataMapper {
         backdropPath = backdropPath
     )
 
-    fun ListTvShowsResponse.toTvShow(): MovieTvShow = MovieTvShow(
+    fun ListTvShowsResponse.toTvShow(): MovieTvShowModel = MovieTvShowModel(
         posterPath = posterPath,
         voteAverage = voteAverage,
         name = name,
@@ -35,23 +35,23 @@ object DataMapper {
         backdropPath = backdropPath
     )
 
-    fun ReviewItemResponse.toReviewItem(): ReviewItem = ReviewItem(
+    fun ReviewItemResponse.toReviewItem(): ReviewModel = ReviewModel(
         author = author,
         createdAt = createdAt,
         id = id,
         content = content,
     )
 
-    fun DetailMoviesResponse.toDetailMovie(): Detail {
+    fun DetailMoviesResponse.toDetailMovie(): DetailModel {
         val videos = videos?.results?.map { video ->
-            Videos(
+            VideoItemModel(
                 id = video.id,
                 key = video.key,
             )
         }
 
         val cast = credits?.cast?.map { cast ->
-            CastCrewItem(
+            CastCrewItemModel(
                 character = cast.character,
                 name = cast.name,
                 profilePath = cast.profilePath,
@@ -60,7 +60,7 @@ object DataMapper {
         }
 
         val crew = credits?.crew?.map { crew ->
-            CastCrewItem(
+            CastCrewItemModel(
                 job = crew.job,
                 name = crew.name,
                 profilePath = crew.profilePath,
@@ -69,10 +69,10 @@ object DataMapper {
         }
 
         val genres = genres?.map { genre ->
-            GenresItem(name = genre.name, id = genre.id)
+            GenreItemModel(name = genre.name, id = genre.id)
         }
 
-        return Detail(
+        return DetailModel(
             originalLanguage = originalLanguage,
             title = title,
             backdropPath = backdropPath,
@@ -89,16 +89,16 @@ object DataMapper {
         )
     }
 
-    fun DetailTvShowsResponse.toDetailTvShow(): Detail {
+    fun DetailTvShowsResponse.toDetailTvShow(): DetailModel {
         val videos = videos?.results?.map { video ->
-            Videos(
+            VideoItemModel(
                 id = video.id,
                 key = video.key,
             )
         }
 
         val cast = credits?.cast?.map { cast ->
-            CastCrewItem(
+            CastCrewItemModel(
                 character = cast.character,
                 name = cast.name,
                 profilePath = cast.profilePath,
@@ -107,7 +107,7 @@ object DataMapper {
         }
 
         val crew = credits?.crew?.map { crew ->
-            CastCrewItem(
+            CastCrewItemModel(
                 job = crew.job,
                 name = crew.name,
                 profilePath = crew.profilePath,
@@ -116,10 +116,10 @@ object DataMapper {
         }
 
         val genres = genres?.map { genre ->
-            GenresItem(name = genre.name, id = genre.id)
+            GenreItemModel(name = genre.name, id = genre.id)
         }
 
-        return Detail(
+        return DetailModel(
             originalLanguage = originalLanguage,
             title = name,
             backdropPath = backdropPath,

@@ -3,7 +3,7 @@ package com.application.zaki.movies.domain.usecase
 import androidx.paging.PagingData
 import androidx.paging.rxjava2.cachedIn
 import com.application.zaki.movies.domain.interfaces.IMoviesRepository
-import com.application.zaki.movies.domain.model.MovieTvShow
+import com.application.zaki.movies.domain.model.MovieTvShowModel
 import com.application.zaki.movies.utils.Movie
 import com.application.zaki.movies.utils.Page
 import io.reactivex.Flowable
@@ -25,7 +25,7 @@ class GetListAllMovies @Inject constructor(private val iMoviesRepository: IMovie
         query: String?,
         movieId: Int?,
         scope: CoroutineScope
-    ): Flowable<List<Pair<Movie, PagingData<MovieTvShow>>>> {
+    ): Flowable<List<Pair<Movie, PagingData<MovieTvShowModel>>>> {
         return Flowable.zip(
             iMoviesRepository.getMovies(nowPlayingMovie, page, query, movieId).cachedIn(scope),
             iMoviesRepository.getMovies(topRatedMovie, page, query, movieId).cachedIn(scope),

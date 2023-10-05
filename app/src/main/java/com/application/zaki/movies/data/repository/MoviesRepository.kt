@@ -4,8 +4,8 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.application.zaki.movies.data.source.remote.RemoteDataSource
 import com.application.zaki.movies.domain.interfaces.IMoviesRepository
-import com.application.zaki.movies.domain.model.Detail
-import com.application.zaki.movies.domain.model.MovieTvShow
+import com.application.zaki.movies.domain.model.DetailModel
+import com.application.zaki.movies.domain.model.MovieTvShowModel
 import com.application.zaki.movies.utils.DataMapper.toDetailMovie
 import com.application.zaki.movies.utils.DataMapper.toMovie
 import com.application.zaki.movies.utils.Movie
@@ -17,7 +17,7 @@ import javax.inject.Singleton
 @Singleton
 class MoviesRepository @Inject constructor(private val remoteDataSource: RemoteDataSource) :
     IMoviesRepository {
-    override fun getDetailMovies(movieId: String): Flowable<Detail> =
+    override fun getDetailMovies(movieId: String): Flowable<DetailModel> =
         remoteDataSource.getDetailMovies(movieId).map { data ->
             data.toDetailMovie()
         }
@@ -27,7 +27,7 @@ class MoviesRepository @Inject constructor(private val remoteDataSource: RemoteD
         page: Page?,
         query: String?,
         movieId: Int?
-    ): Flowable<PagingData<MovieTvShow>> =
+    ): Flowable<PagingData<MovieTvShowModel>> =
         remoteDataSource.getMovies(movie, page, query, movieId).map { pagingData ->
             pagingData.map { data ->
                 data.toMovie()

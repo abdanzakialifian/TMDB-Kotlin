@@ -14,8 +14,8 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.application.zaki.movies.R
 import com.application.zaki.movies.databinding.FragmentTvShowBinding
-import com.application.zaki.movies.domain.model.CategoryItem
-import com.application.zaki.movies.domain.model.MovieTvShow
+import com.application.zaki.movies.domain.model.CategoryModel
+import com.application.zaki.movies.domain.model.MovieTvShowModel
 import com.application.zaki.movies.presentation.adapter.MovieTvShowAdapter
 import com.application.zaki.movies.presentation.adapter.MovieTvShowSliderPagingAdapter
 import com.application.zaki.movies.presentation.base.BaseVBFragment
@@ -53,7 +53,7 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
 
     private val tvShowViewModel by viewModels<TvShowViewModel>()
 
-    private val categoryItems = mutableListOf<CategoryItem>()
+    private val categoryModels = mutableListOf<CategoryModel>()
 
     private val sliderHandler = Handler(Looper.getMainLooper())
 
@@ -67,7 +67,7 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
             }
         }
 
-        if (tvShowViewModel.listTvShows.value == null) {
+        if (tvShowViewModel.listTvShowsPaging.value == null) {
             tvShowViewModel.getListAllTvShows(
                 airingTodayTvShow = TvShow.AIRING_TODAY_TV_SHOWS,
                 topRatedTvShow = TvShow.TOP_RATED_TV_SHOWS,
@@ -95,14 +95,17 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
     }
 
     private fun observeData() {
-        tvShowViewModel.listTvShows.observe(viewLifecycleOwner) { result ->
+        tvShowViewModel.listTvShowsPaging.observe(viewLifecycleOwner) { result ->
             result.forEachIndexed { index, pairTvShow ->
                 val tvShow = pairTvShow.first
                 val tvShowPaging = pairTvShow.second
 
                 if (tvShow == TvShow.AIRING_TODAY_TV_SHOWS) {
                     configureImageSlider()
-                    movieTvShowSliderPagingAdapter.submitData(viewLifecycleOwner.lifecycle, tvShowPaging)
+                    movieTvShowSliderPagingAdapter.submitData(
+                        viewLifecycleOwner.lifecycle,
+                        tvShowPaging
+                    )
                     movieTvShowSliderPagingAdapter.addLoadStateListener { loadState ->
                         setLoadStatePagingSlider(loadState)
                     }
@@ -113,20 +116,20 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
                         else -> resources.getString(R.string.on_the_air_tv_shows)
                     }
 
-                    val data = CategoryItem(
+                    val data = CategoryModel(
                         categoryId = index,
                         categoryTitle = title,
                         categories = tvShowPaging,
                         category = Category.TV_SHOWS,
                         tvShow = tvShow
                     )
-                    categoryItems.add(data)
+                    categoryModels.add(data)
                 }
             }
             setAllTvShowsAdapter()
         }
 
-        tvShowViewModel.listSearchTvShows.observe(viewLifecycleOwner) { result ->
+        tvShowViewModel.listSearchTvShowsPaging.observe(viewLifecycleOwner) { result ->
             movieTvShowPagingAdapter.submitData(viewLifecycleOwner.lifecycle, result)
             movieTvShowPagingAdapter.setOnItemClickCallback(this)
             binding?.apply {
@@ -236,7 +239,7 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
     }
 
     private fun setAllTvShowsAdapter() {
-        movieTvShowAdapter.submitList(categoryItems)
+        movieTvShowAdapter.submitList(categoryModels)
         binding?.apply {
             rvTvShows.adapter = movieTvShowAdapter
             rvTvShows.setHasFixedSize(true)
@@ -266,7 +269,7 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
         )
     }
 
-    override fun onItemClicked(data: MovieTvShow?) {
+    override fun onItemClicked(data: MovieTvShowModel?) {
         navigateToDetailPage(data?.id ?: 0)
     }
 
@@ -317,7 +320,7 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
     }
 
     override fun onDestroyView() {
-        categoryItems.clear()
+        categoryModels.clear()
         super.onDestroyView()
     }
 }

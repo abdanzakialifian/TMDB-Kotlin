@@ -6,11 +6,11 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListMovieTvShowItemBinding
-import com.application.zaki.movies.domain.model.MovieTvShow
+import com.application.zaki.movies.domain.model.MovieTvShowModel
 import com.application.zaki.movies.utils.loadImageUrl
 
 class MovieTvShowItemPagingAdapter :
-    PagingDataAdapter<MovieTvShow, MovieTvShowItemPagingAdapter.MovieItemViewHolder>(DIFF_CALLBACK) {
+    PagingDataAdapter<MovieTvShowModel, MovieTvShowItemPagingAdapter.MovieItemViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
 
@@ -20,7 +20,7 @@ class MovieTvShowItemPagingAdapter :
 
     inner class MovieItemViewHolder(val binding: ItemListMovieTvShowItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: MovieTvShow?) {
+        fun bind(item: MovieTvShowModel?) {
             item?.posterPath?.let {
                 binding.imgHorizontal.loadImageUrl(it)
             }
@@ -42,19 +42,19 @@ class MovieTvShowItemPagingAdapter :
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: MovieTvShow?)
+        fun onItemClicked(data: MovieTvShowModel?)
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<MovieTvShow>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<MovieTvShowModel>() {
             override fun areItemsTheSame(
-                oldItem: MovieTvShow,
-                newItem: MovieTvShow
+                oldItem: MovieTvShowModel,
+                newItem: MovieTvShowModel
             ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
-                oldItem: MovieTvShow,
-                newItem: MovieTvShow
+                oldItem: MovieTvShowModel,
+                newItem: MovieTvShowModel
             ): Boolean = oldItem == newItem
         }
     }

@@ -4,7 +4,7 @@ import androidx.fragment.app.viewModels
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import com.application.zaki.movies.databinding.FragmentSimilarBinding
-import com.application.zaki.movies.domain.model.MovieTvShow
+import com.application.zaki.movies.domain.model.MovieTvShowModel
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.viewmodel.DetailViewModel
 import com.application.zaki.movies.presentation.movietvshow.adapter.MovieTvShowPagingAdapter
@@ -72,7 +72,7 @@ class SimilarFragment : BaseVBFragment<FragmentSimilarBinding>(),
         }
     }
 
-    override fun onItemClicked(data: MovieTvShow?) {}
+    override fun onItemClicked(data: MovieTvShowModel?) {}
 
     override fun onResume() {
         super.onResume()

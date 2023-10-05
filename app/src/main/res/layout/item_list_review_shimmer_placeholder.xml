@@ -11,45 +11,45 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@drawable/background_initial_name"
+        android:backgroundTint="@color/grey200"
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="AA" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_user_name"
-        android:layout_width="0dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:ellipsize="end"
         android:fontFamily="@font/montserrat_semi_bold"
         android:maxLines="1"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/background_rounded_shimmer"
         app:layout_constraintStart_toEndOf="@id/tv_initial_user"
-        app:layout_constraintTop_toTopOf="@id/tv_initial_user"
-        tools:text="Abdan Zaki Alifian" />
+        app:layout_constraintTop_toTopOf="@id/tv_initial_user" />
 
     <TextView
         android:id="@+id/tv_created_at"
-        android:layout_width="0dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:fontFamily="@font/montserrat_medium"
         android:textSize="10sp"
+        android:background="@drawable/background_rounded_shimmer"
         app:layout_constraintStart_toStartOf="@id/tv_user_name"
         app:layout_constraintTop_toBottomOf="@id/tv_user_name"
-        tools:ignore="SmallSp"
-        tools:text="On 16 August 2023" />
+        tools:ignore="SmallSp" />
 
     <LinearLayout
         android:id="@+id/layout_text"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_marginHorizontal="4dp"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_marginTop="8dp"
+        android:background="@drawable/background_rounded_shimmer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_initial_user">
@@ -60,8 +60,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_regular"
             android:textSize="10sp"
-            tools:ignore="SmallSp"
-            tools:text="Hello World" />
+            tools:ignore="SmallSp" />
 
     </LinearLayout>
 

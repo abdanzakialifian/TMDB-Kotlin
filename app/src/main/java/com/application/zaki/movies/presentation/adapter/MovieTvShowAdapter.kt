@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListMovieTvShowBinding
-import com.application.zaki.movies.domain.model.CategoryItem
-import com.application.zaki.movies.domain.model.MovieTvShow
+import com.application.zaki.movies.domain.model.CategoryModel
+import com.application.zaki.movies.domain.model.MovieTvShowModel
 import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.Movie
 import com.application.zaki.movies.utils.TvShow
@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MovieTvShowAdapter @Inject constructor() :
-    ListAdapter<CategoryItem, MovieTvShowAdapter.MovieCategoryViewHolder>(DIFF_CALLBACK) {
+    ListAdapter<CategoryModel, MovieTvShowAdapter.MovieCategoryViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var movieTvShowItemPagingAdapter: MovieTvShowItemPagingAdapter
 
@@ -35,7 +35,7 @@ class MovieTvShowAdapter @Inject constructor() :
 
     inner class MovieCategoryViewHolder(val binding: ItemListMovieTvShowBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: CategoryItem) {
+        fun bind(item: CategoryModel) {
             binding.apply {
                 tvTitleMovieTvShow.text = item.categoryTitle
                 movieTvShowItemPagingAdapter = MovieTvShowItemPagingAdapter()
@@ -107,7 +107,7 @@ class MovieTvShowAdapter @Inject constructor() :
 
         movieTvShowItemPagingAdapter.setOnItemClickCallback(object :
             MovieTvShowItemPagingAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: MovieTvShow?) {
+            override fun onItemClicked(data: MovieTvShowModel?) {
                 if (this@MovieTvShowAdapter::onEventClickCallback.isInitialized) {
                     onEventClickCallback.onItemClicked(data)
                 }
@@ -117,17 +117,17 @@ class MovieTvShowAdapter @Inject constructor() :
 
     interface OnEventClickCallback {
         fun onSeeAllClicked(category: Category?, movie: Movie?, tvShow: TvShow?)
-        fun onItemClicked(data: MovieTvShow?)
+        fun onItemClicked(data: MovieTvShowModel?)
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CategoryItem>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CategoryModel>() {
             override fun areItemsTheSame(
-                oldItem: CategoryItem, newItem: CategoryItem
+                oldItem: CategoryModel, newItem: CategoryModel
             ): Boolean = oldItem.categoryId == newItem.categoryId
 
             override fun areContentsTheSame(
-                oldItem: CategoryItem, newItem: CategoryItem
+                oldItem: CategoryModel, newItem: CategoryModel
             ): Boolean = oldItem == newItem
         }
     }

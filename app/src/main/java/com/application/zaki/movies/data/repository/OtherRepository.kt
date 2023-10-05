@@ -5,7 +5,7 @@ import androidx.paging.map
 import com.application.zaki.movies.data.source.remote.RemoteDataSource
 import com.application.zaki.movies.domain.interfaces.IOtherRepository
 import com.application.zaki.movies.domain.model.DiscoverItem
-import com.application.zaki.movies.domain.model.ReviewItem
+import com.application.zaki.movies.domain.model.ReviewModel
 import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.DataMapper.toResultItemDiscover
 import com.application.zaki.movies.utils.DataMapper.toReviewItem
@@ -19,7 +19,7 @@ class OtherRepository @Inject constructor(private val remoteDataSource: RemoteDa
     override fun getReviewsPaging(
         id: String?,
         category: Category?
-    ): Flowable<PagingData<ReviewItem>> =
+    ): Flowable<PagingData<ReviewModel>> =
         remoteDataSource.getReviewsPaging(id, category)
             .map { pagingData ->
                 pagingData.map { data ->

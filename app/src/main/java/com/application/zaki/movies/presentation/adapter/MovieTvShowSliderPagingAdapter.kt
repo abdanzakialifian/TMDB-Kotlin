@@ -6,12 +6,12 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListMovieTvShowSliderBinding
-import com.application.zaki.movies.domain.model.MovieTvShow
+import com.application.zaki.movies.domain.model.MovieTvShowModel
 import com.application.zaki.movies.utils.loadBackdropImageUrl
 import javax.inject.Inject
 
 class MovieTvShowSliderPagingAdapter @Inject constructor() :
-    PagingDataAdapter<MovieTvShow, MovieTvShowSliderPagingAdapter.SliderViewHolder>(DIFF_CALLBACK) {
+    PagingDataAdapter<MovieTvShowModel, MovieTvShowSliderPagingAdapter.SliderViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
 
@@ -21,7 +21,7 @@ class MovieTvShowSliderPagingAdapter @Inject constructor() :
 
     inner class SliderViewHolder(private val binding: ItemListMovieTvShowSliderBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: MovieTvShow?) {
+        fun bind(item: MovieTvShowModel?) {
             item?.backdropPath?.let {
                 binding.imgSlider.loadBackdropImageUrl(it)
             }
@@ -46,20 +46,20 @@ class MovieTvShowSliderPagingAdapter @Inject constructor() :
     override fun getItemCount(): Int = 5
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: MovieTvShow?)
+        fun onItemClicked(data: MovieTvShowModel?)
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<MovieTvShow>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<MovieTvShowModel>() {
             override fun areItemsTheSame(
-                oldItem: MovieTvShow,
-                newItem: MovieTvShow
+                oldItem: MovieTvShowModel,
+                newItem: MovieTvShowModel
             ): Boolean =
                 oldItem.id == newItem.id
 
             override fun areContentsTheSame(
-                oldItem: MovieTvShow,
-                newItem: MovieTvShow
+                oldItem: MovieTvShowModel,
+                newItem: MovieTvShowModel
             ): Boolean =
                 oldItem == newItem
         }
