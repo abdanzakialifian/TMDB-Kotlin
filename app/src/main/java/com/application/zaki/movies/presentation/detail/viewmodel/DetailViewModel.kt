@@ -21,7 +21,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -48,7 +47,6 @@ class DetailViewModel @Inject constructor(private val detailWrapper: DetailWrapp
         detailWrapper.getDetailMovie(movieId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .delay(3000L, TimeUnit.MILLISECONDS)
             .subscribe({ data ->
                 if (data != null) {
                     _detailDataState.postValue(UiState.Success(data))
@@ -89,8 +87,6 @@ class DetailViewModel @Inject constructor(private val detailWrapper: DetailWrapp
         detailWrapper.getReviews(id, category)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .cachedIn(viewModelScope)
-            .delay(3000L, TimeUnit.MILLISECONDS)
             .subscribe { data ->
                 _listReviewsPaging.postValue(data)
             }
@@ -108,7 +104,6 @@ class DetailViewModel @Inject constructor(private val detailWrapper: DetailWrapp
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .cachedIn(viewModelScope)
-            .delay(3000L, TimeUnit.MILLISECONDS)
             .subscribe { data ->
                 _listSimilarPaging.postValue(data)
             }

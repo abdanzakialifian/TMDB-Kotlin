@@ -40,6 +40,7 @@ class CastCrewFragment : BaseVBFragment<FragmentCastCrewBinding>() {
                 is UiState.Loading -> {
                     binding?.apply {
                         shimmerCastCrew.visible()
+                        shimmerCastCrew.startShimmer()
                         rvCastCrew.gone()
                     }
                 }
@@ -64,14 +65,28 @@ class CastCrewFragment : BaseVBFragment<FragmentCastCrewBinding>() {
                     castCrewAdapter.submitList(castCrewModels)
                     binding?.apply {
                         shimmerCastCrew.gone()
+                        shimmerCastCrew.stopShimmer()
                         rvCastCrew.visible()
                         rvCastCrew.adapter = castCrewAdapter
                         rvCastCrew.setHasFixedSize(true)
                     }
                 }
 
-                is UiState.Error -> {}
-                is UiState.Empty -> {}
+                is UiState.Error -> {
+                    binding?.apply {
+                        shimmerCastCrew.gone()
+                        shimmerCastCrew.stopShimmer()
+                        rvCastCrew.gone()
+                    }
+                }
+
+                is UiState.Empty -> {
+                    binding?.apply {
+                        shimmerCastCrew.gone()
+                        shimmerCastCrew.stopShimmer()
+                        rvCastCrew.gone()
+                    }
+                }
             }
         }
     }

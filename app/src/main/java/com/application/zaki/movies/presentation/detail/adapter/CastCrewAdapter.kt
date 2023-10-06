@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListCastCrewBinding
 import com.application.zaki.movies.domain.model.CastCrewModel
+import com.application.zaki.movies.utils.gone
+import com.application.zaki.movies.utils.visible
 import javax.inject.Inject
 
 class CastCrewAdapter @Inject constructor() :
@@ -16,11 +18,18 @@ class CastCrewAdapter @Inject constructor() :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CastCrewModel) {
             binding.apply {
-                tvCastCrew.text = item.title
-                val castCrewItemAdapter = CastCrewItemAdapter()
-                castCrewItemAdapter.submitList(item.castCrews)
-                rvCastCrew.adapter = castCrewItemAdapter
-                rvCastCrew.setHasFixedSize(true)
+                if (item.castCrews.isNullOrEmpty()) {
+                    tvCastCrew.gone()
+                    rvCastCrew.gone()
+                } else {
+                    tvCastCrew.visible()
+                    rvCastCrew.visible()
+                    tvCastCrew.text = item.title
+                    val castCrewItemAdapter = CastCrewItemAdapter()
+                    castCrewItemAdapter.submitList(item.castCrews)
+                    rvCastCrew.adapter = castCrewItemAdapter
+                    rvCastCrew.setHasFixedSize(true)
+                }
             }
         }
     }

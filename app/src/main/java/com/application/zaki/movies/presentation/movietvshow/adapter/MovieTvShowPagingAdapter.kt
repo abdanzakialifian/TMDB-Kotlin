@@ -28,27 +28,13 @@ class MovieTvShowPagingAdapter @Inject constructor() :
         fun bind(item: MovieTvShowModel?) {
             binding.apply {
                 item?.apply {
-                    posterPath?.let { url ->
-                        imgPoster.loadImageUrl(url)
-                    }
-
-                    releaseDate?.let { releaseDate ->
-                        tvYear.text = releaseDate.convertDateText("dd MMM yyyy", "yyyy-MM-dd")
-                    }
-
-                    name?.let { name ->
-                        tvTitle.text = name
-                    }
-
-                    voteAverage?.let { voteAverage ->
-                        val convertRating =
-                            voteAverage.toBigDecimal().setScale(1, RoundingMode.UP).toDouble()
-                        tvRating.text = convertRating.toFloat().toString()
-                    }
-
-                    overview?.let { overview ->
-                        tvOverview.text = overview
-                    }
+                    val convertRating =
+                        voteAverage?.toBigDecimal()?.setScale(1, RoundingMode.UP)?.toDouble()
+                    imgPoster.loadImageUrl(posterPath ?: "")
+                    tvYear.text = releaseDate?.convertDateText("dd MMM yyyy", "yyyy-MM-dd")
+                    tvTitle.text = name
+                    tvRating.text = convertRating?.toFloat().toString()
+                    tvOverview.text = overview
                 }
             }
             itemView.setOnClickListener {

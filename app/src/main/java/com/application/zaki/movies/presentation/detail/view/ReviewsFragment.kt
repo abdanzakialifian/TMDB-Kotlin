@@ -40,6 +40,7 @@ class ReviewsFragment : BaseVBFragment<FragmentReviewsBinding>() {
                     is LoadState.Loading -> {
                         binding?.apply {
                             shimmerReviews.visible()
+                            shimmerReviews.startShimmer()
                             rvReviews.gone()
                         }
                     }
@@ -47,6 +48,7 @@ class ReviewsFragment : BaseVBFragment<FragmentReviewsBinding>() {
                     is LoadState.NotLoading -> {
                         binding?.apply {
                             shimmerReviews.gone()
+                            shimmerReviews.stopShimmer()
                             rvReviews.visible()
                             rvReviews.adapter = reviewsPagingAdapter
                             rvReviews.setHasFixedSize(true)
@@ -56,6 +58,7 @@ class ReviewsFragment : BaseVBFragment<FragmentReviewsBinding>() {
                     is LoadState.Error -> {
                         binding?.apply {
                             shimmerReviews.gone()
+                            shimmerReviews.stopShimmer()
                             rvReviews.gone()
                         }
                     }

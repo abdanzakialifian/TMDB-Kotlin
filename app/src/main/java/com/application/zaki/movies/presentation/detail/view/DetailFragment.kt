@@ -67,6 +67,7 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                 is UiState.Loading -> {
                     binding?.apply {
                         shimmerDetail.visible()
+                        shimmerDetail.startShimmer()
                         layoutDetail.gone()
                     }
                     setAppBarLayout("")
@@ -75,6 +76,7 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                 is UiState.Success -> {
                     binding?.apply {
                         shimmerDetail.gone()
+                        shimmerDetail.stopShimmer()
                         layoutDetail.visible()
                     }
                     val detail = result.data

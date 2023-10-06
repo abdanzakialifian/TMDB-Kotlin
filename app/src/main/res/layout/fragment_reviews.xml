@@ -7,7 +7,6 @@
     tools:context=".presentation.detail.view.ReviewsFragment">
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/shimmer_reviews"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="16dp"
@@ -19,6 +18,7 @@
 
         <com.facebook.shimmer.ShimmerFrameLayout
             android:layout_width="match_parent"
+            android:id="@+id/shimmer_reviews"
             android:layout_height="wrap_content">
 
             <LinearLayout

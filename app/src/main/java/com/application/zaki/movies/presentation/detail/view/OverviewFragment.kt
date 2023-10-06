@@ -37,6 +37,7 @@ class OverviewFragment : BaseVBFragment<FragmentOverviewBinding>() {
                 is UiState.Loading -> {
                     binding?.apply {
                         shimmerOverview.visible()
+                        shimmerOverview.startShimmer()
                         layoutOverview.gone()
                     }
                 }
@@ -45,17 +46,37 @@ class OverviewFragment : BaseVBFragment<FragmentOverviewBinding>() {
                     val detail = result.data
                     binding?.apply {
                         shimmerOverview.gone()
+                        shimmerOverview.stopShimmer()
                         layoutOverview.visible()
                         tvOverview.setResizableText(detail.overview ?: "", 3, true, layoutText)
-                        trailerAdapter.submitList(detail.videos)
-                        trailerAdapter.setLifecycleOwner(viewLifecycleOwner)
-                        rvTrailer.adapter = trailerAdapter
-                        rvTrailer.setHasFixedSize(true)
+                        if (detail.videos.isNullOrEmpty()) {
+                            tvTrailer.gone()
+                            rvTrailer.gone()
+                        } else {
+                            tvTrailer.visible()
+                            rvTrailer.visible()
+                            trailerAdapter.submitList(detail.videos)
+                            trailerAdapter.setLifecycleOwner(viewLifecycleOwner)
+                            rvTrailer.adapter = trailerAdapter
+                            rvTrailer.setHasFixedSize(true)
+                        }
                     }
                 }
 
-                is UiState.Error -> {}
-                is UiState.Empty -> {}
+                is UiState.Error -> {
+                    binding?.apply {
+                        shimmerOverview.gone()
+                        shimmerOverview.stopShimmer()
+                        layoutOverview.gone()
+                    }
+                }
+                is UiState.Empty -> {
+                    binding?.apply {
+                        shimmerOverview.gone()
+                        shimmerOverview.stopShimmer()
+                        layoutOverview.gone()
+                    }
+                }
             }
         }
     }
