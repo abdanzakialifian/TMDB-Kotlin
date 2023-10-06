@@ -31,7 +31,6 @@ import com.application.zaki.movies.utils.hideKeyboard
 import com.application.zaki.movies.utils.visible
 import com.mancj.materialsearchbar.MaterialSearchBar
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlin.math.abs
 
 @AndroidEntryPoint
@@ -40,14 +39,11 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
     MaterialSearchBar.OnSearchActionListener, TextWatcher,
     MovieTvShowPagingAdapter.OnItemClickCallback {
 
-    @Inject
-    lateinit var movieTvShowSliderPagingAdapter: MovieTvShowSliderPagingAdapter
+    private val movieTvShowSliderPagingAdapter by lazy { MovieTvShowSliderPagingAdapter() }
 
-    @Inject
-    lateinit var movieTvShowAdapter: MovieTvShowAdapter
+    private val movieTvShowAdapter by lazy { MovieTvShowAdapter() }
 
-    @Inject
-    lateinit var movieTvShowPagingAdapter: MovieTvShowPagingAdapter
+    private val movieTvShowPagingAdapter by lazy { MovieTvShowPagingAdapter() }
 
     private lateinit var sliderRunnable: Runnable
 

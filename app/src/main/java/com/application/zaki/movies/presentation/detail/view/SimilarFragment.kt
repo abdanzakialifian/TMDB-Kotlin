@@ -15,7 +15,6 @@ import com.application.zaki.movies.utils.RxDisposer
 import com.application.zaki.movies.utils.gone
 import com.application.zaki.movies.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SimilarFragment : BaseVBFragment<FragmentSimilarBinding>(),
@@ -27,8 +26,8 @@ class SimilarFragment : BaseVBFragment<FragmentSimilarBinding>(),
     */
     private val detailViewModel by viewModels<DetailViewModel>(ownerProducer = { requireParentFragment() })
 
-    @Inject
-    lateinit var movieTvShowPagingAdapter: MovieTvShowPagingAdapter
+
+    private val movieTvShowPagingAdapter by lazy { MovieTvShowPagingAdapter() }
 
     override fun getViewBinding(): FragmentSimilarBinding =
         FragmentSimilarBinding.inflate(layoutInflater)

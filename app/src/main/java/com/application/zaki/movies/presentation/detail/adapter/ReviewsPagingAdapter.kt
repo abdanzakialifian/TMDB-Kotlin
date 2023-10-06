@@ -11,9 +11,9 @@ import com.application.zaki.movies.domain.model.ReviewModel
 import com.application.zaki.movies.utils.convertDateText
 import com.application.zaki.movies.utils.getInitialName
 import com.application.zaki.movies.utils.setResizableText
-import javax.inject.Inject
 
-class ReviewsPagingAdapter @Inject constructor() : PagingDataAdapter<ReviewModel, ReviewsPagingAdapter.ReviewsPagingViewHolder>(
+class ReviewsPagingAdapter :
+    PagingDataAdapter<ReviewModel, ReviewsPagingAdapter.ReviewsPagingViewHolder>(
         DIFF_CALLBACK
     ) {
 

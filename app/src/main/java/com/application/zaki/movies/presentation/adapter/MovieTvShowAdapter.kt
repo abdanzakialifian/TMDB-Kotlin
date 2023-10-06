@@ -20,9 +20,8 @@ import com.application.zaki.movies.utils.visible
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class MovieTvShowAdapter @Inject constructor() :
+class MovieTvShowAdapter :
     ListAdapter<CategoryModel, MovieTvShowAdapter.MovieCategoryViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var movieTvShowItemPagingAdapter: MovieTvShowItemPagingAdapter

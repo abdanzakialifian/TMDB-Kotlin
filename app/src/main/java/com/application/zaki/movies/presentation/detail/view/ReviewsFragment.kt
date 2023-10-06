@@ -11,7 +11,6 @@ import com.application.zaki.movies.utils.RxDisposer
 import com.application.zaki.movies.utils.gone
 import com.application.zaki.movies.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class ReviewsFragment : BaseVBFragment<FragmentReviewsBinding>() {
@@ -22,8 +21,7 @@ class ReviewsFragment : BaseVBFragment<FragmentReviewsBinding>() {
     */
     private val detailViewModel by viewModels<DetailViewModel>(ownerProducer = { requireParentFragment() })
 
-    @Inject
-    lateinit var reviewsPagingAdapter: ReviewsPagingAdapter
+    private val reviewsPagingAdapter by lazy { ReviewsPagingAdapter() }
 
     override fun getViewBinding(): FragmentReviewsBinding =
         FragmentReviewsBinding.inflate(layoutInflater)

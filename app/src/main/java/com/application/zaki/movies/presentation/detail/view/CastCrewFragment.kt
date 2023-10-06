@@ -11,7 +11,6 @@ import com.application.zaki.movies.utils.UiState
 import com.application.zaki.movies.utils.gone
 import com.application.zaki.movies.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class CastCrewFragment : BaseVBFragment<FragmentCastCrewBinding>() {
@@ -22,8 +21,7 @@ class CastCrewFragment : BaseVBFragment<FragmentCastCrewBinding>() {
     */
     private val detailViewModel by viewModels<DetailViewModel>(ownerProducer = { requireParentFragment() })
 
-    @Inject
-    lateinit var castCrewAdapter: CastCrewAdapter
+    private val castCrewAdapter by lazy { CastCrewAdapter() }
 
     private val castCrewModels = mutableListOf<CastCrewModel>()
 

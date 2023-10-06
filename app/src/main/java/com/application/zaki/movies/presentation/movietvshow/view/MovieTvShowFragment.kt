@@ -19,14 +19,12 @@ import com.application.zaki.movies.utils.TvShow
 import com.application.zaki.movies.utils.gone
 import com.application.zaki.movies.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MovieTvShowFragment : BaseVBFragment<FragmentMovieTvShowBinding>(),
     MovieTvShowPagingAdapter.OnItemClickCallback {
 
-    @Inject
-    lateinit var movieTvShowPagingAdapter: MovieTvShowPagingAdapter
+    private val movieTvShowPagingAdapter by lazy { MovieTvShowPagingAdapter() }
 
     private val args: MovieTvShowFragmentArgs by navArgs()
 

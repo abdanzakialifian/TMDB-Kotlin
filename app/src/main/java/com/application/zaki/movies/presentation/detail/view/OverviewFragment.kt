@@ -10,7 +10,6 @@ import com.application.zaki.movies.utils.gone
 import com.application.zaki.movies.utils.setResizableText
 import com.application.zaki.movies.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class OverviewFragment : BaseVBFragment<FragmentOverviewBinding>() {
@@ -21,8 +20,7 @@ class OverviewFragment : BaseVBFragment<FragmentOverviewBinding>() {
     */
     private val detailViewModel by viewModels<DetailViewModel>(ownerProducer = { requireParentFragment() })
 
-    @Inject
-    lateinit var trailerAdapter: TrailerAdapter
+    private val trailerAdapter by lazy { TrailerAdapter() }
 
     override fun getViewBinding(): FragmentOverviewBinding =
         FragmentOverviewBinding.inflate(layoutInflater)

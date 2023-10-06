@@ -10,9 +10,8 @@ import com.application.zaki.movies.databinding.ItemListTrailerBinding
 import com.application.zaki.movies.domain.model.VideoItemModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import javax.inject.Inject
 
-class TrailerAdapter @Inject constructor() :
+class TrailerAdapter :
     ListAdapter<VideoItemModel, TrailerAdapter.TrailerViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var lifecycleOwner: LifecycleOwner

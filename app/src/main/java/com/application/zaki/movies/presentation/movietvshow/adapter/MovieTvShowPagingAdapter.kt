@@ -10,9 +10,8 @@ import com.application.zaki.movies.domain.model.MovieTvShowModel
 import com.application.zaki.movies.utils.convertDateText
 import com.application.zaki.movies.utils.loadImageUrl
 import java.math.RoundingMode
-import javax.inject.Inject
 
-class MovieTvShowPagingAdapter @Inject constructor() :
+class MovieTvShowPagingAdapter :
     PagingDataAdapter<MovieTvShowModel, MovieTvShowPagingAdapter.PopularMoviesPagingViewHolder>(
         DIFF_CALLBACK
     ) {

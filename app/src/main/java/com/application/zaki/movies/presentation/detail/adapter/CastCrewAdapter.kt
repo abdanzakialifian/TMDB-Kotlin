@@ -9,9 +9,8 @@ import com.application.zaki.movies.databinding.ItemListCastCrewBinding
 import com.application.zaki.movies.domain.model.CastCrewModel
 import com.application.zaki.movies.utils.gone
 import com.application.zaki.movies.utils.visible
-import javax.inject.Inject
 
-class CastCrewAdapter @Inject constructor() :
+class CastCrewAdapter :
     ListAdapter<CastCrewModel, CastCrewAdapter.CastViewHolder>(DIFF_CALLBACK) {
 
     inner class CastViewHolder(private val binding: ItemListCastCrewBinding) :

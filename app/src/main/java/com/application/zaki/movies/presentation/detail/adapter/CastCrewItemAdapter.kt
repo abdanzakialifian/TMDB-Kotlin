@@ -8,9 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListCastCrewItemBinding
 import com.application.zaki.movies.domain.model.CastCrewItemModel
 import com.application.zaki.movies.utils.loadImageUrl
-import javax.inject.Inject
 
-class CastCrewItemAdapter @Inject constructor() :
+class CastCrewItemAdapter :
     ListAdapter<CastCrewItemModel, CastCrewItemAdapter.CastViewHolder>(DIFF_CALLBACK) {
     inner class CastViewHolder(private val binding: ItemListCastCrewItemBinding) :
         RecyclerView.ViewHolder(binding.root) {

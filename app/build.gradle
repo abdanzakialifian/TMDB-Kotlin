@@ -1,9 +1,9 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
+    id 'com.google.dagger.hilt.android'
     id 'androidx.navigation.safeargs'
+    id 'com.google.devtools.ksp'
 }
 
 android {
@@ -38,8 +38,8 @@ android {
         jvmTarget = '17'
     }
     buildFeatures {
-        viewBinding true
-        buildConfig true
+        viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -73,9 +73,9 @@ dependencies {
     implementation("com.squareup.retrofit2:adapter-rxjava2:$rxjava2_retrofit_version")
 
     // dagger hilt
-    def dagger_hilt_version = "2.48"
+    def dagger_hilt_version = "2.48.1"
     implementation("com.google.dagger:hilt-android:$dagger_hilt_version")
-    kapt("com.google.dagger:hilt-android-compiler:$dagger_hilt_version")
+    ksp("com.google.dagger:hilt-compiler:$dagger_hilt_version")
 
     // lifecycle
     def lifecycle_version = "2.6.2"
@@ -94,13 +94,14 @@ dependencies {
     // glide image
     def glide_version = "4.16.0"
     implementation("com.github.bumptech.glide:glide:$glide_version")
-    annotationProcessor("com.github.bumptech.glide:compiler:$glide_version")
+    ksp("com.github.bumptech.glide:ksp:$glide_version")
 
     // navigation component
-    def nav_version = "2.7.3"
+    def nav_version = "2.7.4"
+    def fragment_version = "1.6.1"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
-    implementation("androidx.fragment:fragment-ktx:1.6.1")
+    implementation("androidx.fragment:fragment-ktx:$fragment_version")
 
     // dots indicator image slider
     def dots_indicator_version = "4.3"
@@ -125,8 +126,10 @@ dependencies {
 
     // circle image
     def circle_image_version = "3.1.0"
-    implementation "de.hdodenhof:circleimageview:$circle_image_version"
+    implementation("de.hdodenhof:circleimageview:$circle_image_version")
 
-    implementation 'com.github.mancj:MaterialSearchBar:0.8.5'
+    // material searchbar
+    def material_searchbar_version = "0.8.5"
+    implementation("com.github.mancj:MaterialSearchBar:$material_searchbar_version")
 
 }

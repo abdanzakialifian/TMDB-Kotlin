@@ -8,10 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListMovieTvShowSliderBinding
 import com.application.zaki.movies.domain.model.MovieTvShowModel
 import com.application.zaki.movies.utils.loadBackdropImageUrl
-import javax.inject.Inject
 
-class MovieTvShowSliderPagingAdapter @Inject constructor() :
-    PagingDataAdapter<MovieTvShowModel, MovieTvShowSliderPagingAdapter.SliderViewHolder>(DIFF_CALLBACK) {
+class MovieTvShowSliderPagingAdapter :
+    PagingDataAdapter<MovieTvShowModel, MovieTvShowSliderPagingAdapter.SliderViewHolder>(
+        DIFF_CALLBACK
+    ) {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
 
