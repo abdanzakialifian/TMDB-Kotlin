@@ -1,6 +1,7 @@
 package com.application.zaki.movies.presentation.detail.view
 
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import com.application.zaki.movies.databinding.FragmentSimilarBinding
@@ -72,7 +73,20 @@ class SimilarFragment : BaseVBFragment<FragmentSimilarBinding>(),
         }
     }
 
-    override fun onItemClicked(data: MovieTvShowModel?) {}
+    private fun navigateToDetailPage(id: Int) {
+        detailViewModel.detailData.observe(viewLifecycleOwner) { pair ->
+            val intentFrom = pair.first
+            val navigateToDetailFragment =
+                DetailFragmentDirections.actionDetailFragmentToDetailFragment()
+            navigateToDetailFragment.id = id
+            navigateToDetailFragment.intentFrom = intentFrom
+            findNavController().navigate(navigateToDetailFragment)
+        }
+    }
+
+    override fun onItemClicked(data: MovieTvShowModel?) {
+        navigateToDetailPage(data?.id ?: 0)
+    }
 
     override fun onResume() {
         super.onResume()

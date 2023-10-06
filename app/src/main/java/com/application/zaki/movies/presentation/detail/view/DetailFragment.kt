@@ -1,8 +1,11 @@
 package com.application.zaki.movies.presentation.detail.view
 
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.application.zaki.movies.R
 import com.application.zaki.movies.databinding.FragmentDetailBinding
@@ -48,6 +51,7 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                     rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
                 )
             }
+            navigateToMoviePage()
         } else {
             if (detailViewModel.detailData.value == null) {
                 detailViewModel.detailTvShows(
@@ -55,6 +59,7 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                     rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
                 )
             }
+            navigateToTvShowPage()
         }
 
         observeData(intentFrom)
@@ -173,6 +178,26 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
         chip.isCloseIconVisible = false
         chip.isClickable = false
         binding?.chipGroup?.addView(chip as View)
+    }
+
+    private fun navigateToMoviePage() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().popBackStack(R.id.movie_fragment, false)
+                }
+            })
+    }
+
+    private fun navigateToTvShowPage() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().popBackStack(R.id.tv_show_fragment, false)
+                }
+            })
     }
 
     companion object {

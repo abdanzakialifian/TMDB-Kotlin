@@ -23,21 +23,18 @@
         <action
             android:id="@+id/action_listFragment_to_detailFragment"
             app:destination="@id/detail_fragment" />
-        <action
-            android:id="@+id/action_listFragment_to_listDiscoverFragment"
-            app:destination="@id/list_discover_fragment" />
         <argument
             android:name="intentFrom"
-            app:argType="string"
-            android:defaultValue="" />
+            android:defaultValue=""
+            app:argType="string" />
         <argument
             android:name="movie"
-            app:argType="com.application.zaki.movies.utils.Movie"
-            android:defaultValue="POPULAR_MOVIES" />
+            android:defaultValue="POPULAR_MOVIES"
+            app:argType="com.application.zaki.movies.utils.Movie" />
         <argument
             android:name="tvShow"
-            app:argType="com.application.zaki.movies.utils.TvShow"
-            android:defaultValue="POPULAR_TV_SHOWS" />
+            android:defaultValue="POPULAR_TV_SHOWS"
+            app:argType="com.application.zaki.movies.utils.TvShow" />
     </fragment>
     <fragment
         android:id="@+id/detail_fragment"
@@ -53,28 +50,10 @@
             android:defaultValue=""
             app:argType="string" />
         <action
-            android:id="@+id/action_detailFragment_to_reviewsFragment"
-            app:destination="@id/reviews_fragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/list_discover_fragment"
-        android:name="com.application.zaki.movies.presentation.movietvshow.view.ListDiscoverFragment"
-        android:label="fragment_list_discover"
-        tools:layout="@layout/fragment_list_discover">
-        <argument
-            android:name="genreId"
-            android:defaultValue="0"
-            app:argType="integer" />
-        <argument
-            android:name="intentFrom"
-            android:defaultValue=""
-            app:argType="string" />
-        <argument
-            android:name="genreName"
-            android:defaultValue=""
-            app:argType="string" />
+            android:id="@+id/action_detail_fragment_to_detail_fragment"
+            app:destination="@id/detail_fragment" />
         <action
-            android:id="@+id/action_listDiscoverFragment_to_detailFragment"
+            android:id="@+id/action_detail_fragment_self"
             app:destination="@id/detail_fragment" />
     </fragment>
     <fragment
@@ -84,21 +63,10 @@
         tools:layout="@layout/fragment_splash_screen">
         <action
             android:id="@+id/action_splashScreenFragment_to_movie_fragment"
-            app:destination="@id/movie_fragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/reviews_fragment"
-        android:name="com.application.zaki.movies.presentation.detail.view.ReviewsFragment"
-        android:label="fragment_reviews"
-        tools:layout="@layout/fragment_reviews">
-        <argument
-            android:name="id"
-            android:defaultValue=""
-            app:argType="string" />
-        <argument
-            android:name="intentFrom"
-            android:defaultValue=""
-            app:argType="string" />
+            app:destination="@id/movie_fragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/splash_screen_fragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -115,9 +83,9 @@
     </fragment>
     <fragment
         android:id="@+id/tv_show_fragment"
-        tools:layout="@layout/fragment_tv_show"
         android:name="com.application.zaki.movies.presentation.tvshow.view.TvShowFragment"
-        android:label="TvShowsFragment" >
+        android:label="TvShowsFragment"
+        tools:layout="@layout/fragment_tv_show">
         <action
             android:id="@+id/action_tvShowsFragment_to_detailFragment"
             app:destination="@id/detail_fragment" />
