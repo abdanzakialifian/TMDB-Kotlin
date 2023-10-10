@@ -63,4 +63,8 @@
         <item name="tabTextAppearance">@style/TabLayoutTextStyle</item>
         <item name="tabIndicatorFullWidth">false</item>
     </style>
+
+    <style name="CollapsingToolbarStyle" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:background">@color/black</item>
+    </style>
 </resources>
