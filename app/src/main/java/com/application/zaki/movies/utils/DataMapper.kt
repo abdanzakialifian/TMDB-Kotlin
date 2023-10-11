@@ -73,7 +73,9 @@ object DataMapper {
         }
 
         val releaseDateResult = releaseDates?.results?.firstOrNull { data ->
-            data.iso31661 == "ID"
+            data.releaseDates?.any { releaseDate ->
+                !data.iso31661.isNullOrEmpty() && !releaseDate.certification.isNullOrEmpty()
+            } ?: false
         }
 
         val releaseDate = releaseDateResult?.releaseDates?.firstOrNull()
@@ -126,14 +128,12 @@ object DataMapper {
             GenreItemModel(name = genre.name, id = genre.id)
         }
 
-        val releaseDateResult = releaseDates?.results?.firstOrNull { data ->
-            data.iso31661 == "ID"
+        val contentRating = contentRating?.results?.firstOrNull { data ->
+            !data.iso31661.isNullOrEmpty() ||! data.rating.isNullOrEmpty()
         }
 
-        val releaseDate = releaseDateResult?.releaseDates?.firstOrNull()
-
         return DetailModel(
-            originalLanguage = releaseDateResult?.iso31661,
+            originalLanguage = contentRating?.iso31661,
             title = name,
             backdropPath = backdropPath,
             cast = cast,
@@ -142,11 +142,11 @@ object DataMapper {
             id = id,
             overview = overview,
             posterPath = posterPath,
-            releaseDate = releaseDate?.releaseDate,
+            releaseDate = lastAirDate,
             voteAverage = voteAverage,
             videos = videos,
             runtime = lastEpisodeToAir?.runtime,
-            certification = releaseDate?.certification
+            certification = contentRating?.rating
         )
     }
 

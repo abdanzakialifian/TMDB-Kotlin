@@ -114,7 +114,14 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
             imgBackdrop.loadBackdropImageUrl(data.backdropPath ?: "")
             imgPoster.loadImageUrl(data.posterPath ?: "")
             tvTitle.text = data.title
-            tvLanguage.text = data.originalLanguage
+            if (!data.originalLanguage.isNullOrEmpty() && !data.certification.isNullOrEmpty()) {
+                tvLanguage.text = data.originalLanguage
+                tvCertification.text = data.certification
+            } else {
+                tvLanguage.gone()
+                tvCertification.gone()
+            }
+
             tvSubTitle.text = StringBuilder().append(data.runtime?.fromMinutesToHHmm() ?: "0h 0min")
                 .append(" \u25CF ")
                 .append(data.releaseDate?.convertDateText("dd MMM yyyy", "yyyy-MM-dd"))

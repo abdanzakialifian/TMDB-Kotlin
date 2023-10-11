@@ -87,7 +87,10 @@ data class DetailMoviesResponse(
 	val status: String? = null,
 
 	@field:SerializedName("reviews")
-	val reviews: ReviewsResponse? = null
+	val reviews: ReviewsResponse? = null,
+
+	@field:SerializedName("release_dates")
+	val releaseDates: ReleaseDateResponse? = null
 )
 
 data class CrewItemResponse(
@@ -271,4 +274,37 @@ data class BelongsToCollectionResponse(
 
 	@field:SerializedName("poster_path")
 	val posterPath: String? = null
+)
+
+data class ReleaseDateResponse(
+	@field:SerializedName("results")
+	val results: List<ReleaseDateResultItemResponse>
+)
+
+data class ReleaseDateResultItemResponse(
+	@field:SerializedName("iso_3166_1")
+	val iso31661: String? = null,
+
+	@field:SerializedName("release_dates")
+	val releaseDates: List<ReleaseDateItemResponse>? = null
+)
+
+data class ReleaseDateItemResponse(
+	@field:SerializedName("certification")
+	val certification: String? = null,
+
+	@field:SerializedName("descriptors")
+	val descriptors: List<Any>? = null,
+
+	@field:SerializedName("iso_639_1")
+	val iso6391: String? = null,
+
+	@field:SerializedName("note")
+	val note: String? = null,
+
+	@field:SerializedName("release_date")
+	val releaseDate: String? = null,
+
+	@field:SerializedName("type")
+	val type: Int? = null,
 )

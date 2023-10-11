@@ -81,6 +81,15 @@
             app:layout_constraintStart_toStartOf="@id/tv_sub_title"
             app:layout_constraintTop_toBottomOf="@id/tv_sub_title" />
 
+        <View
+            android:layout_width="30dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/background_rounded_shimmer"
+            app:layout_constraintBottom_toBottomOf="@id/view_language"
+            app:layout_constraintStart_toEndOf="@id/view_language"
+            app:layout_constraintTop_toTopOf="@id/view_language" />
+
         <ProgressBar
             android:id="@+id/progress_bar"
             style="?android:attr/progressBarStyleHorizontal"

@@ -108,7 +108,10 @@ data class DetailTvShowsResponse(
     val status: String? = null,
 
     @field:SerializedName("reviews")
-    val reviews: ReviewsResponse? = null
+    val reviews: ReviewsResponse? = null,
+
+    @field:SerializedName("content_ratings")
+    val contentRating: ContentRatingResponse? = null
 )
 
 data class LastEpisodeToAirResponse(
@@ -352,4 +355,20 @@ data class CrewItemResponse(
 
     @field:SerializedName("job")
     val job: String? = null
+)
+
+data class ContentRatingResponse(
+    @field:SerializedName("results")
+    val results: List<ContentRatingResultItemResponse>
+)
+
+data class ContentRatingResultItemResponse(
+    @field:SerializedName("iso_3166_1")
+    val iso31661: String? = null,
+
+    @field:SerializedName("descriptors")
+    val descriptors: List<Any>? = null,
+
+    @field:SerializedName("rating")
+    val rating: String? = null,
 )

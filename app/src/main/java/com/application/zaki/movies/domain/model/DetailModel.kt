@@ -13,7 +13,8 @@ data class DetailModel(
     val releaseDate: String? = null,
     val voteAverage: Float? = null,
     val videos: List<VideoItemModel>? = null,
-    val runtime: Int? = null
+    val runtime: Int? = null,
+    val certification: String? = null
 )
 
 data class CastCrewItemModel(
