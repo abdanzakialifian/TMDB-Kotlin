@@ -1,10 +1,11 @@
 package com.application.zaki.movies.presentation.detail.view
 
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.application.zaki.movies.R
@@ -36,6 +37,10 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
     private val args: DetailFragmentArgs by navArgs()
 
     private val detailViewModel by viewModels<DetailViewModel>()
+
+    private var userScoreProgress = 0
+
+    private var userScorePercentage = 0
 
     override fun getViewBinding(): FragmentDetailBinding =
         FragmentDetailBinding.inflate(layoutInflater)
@@ -99,6 +104,8 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
     private fun showDataDetail(data: DetailModel) {
         val convertRating =
             data.voteAverage?.toBigDecimal()?.setScale(1, RoundingMode.UP)?.toDouble()
+        userScorePercentage = convertRating.toString().replace(".", "").toInt()
+
         data.genres?.forEach {
             addChipToGroup(it.name ?: "")
         }
@@ -108,12 +115,12 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
             imgPoster.loadImageUrl(data.posterPath ?: "")
             tvTitle.text = data.title
             tvLanguage.text = data.originalLanguage
-            tvSubTitle.text = StringBuilder()
-                .append(data.runtime?.fromMinutesToHHmm() ?: "0h 0min")
+            tvSubTitle.text = StringBuilder().append(data.runtime?.fromMinutesToHHmm() ?: "0h 0min")
                 .append(" \u25CF ")
                 .append(data.releaseDate?.convertDateText("dd MMM yyyy", "yyyy-MM-dd"))
-            tvRating.text = (convertRating ?: 0).toString()
         }
+
+        userScoreProgress()
     }
 
     private fun setAppBarLayout(title: String?) {
@@ -178,6 +185,25 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
         chip.isCloseIconVisible = false
         chip.isClickable = false
         binding?.chipGroup?.addView(chip as View)
+    }
+
+    private fun userScoreProgress() {
+        val handler = Handler(Looper.getMainLooper())
+        handler.postDelayed(object : Runnable {
+            override fun run() {
+                if (userScoreProgress <= userScorePercentage) {
+                    binding?.apply {
+                        tvUserScore.text = StringBuilder().append(userScoreProgress).append("%")
+                        progressUserScore.progress = userScoreProgress
+                        userScoreProgress++
+                    }
+                    handler.postDelayed(this, 10L)
+                } else {
+                    handler.removeCallbacks(this)
+                }
+            }
+
+        }, 10L)
     }
 
     private fun navigateToMoviePage() {

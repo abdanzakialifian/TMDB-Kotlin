@@ -40,7 +40,7 @@
 
     <style name="ChipText" parent="TextAppearance.MaterialComponents.Chip">
         <item name="android:fontFamily">@font/montserrat_medium</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">10sp</item>
     </style>
 
     <style name="TabLayoutTextStyle" parent="@android:style/TextAppearance.Widget.TabWidget">

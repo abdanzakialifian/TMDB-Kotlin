@@ -1,5 +1,7 @@
 package com.application.zaki.movies.presentation.movietvshow.adapter
 
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -29,17 +31,43 @@ class MovieTvShowPagingAdapter :
                 item?.apply {
                     val convertRating =
                         voteAverage?.toBigDecimal()?.setScale(1, RoundingMode.UP)?.toDouble()
+                    val userScorePercentage = convertRating.toString().replace(".", "").toInt()
+
                     imgPoster.loadImageUrl(posterPath ?: "")
                     tvYear.text = releaseDate?.convertDateText("dd MMM yyyy", "yyyy-MM-dd")
                     tvTitle.text = name
-                    tvRating.text = convertRating?.toFloat().toString()
                     tvOverview.text = overview
+                    userScoreProgress(binding, userScorePercentage)
                 }
             }
             itemView.setOnClickListener {
                 onItemClickCallback.onItemClicked(item)
             }
         }
+    }
+
+    private fun userScoreProgress(
+        binding: ItemListMovieTvShowPagingBinding,
+        userScorePercentage: Int
+    ) {
+        var userScoreProgress = 0
+
+        val handler = Handler(Looper.getMainLooper())
+        handler.postDelayed(object : Runnable {
+            override fun run() {
+                if (userScoreProgress <= userScorePercentage) {
+                    binding.apply {
+                        tvUserScore.text = StringBuilder().append(userScoreProgress).append("%")
+                        progressUserScore.progress = userScoreProgress
+                        userScoreProgress++
+                    }
+                    handler.postDelayed(this, 10L)
+                } else {
+                    handler.removeCallbacks(this)
+                }
+            }
+
+        }, 10L)
     }
 
     override fun onCreateViewHolder(

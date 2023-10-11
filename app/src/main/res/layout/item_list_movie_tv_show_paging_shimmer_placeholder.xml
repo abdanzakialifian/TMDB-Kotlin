@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="10dp"
     app:cardBackgroundColor="@color/grey500"
+    app:cardCornerRadius="10dp"
     app:cardUseCompatPadding="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,11 +15,11 @@
             android:id="@+id/img_poster"
             android:layout_width="120dp"
             android:layout_height="0dp"
+            android:background="@color/grey200"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@color/grey200"
-            android:scaleType="centerCrop" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_year"
@@ -49,13 +48,18 @@
             app:layout_constraintStart_toEndOf="@id/img_poster"
             app:layout_constraintTop_toBottomOf="@id/tv_year" />
 
-        <View
-            android:id="@+id/rating_bar"
-            android:layout_width="100dp"
-            android:layout_height="18dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/background_rounded_shimmer"
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:indeterminate="false"
+            android:progressBackgroundTint="@color/grey200"
+            android:progressDrawable="@drawable/background_progress_bar_shimmer"
+            android:rotation="-90"
             app:layout_constraintStart_toEndOf="@id/img_poster"
             app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
@@ -74,7 +78,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/img_poster"
-            app:layout_constraintTop_toBottomOf="@id/rating_bar" />
+            app:layout_constraintTop_toBottomOf="@id/progress_bar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

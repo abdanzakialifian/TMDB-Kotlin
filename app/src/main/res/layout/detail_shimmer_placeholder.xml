@@ -36,63 +36,77 @@
 
     </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="150dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="6dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/background_rounded_shimmer"
-        android:ellipsize="end"
-        android:fontFamily="@font/montserrat_bold"
-        android:maxLines="2"
-        android:textSize="18sp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/cv_poster"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/cv_poster"
-        app:layout_constraintTop_toBottomOf="@id/img_backdrop" />
+        app:layout_constraintTop_toBottomOf="@id/img_backdrop">
 
-    <TextView
-        android:id="@+id/tv_sub_title"
-        android:layout_width="180dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:background="@drawable/background_rounded_shimmer"
-        android:ellipsize="end"
-        android:fontFamily="@font/montserrat_medium"
-        android:maxLines="1"
-        android:textSize="10sp"
-        app:layout_constraintStart_toStartOf="@id/tv_title"
-        app:layout_constraintTop_toBottomOf="@id/tv_title"
-        tools:ignore="SmallSp" />
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:background="@drawable/background_rounded_shimmer"
+            android:ellipsize="end"
+            android:fontFamily="@font/montserrat_bold"
+            android:maxLines="2"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <View
-        android:layout_width="100dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/background_rounded_shimmer"
-        app:layout_constraintStart_toStartOf="@id/tv_sub_title"
-        app:layout_constraintTop_toBottomOf="@id/tv_sub_title" />
+        <TextView
+            android:id="@+id/tv_sub_title"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/background_rounded_shimmer"
+            android:ellipsize="end"
+            android:fontFamily="@font/montserrat_medium"
+            android:maxLines="1"
+            android:textSize="10sp"
+            app:layout_constraintStart_toStartOf="@id/tv_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            tools:ignore="SmallSp" />
 
-    <TextView
-        android:id="@+id/tv_genres"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/background_rounded_shimmer"
-        android:fontFamily="@font/montserrat_medium"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@id/cv_poster"
-        app:layout_constraintTop_toBottomOf="@id/cv_poster" />
+        <View
+            android:id="@+id/view_language"
+            android:layout_width="30dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/background_rounded_shimmer"
+            app:layout_constraintStart_toStartOf="@id/tv_sub_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_sub_title" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="8dp"
+            android:indeterminate="false"
+            android:progressBackgroundTint="@color/grey200"
+            android:progressDrawable="@drawable/background_progress_bar_shimmer"
+            android:rotation="-90"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_language" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_genres">
+        app:layout_constraintTop_toBottomOf="@id/cv_poster">
 
         <View
             android:layout_width="80dp"

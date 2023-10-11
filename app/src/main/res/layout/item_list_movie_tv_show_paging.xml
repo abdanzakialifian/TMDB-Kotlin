@@ -49,25 +49,37 @@
             app:layout_constraintTop_toBottomOf="@id/tv_year"
             tools:text="The Dark Knight" />
 
-        <androidx.appcompat.widget.AppCompatImageView
+        <FrameLayout
+            android:id="@+id/layout_progress_user_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/img_star"
-            android:layout_marginTop="4dp"
-            android:src="@drawable/ic_star_18"
-            app:layout_constraintStart_toStartOf="@id/tv_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_title" />
+            android:layout_gravity="center"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toEndOf="@id/img_poster"
+            app:layout_constraintTop_toBottomOf="@id/tv_title">
 
-        <TextView
-            android:id="@+id/tv_rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@id/img_star"
-            app:layout_constraintStart_toEndOf="@id/img_star"
-            app:layout_constraintTop_toTopOf="@id/img_star"
-            tools:text="8.7" />
+            <ProgressBar
+                android:id="@+id/progress_user_score"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:indeterminate="false"
+                android:progressDrawable="@drawable/circle_progress_bar"
+                android:rotation="-90" />
+
+            <TextView
+                android:id="@+id/tv_user_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/montserrat_medium"
+                android:textSize="8sp"
+                tools:ignore="SmallSp"
+                tools:text="60%" />
+
+        </FrameLayout>
 
         <TextView
             android:id="@+id/tv_overview"
@@ -83,7 +95,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/img_poster"
-            app:layout_constraintTop_toBottomOf="@id/tv_rating"
+            app:layout_constraintTop_toBottomOf="@id/layout_progress_user_score"
             tools:text="Inexperienced Otis channels his sex therapist mom when he teams up with rebellious Maeve to set up an underground sex therapy clinic at school." />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

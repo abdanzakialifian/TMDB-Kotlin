@@ -16,6 +16,7 @@
     <color name="blue">#194473</color>
     <color name="blue_thirty_percent">#4D194473</color>
     <color name="yellow">#FDCC0D</color>
+    <color name="red_twenty_percent">#33F30404</color>
     <color name="red">#F30404</color>
     <color name="dark_red">#A50404</color>
 </resources>

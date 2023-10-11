@@ -72,8 +72,14 @@ object DataMapper {
             GenreItemModel(name = genre.name, id = genre.id)
         }
 
+        val releaseDateResult = releaseDates?.results?.firstOrNull { data ->
+            data.iso31661 == "ID"
+        }
+
+        val releaseDate = releaseDateResult?.releaseDates?.firstOrNull()
+
         return DetailModel(
-            originalLanguage = originalLanguage,
+            originalLanguage = releaseDateResult?.iso31661,
             title = title,
             backdropPath = backdropPath,
             cast = cast,
@@ -82,10 +88,11 @@ object DataMapper {
             id = id,
             overview = overview,
             posterPath = posterPath,
-            releaseDate = releaseDate,
+            releaseDate = releaseDate?.releaseDate,
             voteAverage = voteAverage,
             videos = videos,
-            runtime = runtime
+            runtime = runtime,
+            certification = releaseDate?.certification
         )
     }
 
@@ -119,8 +126,14 @@ object DataMapper {
             GenreItemModel(name = genre.name, id = genre.id)
         }
 
+        val releaseDateResult = releaseDates?.results?.firstOrNull { data ->
+            data.iso31661 == "ID"
+        }
+
+        val releaseDate = releaseDateResult?.releaseDates?.firstOrNull()
+
         return DetailModel(
-            originalLanguage = originalLanguage,
+            originalLanguage = releaseDateResult?.iso31661,
             title = name,
             backdropPath = backdropPath,
             cast = cast,
@@ -129,10 +142,11 @@ object DataMapper {
             id = id,
             overview = overview,
             posterPath = posterPath,
-            releaseDate = firstAirDate,
+            releaseDate = releaseDate?.releaseDate,
             voteAverage = voteAverage,
             videos = videos,
-            runtime = lastEpisodeToAir?.runtime
+            runtime = lastEpisodeToAir?.runtime,
+            certification = releaseDate?.certification
         )
     }
 
