@@ -56,7 +56,6 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                     rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
                 )
             }
-            navigateToMoviePage()
         } else {
             if (detailViewModel.detailData.value == null) {
                 detailViewModel.detailTvShows(
@@ -64,9 +63,9 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                     rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
                 )
             }
-            navigateToTvShowPage()
         }
 
+        handlePhysicalBackButton()
         observeData(intentFrom)
         setViewPager()
     }
@@ -135,6 +134,11 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
             appBarLayout.addOnOffsetChangedListener(object : AppBarStateChangedListener() {
                 override fun onStateChanged(appBarLayout: AppBarLayout?, state: State?) {
                     if (state == State.COLLAPSED) {
+                        val intentFrom = args.intentFrom
+                        imgBack.visible()
+                        imgBack.setOnClickListener {
+                            navigateToMovieOrTvShow(intentFrom)
+                        }
                         collapsingToolbarLayout.title = title
                         toolbar.setBackgroundColor(
                             ContextCompat.getColor(
@@ -143,6 +147,7 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                             )
                         )
                     } else {
+                        imgBack.gone()
                         collapsingToolbarLayout.title = ""
                         toolbar.setBackgroundColor(
                             ContextCompat.getColor(
@@ -213,24 +218,23 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
         }, 10L)
     }
 
-    private fun navigateToMoviePage() {
+    private fun handlePhysicalBackButton() {
+        val intentFrom = args.intentFrom
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    findNavController().popBackStack(R.id.movie_fragment, false)
+                    navigateToMovieOrTvShow(intentFrom)
                 }
             })
     }
 
-    private fun navigateToTvShowPage() {
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController().popBackStack(R.id.tv_show_fragment, false)
-                }
-            })
+    private fun navigateToMovieOrTvShow(intentFrom: String) {
+        if (intentFrom == Category.MOVIES.name) {
+            findNavController().popBackStack(R.id.movie_fragment, false)
+        } else {
+            findNavController().popBackStack(R.id.tv_show_fragment, false)
+        }
     }
 
     companion object {

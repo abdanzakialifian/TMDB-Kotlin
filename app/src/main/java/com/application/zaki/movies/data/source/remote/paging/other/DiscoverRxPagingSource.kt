@@ -30,7 +30,7 @@ class DiscoverRxPagingSource @Inject constructor(private val apiService: ApiServ
                     LoadResult.Error(throwable)
                 }
 
-            Category.TV_SHOWS -> apiService.getDiscoverTvShow(position, genreId)
+            else-> apiService.getDiscoverTvShow(position, genreId)
                 .subscribeOn(Schedulers.io())
                 .map { data ->
                     toLoadResult(data, position)

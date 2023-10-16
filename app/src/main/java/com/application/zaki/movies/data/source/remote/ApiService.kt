@@ -1,6 +1,7 @@
 package com.application.zaki.movies.data.source.remote
 
 import com.application.zaki.movies.data.source.remote.response.movies.*
+import com.application.zaki.movies.data.source.remote.response.other.DetailCastResponse
 import com.application.zaki.movies.data.source.remote.response.other.DiscoverResponse
 import com.application.zaki.movies.data.source.remote.response.other.ReviewsResponse
 import com.application.zaki.movies.data.source.remote.response.tvshows.*
@@ -108,4 +109,9 @@ interface ApiService {
         @Path("tv_id") tvId: Int,
         @Query("page") page: Int
     ): Single<TvShowsResponse>
+
+    @GET("person/{person_id}?append_to_response=movie_credits")
+    fun getDetailCast(
+        @Path("person_id") personId: Int
+    ): Flowable<DetailCastResponse>
 }

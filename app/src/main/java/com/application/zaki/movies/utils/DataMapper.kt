@@ -2,11 +2,13 @@ package com.application.zaki.movies.utils
 
 import com.application.zaki.movies.data.source.remote.response.movies.DetailMoviesResponse
 import com.application.zaki.movies.data.source.remote.response.movies.ListMoviesResponse
+import com.application.zaki.movies.data.source.remote.response.other.DetailCastResponse
 import com.application.zaki.movies.data.source.remote.response.other.ResultsItemDiscoverResponse
 import com.application.zaki.movies.data.source.remote.response.other.ReviewItemResponse
 import com.application.zaki.movies.data.source.remote.response.tvshows.DetailTvShowsResponse
 import com.application.zaki.movies.data.source.remote.response.tvshows.ListTvShowsResponse
 import com.application.zaki.movies.domain.model.CastCrewItemModel
+import com.application.zaki.movies.domain.model.DetailCastModel
 import com.application.zaki.movies.domain.model.DetailModel
 import com.application.zaki.movies.domain.model.DiscoverItem
 import com.application.zaki.movies.domain.model.GenreItemModel
@@ -168,4 +170,11 @@ object DataMapper {
             voteCount = voteCount
         )
     }
+
+    fun DetailCastResponse.toDetailCastModel(): DetailCastModel = DetailCastModel(
+        name = name,
+        profilePath = profilePath,
+        biography = biography,
+        placeOfBirth = placeOfBirth
+    )
 }

@@ -1,19 +1,22 @@
 package com.application.zaki.movies.presentation.detail.view
 
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.application.zaki.movies.R
 import com.application.zaki.movies.databinding.FragmentCastCrewBinding
 import com.application.zaki.movies.domain.model.CastCrewModel
 import com.application.zaki.movies.presentation.base.BaseVBFragment
 import com.application.zaki.movies.presentation.detail.adapter.CastCrewAdapter
 import com.application.zaki.movies.presentation.detail.viewmodel.DetailViewModel
+import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.UiState
 import com.application.zaki.movies.utils.gone
 import com.application.zaki.movies.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CastCrewFragment : BaseVBFragment<FragmentCastCrewBinding>() {
+class CastCrewFragment : BaseVBFragment<FragmentCastCrewBinding>(),
+    CastCrewAdapter.OnItemClickCallback {
 
     /*
         To ensure that the viewModel is called after
@@ -51,16 +54,19 @@ class CastCrewFragment : BaseVBFragment<FragmentCastCrewBinding>() {
                             CastCrewModel(
                                 id = 1,
                                 title = resources.getString(R.string.cast),
-                                castCrews = detail.cast
+                                castCrews = detail.cast,
+                                category = Category.CAST
                             ),
                             CastCrewModel(
                                 id = 2,
                                 title = resources.getString(R.string.crew),
-                                castCrews = detail.crew
+                                castCrews = detail.crew,
+                                category = Category.CREW
                             )
                         )
                     )
                     castCrewAdapter.submitList(castCrewModels)
+                    castCrewAdapter.setOnItemClickCallback(this)
                     binding?.apply {
                         shimmerCastCrew.gone()
                         shimmerCastCrew.stopShimmer()
@@ -87,5 +93,17 @@ class CastCrewFragment : BaseVBFragment<FragmentCastCrewBinding>() {
                 }
             }
         }
+    }
+
+    private fun navigateToDetailCastCrew(id: Int, category: Category) {
+        val navigateToDetailCastCrewFragment =
+            DetailFragmentDirections.actionDetailFragmentToDetailCastCrewFragment()
+        navigateToDetailCastCrewFragment.navigateFrom = category
+        navigateToDetailCastCrewFragment.id = id
+        findNavController().navigate(navigateToDetailCastCrewFragment)
+    }
+
+    override fun onItemClicked(id: Int, category: Category) {
+        navigateToDetailCastCrew(id, category)
     }
 }

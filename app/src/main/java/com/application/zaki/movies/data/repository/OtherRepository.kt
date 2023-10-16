@@ -4,9 +4,11 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.application.zaki.movies.data.source.remote.RemoteDataSource
 import com.application.zaki.movies.domain.interfaces.IOtherRepository
+import com.application.zaki.movies.domain.model.DetailCastModel
 import com.application.zaki.movies.domain.model.DiscoverItem
 import com.application.zaki.movies.domain.model.ReviewModel
 import com.application.zaki.movies.utils.Category
+import com.application.zaki.movies.utils.DataMapper.toDetailCastModel
 import com.application.zaki.movies.utils.DataMapper.toResultItemDiscover
 import com.application.zaki.movies.utils.DataMapper.toReviewItem
 import io.reactivex.Flowable
@@ -37,4 +39,9 @@ class OtherRepository @Inject constructor(private val remoteDataSource: RemoteDa
                     data.toResultItemDiscover()
                 }
             }
+
+    override fun getDetailCast(personId: Int): Flowable<DetailCastModel> =
+        remoteDataSource.getDetailCast(personId).map { data ->
+            data.toDetailCastModel()
+        }
 }

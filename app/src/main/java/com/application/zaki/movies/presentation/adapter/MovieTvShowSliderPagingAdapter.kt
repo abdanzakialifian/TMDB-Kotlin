@@ -26,8 +26,10 @@ class MovieTvShowSliderPagingAdapter :
             item?.backdropPath?.let {
                 binding.imgSlider.loadBackdropImageUrl(it)
             }
-            itemView.setOnClickListener {
-                onItemClickCallback.onItemClicked(item)
+            if (this@MovieTvShowSliderPagingAdapter::onItemClickCallback.isInitialized) {
+                itemView.setOnClickListener {
+                    onItemClickCallback.onItemClicked(item)
+                }
             }
         }
     }

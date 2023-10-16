@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/movie_tv_show_fragment"
         android:name="com.application.zaki.movies.presentation.movietvshow.view.MovieTvShowFragment"
-        android:label="fragment_list"
+        android:label="fragment_movie_tv_show"
         tools:layout="@layout/fragment_movie_tv_show">
         <action
             android:id="@+id/action_listFragment_to_detailFragment"
@@ -55,6 +55,9 @@
         <action
             android:id="@+id/action_detail_fragment_self"
             app:destination="@id/detail_fragment" />
+        <action
+            android:id="@+id/action_detail_fragment_to_detailCastCrewFragment"
+            app:destination="@id/detail_cast_crew_fragment" />
     </fragment>
     <fragment
         android:id="@+id/splash_screen_fragment"
@@ -72,7 +75,7 @@
     <fragment
         android:id="@+id/movie_fragment"
         android:name="com.application.zaki.movies.presentation.movie.view.MovieFragment"
-        android:label="fragment_tv_shows"
+        android:label="fragment_movie"
         tools:layout="@layout/fragment_movie">
         <action
             android:id="@+id/action_movie_fragment_to_detailFragment"
@@ -84,7 +87,7 @@
     <fragment
         android:id="@+id/tv_show_fragment"
         android:name="com.application.zaki.movies.presentation.tvshow.view.TvShowFragment"
-        android:label="TvShowsFragment"
+        android:label="fragment_tv_show"
         tools:layout="@layout/fragment_tv_show">
         <action
             android:id="@+id/action_tvShowsFragment_to_detailFragment"
@@ -92,6 +95,20 @@
         <action
             android:id="@+id/action_tv_show_fragment_to_movieTvShowFragment"
             app:destination="@id/movie_tv_show_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detail_cast_crew_fragment"
+        android:name="com.application.zaki.movies.presentation.castcrew.view.DetailCastCrewFragment"
+        android:label="fragment_detail_cast_crew"
+        tools:layout="@layout/fragment_detail_cast_crew">
+        <argument
+            android:name="navigateFrom"
+            android:defaultValue="CAST"
+            app:argType="com.application.zaki.movies.utils.Category" />
+        <argument
+            android:name="id"
+            android:defaultValue="0"
+            app:argType="integer" />
     </fragment>
 
 </navigation>

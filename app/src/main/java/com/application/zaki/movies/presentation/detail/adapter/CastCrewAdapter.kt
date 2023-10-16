@@ -6,12 +6,22 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.application.zaki.movies.databinding.ItemListCastCrewBinding
+import com.application.zaki.movies.domain.model.CastCrewItemModel
 import com.application.zaki.movies.domain.model.CastCrewModel
+import com.application.zaki.movies.utils.Category
 import com.application.zaki.movies.utils.gone
 import com.application.zaki.movies.utils.visible
 
 class CastCrewAdapter :
     ListAdapter<CastCrewModel, CastCrewAdapter.CastViewHolder>(DIFF_CALLBACK) {
+
+    private lateinit var castCrewItemAdapter: CastCrewItemAdapter
+
+    private lateinit var onItemClickCallback: OnItemClickCallback
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
 
     inner class CastViewHolder(private val binding: ItemListCastCrewBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -24,10 +34,13 @@ class CastCrewAdapter :
                     tvCastCrew.visible()
                     rvCastCrew.visible()
                     tvCastCrew.text = item.title
-                    val castCrewItemAdapter = CastCrewItemAdapter()
-                    castCrewItemAdapter.submitList(item.castCrews)
-                    rvCastCrew.adapter = castCrewItemAdapter
-                    rvCastCrew.setHasFixedSize(true)
+                    castCrewItemAdapter = CastCrewItemAdapter()
+                    if (this@CastCrewAdapter::castCrewItemAdapter.isInitialized) {
+                        castCrewItemAdapter.submitList(item.castCrews)
+                        rvCastCrew.adapter = castCrewItemAdapter
+                        rvCastCrew.setHasFixedSize(true)
+                        eventListeners(item.category)
+                    }
                 }
             }
         }
@@ -42,6 +55,21 @@ class CastCrewAdapter :
 
     override fun onBindViewHolder(holder: CastViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    private fun eventListeners(category: Category) {
+        castCrewItemAdapter.setOnItemClickCallback(object :
+            CastCrewItemAdapter.OnItemClickCallback {
+            override fun onItemClicked(item: CastCrewItemModel) {
+                if (this@CastCrewAdapter::castCrewItemAdapter.isInitialized) {
+                    onItemClickCallback.onItemClicked(item.id ?: 0, category)
+                }
+            }
+        })
+    }
+
+    interface OnItemClickCallback {
+        fun onItemClicked(id: Int, category: Category)
     }
 
     companion object {

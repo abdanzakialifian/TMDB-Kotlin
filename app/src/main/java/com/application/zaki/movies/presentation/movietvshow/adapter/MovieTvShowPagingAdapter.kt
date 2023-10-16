@@ -40,8 +40,10 @@ class MovieTvShowPagingAdapter :
                     userScoreProgress(binding, userScorePercentage)
                 }
             }
-            itemView.setOnClickListener {
-                onItemClickCallback.onItemClicked(item)
+            if (this@MovieTvShowPagingAdapter::onItemClickCallback.isInitialized) {
+                itemView.setOnClickListener {
+                    onItemClickCallback.onItemClicked(item)
+                }
             }
         }
     }

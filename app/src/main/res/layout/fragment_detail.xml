@@ -16,7 +16,7 @@
             style="@style/CollapsingToolbarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:collapsedTitleTextColor="@color/white"
+            app:collapsedTitleTextAppearance="@style/CollapsedTitle"
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -101,7 +101,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:background="@drawable/background_original_language"
+                        android:background="@drawable/background_rounded_grey"
                         android:fontFamily="@font/montserrat_semi_bold"
                         android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="@id/tv_sub_title"
@@ -113,7 +113,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:background="@drawable/background_original_language"
+                        android:background="@drawable/background_rounded_outline"
                         android:fontFamily="@font/montserrat_semi_bold"
                         android:textSize="12sp"
                         app:layout_constraintBottom_toBottomOf="@id/tv_language"
@@ -183,7 +183,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@android:color/transparent"
-                app:layout_collapseMode="pin" />
+                app:layout_collapseMode="pin">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/img_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|top"
+                    android:layout_marginEnd="10dp"
+                    android:src="@drawable/ic_arrow_back_28"
+                    android:visibility="gone" />
+
+            </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

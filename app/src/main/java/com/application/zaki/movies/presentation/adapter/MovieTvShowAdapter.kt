@@ -47,8 +47,8 @@ class MovieTvShowAdapter :
                     movieTvShowItemPagingAdapter.addLoadStateListener { loadState ->
                         setLoadStatePaging(loadState, binding)
                     }
+                    eventListeners(tvSeeAllMovieTvShow, item.category, item.movie, item.tvShow)
                 }
-                eventListeners(tvSeeAllMovieTvShow, item.category, item.movie, item.tvShow)
             }
         }
     }

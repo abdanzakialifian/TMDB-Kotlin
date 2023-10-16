@@ -11,6 +11,13 @@ import com.application.zaki.movies.utils.loadImageUrl
 
 class CastCrewItemAdapter :
     ListAdapter<CastCrewItemModel, CastCrewItemAdapter.CastViewHolder>(DIFF_CALLBACK) {
+
+    private lateinit var onItemClickCallback: OnItemClickCallback
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
+
     inner class CastViewHolder(private val binding: ItemListCastCrewItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CastCrewItemModel) {
@@ -18,6 +25,12 @@ class CastCrewItemAdapter :
                 imgPeople.loadImageUrl(item.profilePath ?: "")
                 tvTitle.text = item.name
                 tvSubTitle.text = item.character ?: item.job
+            }
+
+            if (this@CastCrewItemAdapter::onItemClickCallback.isInitialized) {
+                itemView.setOnClickListener {
+                    onItemClickCallback.onItemClicked(item)
+                }
             }
         }
     }
@@ -31,6 +44,10 @@ class CastCrewItemAdapter :
 
     override fun onBindViewHolder(holder: CastViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    interface OnItemClickCallback {
+        fun onItemClicked(item: CastCrewItemModel)
     }
 
     companion object {

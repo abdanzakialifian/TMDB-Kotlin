@@ -24,8 +24,10 @@ class MovieTvShowItemPagingAdapter :
             item?.posterPath?.let {
                 binding.imgHorizontal.loadImageUrl(it)
             }
-            itemView.setOnClickListener {
-                onItemClickCallback.onItemClicked(item)
+            if (this@MovieTvShowItemPagingAdapter::onItemClickCallback.isInitialized) {
+                itemView.setOnClickListener {
+                    onItemClickCallback.onItemClicked(item)
+                }
             }
         }
     }

@@ -10,6 +10,7 @@ import com.application.zaki.movies.data.source.remote.paging.other.ReviewsRxPagi
 import com.application.zaki.movies.data.source.remote.paging.tvshows.TvShowsRxPagingSource
 import com.application.zaki.movies.data.source.remote.response.movies.DetailMoviesResponse
 import com.application.zaki.movies.data.source.remote.response.movies.ListMoviesResponse
+import com.application.zaki.movies.data.source.remote.response.other.DetailCastResponse
 import com.application.zaki.movies.data.source.remote.response.other.ResultsItemDiscoverResponse
 import com.application.zaki.movies.data.source.remote.response.other.ReviewItemResponse
 import com.application.zaki.movies.data.source.remote.response.tvshows.DetailTvShowsResponse
@@ -132,4 +133,7 @@ class RemoteDataSource @Inject constructor(
                 }
             }
         ).flowable
+
+    fun getDetailCast(personId: Int): Flowable<DetailCastResponse> =
+        apiService.getDetailCast(personId)
 }
