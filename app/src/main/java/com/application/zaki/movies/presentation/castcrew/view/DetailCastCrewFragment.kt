@@ -14,6 +14,7 @@ import com.application.zaki.movies.utils.State
 import com.application.zaki.movies.utils.UiState
 import com.application.zaki.movies.utils.gone
 import com.application.zaki.movies.utils.loadImageUrl
+import com.application.zaki.movies.utils.setResizableText
 import com.application.zaki.movies.utils.visible
 import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,10 +49,15 @@ class DetailCastCrewFragment : BaseVBFragment<FragmentDetailCastCrewBinding>() {
                 is UiState.Success -> {
                     val detailCastCrew = result.data
                     binding?.apply {
+                        tvBiography.setResizableText(
+                            detailCastCrew.biography ?: "",
+                            3,
+                            true,
+                            layoutText
+                        )
                         imgPeople.loadImageUrl(detailCastCrew.profilePath ?: "")
                         collapsingToolbarLayout.title = detailCastCrew.name
                         tvPlaceOfBirth.text = detailCastCrew.placeOfBirth
-                        tvBiography.text = detailCastCrew.biography
                     }
                 }
             }
