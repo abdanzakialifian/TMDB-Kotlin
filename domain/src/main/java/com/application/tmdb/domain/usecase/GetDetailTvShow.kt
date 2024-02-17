@@ -8,6 +8,6 @@ import javax.inject.Singleton
 
 @Singleton
 class GetDetailTvShow @Inject constructor(private val iTvShowsRepository: ITvShowsRepository) {
-    operator fun invoke(tvId: String): Flowable<com.application.tmdb.common.model.DetailModel> =
+    operator fun invoke(tvId: String): Flowable<DetailModel> =
         iTvShowsRepository.getDetailTvShows(tvId)
 }
