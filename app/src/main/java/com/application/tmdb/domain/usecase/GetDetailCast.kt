@@ -1,0 +1,13 @@
+package com.application.tmdb.domain.usecase
+
+import com.application.tmdb.domain.interfaces.IOtherRepository
+import com.application.tmdb.domain.model.DetailCastModel
+import io.reactivex.Flowable
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@Singleton
+class GetDetailCast @Inject constructor(private val iOtherRepository: IOtherRepository) {
+    operator fun invoke(personId: Int): Flowable<DetailCastModel> =
+        iOtherRepository.getDetailCast(personId)
+}

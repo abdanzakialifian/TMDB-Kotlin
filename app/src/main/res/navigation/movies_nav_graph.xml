@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/search_fragment"
-        android:name="com.application.zaki.movies.presentation.setting.SettingFragment"
+        android:name="com.application.tmdb.presentation.setting.SettingFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_setting" />
     <fragment
         android:id="@+id/favorite_fragment"
-        android:name="com.application.zaki.movies.presentation.favorite.FavoriteFragment"
+        android:name="com.application.tmdb.presentation.favorite.FavoriteFragment"
         android:label="fragment_favorite"
         tools:layout="@layout/fragment_favorite" />
     <fragment
         android:id="@+id/movie_tv_show_fragment"
-        android:name="com.application.zaki.movies.presentation.movietvshow.view.MovieTvShowFragment"
+        android:name="com.application.tmdb.presentation.movietvshow.view.MovieTvShowFragment"
         android:label="fragment_movie_tv_show"
         tools:layout="@layout/fragment_movie_tv_show">
         <action
@@ -30,15 +30,15 @@
         <argument
             android:name="movie"
             android:defaultValue="POPULAR_MOVIES"
-            app:argType="com.application.zaki.movies.utils.Movie" />
+            app:argType="com.application.tmdb.utils.Movie" />
         <argument
             android:name="tvShow"
             android:defaultValue="POPULAR_TV_SHOWS"
-            app:argType="com.application.zaki.movies.utils.TvShow" />
+            app:argType="com.application.tmdb.utils.TvShow" />
     </fragment>
     <fragment
         android:id="@+id/detail_fragment"
-        android:name="com.application.zaki.movies.presentation.detail.view.DetailFragment"
+        android:name="com.application.tmdb.presentation.detail.view.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail">
         <argument
@@ -61,7 +61,7 @@
     </fragment>
     <fragment
         android:id="@+id/splash_screen_fragment"
-        android:name="com.application.zaki.movies.presentation.splash.SplashScreenFragment"
+        android:name="com.application.tmdb.presentation.splash.SplashScreenFragment"
         android:label="fragment_splash_screen"
         tools:layout="@layout/fragment_splash_screen">
         <action
@@ -74,7 +74,7 @@
 
     <fragment
         android:id="@+id/movie_fragment"
-        android:name="com.application.zaki.movies.presentation.movie.view.MovieFragment"
+        android:name="com.application.tmdb.presentation.movie.view.MovieFragment"
         android:label="fragment_movie"
         tools:layout="@layout/fragment_movie">
         <action
@@ -86,7 +86,7 @@
     </fragment>
     <fragment
         android:id="@+id/tv_show_fragment"
-        android:name="com.application.zaki.movies.presentation.tvshow.view.TvShowFragment"
+        android:name="com.application.tmdb.presentation.tvshow.view.TvShowFragment"
         android:label="fragment_tv_show"
         tools:layout="@layout/fragment_tv_show">
         <action
@@ -98,13 +98,13 @@
     </fragment>
     <fragment
         android:id="@+id/detail_cast_crew_fragment"
-        android:name="com.application.zaki.movies.presentation.castcrew.view.DetailCastCrewFragment"
+        android:name="com.application.tmdb.presentation.castcrew.view.DetailCastCrewFragment"
         android:label="fragment_detail_cast_crew"
         tools:layout="@layout/fragment_detail_cast_crew">
         <argument
             android:name="navigateFrom"
             android:defaultValue="CAST"
-            app:argType="com.application.zaki.movies.utils.Category" />
+            app:argType="com.application.tmdb.utils.Category" />
         <argument
             android:name="id"
             android:defaultValue="0"

@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace "com.application.zaki.movies"
+    namespace "com.application.tmdb"
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.application.zaki.movies"
+        applicationId "com.application.tmdb"
         minSdk 23
         targetSdk 34
         versionCode 1
