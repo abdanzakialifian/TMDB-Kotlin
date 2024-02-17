@@ -38,7 +38,7 @@ android {
 }
 
 dependencies {
-    implementation project(":common")
+    implementation project(":domain")
 
     // retrofit
     def retrofit_version = "2.9.0"

@@ -5,13 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.rxjava2.cachedIn
-import com.application.tmdb.core.domain.model.MovieTvShowModel
-import com.application.tmdb.core.domain.usecase.tvshow.TvShowWrapper
-import com.application.tmdb.common.Page
-import com.application.tmdb.common.TvShow
-import com.application.tmdb.common.RxDisposer
-import com.application.tmdb.common.addToDisposer
-import com.application.tmdb.common.toLiveData
+import com.application.tmdb.core.utils.Page
+import com.application.tmdb.core.utils.TvShow
+import com.application.tmdb.domain.model.MovieTvShowModel
+import com.application.tmdb.domain.usecase.tvshow.TvShowWrapper
+import com.application.tmdb.utils.RxDisposer
+import com.application.tmdb.utils.addToDisposer
+import com.application.tmdb.utils.toLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -22,7 +22,7 @@ import javax.inject.Inject
 class TvShowViewModel @Inject constructor(private val tvShowWrapper: TvShowWrapper) :
     ViewModel() {
 
-    private val _listTvShowsPaging: MutableLiveData<List<Pair<com.application.tmdb.common.TvShow, PagingData<MovieTvShowModel>>>> =
+    private val _listTvShowsPaging: MutableLiveData<List<Pair<TvShow, PagingData<MovieTvShowModel>>>> =
         MutableLiveData()
     val listTvShowsPaging get() = _listTvShowsPaging.toLiveData()
 
@@ -34,14 +34,14 @@ class TvShowViewModel @Inject constructor(private val tvShowWrapper: TvShowWrapp
     val isSearchStateChanged get() = _isSearchStateChanged.toLiveData()
 
     fun getListAllTvShows(
-        airingTodayTvShow: com.application.tmdb.common.TvShow?,
-        topRatedTvShow: com.application.tmdb.common.TvShow?,
-        popularTvShow: com.application.tmdb.common.TvShow?,
-        onTheAirTvShow: com.application.tmdb.common.TvShow?,
-        page: com.application.tmdb.common.Page?,
+        airingTodayTvShow: TvShow?,
+        topRatedTvShow: TvShow?,
+        popularTvShow: TvShow?,
+        onTheAirTvShow: TvShow?,
+        page: Page?,
         query: String?,
         tvId: Int?,
-        rxDisposer: com.application.tmdb.common.RxDisposer
+        rxDisposer: RxDisposer
     ) {
         tvShowWrapper.getListAllTvShows(
             airingTodayTvShow,
@@ -62,11 +62,11 @@ class TvShowViewModel @Inject constructor(private val tvShowWrapper: TvShowWrapp
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun getListTvShows(
-        tvShow: com.application.tmdb.common.TvShow?,
-        page: com.application.tmdb.common.Page?,
+        tvShow: TvShow?,
+        page: Page?,
         query: String?,
         tvId: Int?,
-        rxDisposer: com.application.tmdb.common.RxDisposer
+        rxDisposer: RxDisposer
     ) {
         tvShowWrapper.getListTvShows(tvShow, page, query, tvId)
             .subscribeOn(Schedulers.io())
