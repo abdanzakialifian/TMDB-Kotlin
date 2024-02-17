@@ -38,6 +38,8 @@ android {
 }
 
 dependencies {
+    implementation project(":domain")
+
     // retrofit
     def retrofit_version = "2.9.0"
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
