@@ -6,18 +6,18 @@ import androidx.navigation.fragment.navArgs
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import com.application.tmdb.R
+import com.application.tmdb.common.model.MovieTvShowModel
+import com.application.tmdb.common.utils.Category
+import com.application.tmdb.common.utils.Movie
+import com.application.tmdb.common.utils.Page
+import com.application.tmdb.common.utils.RxDisposer
+import com.application.tmdb.common.utils.TvShow
+import com.application.tmdb.common.utils.gone
+import com.application.tmdb.common.utils.visible
 import com.application.tmdb.databinding.FragmentMovieTvShowBinding
-import com.application.tmdb.core.domain.model.MovieTvShowModel
 import com.application.tmdb.presentation.base.BaseVBFragment
 import com.application.tmdb.presentation.movietvshow.adapter.MovieTvShowPagingAdapter
 import com.application.tmdb.presentation.movietvshow.viewmodel.MovieTvShowViewModel
-import com.application.tmdb.common.Category
-import com.application.tmdb.common.Movie
-import com.application.tmdb.common.Page
-import com.application.tmdb.common.RxDisposer
-import com.application.tmdb.common.TvShow
-import com.application.tmdb.common.gone
-import com.application.tmdb.common.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -39,19 +39,19 @@ class MovieTvShowFragment : BaseVBFragment<FragmentMovieTvShowBinding>(),
         val tvShow = args.tvShow
 
         when (intentFrom) {
-            com.application.tmdb.common.Category.MOVIES.name -> {
+            Category.MOVIES.name -> {
                 binding?.tvTitleAppbar?.text = when (movie) {
-                    com.application.tmdb.common.Movie.POPULAR_MOVIES -> resources.getString(R.string.popular_movies)
-                    com.application.tmdb.common.Movie.TOP_RATED_MOVIES -> resources.getString(R.string.top_rated_movies)
+                    Movie.POPULAR_MOVIES -> resources.getString(R.string.popular_movies)
+                    Movie.TOP_RATED_MOVIES -> resources.getString(R.string.top_rated_movies)
                     else -> resources.getString(R.string.up_coming_movies)
                 }
                 getListMovies(movie)
             }
 
-            com.application.tmdb.common.Category.TV_SHOWS.name -> {
+            Category.TV_SHOWS.name -> {
                 binding?.tvTitleAppbar?.text = when (tvShow) {
-                    com.application.tmdb.common.TvShow.TOP_RATED_TV_SHOWS -> resources.getString(R.string.top_rated_tv_shows)
-                    com.application.tmdb.common.TvShow.POPULAR_TV_SHOWS -> resources.getString(R.string.popular_tv_shows)
+                    TvShow.TOP_RATED_TV_SHOWS -> resources.getString(R.string.top_rated_tv_shows)
+                    TvShow.POPULAR_TV_SHOWS -> resources.getString(R.string.popular_tv_shows)
                     else -> resources.getString(R.string.on_the_air_tv_shows)
                 }
                 getListTvShows(tvShow)
@@ -63,27 +63,27 @@ class MovieTvShowFragment : BaseVBFragment<FragmentMovieTvShowBinding>(),
         }
     }
 
-    private fun getListMovies(movie: com.application.tmdb.common.Movie) {
+    private fun getListMovies(movie: Movie) {
         if (movieTvShowViewModel.listMoviesPaging.value == null) {
             movieTvShowViewModel.getListMovies(
                 movie = movie,
-                page = com.application.tmdb.common.Page.MORE_THAN_ONE,
+                page = Page.MORE_THAN_ONE,
                 query = null,
                 movieId = null,
-                rxDisposer = com.application.tmdb.common.RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) },
+                rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) },
             )
         }
         observeData()
     }
 
-    private fun getListTvShows(tvShow: com.application.tmdb.common.TvShow) {
+    private fun getListTvShows(tvShow: TvShow) {
         if (movieTvShowViewModel.listTvShowsPaging.value == null) {
             movieTvShowViewModel.getListTvShows(
                 tvShow = tvShow,
-                page = com.application.tmdb.common.Page.MORE_THAN_ONE,
+                page = Page.MORE_THAN_ONE,
                 query = null,
                 tvId = null,
-                rxDisposer = com.application.tmdb.common.RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) },
+                rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) },
             )
         }
         observeData()

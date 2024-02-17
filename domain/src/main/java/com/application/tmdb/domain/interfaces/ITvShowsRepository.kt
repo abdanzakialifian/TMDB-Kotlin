@@ -1,10 +1,10 @@
 package com.application.tmdb.domain.interfaces
 
 import androidx.paging.PagingData
-import com.application.tmdb.core.utils.Page
-import com.application.tmdb.core.utils.TvShow
-import com.application.tmdb.domain.model.DetailModel
-import com.application.tmdb.domain.model.MovieTvShowModel
+import com.application.tmdb.common.model.DetailModel
+import com.application.tmdb.common.model.MovieTvShowModel
+import com.application.tmdb.common.utils.Page
+import com.application.tmdb.common.utils.TvShow
 import io.reactivex.Flowable
 
 interface ITvShowsRepository {

@@ -2,12 +2,12 @@ package com.application.tmdb.presentation.castcrew.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.application.tmdb.domain.model.DetailCastModel
+import com.application.tmdb.common.model.DetailCastModel
+import com.application.tmdb.common.utils.RxDisposer
+import com.application.tmdb.common.utils.UiState
+import com.application.tmdb.common.utils.addToDisposer
+import com.application.tmdb.common.utils.toLiveData
 import com.application.tmdb.domain.usecase.GetDetailCast
-import com.application.tmdb.utils.RxDisposer
-import com.application.tmdb.utils.UiState
-import com.application.tmdb.utils.addToDisposer
-import com.application.tmdb.utils.toLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

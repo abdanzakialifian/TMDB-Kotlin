@@ -1,12 +1,12 @@
 package com.application.tmdb.core.source.remote
 
-import com.application.tmdb.core.source.remote.response.movies.DetailMoviesResponse
-import com.application.tmdb.core.source.remote.response.movies.MoviesResponse
-import com.application.tmdb.core.source.remote.response.tvshows.DetailTvShowsResponse
-import com.application.tmdb.core.source.remote.response.tvshows.TvShowsResponse
-import com.application.tmdb.core.source.remote.response.other.DetailCastResponse
-import com.application.tmdb.core.source.remote.response.other.DiscoverResponse
-import com.application.tmdb.core.source.remote.response.other.ReviewsResponse
+import com.application.tmdb.common.response.movies.DetailMoviesResponse
+import com.application.tmdb.common.response.movies.MoviesResponse
+import com.application.tmdb.common.response.tvshows.DetailTvShowsResponse
+import com.application.tmdb.common.response.tvshows.TvShowsResponse
+import com.application.tmdb.common.response.other.DetailCastResponse
+import com.application.tmdb.common.response.other.DiscoverResponse
+import com.application.tmdb.common.response.other.ReviewsResponse
 import io.reactivex.Flowable
 import io.reactivex.Single
 import retrofit2.http.GET
@@ -17,103 +17,103 @@ interface ApiService {
     @GET("movie/now_playing")
     fun getNowPlayingMovies(
         @Query("page") page: Int
-    ): Single<MoviesResponse>
+    ): Single<com.application.tmdb.common.response.movies.MoviesResponse>
 
     @GET("movie/top_rated")
     fun getTopRatedMoviesPaging(
         @Query("page") page: Int
-    ): Single<MoviesResponse>
+    ): Single<com.application.tmdb.common.response.movies.MoviesResponse>
 
     @GET("movie/popular")
     fun getPopularMoviesPaging(
         @Query("page") page: Int
-    ): Single<MoviesResponse>
+    ): Single<com.application.tmdb.common.response.movies.MoviesResponse>
 
     @GET("movie/upcoming")
     fun getUpComingMoviesPaging(
         @Query("page") page: Int
-    ): Single<MoviesResponse>
+    ): Single<com.application.tmdb.common.response.movies.MoviesResponse>
 
     @GET("tv/airing_today")
     fun getAiringTodayTvShows(
         @Query("page") page: Int
-    ): Single<TvShowsResponse>
+    ): Single<com.application.tmdb.common.response.tvshows.TvShowsResponse>
 
     @GET("tv/top_rated")
     fun getTopRatedTvShowsPaging(
         @Query("page") page: Int
-    ): Single<TvShowsResponse>
+    ): Single<com.application.tmdb.common.response.tvshows.TvShowsResponse>
 
     @GET("tv/popular")
     fun getPopularTvShowsPaging(
         @Query("page") page: Int
-    ): Single<TvShowsResponse>
+    ): Single<com.application.tmdb.common.response.tvshows.TvShowsResponse>
 
     @GET("tv/on_the_air")
     fun getOnTheAirTvShowsPaging(
         @Query("page") page: Int
-    ): Single<TvShowsResponse>
+    ): Single<com.application.tmdb.common.response.tvshows.TvShowsResponse>
 
     @GET("movie/{movie_id}?append_to_response=credits,videos,release_dates")
     fun getDetailMovies(
         @Path("movie_id") movieId: String
-    ): Flowable<DetailMoviesResponse>
+    ): Flowable<com.application.tmdb.common.response.movies.DetailMoviesResponse>
 
     @GET("tv/{tv_id}?append_to_response=credits,videos,content_ratings")
     fun getDetailTvShows(
         @Path("tv_id") tvId: String
-    ): Flowable<DetailTvShowsResponse>
+    ): Flowable<com.application.tmdb.common.response.tvshows.DetailTvShowsResponse>
 
     @GET("movie/{movie_id}/reviews")
     fun getReviewsMovie(
         @Path("movie_id") movieId: String,
         @Query("page") page: Int
-    ): Single<ReviewsResponse>
+    ): Single<com.application.tmdb.common.response.other.ReviewsResponse>
 
     @GET("tv/{tv_id}/reviews")
     fun getReviewsTvShow(
         @Path("tv_id") tvId: String,
         @Query("page") page: Int
-    ): Single<ReviewsResponse>
+    ): Single<com.application.tmdb.common.response.other.ReviewsResponse>
 
     @GET("discover/movie")
     fun getDiscoverMovie(
         @Query("page") page: Int,
         @Query("with_genres") withGenres: String
-    ): Single<DiscoverResponse>
+    ): Single<com.application.tmdb.common.response.other.DiscoverResponse>
 
     @GET("discover/tv")
     fun getDiscoverTvShow(
         @Query("page") page: Int,
         @Query("with_genres") withGenres: String
-    ): Single<DiscoverResponse>
+    ): Single<com.application.tmdb.common.response.other.DiscoverResponse>
 
     @GET("search/movie")
     fun getSearchMovies(
         @Query("query") query: String,
         @Query("page") page: Int
-    ): Single<MoviesResponse>
+    ): Single<com.application.tmdb.common.response.movies.MoviesResponse>
 
     @GET("search/tv")
     fun getSearchTvShows(
         @Query("query") query: String,
         @Query("page") page: Int
-    ): Single<TvShowsResponse>
+    ): Single<com.application.tmdb.common.response.tvshows.TvShowsResponse>
 
     @GET("movie/{movie_id}/similar")
     fun getSimilarMovies(
         @Path("movie_id") movieId: Int,
         @Query("page") page: Int
-    ): Single<MoviesResponse>
+    ): Single<com.application.tmdb.common.response.movies.MoviesResponse>
 
     @GET("tv/{tv_id}/similar")
     fun getSimilarTvShows(
         @Path("tv_id") tvId: Int,
         @Query("page") page: Int
-    ): Single<TvShowsResponse>
+    ): Single<com.application.tmdb.common.response.tvshows.TvShowsResponse>
 
     @GET("person/{person_id}?append_to_response=movie_credits")
     fun getDetailCast(
         @Path("person_id") personId: Int
-    ): Flowable<DetailCastResponse>
+    ): Flowable<com.application.tmdb.common.response.other.DetailCastResponse>
 }

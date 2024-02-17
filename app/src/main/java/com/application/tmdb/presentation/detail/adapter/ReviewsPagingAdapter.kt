@@ -6,11 +6,11 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.application.tmdb.R
+import com.application.tmdb.common.model.ReviewModel
+import com.application.tmdb.common.utils.convertDateText
+import com.application.tmdb.common.utils.getInitialName
+import com.application.tmdb.common.utils.setResizableText
 import com.application.tmdb.databinding.ItemListReviewBinding
-import com.application.tmdb.core.domain.model.ReviewModel
-import com.application.tmdb.common.convertDateText
-import com.application.tmdb.common.getInitialName
-import com.application.tmdb.common.setResizableText
 
 class ReviewsPagingAdapter :
     PagingDataAdapter<ReviewModel, ReviewsPagingAdapter.ReviewsPagingViewHolder>(

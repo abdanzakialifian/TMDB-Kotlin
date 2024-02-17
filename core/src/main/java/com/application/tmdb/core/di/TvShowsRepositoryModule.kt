@@ -1,7 +1,7 @@
 package com.application.tmdb.core.di
 
-import com.application.tmdb.core.domain.interfaces.ITvShowsRepository
 import com.application.tmdb.core.repository.TvShowsRepository
+import com.application.tmdb.domain.interfaces.ITvShowsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

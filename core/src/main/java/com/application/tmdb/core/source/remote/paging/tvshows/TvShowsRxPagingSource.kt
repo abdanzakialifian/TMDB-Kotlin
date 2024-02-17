@@ -2,11 +2,11 @@ package com.application.tmdb.core.source.remote.paging.tvshows
 
 import androidx.paging.PagingState
 import androidx.paging.rxjava2.RxPagingSource
-import com.application.tmdb.common.Page
-import com.application.tmdb.common.TvShow
+import com.application.tmdb.common.response.tvshows.ListTvShowsResponse
+import com.application.tmdb.common.response.tvshows.TvShowsResponse
+import com.application.tmdb.common.utils.Page
+import com.application.tmdb.common.utils.TvShow
 import com.application.tmdb.core.source.remote.ApiService
-import com.application.tmdb.core.source.remote.response.tvshows.ListTvShowsResponse
-import com.application.tmdb.core.source.remote.response.tvshows.TvShowsResponse
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -14,16 +14,16 @@ import javax.inject.Inject
 class TvShowsRxPagingSource @Inject constructor(private val apiService: ApiService) :
     RxPagingSource<Int, ListTvShowsResponse>() {
 
-    private var page: com.application.tmdb.common.Page? = null
+    private var page: Page? = null
 
-    private var tvShow: com.application.tmdb.common.TvShow? = null
+    private var tvShow: TvShow? = null
 
     private var query: String? = null
 
     private var tvId: Int? = null
 
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, ListTvShowsResponse>> {
-        val position = if (page == com.application.tmdb.common.Page.ONE) {
+        val position = if (page == Page.ONE) {
             INITIAL_POSITION
         } else {
             params.key ?: INITIAL_POSITION
@@ -47,7 +47,7 @@ class TvShowsRxPagingSource @Inject constructor(private val apiService: ApiServi
                 }
         } else {
             when (tvShow) {
-                com.application.tmdb.common.TvShow.AIRING_TODAY_TV_SHOWS -> apiService.getAiringTodayTvShows(position)
+                TvShow.AIRING_TODAY_TV_SHOWS -> apiService.getAiringTodayTvShows(position)
                     .subscribeOn(
                         Schedulers.io()
                     ).map { data ->
@@ -56,7 +56,7 @@ class TvShowsRxPagingSource @Inject constructor(private val apiService: ApiServi
                         LoadResult.Error(throwable)
                     }
 
-                com.application.tmdb.common.TvShow.TOP_RATED_TV_SHOWS -> apiService.getTopRatedTvShowsPaging(position)
+                TvShow.TOP_RATED_TV_SHOWS -> apiService.getTopRatedTvShowsPaging(position)
                     .subscribeOn(Schedulers.io())
                     .map { data ->
                         toLoadResult(data, position)
@@ -64,7 +64,7 @@ class TvShowsRxPagingSource @Inject constructor(private val apiService: ApiServi
                         LoadResult.Error(throwable)
                     }
 
-                com.application.tmdb.common.TvShow.POPULAR_TV_SHOWS -> apiService.getPopularTvShowsPaging(position)
+                TvShow.POPULAR_TV_SHOWS -> apiService.getPopularTvShowsPaging(position)
                     .subscribeOn(Schedulers.io())
                     .map { data ->
                         toLoadResult(data, position)
@@ -90,7 +90,7 @@ class TvShowsRxPagingSource @Inject constructor(private val apiService: ApiServi
         return LoadResult.Page(
             data = data.results ?: emptyList(),
             prevKey = if (position == 1) null else position - 1,
-            nextKey = if (page != com.application.tmdb.common.Page.ONE) {
+            nextKey = if (page != Page.ONE) {
                 if (position == data.totalPages) null else position + 1
             } else {
                 null
@@ -105,7 +105,7 @@ class TvShowsRxPagingSource @Inject constructor(private val apiService: ApiServi
         }
     }
 
-    fun setData(tvShow: com.application.tmdb.common.TvShow?, page: com.application.tmdb.common.Page?, query: String?, tvId: Int?) {
+    fun setData(tvShow: TvShow?, page: Page?, query: String?, tvId: Int?) {
         this.tvShow = tvShow
         this.page = page
         this.query = query

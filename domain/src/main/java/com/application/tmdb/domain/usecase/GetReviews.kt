@@ -1,9 +1,9 @@
 package com.application.tmdb.domain.usecase
 
 import androidx.paging.PagingData
-import com.application.tmdb.core.utils.Category
+import com.application.tmdb.common.model.ReviewModel
+import com.application.tmdb.common.utils.Category
 import com.application.tmdb.domain.interfaces.IOtherRepository
-import com.application.tmdb.domain.model.ReviewModel
 import io.reactivex.Flowable
 import javax.inject.Inject
 import javax.inject.Singleton

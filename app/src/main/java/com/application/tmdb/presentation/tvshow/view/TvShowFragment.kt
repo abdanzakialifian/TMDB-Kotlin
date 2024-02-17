@@ -13,22 +13,22 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.application.tmdb.R
+import com.application.tmdb.common.model.CategoryModel
+import com.application.tmdb.common.model.MovieTvShowModel
+import com.application.tmdb.common.utils.Category
+import com.application.tmdb.common.utils.Movie
+import com.application.tmdb.common.utils.Page
+import com.application.tmdb.common.utils.RxDisposer
+import com.application.tmdb.common.utils.TvShow
+import com.application.tmdb.common.utils.gone
+import com.application.tmdb.common.utils.hideKeyboard
+import com.application.tmdb.common.utils.visible
 import com.application.tmdb.databinding.FragmentTvShowBinding
-import com.application.tmdb.core.domain.model.CategoryModel
-import com.application.tmdb.core.domain.model.MovieTvShowModel
 import com.application.tmdb.presentation.adapter.MovieTvShowAdapter
 import com.application.tmdb.presentation.adapter.MovieTvShowSliderPagingAdapter
 import com.application.tmdb.presentation.base.BaseVBFragment
 import com.application.tmdb.presentation.movietvshow.adapter.MovieTvShowPagingAdapter
 import com.application.tmdb.presentation.tvshow.viewmodel.TvShowViewModel
-import com.application.tmdb.common.Category
-import com.application.tmdb.common.Movie
-import com.application.tmdb.common.Page
-import com.application.tmdb.common.RxDisposer
-import com.application.tmdb.common.TvShow
-import com.application.tmdb.common.gone
-import com.application.tmdb.common.hideKeyboard
-import com.application.tmdb.common.visible
 import com.mancj.materialsearchbar.MaterialSearchBar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.abs
@@ -65,14 +65,14 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
 
         if (tvShowViewModel.listTvShowsPaging.value == null) {
             tvShowViewModel.getListAllTvShows(
-                airingTodayTvShow = com.application.tmdb.common.TvShow.AIRING_TODAY_TV_SHOWS,
-                topRatedTvShow = com.application.tmdb.common.TvShow.TOP_RATED_TV_SHOWS,
-                popularTvShow = com.application.tmdb.common.TvShow.POPULAR_TV_SHOWS,
-                onTheAirTvShow = com.application.tmdb.common.TvShow.ON_THE_AIR_TV_SHOWS,
-                page = com.application.tmdb.common.Page.ONE,
+                airingTodayTvShow = TvShow.AIRING_TODAY_TV_SHOWS,
+                topRatedTvShow = TvShow.TOP_RATED_TV_SHOWS,
+                popularTvShow = TvShow.POPULAR_TV_SHOWS,
+                onTheAirTvShow = TvShow.ON_THE_AIR_TV_SHOWS,
+                page = Page.ONE,
                 query = null,
                 tvId = null,
-                rxDisposer = com.application.tmdb.common.RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
+                rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
             )
         }
         observeData()
@@ -96,7 +96,7 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
                 val tvShow = pairTvShow.first
                 val tvShowPaging = pairTvShow.second
 
-                if (tvShow == com.application.tmdb.common.TvShow.AIRING_TODAY_TV_SHOWS) {
+                if (tvShow == TvShow.AIRING_TODAY_TV_SHOWS) {
                     configureImageSlider()
                     movieTvShowSliderPagingAdapter.submitData(
                         viewLifecycleOwner.lifecycle,
@@ -107,8 +107,8 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
                     }
                 } else {
                     val title = when (tvShow) {
-                        com.application.tmdb.common.TvShow.TOP_RATED_TV_SHOWS -> resources.getString(R.string.top_rated_tv_shows)
-                        com.application.tmdb.common.TvShow.POPULAR_TV_SHOWS -> resources.getString(R.string.popular_tv_shows)
+                        TvShow.TOP_RATED_TV_SHOWS -> resources.getString(R.string.top_rated_tv_shows)
+                        TvShow.POPULAR_TV_SHOWS -> resources.getString(R.string.popular_tv_shows)
                         else -> resources.getString(R.string.on_the_air_tv_shows)
                     }
 
@@ -116,7 +116,7 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
                         categoryId = index,
                         categoryTitle = title,
                         categories = tvShowPaging,
-                        category = com.application.tmdb.common.Category.TV_SHOWS,
+                        category = Category.TV_SHOWS,
                         tvShow = tvShow
                     )
                     categoryModels.add(data)
@@ -246,11 +246,11 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
         val navigateToDetailFragment =
             TvShowFragmentDirections.actionTvShowsFragmentToDetailFragment()
         navigateToDetailFragment.id = id
-        navigateToDetailFragment.intentFrom = com.application.tmdb.common.Category.TV_SHOWS.name
+        navigateToDetailFragment.intentFrom = Category.TV_SHOWS.name
         findNavController().navigate(navigateToDetailFragment)
     }
 
-    private fun navigateToListPage(category: com.application.tmdb.common.Category, tvShow: com.application.tmdb.common.TvShow) {
+    private fun navigateToListPage(category: Category, tvShow: TvShow) {
         val navigateToListFragment =
             TvShowFragmentDirections.actionTvShowFragmentToMovieTvShowFragment()
         navigateToListFragment.intentFrom = category.name
@@ -258,10 +258,10 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
         findNavController().navigate(navigateToListFragment)
     }
 
-    override fun onSeeAllClicked(category: com.application.tmdb.common.Category?, movie: com.application.tmdb.common.Movie?, tvShow: com.application.tmdb.common.TvShow?) {
+    override fun onSeeAllClicked(category: Category?, movie: Movie?, tvShow: TvShow?) {
         navigateToListPage(
-            category = category ?: com.application.tmdb.common.Category.TV_SHOWS,
-            tvShow = tvShow ?: com.application.tmdb.common.TvShow.POPULAR_TV_SHOWS
+            category = category ?: Category.TV_SHOWS,
+            tvShow = tvShow ?: TvShow.POPULAR_TV_SHOWS
         )
     }
 
@@ -276,10 +276,10 @@ class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
     override fun onSearchConfirmed(text: CharSequence?) {
         tvShowViewModel.getListTvShows(
             tvShow = null,
-            page = com.application.tmdb.common.Page.MORE_THAN_ONE,
+            page = Page.MORE_THAN_ONE,
             query = text.toString(),
             tvId = null,
-            rxDisposer = com.application.tmdb.common.RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
+            rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
         )
 
         // hide keyboard after search

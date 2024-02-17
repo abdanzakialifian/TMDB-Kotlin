@@ -18,3 +18,4 @@ rootProject.name = "Movies"
 include ':app'
 include ':core'
 include ':domain'
+include ':common'

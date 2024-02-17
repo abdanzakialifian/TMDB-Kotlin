@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.application.tmdb.common.model.MovieTvShowModel
+import com.application.tmdb.common.utils.loadBackdropImageUrl
 import com.application.tmdb.databinding.ItemListMovieTvShowSliderBinding
-import com.application.tmdb.core.domain.model.MovieTvShowModel
-import com.application.tmdb.common.loadBackdropImageUrl
 
 class MovieTvShowSliderPagingAdapter :
     PagingDataAdapter<MovieTvShowModel, MovieTvShowSliderPagingAdapter.SliderViewHolder>(

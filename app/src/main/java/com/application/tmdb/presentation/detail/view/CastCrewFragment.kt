@@ -3,15 +3,15 @@ package com.application.tmdb.presentation.detail.view
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.application.tmdb.R
+import com.application.tmdb.common.model.CastCrewModel
+import com.application.tmdb.common.utils.Category
+import com.application.tmdb.common.utils.UiState
+import com.application.tmdb.common.utils.gone
+import com.application.tmdb.common.utils.visible
 import com.application.tmdb.databinding.FragmentCastCrewBinding
-import com.application.tmdb.core.domain.model.CastCrewModel
 import com.application.tmdb.presentation.base.BaseVBFragment
 import com.application.tmdb.presentation.detail.adapter.CastCrewAdapter
 import com.application.tmdb.presentation.detail.viewmodel.DetailViewModel
-import com.application.tmdb.common.Category
-import com.application.tmdb.common.UiState
-import com.application.tmdb.common.gone
-import com.application.tmdb.common.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,7 +38,7 @@ class CastCrewFragment : BaseVBFragment<FragmentCastCrewBinding>(),
     private fun observeData() {
         detailViewModel.detailDataState.observe(viewLifecycleOwner) { result ->
             when (result) {
-                is com.application.tmdb.common.UiState.Loading -> {
+                is UiState.Loading -> {
                     binding?.apply {
                         shimmerCastCrew.visible()
                         shimmerCastCrew.startShimmer()
@@ -46,7 +46,7 @@ class CastCrewFragment : BaseVBFragment<FragmentCastCrewBinding>(),
                     }
                 }
 
-                is com.application.tmdb.common.UiState.Success -> {
+                is UiState.Success -> {
                     val detail = result.data
                     castCrewModels.clear()
                     castCrewModels.addAll(
@@ -55,13 +55,13 @@ class CastCrewFragment : BaseVBFragment<FragmentCastCrewBinding>(),
                                 id = 1,
                                 title = resources.getString(R.string.cast),
                                 castCrews = detail.cast,
-                                category = com.application.tmdb.common.Category.CAST
+                                category = Category.CAST
                             ),
                             CastCrewModel(
                                 id = 2,
                                 title = resources.getString(R.string.crew),
                                 castCrews = detail.crew,
-                                category = com.application.tmdb.common.Category.CREW
+                                category = Category.CREW
                             )
                         )
                     )
@@ -76,7 +76,7 @@ class CastCrewFragment : BaseVBFragment<FragmentCastCrewBinding>(),
                     }
                 }
 
-                is com.application.tmdb.common.UiState.Error -> {
+                is UiState.Error -> {
                     binding?.apply {
                         shimmerCastCrew.gone()
                         shimmerCastCrew.stopShimmer()
@@ -84,7 +84,7 @@ class CastCrewFragment : BaseVBFragment<FragmentCastCrewBinding>(),
                     }
                 }
 
-                is com.application.tmdb.common.UiState.Empty -> {
+                is UiState.Empty -> {
                     binding?.apply {
                         shimmerCastCrew.gone()
                         shimmerCastCrew.stopShimmer()
@@ -95,7 +95,7 @@ class CastCrewFragment : BaseVBFragment<FragmentCastCrewBinding>(),
         }
     }
 
-    private fun navigateToDetailCastCrew(id: Int, category: com.application.tmdb.common.Category) {
+    private fun navigateToDetailCastCrew(id: Int, category: Category) {
         val navigateToDetailCastCrewFragment =
             DetailFragmentDirections.actionDetailFragmentToDetailCastCrewFragment()
         navigateToDetailCastCrewFragment.navigateFrom = category
@@ -103,7 +103,7 @@ class CastCrewFragment : BaseVBFragment<FragmentCastCrewBinding>(),
         findNavController().navigate(navigateToDetailCastCrewFragment)
     }
 
-    override fun onItemClicked(id: Int, category: com.application.tmdb.common.Category) {
+    override fun onItemClicked(id: Int, category: Category) {
         navigateToDetailCastCrew(id, category)
     }
 }

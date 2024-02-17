@@ -9,14 +9,14 @@ import androidx.paging.PagingData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.application.tmdb.common.model.CategoryModel
+import com.application.tmdb.common.model.MovieTvShowModel
+import com.application.tmdb.common.utils.Category
+import com.application.tmdb.common.utils.Movie
+import com.application.tmdb.common.utils.TvShow
+import com.application.tmdb.common.utils.gone
+import com.application.tmdb.common.utils.visible
 import com.application.tmdb.databinding.ItemListMovieTvShowBinding
-import com.application.tmdb.core.domain.model.CategoryModel
-import com.application.tmdb.core.domain.model.MovieTvShowModel
-import com.application.tmdb.common.Category
-import com.application.tmdb.common.Movie
-import com.application.tmdb.common.TvShow
-import com.application.tmdb.common.gone
-import com.application.tmdb.common.visible
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -96,9 +96,9 @@ class MovieTvShowAdapter :
 
     private fun eventListeners(
         tvSeeAllMovies: TextView,
-        category: com.application.tmdb.common.Category?,
-        movie: com.application.tmdb.common.Movie?,
-        tvShow: com.application.tmdb.common.TvShow?
+        category: Category?,
+        movie: Movie?,
+        tvShow: TvShow?
     ) {
         tvSeeAllMovies.setOnClickListener {
             onEventClickCallback.onSeeAllClicked(category, movie, tvShow)
@@ -115,7 +115,7 @@ class MovieTvShowAdapter :
     }
 
     interface OnEventClickCallback {
-        fun onSeeAllClicked(category: com.application.tmdb.common.Category?, movie: com.application.tmdb.common.Movie?, tvShow: com.application.tmdb.common.TvShow?)
+        fun onSeeAllClicked(category: Category?, movie: Movie?, tvShow: TvShow?)
         fun onItemClicked(data: MovieTvShowModel?)
     }
 

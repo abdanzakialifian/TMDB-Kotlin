@@ -1,7 +1,7 @@
 package com.application.tmdb.core.di
 
-import com.application.tmdb.core.domain.interfaces.IOtherRepository
 import com.application.tmdb.core.repository.OtherRepository
+import com.application.tmdb.domain.interfaces.IOtherRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

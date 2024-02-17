@@ -2,10 +2,10 @@ package com.application.tmdb.domain.usecase
 
 import androidx.paging.PagingData
 import androidx.paging.rxjava2.cachedIn
-import com.application.tmdb.core.utils.Movie
-import com.application.tmdb.core.utils.Page
+import com.application.tmdb.common.model.MovieTvShowModel
+import com.application.tmdb.common.utils.Movie
+import com.application.tmdb.common.utils.Page
 import com.application.tmdb.domain.interfaces.IMoviesRepository
-import com.application.tmdb.domain.model.MovieTvShowModel
 import io.reactivex.Flowable
 import io.reactivex.functions.Function4
 import kotlinx.coroutines.CoroutineScope

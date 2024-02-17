@@ -1,7 +1,7 @@
 package com.application.tmdb.core.di
 
-import com.application.tmdb.core.domain.interfaces.IMoviesRepository
 import com.application.tmdb.core.repository.MoviesRepository
+import com.application.tmdb.domain.interfaces.IMoviesRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

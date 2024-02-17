@@ -2,10 +2,10 @@ package com.application.tmdb.core.source.remote.paging.other
 
 import androidx.paging.PagingState
 import androidx.paging.rxjava2.RxPagingSource
-import com.application.tmdb.common.Category
+import com.application.tmdb.common.response.other.DiscoverResponse
+import com.application.tmdb.common.response.other.ResultsItemDiscoverResponse
+import com.application.tmdb.common.utils.Category
 import com.application.tmdb.core.source.remote.ApiService
-import com.application.tmdb.core.source.remote.response.other.DiscoverResponse
-import com.application.tmdb.core.source.remote.response.other.ResultsItemDiscoverResponse
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -16,13 +16,13 @@ class DiscoverRxPagingSource @Inject constructor(private val apiService: ApiServ
     RxPagingSource<Int, ResultsItemDiscoverResponse>() {
 
     private var genreId: String = ""
-    private var category: com.application.tmdb.common.Category = com.application.tmdb.common.Category.MOVIES
+    private var category: Category = Category.MOVIES
 
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, ResultsItemDiscoverResponse>> {
         val position = params.key ?: 1
 
         return when (category) {
-            com.application.tmdb.common.Category.MOVIES -> apiService.getDiscoverMovie(position, genreId)
+            Category.MOVIES -> apiService.getDiscoverMovie(position, genreId)
                 .subscribeOn(Schedulers.io())
                 .map { data ->
                     toLoadResult(data, position)
@@ -57,7 +57,7 @@ class DiscoverRxPagingSource @Inject constructor(private val apiService: ApiServ
         }
     }
 
-    fun setDataDiscover(genreId: String, category: com.application.tmdb.common.Category) {
+    fun setDataDiscover(genreId: String, category: Category) {
         this.genreId = genreId
         this.category = category
     }

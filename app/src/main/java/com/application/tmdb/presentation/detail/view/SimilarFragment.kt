@@ -4,16 +4,16 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
+import com.application.tmdb.common.model.MovieTvShowModel
+import com.application.tmdb.common.utils.Category
+import com.application.tmdb.common.utils.Page
+import com.application.tmdb.common.utils.RxDisposer
+import com.application.tmdb.common.utils.gone
+import com.application.tmdb.common.utils.visible
 import com.application.tmdb.databinding.FragmentSimilarBinding
-import com.application.tmdb.core.domain.model.MovieTvShowModel
 import com.application.tmdb.presentation.base.BaseVBFragment
 import com.application.tmdb.presentation.detail.viewmodel.DetailViewModel
 import com.application.tmdb.presentation.movietvshow.adapter.MovieTvShowPagingAdapter
-import com.application.tmdb.common.Category
-import com.application.tmdb.common.Page
-import com.application.tmdb.common.RxDisposer
-import com.application.tmdb.common.gone
-import com.application.tmdb.common.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -94,21 +94,21 @@ class SimilarFragment : BaseVBFragment<FragmentSimilarBinding>(),
                 val intentFrom = pair.first
                 val detail = pair.second
 
-                if (intentFrom == com.application.tmdb.common.Category.MOVIES.name) {
+                if (intentFrom == Category.MOVIES.name) {
                     detailViewModel.getSimilarMovies(
                         null,
-                        com.application.tmdb.common.Page.MORE_THAN_ONE,
+                        Page.MORE_THAN_ONE,
                         null,
                         detail.id,
-                        com.application.tmdb.common.RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
+                        RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
                     )
                 } else {
                     detailViewModel.getSimilarTvShows(
                         null,
-                        com.application.tmdb.common.Page.MORE_THAN_ONE,
+                        Page.MORE_THAN_ONE,
                         null,
                         detail.id,
-                        com.application.tmdb.common.RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
+                        RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
                     )
                 }
             }

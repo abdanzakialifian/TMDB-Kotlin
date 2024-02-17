@@ -2,15 +2,15 @@ package com.application.tmdb.core.repository
 
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.application.tmdb.core.utils.Category
-import com.application.tmdb.core.utils.DataMapper.toDetailCastModel
-import com.application.tmdb.core.utils.DataMapper.toResultItemDiscover
-import com.application.tmdb.core.utils.DataMapper.toReviewItem
+import com.application.tmdb.common.model.DetailCastModel
+import com.application.tmdb.common.model.DiscoverItem
+import com.application.tmdb.common.model.ReviewModel
+import com.application.tmdb.common.utils.Category
+import com.application.tmdb.common.utils.DataMapper.toDetailCastModel
+import com.application.tmdb.common.utils.DataMapper.toResultItemDiscover
+import com.application.tmdb.common.utils.DataMapper.toReviewItem
 import com.application.tmdb.core.source.remote.RemoteDataSource
 import com.application.tmdb.domain.interfaces.IOtherRepository
-import com.application.tmdb.domain.model.DetailCastModel
-import com.application.tmdb.domain.model.DiscoverItem
-import com.application.tmdb.domain.model.ReviewModel
 import io.reactivex.Flowable
 import javax.inject.Inject
 import javax.inject.Singleton

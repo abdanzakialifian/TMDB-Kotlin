@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="resizable_text_read_more">Show More</string>
+    <string name="resizable_text_read_less">Show Less</string>
+</resources>

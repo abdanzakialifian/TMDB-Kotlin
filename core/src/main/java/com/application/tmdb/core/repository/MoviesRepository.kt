@@ -2,14 +2,14 @@ package com.application.tmdb.core.repository
 
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.application.tmdb.core.utils.DataMapper.toDetailMovie
-import com.application.tmdb.core.utils.DataMapper.toMovie
-import com.application.tmdb.core.utils.Movie
-import com.application.tmdb.core.utils.Page
+import com.application.tmdb.common.model.DetailModel
+import com.application.tmdb.common.model.MovieTvShowModel
+import com.application.tmdb.common.utils.DataMapper.toDetailMovie
+import com.application.tmdb.common.utils.DataMapper.toMovie
+import com.application.tmdb.common.utils.Movie
+import com.application.tmdb.common.utils.Page
 import com.application.tmdb.core.source.remote.RemoteDataSource
 import com.application.tmdb.domain.interfaces.IMoviesRepository
-import com.application.tmdb.domain.model.DetailModel
-import com.application.tmdb.domain.model.MovieTvShowModel
 import io.reactivex.Flowable
 import javax.inject.Inject
 import javax.inject.Singleton

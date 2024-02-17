@@ -5,9 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.application.tmdb.R
+import com.application.tmdb.common.utils.gone
+import com.application.tmdb.common.utils.visible
 import com.application.tmdb.databinding.ActivityContainerBinding
-import com.application.tmdb.common.gone
-import com.application.tmdb.common.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 

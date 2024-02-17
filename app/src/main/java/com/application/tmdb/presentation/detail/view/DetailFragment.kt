@@ -9,22 +9,22 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.application.tmdb.R
+import com.application.tmdb.common.model.DetailModel
+import com.application.tmdb.common.utils.AppBarStateChangedListener
+import com.application.tmdb.common.utils.Category
+import com.application.tmdb.common.utils.RxDisposer
+import com.application.tmdb.common.utils.State
+import com.application.tmdb.common.utils.UiState
+import com.application.tmdb.common.utils.convertDateText
+import com.application.tmdb.common.utils.fromMinutesToHHmm
+import com.application.tmdb.common.utils.gone
+import com.application.tmdb.common.utils.loadBackdropImageUrl
+import com.application.tmdb.common.utils.loadImageUrl
+import com.application.tmdb.common.utils.visible
 import com.application.tmdb.databinding.FragmentDetailBinding
-import com.application.tmdb.core.domain.model.DetailModel
 import com.application.tmdb.presentation.base.BaseVBFragment
 import com.application.tmdb.presentation.detail.adapter.DetailPagerAdapter
 import com.application.tmdb.presentation.detail.viewmodel.DetailViewModel
-import com.application.tmdb.common.AppBarStateChangedListener
-import com.application.tmdb.common.Category
-import com.application.tmdb.common.RxDisposer
-import com.application.tmdb.common.State
-import com.application.tmdb.common.UiState
-import com.application.tmdb.common.convertDateText
-import com.application.tmdb.common.fromMinutesToHHmm
-import com.application.tmdb.common.gone
-import com.application.tmdb.common.loadBackdropImageUrl
-import com.application.tmdb.common.loadImageUrl
-import com.application.tmdb.common.visible
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
@@ -49,18 +49,19 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
         val id = args.id.toString()
         val intentFrom = args.intentFrom
 
-        if (intentFrom == com.application.tmdb.common.Category.MOVIES.name) {
+        if (intentFrom == Category.MOVIES.name) {
             if (detailViewModel.detailData.value == null) {
                 detailViewModel.detailMovies(
                     movieId = id,
-                    rxDisposer = com.application.tmdb.common.RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
+                    rxDisposer = RxDisposer()
+                        .apply { bind(viewLifecycleOwner.lifecycle) }
                 )
             }
         } else {
             if (detailViewModel.detailData.value == null) {
                 detailViewModel.detailTvShows(
                     tvId = id,
-                    rxDisposer = com.application.tmdb.common.RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
+                    rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
                 )
             }
         }
@@ -73,7 +74,7 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
     private fun observeData(intentFrom: String) {
         detailViewModel.detailDataState.observe(viewLifecycleOwner) { result ->
             when (result) {
-                is com.application.tmdb.common.UiState.Loading -> {
+                is UiState.Loading -> {
                     binding?.apply {
                         shimmerDetail.visible()
                         shimmerDetail.startShimmer()
@@ -82,7 +83,7 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                     setAppBarLayout("")
                 }
 
-                is com.application.tmdb.common.UiState.Success -> {
+                is UiState.Success -> {
                     binding?.apply {
                         shimmerDetail.gone()
                         shimmerDetail.stopShimmer()
@@ -94,8 +95,8 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                     detailViewModel.setDetailData(intentFrom, detail)
                 }
 
-                is com.application.tmdb.common.UiState.Error -> {}
-                is com.application.tmdb.common.UiState.Empty -> {}
+                is UiState.Error -> {}
+                is UiState.Empty -> {}
             }
         }
     }
@@ -131,9 +132,9 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
 
     private fun setAppBarLayout(title: String?) {
         binding?.apply {
-            appBarLayout.addOnOffsetChangedListener(object : com.application.tmdb.common.AppBarStateChangedListener() {
-                override fun onStateChanged(appBarLayout: AppBarLayout?, state: com.application.tmdb.common.State?) {
-                    if (state == com.application.tmdb.common.State.COLLAPSED) {
+            appBarLayout.addOnOffsetChangedListener(object : AppBarStateChangedListener() {
+                override fun onStateChanged(appBarLayout: AppBarLayout?, state: State?) {
+                    if (state == State.COLLAPSED) {
                         val intentFrom = args.intentFrom
                         imgBack.visible()
                         imgBack.setOnClickListener {
@@ -230,7 +231,7 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
     }
 
     private fun navigateToMovieOrTvShow(intentFrom: String) {
-        if (intentFrom == com.application.tmdb.common.Category.MOVIES.name) {
+        if (intentFrom == Category.MOVIES.name) {
             findNavController().popBackStack(R.id.movie_fragment, false)
         } else {
             findNavController().popBackStack(R.id.tv_show_fragment, false)

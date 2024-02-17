@@ -5,17 +5,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.rxjava2.cachedIn
-import com.application.tmdb.core.utils.Movie
-import com.application.tmdb.core.utils.Page
-import com.application.tmdb.utils.RxDisposer
-import com.application.tmdb.core.utils.TvShow
-import com.application.tmdb.domain.model.DetailModel
-import com.application.tmdb.domain.model.MovieTvShowModel
-import com.application.tmdb.domain.model.ReviewModel
+import com.application.tmdb.common.model.DetailModel
+import com.application.tmdb.common.model.MovieTvShowModel
+import com.application.tmdb.common.model.ReviewModel
+import com.application.tmdb.common.utils.Category
+import com.application.tmdb.common.utils.Movie
+import com.application.tmdb.common.utils.Page
+import com.application.tmdb.common.utils.RxDisposer
+import com.application.tmdb.common.utils.TvShow
+import com.application.tmdb.common.utils.UiState
+import com.application.tmdb.common.utils.addToDisposer
+import com.application.tmdb.common.utils.toLiveData
 import com.application.tmdb.domain.usecase.detail.DetailWrapper
-import com.application.tmdb.utils.UiState
-import com.application.tmdb.utils.addToDisposer
-import com.application.tmdb.utils.toLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -80,7 +81,7 @@ class DetailViewModel @Inject constructor(private val detailWrapper: DetailWrapp
 
     fun reviewsPaging(
         id: String?,
-        category: com.application.tmdb.core.utils.Category?,
+        category: Category?,
         rxDisposer: RxDisposer,
     ) {
         detailWrapper.getReviews(id, category)

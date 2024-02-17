@@ -1,10 +1,10 @@
 package com.application.tmdb.domain.interfaces
 
 import androidx.paging.PagingData
-import com.application.tmdb.core.utils.Category
-import com.application.tmdb.domain.model.DetailCastModel
-import com.application.tmdb.domain.model.DiscoverItem
-import com.application.tmdb.domain.model.ReviewModel
+import com.application.tmdb.common.model.DetailCastModel
+import com.application.tmdb.common.model.DiscoverItem
+import com.application.tmdb.common.model.ReviewModel
+import com.application.tmdb.common.utils.Category
 import io.reactivex.Flowable
 
 interface IOtherRepository {

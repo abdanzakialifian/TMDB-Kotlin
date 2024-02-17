@@ -2,11 +2,11 @@ package com.application.tmdb.core.source.remote.paging.movies
 
 import androidx.paging.PagingState
 import androidx.paging.rxjava2.RxPagingSource
-import com.application.tmdb.common.Movie
-import com.application.tmdb.common.Page
+import com.application.tmdb.common.response.movies.ListMoviesResponse
+import com.application.tmdb.common.response.movies.MoviesResponse
+import com.application.tmdb.common.utils.Movie
+import com.application.tmdb.common.utils.Page
 import com.application.tmdb.core.source.remote.ApiService
-import com.application.tmdb.core.source.remote.response.movies.ListMoviesResponse
-import com.application.tmdb.core.source.remote.response.movies.MoviesResponse
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -14,16 +14,16 @@ import javax.inject.Inject
 class MoviesRxPagingSource @Inject constructor(private val apiService: ApiService) :
     RxPagingSource<Int, ListMoviesResponse>() {
 
-    private var page: com.application.tmdb.common.Page? = null
+    private var page: Page? = null
 
-    private var movie: com.application.tmdb.common.Movie? = null
+    private var movie: Movie? = null
 
     private var query: String? = null
 
     private var movieId: Int? = null
 
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, ListMoviesResponse>> {
-        val position = if (page == com.application.tmdb.common.Page.ONE) {
+        val position = if (page == Page.ONE) {
             INITIAL_POSITION
         } else {
             params.key ?: INITIAL_POSITION
@@ -47,7 +47,7 @@ class MoviesRxPagingSource @Inject constructor(private val apiService: ApiServic
                 }
         } else {
             when (movie) {
-                com.application.tmdb.common.Movie.NOW_PLAYING_MOVIES -> apiService.getNowPlayingMovies(position)
+                Movie.NOW_PLAYING_MOVIES -> apiService.getNowPlayingMovies(position)
                     .subscribeOn(Schedulers.io())
                     .map { data ->
                         toLoadResult(data, position)
@@ -55,7 +55,7 @@ class MoviesRxPagingSource @Inject constructor(private val apiService: ApiServic
                         LoadResult.Error(throwable)
                     }
 
-                com.application.tmdb.common.Movie.POPULAR_MOVIES -> apiService.getPopularMoviesPaging(position)
+                Movie.POPULAR_MOVIES -> apiService.getPopularMoviesPaging(position)
                     .subscribeOn(Schedulers.io())
                     .map { data ->
                         toLoadResult(data, position)
@@ -63,7 +63,7 @@ class MoviesRxPagingSource @Inject constructor(private val apiService: ApiServic
                         LoadResult.Error(throwable)
                     }
 
-                com.application.tmdb.common.Movie.TOP_RATED_MOVIES -> apiService.getTopRatedMoviesPaging(position)
+                Movie.TOP_RATED_MOVIES -> apiService.getTopRatedMoviesPaging(position)
                     .subscribeOn(Schedulers.io())
                     .map { data ->
                         toLoadResult(data, position)
@@ -88,7 +88,7 @@ class MoviesRxPagingSource @Inject constructor(private val apiService: ApiServic
         return LoadResult.Page(
             data = data.results ?: emptyList(),
             prevKey = if (position == 1) null else position - 1,
-            nextKey = if (page != com.application.tmdb.common.Page.ONE) {
+            nextKey = if (page != Page.ONE) {
                 if (position == data.totalPages) null else position + 1
             } else {
                 null
@@ -103,7 +103,7 @@ class MoviesRxPagingSource @Inject constructor(private val apiService: ApiServic
         }
     }
 
-    fun setData(movie: com.application.tmdb.common.Movie?, page: com.application.tmdb.common.Page?, query: String?, movieId: Int?) {
+    fun setData(movie: Movie?, page: Page?, query: String?, movieId: Int?) {
         this.movie = movie
         this.page = page
         this.query = query
