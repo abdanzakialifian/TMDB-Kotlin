@@ -5,11 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.rxjava2.cachedIn
-import com.application.tmdb.domain.model.MovieTvShowModel
-import com.application.tmdb.domain.usecase.tvshow.TvShowWrapper
-import com.application.tmdb.utils.Page
+import com.application.tmdb.core.domain.model.MovieTvShowModel
+import com.application.tmdb.core.domain.usecase.tvshow.TvShowWrapper
+import com.application.tmdb.core.utils.Page
+import com.application.tmdb.core.utils.TvShow
 import com.application.tmdb.utils.RxDisposer
-import com.application.tmdb.utils.TvShow
 import com.application.tmdb.utils.addToDisposer
 import com.application.tmdb.utils.toLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel

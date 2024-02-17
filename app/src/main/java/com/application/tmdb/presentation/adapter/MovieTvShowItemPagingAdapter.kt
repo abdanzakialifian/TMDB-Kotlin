@@ -6,7 +6,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.application.tmdb.databinding.ItemListMovieTvShowItemBinding
-import com.application.tmdb.domain.model.MovieTvShowModel
+import com.application.tmdb.core.domain.model.MovieTvShowModel
 import com.application.tmdb.utils.loadImageUrl
 
 class MovieTvShowItemPagingAdapter :

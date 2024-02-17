@@ -5,15 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.rxjava2.cachedIn
-import com.application.tmdb.domain.model.DetailModel
-import com.application.tmdb.domain.model.MovieTvShowModel
-import com.application.tmdb.domain.model.ReviewModel
-import com.application.tmdb.domain.usecase.detail.DetailWrapper
-import com.application.tmdb.utils.Category
-import com.application.tmdb.utils.Movie
-import com.application.tmdb.utils.Page
+import com.application.tmdb.core.domain.model.DetailModel
+import com.application.tmdb.core.domain.model.MovieTvShowModel
+import com.application.tmdb.core.domain.model.ReviewModel
+import com.application.tmdb.core.domain.usecase.detail.DetailWrapper
+import com.application.tmdb.core.utils.Movie
+import com.application.tmdb.core.utils.Page
 import com.application.tmdb.utils.RxDisposer
-import com.application.tmdb.utils.TvShow
+import com.application.tmdb.core.utils.TvShow
 import com.application.tmdb.utils.UiState
 import com.application.tmdb.utils.addToDisposer
 import com.application.tmdb.utils.toLiveData
@@ -81,7 +80,7 @@ class DetailViewModel @Inject constructor(private val detailWrapper: DetailWrapp
 
     fun reviewsPaging(
         id: String?,
-        category: Category?,
+        category: com.application.tmdb.core.utils.Category?,
         rxDisposer: RxDisposer,
     ) {
         detailWrapper.getReviews(id, category)

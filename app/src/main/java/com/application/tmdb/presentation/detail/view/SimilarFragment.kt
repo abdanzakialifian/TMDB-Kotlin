@@ -5,12 +5,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import com.application.tmdb.databinding.FragmentSimilarBinding
-import com.application.tmdb.domain.model.MovieTvShowModel
+import com.application.tmdb.core.domain.model.MovieTvShowModel
 import com.application.tmdb.presentation.base.BaseVBFragment
 import com.application.tmdb.presentation.detail.viewmodel.DetailViewModel
 import com.application.tmdb.presentation.movietvshow.adapter.MovieTvShowPagingAdapter
-import com.application.tmdb.utils.Category
-import com.application.tmdb.utils.Page
+import com.application.tmdb.core.utils.Category
+import com.application.tmdb.core.utils.Page
 import com.application.tmdb.utils.RxDisposer
 import com.application.tmdb.utils.gone
 import com.application.tmdb.utils.visible

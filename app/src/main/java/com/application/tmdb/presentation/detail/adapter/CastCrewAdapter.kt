@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.application.tmdb.databinding.ItemListCastCrewBinding
-import com.application.tmdb.domain.model.CastCrewItemModel
-import com.application.tmdb.domain.model.CastCrewModel
-import com.application.tmdb.utils.Category
+import com.application.tmdb.core.domain.model.CastCrewItemModel
+import com.application.tmdb.core.domain.model.CastCrewModel
+import com.application.tmdb.core.utils.Category
 import com.application.tmdb.utils.gone
 import com.application.tmdb.utils.visible
 

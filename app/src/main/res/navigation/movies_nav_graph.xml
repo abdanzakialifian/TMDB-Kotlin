@@ -30,11 +30,11 @@
         <argument
             android:name="movie"
             android:defaultValue="POPULAR_MOVIES"
-            app:argType="com.application.tmdb.utils.Movie" />
+            app:argType="com.application.tmdb.core.utils.Movie" />
         <argument
             android:name="tvShow"
             android:defaultValue="POPULAR_TV_SHOWS"
-            app:argType="com.application.tmdb.utils.TvShow" />
+            app:argType="com.application.tmdb.core.utils.TvShow" />
     </fragment>
     <fragment
         android:id="@+id/detail_fragment"
@@ -104,7 +104,7 @@
         <argument
             android:name="navigateFrom"
             android:defaultValue="CAST"
-            app:argType="com.application.tmdb.utils.Category" />
+            app:argType="com.application.tmdb.core.utils.Category" />
         <argument
             android:name="id"
             android:defaultValue="0"

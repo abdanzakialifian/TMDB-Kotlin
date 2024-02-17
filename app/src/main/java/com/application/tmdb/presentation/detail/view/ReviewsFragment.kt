@@ -6,7 +6,7 @@ import com.application.tmdb.databinding.FragmentReviewsBinding
 import com.application.tmdb.presentation.base.BaseVBFragment
 import com.application.tmdb.presentation.detail.adapter.ReviewsPagingAdapter
 import com.application.tmdb.presentation.detail.viewmodel.DetailViewModel
-import com.application.tmdb.utils.Category
+import com.application.tmdb.core.utils.Category
 import com.application.tmdb.utils.RxDisposer
 import com.application.tmdb.utils.gone
 import com.application.tmdb.utils.visible

@@ -4,11 +4,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.application.tmdb.R
 import com.application.tmdb.databinding.FragmentCastCrewBinding
-import com.application.tmdb.domain.model.CastCrewModel
+import com.application.tmdb.core.domain.model.CastCrewModel
 import com.application.tmdb.presentation.base.BaseVBFragment
 import com.application.tmdb.presentation.detail.adapter.CastCrewAdapter
 import com.application.tmdb.presentation.detail.viewmodel.DetailViewModel
-import com.application.tmdb.utils.Category
+import com.application.tmdb.core.utils.Category
 import com.application.tmdb.utils.UiState
 import com.application.tmdb.utils.gone
 import com.application.tmdb.utils.visible

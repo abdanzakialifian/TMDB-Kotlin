@@ -2,8 +2,8 @@ package com.application.tmdb.presentation.castcrew.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.application.tmdb.domain.model.DetailCastModel
-import com.application.tmdb.domain.usecase.GetDetailCast
+import com.application.tmdb.core.domain.model.DetailCastModel
+import com.application.tmdb.core.domain.usecase.GetDetailCast
 import com.application.tmdb.utils.RxDisposer
 import com.application.tmdb.utils.UiState
 import com.application.tmdb.utils.addToDisposer

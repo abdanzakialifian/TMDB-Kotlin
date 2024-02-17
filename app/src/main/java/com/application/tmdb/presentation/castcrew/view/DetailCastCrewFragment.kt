@@ -8,7 +8,7 @@ import com.application.tmdb.databinding.FragmentDetailCastCrewBinding
 import com.application.tmdb.presentation.base.BaseVBFragment
 import com.application.tmdb.presentation.castcrew.viewmodel.DetailCastCrewViewModel
 import com.application.tmdb.utils.AppBarStateChangedListener
-import com.application.tmdb.utils.Category
+import com.application.tmdb.core.utils.Category
 import com.application.tmdb.utils.RxDisposer
 import com.application.tmdb.utils.State
 import com.application.tmdb.utils.UiState

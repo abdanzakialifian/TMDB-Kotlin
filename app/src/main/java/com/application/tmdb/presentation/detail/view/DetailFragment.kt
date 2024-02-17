@@ -10,12 +10,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.application.tmdb.R
 import com.application.tmdb.databinding.FragmentDetailBinding
-import com.application.tmdb.domain.model.DetailModel
+import com.application.tmdb.core.domain.model.DetailModel
 import com.application.tmdb.presentation.base.BaseVBFragment
 import com.application.tmdb.presentation.detail.adapter.DetailPagerAdapter
 import com.application.tmdb.presentation.detail.viewmodel.DetailViewModel
 import com.application.tmdb.utils.AppBarStateChangedListener
-import com.application.tmdb.utils.Category
+import com.application.tmdb.core.utils.Category
 import com.application.tmdb.utils.RxDisposer
 import com.application.tmdb.utils.State
 import com.application.tmdb.utils.UiState
