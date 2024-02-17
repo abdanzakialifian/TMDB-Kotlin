@@ -12,11 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.application.tmdb.databinding.ItemListMovieTvShowBinding
 import com.application.tmdb.core.domain.model.CategoryModel
 import com.application.tmdb.core.domain.model.MovieTvShowModel
-import com.application.tmdb.core.utils.Category
-import com.application.tmdb.core.utils.Movie
-import com.application.tmdb.core.utils.TvShow
-import com.application.tmdb.utils.gone
-import com.application.tmdb.utils.visible
+import com.application.tmdb.common.Category
+import com.application.tmdb.common.Movie
+import com.application.tmdb.common.TvShow
+import com.application.tmdb.common.gone
+import com.application.tmdb.common.visible
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -96,9 +96,9 @@ class MovieTvShowAdapter :
 
     private fun eventListeners(
         tvSeeAllMovies: TextView,
-        category: Category?,
-        movie: Movie?,
-        tvShow: TvShow?
+        category: com.application.tmdb.common.Category?,
+        movie: com.application.tmdb.common.Movie?,
+        tvShow: com.application.tmdb.common.TvShow?
     ) {
         tvSeeAllMovies.setOnClickListener {
             onEventClickCallback.onSeeAllClicked(category, movie, tvShow)
@@ -115,7 +115,7 @@ class MovieTvShowAdapter :
     }
 
     interface OnEventClickCallback {
-        fun onSeeAllClicked(category: Category?, movie: Movie?, tvShow: TvShow?)
+        fun onSeeAllClicked(category: com.application.tmdb.common.Category?, movie: com.application.tmdb.common.Movie?, tvShow: com.application.tmdb.common.TvShow?)
         fun onItemClicked(data: MovieTvShowModel?)
     }
 

@@ -1,4 +1,4 @@
-package com.application.tmdb.utils
+package com.application.tmdb.common
 
 enum class State {
     EXPANDED,

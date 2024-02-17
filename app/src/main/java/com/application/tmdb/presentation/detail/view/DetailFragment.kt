@@ -14,17 +14,17 @@ import com.application.tmdb.core.domain.model.DetailModel
 import com.application.tmdb.presentation.base.BaseVBFragment
 import com.application.tmdb.presentation.detail.adapter.DetailPagerAdapter
 import com.application.tmdb.presentation.detail.viewmodel.DetailViewModel
-import com.application.tmdb.utils.AppBarStateChangedListener
-import com.application.tmdb.core.utils.Category
-import com.application.tmdb.utils.RxDisposer
-import com.application.tmdb.utils.State
-import com.application.tmdb.utils.UiState
-import com.application.tmdb.utils.convertDateText
-import com.application.tmdb.utils.fromMinutesToHHmm
-import com.application.tmdb.utils.gone
-import com.application.tmdb.utils.loadBackdropImageUrl
-import com.application.tmdb.utils.loadImageUrl
-import com.application.tmdb.utils.visible
+import com.application.tmdb.common.AppBarStateChangedListener
+import com.application.tmdb.common.Category
+import com.application.tmdb.common.RxDisposer
+import com.application.tmdb.common.State
+import com.application.tmdb.common.UiState
+import com.application.tmdb.common.convertDateText
+import com.application.tmdb.common.fromMinutesToHHmm
+import com.application.tmdb.common.gone
+import com.application.tmdb.common.loadBackdropImageUrl
+import com.application.tmdb.common.loadImageUrl
+import com.application.tmdb.common.visible
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
@@ -49,18 +49,18 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
         val id = args.id.toString()
         val intentFrom = args.intentFrom
 
-        if (intentFrom == Category.MOVIES.name) {
+        if (intentFrom == com.application.tmdb.common.Category.MOVIES.name) {
             if (detailViewModel.detailData.value == null) {
                 detailViewModel.detailMovies(
                     movieId = id,
-                    rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
+                    rxDisposer = com.application.tmdb.common.RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
                 )
             }
         } else {
             if (detailViewModel.detailData.value == null) {
                 detailViewModel.detailTvShows(
                     tvId = id,
-                    rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
+                    rxDisposer = com.application.tmdb.common.RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
                 )
             }
         }
@@ -73,7 +73,7 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
     private fun observeData(intentFrom: String) {
         detailViewModel.detailDataState.observe(viewLifecycleOwner) { result ->
             when (result) {
-                is UiState.Loading -> {
+                is com.application.tmdb.common.UiState.Loading -> {
                     binding?.apply {
                         shimmerDetail.visible()
                         shimmerDetail.startShimmer()
@@ -82,7 +82,7 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                     setAppBarLayout("")
                 }
 
-                is UiState.Success -> {
+                is com.application.tmdb.common.UiState.Success -> {
                     binding?.apply {
                         shimmerDetail.gone()
                         shimmerDetail.stopShimmer()
@@ -94,8 +94,8 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
                     detailViewModel.setDetailData(intentFrom, detail)
                 }
 
-                is UiState.Error -> {}
-                is UiState.Empty -> {}
+                is com.application.tmdb.common.UiState.Error -> {}
+                is com.application.tmdb.common.UiState.Empty -> {}
             }
         }
     }
@@ -131,9 +131,9 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
 
     private fun setAppBarLayout(title: String?) {
         binding?.apply {
-            appBarLayout.addOnOffsetChangedListener(object : AppBarStateChangedListener() {
-                override fun onStateChanged(appBarLayout: AppBarLayout?, state: State?) {
-                    if (state == State.COLLAPSED) {
+            appBarLayout.addOnOffsetChangedListener(object : com.application.tmdb.common.AppBarStateChangedListener() {
+                override fun onStateChanged(appBarLayout: AppBarLayout?, state: com.application.tmdb.common.State?) {
+                    if (state == com.application.tmdb.common.State.COLLAPSED) {
                         val intentFrom = args.intentFrom
                         imgBack.visible()
                         imgBack.setOnClickListener {
@@ -230,7 +230,7 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
     }
 
     private fun navigateToMovieOrTvShow(intentFrom: String) {
-        if (intentFrom == Category.MOVIES.name) {
+        if (intentFrom == com.application.tmdb.common.Category.MOVIES.name) {
             findNavController().popBackStack(R.id.movie_fragment, false)
         } else {
             findNavController().popBackStack(R.id.tv_show_fragment, false)

@@ -1,4 +1,4 @@
-package com.application.tmdb.utils
+package com.application.tmdb.common
 
 import android.animation.LayoutTransition
 import android.app.Activity
@@ -20,7 +20,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.application.tmdb.R
 import com.bumptech.glide.Glide
 import java.text.SimpleDateFormat
 import java.util.Locale

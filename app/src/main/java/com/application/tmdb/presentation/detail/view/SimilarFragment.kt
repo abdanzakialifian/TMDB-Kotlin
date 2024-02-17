@@ -9,11 +9,11 @@ import com.application.tmdb.core.domain.model.MovieTvShowModel
 import com.application.tmdb.presentation.base.BaseVBFragment
 import com.application.tmdb.presentation.detail.viewmodel.DetailViewModel
 import com.application.tmdb.presentation.movietvshow.adapter.MovieTvShowPagingAdapter
-import com.application.tmdb.core.utils.Category
-import com.application.tmdb.core.utils.Page
-import com.application.tmdb.utils.RxDisposer
-import com.application.tmdb.utils.gone
-import com.application.tmdb.utils.visible
+import com.application.tmdb.common.Category
+import com.application.tmdb.common.Page
+import com.application.tmdb.common.RxDisposer
+import com.application.tmdb.common.gone
+import com.application.tmdb.common.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -94,21 +94,21 @@ class SimilarFragment : BaseVBFragment<FragmentSimilarBinding>(),
                 val intentFrom = pair.first
                 val detail = pair.second
 
-                if (intentFrom == Category.MOVIES.name) {
+                if (intentFrom == com.application.tmdb.common.Category.MOVIES.name) {
                     detailViewModel.getSimilarMovies(
                         null,
-                        Page.MORE_THAN_ONE,
+                        com.application.tmdb.common.Page.MORE_THAN_ONE,
                         null,
                         detail.id,
-                        RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
+                        com.application.tmdb.common.RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
                     )
                 } else {
                     detailViewModel.getSimilarTvShows(
                         null,
-                        Page.MORE_THAN_ONE,
+                        com.application.tmdb.common.Page.MORE_THAN_ONE,
                         null,
                         detail.id,
-                        RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
+                        com.application.tmdb.common.RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
                     )
                 }
             }

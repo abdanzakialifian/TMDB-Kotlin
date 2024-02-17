@@ -21,14 +21,14 @@ import com.application.tmdb.presentation.adapter.MovieTvShowSliderPagingAdapter
 import com.application.tmdb.presentation.base.BaseVBFragment
 import com.application.tmdb.presentation.movie.viewmodel.MovieViewModel
 import com.application.tmdb.presentation.movietvshow.adapter.MovieTvShowPagingAdapter
-import com.application.tmdb.core.utils.Category
-import com.application.tmdb.core.utils.Movie
-import com.application.tmdb.core.utils.Page
-import com.application.tmdb.utils.RxDisposer
-import com.application.tmdb.core.utils.TvShow
-import com.application.tmdb.utils.gone
-import com.application.tmdb.utils.hideKeyboard
-import com.application.tmdb.utils.visible
+import com.application.tmdb.common.Category
+import com.application.tmdb.common.Movie
+import com.application.tmdb.common.Page
+import com.application.tmdb.common.RxDisposer
+import com.application.tmdb.common.TvShow
+import com.application.tmdb.common.gone
+import com.application.tmdb.common.hideKeyboard
+import com.application.tmdb.common.visible
 import com.mancj.materialsearchbar.MaterialSearchBar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.abs
@@ -65,14 +65,14 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
 
         if (movieViewModel.listMoviesPaging.value == null) {
             movieViewModel.getListAllMovies(
-                nowPlayingMovie = Movie.NOW_PLAYING_MOVIES,
-                topRatedMovie = Movie.TOP_RATED_MOVIES,
-                popularMovie = Movie.POPULAR_MOVIES,
-                upComingMovie = Movie.UP_COMING_MOVIES,
-                page = Page.ONE,
+                nowPlayingMovie = com.application.tmdb.common.Movie.NOW_PLAYING_MOVIES,
+                topRatedMovie = com.application.tmdb.common.Movie.TOP_RATED_MOVIES,
+                popularMovie = com.application.tmdb.common.Movie.POPULAR_MOVIES,
+                upComingMovie = com.application.tmdb.common.Movie.UP_COMING_MOVIES,
+                page = com.application.tmdb.common.Page.ONE,
                 query = null,
                 movieId = null,
-                rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
+                rxDisposer = com.application.tmdb.common.RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
             )
         }
 
@@ -96,7 +96,7 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
                 val movie = pairMovie.first
                 val moviePaging = pairMovie.second
 
-                if (movie == Movie.NOW_PLAYING_MOVIES) {
+                if (movie == com.application.tmdb.common.Movie.NOW_PLAYING_MOVIES) {
                     movieTvShowSliderPagingAdapter.submitData(viewLifecycleOwner.lifecycle, moviePaging)
                     configureImageSlider()
                     movieTvShowSliderPagingAdapter.addLoadStateListener { loadState ->
@@ -104,8 +104,8 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
                     }
                 } else {
                     val title = when (movie) {
-                        Movie.TOP_RATED_MOVIES -> resources.getString(R.string.top_rated_movies)
-                        Movie.POPULAR_MOVIES -> resources.getString(R.string.popular_movies)
+                        com.application.tmdb.common.Movie.TOP_RATED_MOVIES -> resources.getString(R.string.top_rated_movies)
+                        com.application.tmdb.common.Movie.POPULAR_MOVIES -> resources.getString(R.string.popular_movies)
                         else -> resources.getString(R.string.up_coming_movies)
                     }
 
@@ -113,7 +113,7 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
                         categoryId = index,
                         categoryTitle = title,
                         categories = moviePaging,
-                        category = Category.MOVIES,
+                        category = com.application.tmdb.common.Category.MOVIES,
                         movie = movie
                     )
                     categoryModels.add(data)
@@ -243,11 +243,11 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
         val navigateToDetailFragment =
             MovieFragmentDirections.actionMovieFragmentToDetailFragment()
         navigateToDetailFragment.id = id
-        navigateToDetailFragment.intentFrom = Category.MOVIES.name
+        navigateToDetailFragment.intentFrom = com.application.tmdb.common.Category.MOVIES.name
         findNavController().navigate(navigateToDetailFragment)
     }
 
-    private fun navigateToListPage(category: Category, movie: Movie) {
+    private fun navigateToListPage(category: com.application.tmdb.common.Category, movie: com.application.tmdb.common.Movie) {
         val navigateToListFragment =
             MovieFragmentDirections.actionMovieFragmentToMovieTvShowFragment()
         navigateToListFragment.intentFrom = category.name
@@ -255,10 +255,10 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
         findNavController().navigate(navigateToListFragment)
     }
 
-    override fun onSeeAllClicked(category: Category?, movie: Movie?, tvShow: TvShow?) {
+    override fun onSeeAllClicked(category: com.application.tmdb.common.Category?, movie: com.application.tmdb.common.Movie?, tvShow: com.application.tmdb.common.TvShow?) {
         navigateToListPage(
-            category = category ?: Category.MOVIES,
-            movie = movie ?: Movie.POPULAR_MOVIES
+            category = category ?: com.application.tmdb.common.Category.MOVIES,
+            movie = movie ?: com.application.tmdb.common.Movie.POPULAR_MOVIES
         )
     }
 
@@ -273,10 +273,10 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
     override fun onSearchConfirmed(text: CharSequence?) {
         movieViewModel.getListMovies(
             movie = null,
-            page = Page.MORE_THAN_ONE,
+            page = com.application.tmdb.common.Page.MORE_THAN_ONE,
             query = text.toString(),
             movieId = null,
-            rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
+            rxDisposer = com.application.tmdb.common.RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
         )
 
         // hide keyboard after search

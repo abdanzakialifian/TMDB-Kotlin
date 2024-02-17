@@ -5,10 +5,10 @@ import androidx.paging.map
 import com.application.tmdb.core.domain.interfaces.IMoviesRepository
 import com.application.tmdb.core.domain.model.DetailModel
 import com.application.tmdb.core.domain.model.MovieTvShowModel
-import com.application.tmdb.core.utils.DataMapper.toDetailMovie
-import com.application.tmdb.core.utils.DataMapper.toMovie
-import com.application.tmdb.core.utils.Movie
-import com.application.tmdb.core.utils.Page
+import com.application.tmdb.common.DataMapper.toDetailMovie
+import com.application.tmdb.common.DataMapper.toMovie
+import com.application.tmdb.common.Movie
+import com.application.tmdb.common.Page
 import com.application.tmdb.core.source.remote.RemoteDataSource
 import io.reactivex.Flowable
 import javax.inject.Inject
@@ -23,8 +23,8 @@ class MoviesRepository @Inject constructor(private val remoteDataSource: RemoteD
         }
 
     override fun getMovies(
-        movie: Movie?,
-        page: Page?,
+        movie: com.application.tmdb.common.Movie?,
+        page: com.application.tmdb.common.Page?,
         query: String?,
         movieId: Int?
     ): Flowable<PagingData<MovieTvShowModel>> =

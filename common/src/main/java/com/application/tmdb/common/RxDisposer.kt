@@ -1,4 +1,4 @@
-package com.application.tmdb.utils
+package com.application.tmdb.common
 
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle

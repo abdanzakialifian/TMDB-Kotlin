@@ -7,12 +7,12 @@ import androidx.paging.PagingData
 import androidx.paging.rxjava2.cachedIn
 import com.application.tmdb.core.domain.model.MovieTvShowModel
 import com.application.tmdb.core.domain.usecase.movietvshow.MovieTvShowWrapper
-import com.application.tmdb.core.utils.Movie
-import com.application.tmdb.core.utils.Page
-import com.application.tmdb.core.utils.TvShow
-import com.application.tmdb.utils.RxDisposer
-import com.application.tmdb.utils.addToDisposer
-import com.application.tmdb.utils.toLiveData
+import com.application.tmdb.common.Movie
+import com.application.tmdb.common.Page
+import com.application.tmdb.common.TvShow
+import com.application.tmdb.common.RxDisposer
+import com.application.tmdb.common.addToDisposer
+import com.application.tmdb.common.toLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -31,11 +31,11 @@ class MovieTvShowViewModel @Inject constructor(private val movieTvShowWrapper: M
     val listTvShowsPaging get() = _listTvShowsPaging.toLiveData()
 
     fun getListMovies(
-        movie: Movie?,
-        page: Page?,
+        movie: com.application.tmdb.common.Movie?,
+        page: com.application.tmdb.common.Page?,
         query: String?,
         movieId: Int?,
-        rxDisposer: RxDisposer
+        rxDisposer: com.application.tmdb.common.RxDisposer
     ) {
         movieTvShowWrapper.getListMovies(movie, page, query, movieId)
             .subscribeOn(Schedulers.io())
@@ -48,11 +48,11 @@ class MovieTvShowViewModel @Inject constructor(private val movieTvShowWrapper: M
     }
 
     fun getListTvShows(
-        tvShow: TvShow?,
-        page: Page?,
+        tvShow: com.application.tmdb.common.TvShow?,
+        page: com.application.tmdb.common.Page?,
         query: String?,
         tvId: Int?,
-        rxDisposer: RxDisposer
+        rxDisposer: com.application.tmdb.common.RxDisposer
     ) {
         movieTvShowWrapper.getListTvShows(tvShow, page, query, tvId)
             .subscribeOn(Schedulers.io())

@@ -15,10 +15,10 @@ import com.application.tmdb.core.source.remote.response.other.ResultsItemDiscove
 import com.application.tmdb.core.source.remote.response.other.ReviewItemResponse
 import com.application.tmdb.core.source.remote.response.tvshows.DetailTvShowsResponse
 import com.application.tmdb.core.source.remote.response.tvshows.ListTvShowsResponse
-import com.application.tmdb.core.utils.Category
-import com.application.tmdb.core.utils.Movie
-import com.application.tmdb.core.utils.Page
-import com.application.tmdb.core.utils.TvShow
+import com.application.tmdb.common.Category
+import com.application.tmdb.common.Movie
+import com.application.tmdb.common.Page
+import com.application.tmdb.common.TvShow
 import io.reactivex.Flowable
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -47,7 +47,7 @@ class RemoteDataSource @Inject constructor(
         apiService.getDetailTvShows(tvId)
 
     fun getReviewsPaging(
-        id: String?, category: Category?
+        id: String?, category: com.application.tmdb.common.Category?
     ): Flowable<PagingData<ReviewItemResponse>> = Pager(config = PagingConfig(
         pageSize = 10, initialLoadSize = 10
     ), pagingSourceFactory = {
@@ -57,7 +57,7 @@ class RemoteDataSource @Inject constructor(
     }).flowable
 
     fun getDiscoverPaging(
-        genreId: String, category: Category
+        genreId: String, category: com.application.tmdb.common.Category
     ): Flowable<PagingData<ResultsItemDiscoverResponse>> = Pager(config = PagingConfig(
         pageSize = 10, initialLoadSize = 10
     ), pagingSourceFactory = {
@@ -67,8 +67,8 @@ class RemoteDataSource @Inject constructor(
     }).flowable
 
     fun getMovies(
-        movie: Movie?,
-        page: Page?,
+        movie: com.application.tmdb.common.Movie?,
+        page: com.application.tmdb.common.Page?,
         query: String?,
         movieId: Int?
     ): Flowable<PagingData<ListMoviesResponse>> = Pager(
@@ -77,19 +77,19 @@ class RemoteDataSource @Inject constructor(
             initialLoadSize = 10
         ), pagingSourceFactory = {
             when (movie) {
-                Movie.NOW_PLAYING_MOVIES -> nowPlayingMoviesRxPagingSource.apply {
+                com.application.tmdb.common.Movie.NOW_PLAYING_MOVIES -> nowPlayingMoviesRxPagingSource.apply {
                     setData(movie, page, query, movieId)
                 }
 
-                Movie.POPULAR_MOVIES -> popularMoviesRxPagingSource.apply {
+                com.application.tmdb.common.Movie.POPULAR_MOVIES -> popularMoviesRxPagingSource.apply {
                     setData(movie, page, query, movieId)
                 }
 
-                Movie.TOP_RATED_MOVIES -> topRatedMoviesRxPagingSource.apply {
+                com.application.tmdb.common.Movie.TOP_RATED_MOVIES -> topRatedMoviesRxPagingSource.apply {
                     setData(movie, page, query, movieId)
                 }
 
-                Movie.UP_COMING_MOVIES -> upComingMoviesRxPagingSource.apply {
+                com.application.tmdb.common.Movie.UP_COMING_MOVIES -> upComingMoviesRxPagingSource.apply {
                     setData(movie, page, query, movieId)
                 }
 
@@ -101,8 +101,8 @@ class RemoteDataSource @Inject constructor(
     ).flowable
 
     fun getTvShows(
-        tvShow: TvShow?,
-        page: Page?,
+        tvShow: com.application.tmdb.common.TvShow?,
+        page: com.application.tmdb.common.Page?,
         query: String?,
         tvId: Int?
     ): Flowable<PagingData<ListTvShowsResponse>> =
@@ -111,19 +111,19 @@ class RemoteDataSource @Inject constructor(
                 pageSize = 10, initialLoadSize = 10
             ), pagingSourceFactory = {
                 when (tvShow) {
-                    TvShow.AIRING_TODAY_TV_SHOWS -> airingTodayTvShowsRxPagingSource.apply {
+                    com.application.tmdb.common.TvShow.AIRING_TODAY_TV_SHOWS -> airingTodayTvShowsRxPagingSource.apply {
                         setData(tvShow, page, query, tvId)
                     }
 
-                    TvShow.TOP_RATED_TV_SHOWS -> topRatedTvShowsRxPagingSource.apply {
+                    com.application.tmdb.common.TvShow.TOP_RATED_TV_SHOWS -> topRatedTvShowsRxPagingSource.apply {
                         setData(tvShow, page, query, tvId)
                     }
 
-                    TvShow.POPULAR_TV_SHOWS -> popularTvShowsRxPagingSource.apply {
+                    com.application.tmdb.common.TvShow.POPULAR_TV_SHOWS -> popularTvShowsRxPagingSource.apply {
                         setData(tvShow, page, query, tvId)
                     }
 
-                    TvShow.ON_THE_AIR_TV_SHOWS -> onTheAirTvShowsRxPagingSource.apply {
+                    com.application.tmdb.common.TvShow.ON_THE_AIR_TV_SHOWS -> onTheAirTvShowsRxPagingSource.apply {
                         setData(tvShow, page, query, tvId)
                     }
 

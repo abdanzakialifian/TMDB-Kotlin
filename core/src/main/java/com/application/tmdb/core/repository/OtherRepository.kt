@@ -6,10 +6,10 @@ import com.application.tmdb.core.domain.interfaces.IOtherRepository
 import com.application.tmdb.core.domain.model.DetailCastModel
 import com.application.tmdb.core.domain.model.DiscoverItem
 import com.application.tmdb.core.domain.model.ReviewModel
-import com.application.tmdb.core.utils.Category
-import com.application.tmdb.core.utils.DataMapper.toDetailCastModel
-import com.application.tmdb.core.utils.DataMapper.toResultItemDiscover
-import com.application.tmdb.core.utils.DataMapper.toReviewItem
+import com.application.tmdb.common.Category
+import com.application.tmdb.common.DataMapper.toDetailCastModel
+import com.application.tmdb.common.DataMapper.toResultItemDiscover
+import com.application.tmdb.common.DataMapper.toReviewItem
 import com.application.tmdb.core.source.remote.RemoteDataSource
 import io.reactivex.Flowable
 import javax.inject.Inject
@@ -20,7 +20,7 @@ class OtherRepository @Inject constructor(private val remoteDataSource: RemoteDa
     IOtherRepository {
     override fun getReviewsPaging(
         id: String?,
-        category: Category?
+        category: com.application.tmdb.common.Category?
     ): Flowable<PagingData<ReviewModel>> =
         remoteDataSource.getReviewsPaging(id, category)
             .map { pagingData ->
@@ -31,7 +31,7 @@ class OtherRepository @Inject constructor(private val remoteDataSource: RemoteDa
 
     override fun getDiscoverPaging(
         genreId: String,
-        category: Category
+        category: com.application.tmdb.common.Category
     ): Flowable<PagingData<DiscoverItem>> =
         remoteDataSource.getDiscoverPaging(genreId, category)
             .map { pagingData ->

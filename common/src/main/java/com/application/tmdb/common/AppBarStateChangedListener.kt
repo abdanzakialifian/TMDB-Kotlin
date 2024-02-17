@@ -1,4 +1,4 @@
-package com.application.tmdb.utils
+package com.application.tmdb.common
 
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener

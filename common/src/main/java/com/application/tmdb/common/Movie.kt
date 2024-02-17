@@ -1,4 +1,4 @@
-package com.application.tmdb.core.utils
+package com.application.tmdb.common
 
 enum class Movie {
     NOW_PLAYING_MOVIES,

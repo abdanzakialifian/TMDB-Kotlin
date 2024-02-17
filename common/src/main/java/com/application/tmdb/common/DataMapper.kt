@@ -1,4 +1,4 @@
-package com.application.tmdb.core.utils
+package com.application.tmdb.common
 
 import com.application.tmdb.core.domain.model.CastCrewItemModel
 import com.application.tmdb.core.domain.model.DetailCastModel

@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.application.tmdb.databinding.ItemListCastCrewBinding
 import com.application.tmdb.core.domain.model.CastCrewItemModel
 import com.application.tmdb.core.domain.model.CastCrewModel
-import com.application.tmdb.core.utils.Category
-import com.application.tmdb.utils.gone
-import com.application.tmdb.utils.visible
+import com.application.tmdb.common.Category
+import com.application.tmdb.common.gone
+import com.application.tmdb.common.visible
 
 class CastCrewAdapter :
     ListAdapter<CastCrewModel, CastCrewAdapter.CastViewHolder>(DIFF_CALLBACK) {
@@ -57,7 +57,7 @@ class CastCrewAdapter :
         holder.bind(getItem(position))
     }
 
-    private fun eventListeners(category: Category) {
+    private fun eventListeners(category: com.application.tmdb.common.Category) {
         castCrewItemAdapter.setOnItemClickCallback(object :
             CastCrewItemAdapter.OnItemClickCallback {
             override fun onItemClicked(item: CastCrewItemModel) {
@@ -69,7 +69,7 @@ class CastCrewAdapter :
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(id: Int, category: Category)
+        fun onItemClicked(id: Int, category: com.application.tmdb.common.Category)
     }
 
     companion object {

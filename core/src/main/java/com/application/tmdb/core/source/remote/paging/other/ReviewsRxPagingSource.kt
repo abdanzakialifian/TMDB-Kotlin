@@ -2,7 +2,7 @@ package com.application.tmdb.core.source.remote.paging.other
 
 import androidx.paging.PagingState
 import androidx.paging.rxjava2.RxPagingSource
-import com.application.tmdb.core.utils.Category
+import com.application.tmdb.common.Category
 import com.application.tmdb.core.source.remote.ApiService
 import com.application.tmdb.core.source.remote.response.other.ReviewItemResponse
 import com.application.tmdb.core.source.remote.response.other.ReviewsResponse
@@ -17,12 +17,12 @@ class ReviewsRxPagingSource @Inject constructor(private val apiService: ApiServi
 
     private var id: String? = null
 
-    private var category: Category? = null
+    private var category: com.application.tmdb.common.Category? = null
 
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, ReviewItemResponse>> {
         val position = params.key ?: INITIAL_POSITION
 
-        return if (category == Category.MOVIES) {
+        return if (category == com.application.tmdb.common.Category.MOVIES) {
             apiService.getReviewsMovie(id ?: "", position)
                 .subscribeOn(Schedulers.io())
                 .map { data ->
@@ -61,7 +61,7 @@ class ReviewsRxPagingSource @Inject constructor(private val apiService: ApiServi
         }
     }
 
-    fun setDataReviews(id: String?, category: Category?) {
+    fun setDataReviews(id: String?, category: com.application.tmdb.common.Category?) {
         this.id = id
         this.category = category
     }

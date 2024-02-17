@@ -5,10 +5,10 @@ import com.application.tmdb.databinding.FragmentOverviewBinding
 import com.application.tmdb.presentation.base.BaseVBFragment
 import com.application.tmdb.presentation.detail.adapter.TrailerAdapter
 import com.application.tmdb.presentation.detail.viewmodel.DetailViewModel
-import com.application.tmdb.utils.UiState
-import com.application.tmdb.utils.gone
-import com.application.tmdb.utils.setResizableText
-import com.application.tmdb.utils.visible
+import com.application.tmdb.common.UiState
+import com.application.tmdb.common.gone
+import com.application.tmdb.common.setResizableText
+import com.application.tmdb.common.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,7 +32,7 @@ class OverviewFragment : BaseVBFragment<FragmentOverviewBinding>() {
     private fun observeData() {
         detailViewModel.detailDataState.observe(viewLifecycleOwner) { result ->
             when (result) {
-                is UiState.Loading -> {
+                is com.application.tmdb.common.UiState.Loading -> {
                     binding?.apply {
                         shimmerOverview.visible()
                         shimmerOverview.startShimmer()
@@ -40,7 +40,7 @@ class OverviewFragment : BaseVBFragment<FragmentOverviewBinding>() {
                     }
                 }
 
-                is UiState.Success -> {
+                is com.application.tmdb.common.UiState.Success -> {
                     val detail = result.data
                     binding?.apply {
                         shimmerOverview.gone()
@@ -61,14 +61,14 @@ class OverviewFragment : BaseVBFragment<FragmentOverviewBinding>() {
                     }
                 }
 
-                is UiState.Error -> {
+                is com.application.tmdb.common.UiState.Error -> {
                     binding?.apply {
                         shimmerOverview.gone()
                         shimmerOverview.stopShimmer()
                         layoutOverview.gone()
                     }
                 }
-                is UiState.Empty -> {
+                is com.application.tmdb.common.UiState.Empty -> {
                     binding?.apply {
                         shimmerOverview.gone()
                         shimmerOverview.stopShimmer()

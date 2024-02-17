@@ -1,4 +1,4 @@
-package com.application.tmdb.core.utils
+package com.application.tmdb.common
 
 enum class Page {
     ONE,
