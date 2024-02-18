@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_marginTop="20dp"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_title_movies"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_rounded_shimmer"
+        android:fontFamily="@font/montserrat_regular"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_see_all"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:background="@drawable/background_rounded_shimmer"
+        android:fontFamily="@font/montserrat_regular"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_title_movies"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_title_movies" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_see_all">
+
+        <include layout="@layout/item_list_movie_tv_show_item_shimmer_placeholder" />
+
+        <include layout="@layout/item_list_movie_tv_show_item_shimmer_placeholder" />
+
+        <include layout="@layout/item_list_movie_tv_show_item_shimmer_placeholder" />
+
+        <include layout="@layout/item_list_movie_tv_show_item_shimmer_placeholder" />
+
+        <include layout="@layout/item_list_movie_tv_show_item_shimmer_placeholder" />
+
+        <include layout="@layout/item_list_movie_tv_show_item_shimmer_placeholder" />
+
+        <include layout="@layout/item_list_movie_tv_show_item_shimmer_placeholder" />
+
+        <include layout="@layout/item_list_movie_tv_show_item_shimmer_placeholder" />
+
+        <include layout="@layout/item_list_movie_tv_show_item_shimmer_placeholder" />
+
+        <include layout="@layout/item_list_movie_tv_show_item_shimmer_placeholder" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

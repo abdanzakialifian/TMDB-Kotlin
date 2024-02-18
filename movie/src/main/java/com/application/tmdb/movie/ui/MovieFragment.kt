@@ -1,20 +1,22 @@
-package com.application.tmdb.presentation.movie.view
+package com.application.tmdb.movie.ui
 
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.ViewPager2
-import com.application.tmdb.R
+import com.application.tmdb.common.base.BaseVBFragment
 import com.application.tmdb.common.model.CategoryModel
 import com.application.tmdb.common.model.MovieTvShowModel
+import com.application.tmdb.common.ui.adapter.MovieTvShowAdapter
+import com.application.tmdb.common.ui.adapter.MovieTvShowPagingAdapter
+import com.application.tmdb.common.ui.adapter.MovieTvShowSliderPagingAdapter
 import com.application.tmdb.common.utils.Category
 import com.application.tmdb.common.utils.Movie
 import com.application.tmdb.common.utils.Page
@@ -23,12 +25,9 @@ import com.application.tmdb.common.utils.TvShow
 import com.application.tmdb.common.utils.gone
 import com.application.tmdb.common.utils.hideKeyboard
 import com.application.tmdb.common.utils.visible
-import com.application.tmdb.databinding.FragmentMovieBinding
-import com.application.tmdb.presentation.adapter.MovieTvShowAdapter
-import com.application.tmdb.presentation.adapter.MovieTvShowSliderPagingAdapter
-import com.application.tmdb.presentation.base.BaseVBFragment
-import com.application.tmdb.presentation.movie.viewmodel.MovieViewModel
-import com.application.tmdb.presentation.movietvshow.adapter.MovieTvShowPagingAdapter
+import com.application.tmdb.movie.R
+import com.application.tmdb.movie.databinding.FragmentMovieBinding
+import com.application.tmdb.movie.viewmodel.MovieViewModel
 import com.mancj.materialsearchbar.MaterialSearchBar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.abs
@@ -242,31 +241,31 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
         }
     }
 
-    private fun navigateToDetailPage(id: Int) {
-        val navigateToDetailFragment =
-            MovieFragmentDirections.actionMovieFragmentToDetailFragment()
-        navigateToDetailFragment.id = id
-        navigateToDetailFragment.intentFrom = Category.MOVIES.name
-        findNavController().navigate(navigateToDetailFragment)
-    }
-
-    private fun navigateToListPage(category: Category, movie: Movie) {
-        val navigateToListFragment =
-            MovieFragmentDirections.actionMovieFragmentToMovieTvShowFragment()
-        navigateToListFragment.intentFrom = category.name
-        navigateToListFragment.movie = movie
-        findNavController().navigate(navigateToListFragment)
-    }
+//    private fun navigateToDetailPage(id: Int) {
+//        val navigateToDetailFragment =
+//            MovieFragmentDirections.actionMovieFragmentToDetailFragment()
+//        navigateToDetailFragment.id = id
+//        navigateToDetailFragment.intentFrom = Category.MOVIES.name
+//        findNavController().navigate(navigateToDetailFragment)
+//    }
+//
+//    private fun navigateToListPage(category: Category, movie: Movie) {
+//        val navigateToListFragment =
+//            MovieFragmentDirections.actionMovieFragmentToMovieTvShowFragment()
+//        navigateToListFragment.intentFrom = category.name
+//        navigateToListFragment.movie = movie
+//        findNavController().navigate(navigateToListFragment)
+//    }
 
     override fun onSeeAllClicked(category: Category?, movie: Movie?, tvShow: TvShow?) {
-        navigateToListPage(
-            category = category ?: Category.MOVIES,
-            movie = movie ?: Movie.POPULAR_MOVIES
-        )
+//        navigateToListPage(
+//            category = category ?: Category.MOVIES,
+//            movie = movie ?: Movie.POPULAR_MOVIES
+//        )
     }
 
     override fun onItemClicked(data: MovieTvShowModel?) {
-        navigateToDetailPage(data?.id ?: 0)
+//        navigateToDetailPage(data?.id ?: 0)
     }
 
     override fun onSearchStateChanged(enabled: Boolean) {

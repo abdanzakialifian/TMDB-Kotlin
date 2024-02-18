@@ -66,24 +66,14 @@
         tools:layout="@layout/fragment_splash_screen">
         <action
             android:id="@+id/action_splashScreenFragment_to_movie_fragment"
-            app:destination="@id/movie_fragment"
+            app:destination="@id/movie_nav_graph"
             app:launchSingleTop="true"
             app:popUpTo="@id/splash_screen_fragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="true"/>
     </fragment>
 
-    <fragment
-        android:id="@+id/movie_fragment"
-        android:name="com.application.tmdb.presentation.movie.view.MovieFragment"
-        android:label="fragment_movie"
-        tools:layout="@layout/fragment_movie">
-        <action
-            android:id="@+id/action_movie_fragment_to_detailFragment"
-            app:destination="@id/detail_fragment" />
-        <action
-            android:id="@+id/action_movie_fragment_to_movieTvShowFragment"
-            app:destination="@id/movie_tv_show_fragment" />
-    </fragment>
+    <include app:graph="@navigation/movie_nav_graph"/>
+
     <fragment
         android:id="@+id/tv_show_fragment"
         android:name="com.application.tmdb.presentation.tvshow.view.TvShowFragment"

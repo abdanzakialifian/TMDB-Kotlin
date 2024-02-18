@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="top_rated_movies">Top rated movies</string>
+    <string name="popular_movies">Popular movies</string>
+    <string name="up_coming_movies">Up coming movies</string>
+    <string name="search_movies">Search Movies</string>
+</resources>
