@@ -9,7 +9,7 @@ plugins {
 apply from: "$rootProject.projectDir/shared_dependencies.gradle"
 
 android {
-    namespace 'com.application.tmdb.common'
+    namespace 'com.application.tmdb.tv'
     compileSdk 34
 
     defaultConfig {
@@ -36,4 +36,10 @@ android {
         viewBinding = true
         buildConfig = true
     }
+}
+
+dependencies {
+    implementation project(":core")
+    implementation project(":domain")
+    implementation project(":common")
 }

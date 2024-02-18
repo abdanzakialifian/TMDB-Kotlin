@@ -231,11 +231,11 @@ class DetailFragment : BaseVBFragment<FragmentDetailBinding>() {
     }
 
     private fun navigateToMovieOrTvShow(intentFrom: String) {
-        if (intentFrom == Category.MOVIES.name) {
-            findNavController().popBackStack(R.id.movie_fragment, false)
-        } else {
-            findNavController().popBackStack(R.id.tv_show_fragment, false)
-        }
+//        if (intentFrom == Category.MOVIES.name) {
+//            findNavController().popBackStack(R.id.movie_fragment, false)
+//        } else {
+//            findNavController().popBackStack(R.id.tv_show_fragment, false)
+//        }
     }
 
     companion object {

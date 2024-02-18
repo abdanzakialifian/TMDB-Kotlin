@@ -1,20 +1,23 @@
-package com.application.tmdb.presentation.movie.view
+package com.application.tmdb.tv.ui
 
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.ViewPager2
-import com.application.tmdb.R
+import com.application.tmdb.common.R
+import com.application.tmdb.common.base.BaseVBFragment
 import com.application.tmdb.common.model.CategoryModel
 import com.application.tmdb.common.model.MovieTvShowModel
+import com.application.tmdb.common.ui.adapter.MovieTvShowAdapter
+import com.application.tmdb.common.ui.adapter.MovieTvShowPagingAdapter
+import com.application.tmdb.common.ui.adapter.MovieTvShowSliderPagingAdapter
 import com.application.tmdb.common.utils.Category
 import com.application.tmdb.common.utils.Movie
 import com.application.tmdb.common.utils.Page
@@ -23,21 +26,17 @@ import com.application.tmdb.common.utils.TvShow
 import com.application.tmdb.common.utils.gone
 import com.application.tmdb.common.utils.hideKeyboard
 import com.application.tmdb.common.utils.visible
-import com.application.tmdb.databinding.FragmentMovieBinding
-import com.application.tmdb.presentation.adapter.MovieTvShowAdapter
-import com.application.tmdb.presentation.adapter.MovieTvShowSliderPagingAdapter
-import com.application.tmdb.presentation.base.BaseVBFragment
-import com.application.tmdb.presentation.movie.viewmodel.MovieViewModel
-import com.application.tmdb.presentation.movietvshow.adapter.MovieTvShowPagingAdapter
+import com.application.tmdb.tv.viewmodel.TvShowViewModel
+import com.application.tmdb.tv.databinding.FragmentTvShowBinding
 import com.mancj.materialsearchbar.MaterialSearchBar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.abs
 
 @AndroidEntryPoint
-class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
+class TvShowFragment : BaseVBFragment<FragmentTvShowBinding>(),
     MovieTvShowSliderPagingAdapter.OnItemClickCallback, MovieTvShowAdapter.OnEventClickCallback,
-    MaterialSearchBar.OnSearchActionListener, MovieTvShowPagingAdapter.OnItemClickCallback,
-    TextWatcher {
+    MaterialSearchBar.OnSearchActionListener, TextWatcher,
+    MovieTvShowPagingAdapter.OnItemClickCallback {
 
     private val movieTvShowSliderPagingAdapter by lazy { MovieTvShowSliderPagingAdapter() }
 
@@ -47,14 +46,14 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
 
     private lateinit var sliderRunnable: Runnable
 
-    private val movieViewModel by viewModels<MovieViewModel>()
+    private val tvShowViewModel by viewModels<TvShowViewModel>()
 
     private val categoryModels = mutableListOf<CategoryModel>()
 
     private val sliderHandler = Handler(Looper.getMainLooper())
 
-    override fun getViewBinding(): FragmentMovieBinding =
-        FragmentMovieBinding.inflate(layoutInflater)
+    override fun getViewBinding(): FragmentTvShowBinding =
+        FragmentTvShowBinding.inflate(layoutInflater)
 
     override fun initView() {
         sliderRunnable = Runnable {
@@ -63,19 +62,18 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
             }
         }
 
-        if (movieViewModel.listMoviesPaging.value == null) {
-            movieViewModel.getListAllMovies(
-                nowPlayingMovie = Movie.NOW_PLAYING_MOVIES,
-                topRatedMovie = Movie.TOP_RATED_MOVIES,
-                popularMovie = Movie.POPULAR_MOVIES,
-                upComingMovie = Movie.UP_COMING_MOVIES,
+        if (tvShowViewModel.listTvShowsPaging.value == null) {
+            tvShowViewModel.getListAllTvShows(
+                airingTodayTvShow = TvShow.AIRING_TODAY_TV_SHOWS,
+                topRatedTvShow = TvShow.TOP_RATED_TV_SHOWS,
+                popularTvShow = TvShow.POPULAR_TV_SHOWS,
+                onTheAirTvShow = TvShow.ON_THE_AIR_TV_SHOWS,
                 page = Page.ONE,
                 query = null,
-                movieId = null,
+                tvId = null,
                 rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
             )
         }
-
         observeData()
 
         eventListeners()
@@ -85,65 +83,66 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
         movieTvShowSliderPagingAdapter.setOnItemClickCallback(this)
         movieTvShowAdapter.setOnEventClickCallback(this)
         binding?.apply {
-            searchBar.setOnSearchActionListener(this@MovieFragment)
-            searchBar.addTextChangeListener(this@MovieFragment)
+            searchBar.setOnSearchActionListener(this@TvShowFragment)
+
+            searchBar.addTextChangeListener(this@TvShowFragment)
         }
     }
 
     private fun observeData() {
-        movieViewModel.listMoviesPaging.observe(viewLifecycleOwner) { result ->
-            result.forEachIndexed { index, pairMovie ->
-                val movie = pairMovie.first
-                val moviePaging = pairMovie.second
+        tvShowViewModel.listTvShowsPaging.observe(viewLifecycleOwner) { result ->
+            result.forEachIndexed { index, pairTvShow ->
+                val tvShow = pairTvShow.first
+                val tvShowPaging = pairTvShow.second
 
-                if (movie == Movie.NOW_PLAYING_MOVIES) {
+                if (tvShow == TvShow.AIRING_TODAY_TV_SHOWS) {
+                    configureImageSlider()
                     movieTvShowSliderPagingAdapter.submitData(
                         viewLifecycleOwner.lifecycle,
-                        moviePaging
+                        tvShowPaging
                     )
-                    configureImageSlider()
                     movieTvShowSliderPagingAdapter.addLoadStateListener { loadState ->
                         setLoadStatePagingSlider(loadState)
                     }
                 } else {
-                    val title = when (movie) {
-                        Movie.TOP_RATED_MOVIES -> resources.getString(R.string.top_rated_movies)
-                        Movie.POPULAR_MOVIES -> resources.getString(R.string.popular_movies)
-                        else -> resources.getString(R.string.up_coming_movies)
+                    val title = when (tvShow) {
+                        TvShow.TOP_RATED_TV_SHOWS -> resources.getString(R.string.top_rated_tv_shows)
+                        TvShow.POPULAR_TV_SHOWS -> resources.getString(R.string.popular_tv_shows)
+                        else -> resources.getString(R.string.on_the_air_tv_shows)
                     }
 
                     val data = CategoryModel(
                         categoryId = index,
                         categoryTitle = title,
-                        categories = moviePaging,
-                        category = Category.MOVIES,
-                        movie = movie
+                        categories = tvShowPaging,
+                        category = Category.TV_SHOWS,
+                        tvShow = tvShow
                     )
                     categoryModels.add(data)
                 }
             }
-            setAllMoviesAdapter()
+            setAllTvShowsAdapter()
         }
 
-        movieViewModel.listSearchMoviesPaging.observe(viewLifecycleOwner) { result ->
+        tvShowViewModel.listSearchTvShowsPaging.observe(viewLifecycleOwner) { result ->
             movieTvShowPagingAdapter.submitData(viewLifecycleOwner.lifecycle, result)
             movieTvShowPagingAdapter.setOnItemClickCallback(this)
             binding?.apply {
-                rvSearchMovies.adapter = movieTvShowPagingAdapter
-                rvSearchMovies.setHasFixedSize(true)
+                rvSearchTvShows.adapter = movieTvShowPagingAdapter
+                rvSearchTvShows.setHasFixedSize(true)
             }
             movieTvShowPagingAdapter.addLoadStateListener { loadState ->
                 setLoadStatePaging(loadState)
             }
         }
 
-        movieViewModel.isSearchStateChanged.observe(viewLifecycleOwner) { isSearchStateChanged ->
+        tvShowViewModel.isSearchStateChanged.observe(viewLifecycleOwner) { isSearchStateChanged ->
             binding?.apply {
                 if (isSearchStateChanged) {
-                    rvSearchMovies.visible()
+                    rvSearchTvShows.visible()
                     layoutMain.gone()
                 } else {
-                    rvSearchMovies.gone()
+                    rvSearchTvShows.gone()
                     layoutMain.visible()
                     movieTvShowPagingAdapter.submitData(
                         viewLifecycleOwner.lifecycle,
@@ -171,13 +170,13 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
                 registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                     override fun onPageSelected(position: Int) {
                         super.onPageSelected(position)
-                        if (this@MovieFragment::sliderRunnable.isInitialized) {
+                        if (this@TvShowFragment::sliderRunnable.isInitialized) {
                             sliderHandler.removeCallbacks(sliderRunnable)
                             sliderHandler.postDelayed(
-                                sliderRunnable, 2000L
+                                sliderRunnable,
+                                2000L
                             ) // slide duration 2 seconds
                         }
-
                         Handler(Looper.getMainLooper()).postDelayed({
                             if (position == 4) {
                                 viewPagerImageSlider.setCurrentItem(0, false)
@@ -217,68 +216,68 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
             is LoadState.Loading -> binding?.apply {
                 shimmerList.visible()
                 shimmerList.startShimmer()
-                rvSearchMovies.gone()
+                rvSearchTvShows.gone()
             }
 
             is LoadState.NotLoading -> binding?.apply {
                 shimmerList.gone()
                 shimmerList.stopShimmer()
-                rvSearchMovies.visible()
+                rvSearchTvShows.visible()
             }
 
             is LoadState.Error -> binding?.apply {
                 shimmerList.gone()
                 shimmerList.stopShimmer()
-                rvSearchMovies.gone()
+                rvSearchTvShows.gone()
             }
         }
     }
 
-    private fun setAllMoviesAdapter() {
+    private fun setAllTvShowsAdapter() {
         movieTvShowAdapter.submitList(categoryModels)
         binding?.apply {
-            rvMovies.adapter = movieTvShowAdapter
-            rvMovies.setHasFixedSize(true)
+            rvTvShows.adapter = movieTvShowAdapter
+            rvTvShows.setHasFixedSize(true)
         }
     }
 
-    private fun navigateToDetailPage(id: Int) {
-        val navigateToDetailFragment =
-            MovieFragmentDirections.actionMovieFragmentToDetailFragment()
-        navigateToDetailFragment.id = id
-        navigateToDetailFragment.intentFrom = Category.MOVIES.name
-        findNavController().navigate(navigateToDetailFragment)
-    }
+//    private fun navigateToDetailPage(id: Int) {
+//        val navigateToDetailFragment =
+//            TvShowFragmentDirections.actionTvShowsFragmentToDetailFragment()
+//        navigateToDetailFragment.id = id
+//        navigateToDetailFragment.intentFrom = Category.TV_SHOWS.name
+//        findNavController().navigate(navigateToDetailFragment)
+//    }
 
-    private fun navigateToListPage(category: Category, movie: Movie) {
-        val navigateToListFragment =
-            MovieFragmentDirections.actionMovieFragmentToMovieTvShowFragment()
-        navigateToListFragment.intentFrom = category.name
-        navigateToListFragment.movie = movie
-        findNavController().navigate(navigateToListFragment)
-    }
+//    private fun navigateToListPage(category: Category, tvShow: TvShow) {
+//        val navigateToListFragment =
+//            TvShowFragmentDirections.actionTvShowFragmentToMovieTvShowFragment()
+//        navigateToListFragment.intentFrom = category.name
+//        navigateToListFragment.tvShow = tvShow
+//        findNavController().navigate(navigateToListFragment)
+//    }
 
     override fun onSeeAllClicked(category: Category?, movie: Movie?, tvShow: TvShow?) {
-        navigateToListPage(
-            category = category ?: Category.MOVIES,
-            movie = movie ?: Movie.POPULAR_MOVIES
-        )
+//        navigateToListPage(
+//            category = category ?: Category.TV_SHOWS,
+//            tvShow = tvShow ?: TvShow.POPULAR_TV_SHOWS
+//        )
     }
 
     override fun onItemClicked(data: MovieTvShowModel?) {
-        navigateToDetailPage(data?.id ?: 0)
+//        navigateToDetailPage(data?.id ?: 0)
     }
 
     override fun onSearchStateChanged(enabled: Boolean) {
-        movieViewModel.setIsSearchStateChanged(enabled)
+        tvShowViewModel.setIsSearchStateChanged(enabled)
     }
 
     override fun onSearchConfirmed(text: CharSequence?) {
-        movieViewModel.getListMovies(
-            movie = null,
+        tvShowViewModel.getListTvShows(
+            tvShow = null,
             page = Page.MORE_THAN_ONE,
             query = text.toString(),
-            movieId = null,
+            tvId = null,
             rxDisposer = RxDisposer().apply { bind(viewLifecycleOwner.lifecycle) }
         )
 
@@ -300,7 +299,6 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
             )
         }
     }
-
 
     override fun onResume() {
         super.onResume()

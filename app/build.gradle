@@ -45,4 +45,6 @@ dependencies {
     implementation project(":core")
     implementation project(":domain")
     implementation project(":common")
+    implementation project(":movie")
+    implementation project(":tv")
 }

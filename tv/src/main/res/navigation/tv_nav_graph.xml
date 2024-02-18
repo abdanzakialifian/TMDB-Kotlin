@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tv_nav_graph"
+    app:startDestination="@id/tv_show_fragment">
+
+    <fragment
+        android:id="@+id/tv_show_fragment"
+        android:name="com.application.tmdb.tv.ui.TvShowFragment"
+        android:label="fragment_tv_show"
+        tools:layout="@layout/fragment_tv_show">
+        <!--        <action-->
+        <!--            android:id="@+id/action_tvShowsFragment_to_detailFragment"-->
+        <!--            app:destination="@id/detail_fragment" />-->
+        <!--        <action-->
+        <!--            android:id="@+id/action_tv_show_fragment_to_movieTvShowFragment"-->
+        <!--            app:destination="@id/movie_tv_show_fragment" />-->
+    </fragment>
+
+</navigation>

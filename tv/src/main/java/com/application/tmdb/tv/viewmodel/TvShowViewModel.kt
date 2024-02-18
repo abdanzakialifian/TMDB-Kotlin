@@ -1,4 +1,4 @@
-package com.application.tmdb.presentation.movie.viewmodel
+package com.application.tmdb.tv.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -6,12 +6,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.rxjava2.cachedIn
 import com.application.tmdb.common.model.MovieTvShowModel
-import com.application.tmdb.common.utils.Movie
 import com.application.tmdb.common.utils.Page
 import com.application.tmdb.common.utils.RxDisposer
+import com.application.tmdb.common.utils.TvShow
 import com.application.tmdb.common.utils.addToDisposer
 import com.application.tmdb.common.utils.toLiveData
-import com.application.tmdb.domain.usecase.movie.MovieWrapper
+import com.application.tmdb.domain.usecase.tvshow.TvShowWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -19,59 +19,61 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
 @HiltViewModel
-class MovieViewModel @Inject constructor(private val movieWrapper: MovieWrapper) : ViewModel() {
+class TvShowViewModel @Inject constructor(private val tvShowWrapper: TvShowWrapper) :
+    ViewModel() {
 
-    private val _listMoviesPaging = MutableLiveData<List<Pair<Movie, PagingData<MovieTvShowModel>>>>()
-    val listMoviesPaging get() = _listMoviesPaging.toLiveData()
+    private val _listTvShowsPaging: MutableLiveData<List<Pair<TvShow, PagingData<MovieTvShowModel>>>> =
+        MutableLiveData()
+    val listTvShowsPaging get() = _listTvShowsPaging.toLiveData()
 
-    private val _listSearchMoviesPaging = MutableLiveData<PagingData<MovieTvShowModel>>()
-    val listSearchMoviesPaging get() = _listSearchMoviesPaging.toLiveData()
+    private val _listSearchTvShowsPaging: MutableLiveData<PagingData<MovieTvShowModel>> =
+        MutableLiveData()
+    val listSearchTvShowsPaging get() = _listSearchTvShowsPaging.toLiveData()
 
     private val _isSearchStateChanged = MutableLiveData(false)
     val isSearchStateChanged get() = _isSearchStateChanged.toLiveData()
 
-    fun getListAllMovies(
-        nowPlayingMovie: Movie?,
-        topRatedMovie: Movie?,
-        popularMovie: Movie?,
-        upComingMovie: Movie?,
+    fun getListAllTvShows(
+        airingTodayTvShow: TvShow?,
+        topRatedTvShow: TvShow?,
+        popularTvShow: TvShow?,
+        onTheAirTvShow: TvShow?,
         page: Page?,
         query: String?,
-        movieId: Int?,
+        tvId: Int?,
         rxDisposer: RxDisposer
     ) {
-        movieWrapper.getListAllMovies(
-            nowPlayingMovie,
-            topRatedMovie,
-            popularMovie,
-            upComingMovie,
+        tvShowWrapper.getListAllTvShows(
+            airingTodayTvShow,
+            topRatedTvShow,
+            popularTvShow,
+            onTheAirTvShow,
             page,
             query,
-            movieId,
+            tvId,
             viewModelScope
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->
-                _listMoviesPaging.postValue(data)
-
+                _listTvShowsPaging.postValue(data)
             }.addToDisposer(rxDisposer)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun getListMovies(
-        movie: Movie?,
+    fun getListTvShows(
+        tvShow: TvShow?,
         page: Page?,
         query: String?,
-        movieId: Int?,
+        tvId: Int?,
         rxDisposer: RxDisposer
     ) {
-        movieWrapper.getListMovies(movie, page, query, movieId)
+        tvShowWrapper.getListTvShows(tvShow, page, query, tvId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .cachedIn(viewModelScope)
             .subscribe { data ->
-                _listSearchMoviesPaging.postValue(data)
+                _listSearchTvShowsPaging.postValue(data)
             }
             .addToDisposer(rxDisposer)
     }
