@@ -1,10 +1,10 @@
-package com.application.tmdb.presentation.setting
+package com.application.tmdb.setting
 
 import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatDelegate
-import com.application.tmdb.R
-import com.application.tmdb.databinding.FragmentSettingBinding
-import com.application.tmdb.presentation.base.BaseVBFragment
+import com.application.tmdb.common.R
+import com.application.tmdb.common.base.BaseVBFragment
+import com.application.tmdb.setting.databinding.FragmentSettingBinding
 
 class SettingFragment : BaseVBFragment<FragmentSettingBinding>(),
     CompoundButton.OnCheckedChangeListener {

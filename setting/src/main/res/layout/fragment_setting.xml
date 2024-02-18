@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".presentation.setting.SettingFragment">
+    tools:context="SettingFragment">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/img_theme"

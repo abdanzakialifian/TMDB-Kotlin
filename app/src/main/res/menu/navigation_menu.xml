@@ -16,7 +16,7 @@
         android:title="@string/favorite" />
 
     <item
-        android:id="@+id/search_fragment"
+        android:id="@+id/setting_nav_graph"
         android:icon="@drawable/ic_setting_32_outline"
         android:title="@string/setting" />
 </menu>
