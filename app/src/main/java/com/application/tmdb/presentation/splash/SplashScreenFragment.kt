@@ -15,8 +15,8 @@ class SplashScreenFragment : BaseVBFragment<FragmentSplashScreenBinding>() {
 
     override fun initView() {
         Handler(Looper.getMainLooper()).postDelayed({
-            val navigateToHomeFragment = SplashScreenFragmentDirections.actionSplashScreenFragmentToMovieFragment()
-            findNavController().navigate(navigateToHomeFragment)
+            val navigateToMovieFragment = SplashScreenFragmentDirections.actionSplashScreenFragmentToMovieFragment()
+            findNavController().navigate(navigateToMovieFragment)
         }, DELAY_SPLASH_SCREEN)
     }
 
