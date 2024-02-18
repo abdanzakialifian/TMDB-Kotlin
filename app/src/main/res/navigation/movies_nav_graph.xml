@@ -10,11 +10,7 @@
         android:name="com.application.tmdb.presentation.setting.SettingFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_setting" />
-    <fragment
-        android:id="@+id/favorite_fragment"
-        android:name="com.application.tmdb.presentation.favorite.FavoriteFragment"
-        android:label="fragment_favorite"
-        tools:layout="@layout/fragment_favorite" />
+
     <fragment
         android:id="@+id/movie_tv_show_fragment"
         android:name="com.application.tmdb.presentation.movietvshow.view.MovieTvShowFragment"
@@ -75,6 +71,8 @@
     <include app:graph="@navigation/movie_nav_graph"/>
 
     <include app:graph="@navigation/tv_nav_graph"/>
+
+    <include app:graph="@navigation/favorite_nav_graph"/>
 
     <fragment
         android:id="@+id/detail_cast_crew_fragment"

@@ -1,7 +1,7 @@
-package com.application.tmdb.presentation.favorite
+package com.application.tmdb.favorite
 
-import com.application.tmdb.databinding.FragmentFavoriteBinding
-import com.application.tmdb.presentation.base.BaseVBFragment
+import com.application.tmdb.common.base.BaseVBFragment
+import com.application.tmdb.favorite.databinding.FragmentFavoriteBinding
 
 class FavoriteFragment : BaseVBFragment<FragmentFavoriteBinding>() {
     override fun getViewBinding(): FragmentFavoriteBinding =

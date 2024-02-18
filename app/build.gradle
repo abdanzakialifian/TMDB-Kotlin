@@ -47,4 +47,5 @@ dependencies {
     implementation project(":common")
     implementation project(":movie")
     implementation project(":tv")
+    implementation project(":favorite")
 }
