@@ -1,5 +1,6 @@
 package com.application.tmdb.movie.ui
 
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
@@ -28,6 +29,8 @@ import com.application.tmdb.common.utils.hideKeyboard
 import com.application.tmdb.common.utils.visible
 import com.application.tmdb.movie.databinding.FragmentMovieBinding
 import com.application.tmdb.movie.viewmodel.MovieViewModel
+import com.application.tmdb.navigation.DetailScreenNavigation
+import com.application.tmdb.navigation.ListScreenNavigation
 import com.mancj.materialsearchbar.MaterialSearchBar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.abs
@@ -51,6 +54,25 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
     private val categoryModels = mutableListOf<CategoryModel>()
 
     private val sliderHandler = Handler(Looper.getMainLooper())
+
+    private lateinit var detailScreenNavigation: DetailScreenNavigation
+
+    private lateinit var listScreenNavigation: ListScreenNavigation
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is DetailScreenNavigation) {
+            detailScreenNavigation = context
+        } else {
+            throw RuntimeException("$context must implement NavigationInterface")
+        }
+
+        if (context is ListScreenNavigation) {
+            listScreenNavigation = context
+        } else {
+            throw RuntimeException("$context must implement NavigationInterface")
+        }
+    }
 
     override fun getViewBinding(): FragmentMovieBinding =
         FragmentMovieBinding.inflate(layoutInflater)
@@ -241,31 +263,22 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
         }
     }
 
-//    private fun navigateToDetailPage(id: Int) {
-//        val navigateToDetailFragment =
-//            MovieFragmentDirections.actionMovieFragmentToDetailFragment()
-//        navigateToDetailFragment.id = id
-//        navigateToDetailFragment.intentFrom = Category.MOVIES.name
-//        findNavController().navigate(navigateToDetailFragment)
-//    }
-//
-//    private fun navigateToListPage(category: Category, movie: Movie) {
-//        val navigateToListFragment =
-//            MovieFragmentDirections.actionMovieFragmentToMovieTvShowFragment()
-//        navigateToListFragment.intentFrom = category.name
-//        navigateToListFragment.movie = movie
-//        findNavController().navigate(navigateToListFragment)
-//    }
-
     override fun onSeeAllClicked(category: Category?, movie: Movie?, tvShow: TvShow?) {
-//        navigateToListPage(
-//            category = category ?: Category.MOVIES,
-//            movie = movie ?: Movie.POPULAR_MOVIES
-//        )
+        listScreenNavigation.launchListScreen(
+            ListScreenNavigation.ListScreenArguments(
+                intentFrom = category?.name ?: Category.MOVIES.name,
+                movie = movie ?: Movie.POPULAR_MOVIES,
+            )
+        )
     }
 
     override fun onItemClicked(data: MovieTvShowModel?) {
-//        navigateToDetailPage(data?.id ?: 0)
+        detailScreenNavigation.launchDetailScreen(
+            DetailScreenNavigation.DetailScreenArguments(
+                id = data?.id ?: 0,
+                intentFrom = Category.MOVIES.name,
+            ),
+        )
     }
 
     override fun onSearchStateChanged(enabled: Boolean) {
@@ -299,7 +312,6 @@ class MovieFragment : BaseVBFragment<FragmentMovieBinding>(),
             )
         }
     }
-
 
     override fun onResume() {
         super.onResume()

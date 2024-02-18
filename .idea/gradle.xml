@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/favorite" />
             <option value="$PROJECT_DIR$/movie" />
+            <option value="$PROJECT_DIR$/navigation" />
             <option value="$PROJECT_DIR$/setting" />
             <option value="$PROJECT_DIR$/tv" />
           </set>

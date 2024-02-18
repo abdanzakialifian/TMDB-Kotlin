@@ -13,28 +13,17 @@
 
     <fragment
         android:id="@+id/movie_tv_show_fragment"
-        android:name="com.application.tmdb.presentation.movietvshow.view.MovieTvShowFragment"
+        android:name="com.application.tmdb.movietvshow.view.MovieTvShowFragment"
         android:label="fragment_movie_tv_show"
         tools:layout="@layout/fragment_movie_tv_show">
         <action
             android:id="@+id/action_listFragment_to_detailFragment"
             app:destination="@id/detail_fragment" />
-        <argument
-            android:name="intentFrom"
-            android:defaultValue=""
-            app:argType="string" />
-        <argument
-            android:name="movie"
-            android:defaultValue="POPULAR_MOVIES"
-            app:argType="com.application.tmdb.common.utils.Movie" />
-        <argument
-            android:name="tvShow"
-            android:defaultValue="POPULAR_TV_SHOWS"
-            app:argType="com.application.tmdb.common.utils.TvShow" />
     </fragment>
+
     <fragment
         android:id="@+id/detail_fragment"
-        android:name="com.application.tmdb.presentation.detail.view.DetailFragment"
+        android:name="com.application.tmdb.detail.view.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail">
         <argument
@@ -42,22 +31,20 @@
             android:defaultValue="0"
             app:argType="integer" />
         <argument
-            android:name="intentFrom"
+            android:name="intent_from"
             android:defaultValue=""
             app:argType="string" />
         <action
             android:id="@+id/action_detail_fragment_to_detail_fragment"
             app:destination="@id/detail_fragment" />
         <action
-            android:id="@+id/action_detail_fragment_self"
-            app:destination="@id/detail_fragment" />
-        <action
             android:id="@+id/action_detail_fragment_to_detailCastCrewFragment"
             app:destination="@id/detail_cast_crew_fragment" />
     </fragment>
+
     <fragment
         android:id="@+id/splash_screen_fragment"
-        android:name="com.application.tmdb.presentation.splash.SplashScreenFragment"
+        android:name="com.application.tmdb.splash.SplashScreenFragment"
         android:label="fragment_splash_screen"
         tools:layout="@layout/fragment_splash_screen">
         <action
@@ -68,21 +55,13 @@
             app:popUpToInclusive="true"/>
     </fragment>
 
-    <include app:graph="@navigation/movie_nav_graph"/>
-
-    <include app:graph="@navigation/tv_nav_graph"/>
-
-    <include app:graph="@navigation/favorite_nav_graph"/>
-
-    <include app:graph="@navigation/setting_nav_graph"/>
-
     <fragment
         android:id="@+id/detail_cast_crew_fragment"
-        android:name="com.application.tmdb.presentation.castcrew.view.DetailCastCrewFragment"
+        android:name="com.application.tmdb.castcrew.view.DetailCastCrewFragment"
         android:label="fragment_detail_cast_crew"
         tools:layout="@layout/fragment_detail_cast_crew">
         <argument
-            android:name="navigateFrom"
+            android:name="navigate_from"
             android:defaultValue="CAST"
             app:argType="com.application.tmdb.common.utils.Category" />
         <argument
@@ -90,5 +69,13 @@
             android:defaultValue="0"
             app:argType="integer" />
     </fragment>
+
+    <include app:graph="@navigation/movie_nav_graph"/>
+
+    <include app:graph="@navigation/tv_nav_graph"/>
+
+    <include app:graph="@navigation/favorite_nav_graph"/>
+
+    <include app:graph="@navigation/setting_nav_graph"/>
 
 </navigation>

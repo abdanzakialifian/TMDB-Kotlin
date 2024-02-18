@@ -1,29 +1,3 @@
 <resources>
     <string name="app_name">TMDB</string>
-    <string name="popular_movies">Popular movies</string>
-    <string name="see_all">See all</string>
-    <string name="top_rated_movies">Top rated movies</string>
-    <string name="movie">Movie</string>
-    <string name="tv_show">Tv Show</string>
-    <string name="favorite">Favorite</string>
-    <string name="up_coming_movies">Up coming movies</string>
-    <string name="top_rated_tv_shows">Top rated tv shows</string>
-    <string name="on_the_air_tv_shows">On the air tv shows</string>
-    <string name="popular_tv_shows">Popular tv shows</string>
-    <string name="top_cast">Top Cast</string>
-    <string name="reviews">Reviews</string>
-    <string name="search_movies">Search Movies</string>
-    <string name="search_tv_shows">Search Tv Shows</string>
-    <string name="setting">Setting</string>
-    <string name="genres">Genres : </string>
-    <string name="play_trailer">Play Trailer</string>
-    <string name="resizable_text_read_more">Show More</string>
-    <string name="resizable_text_read_less">Show Less</string>
-    <string name="overview">Overview :</string>
-    <string name="trailer">Trailer :</string>
-    <string name="on">On %1$s</string>
-    <string name="castandcrew">Cast &amp; Crew</string>
-    <string name="similar">Similar</string>
-    <string name="cast">Cast :</string>
-    <string name="crew">Crew :</string>
 </resources>

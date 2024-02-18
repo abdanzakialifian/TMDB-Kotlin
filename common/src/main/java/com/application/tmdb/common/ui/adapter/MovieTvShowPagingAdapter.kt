@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.application.tmdb.common.databinding.ItemListMovieTvShowPagingBinding
 import com.application.tmdb.common.model.MovieTvShowModel
+import com.application.tmdb.common.utils.Constant
 import com.application.tmdb.common.utils.convertDateText
 import com.application.tmdb.common.utils.loadImageUrl
 import java.math.RoundingMode
@@ -33,8 +34,11 @@ class MovieTvShowPagingAdapter :
                         voteAverage?.toBigDecimal()?.setScale(1, RoundingMode.UP)?.toDouble()
                     val userScorePercentage = convertRating.toString().replace(".", "").toInt()
 
-                    imgPoster.loadImageUrl(posterPath ?: "")
-                    tvYear.text = releaseDate?.convertDateText("dd MMM yyyy", "yyyy-MM-dd")
+                    imgPoster.loadImageUrl(posterPath.orEmpty())
+                    tvYear.text = releaseDate?.convertDateText(
+                        Constant.FORMAT_DD_MMM_YYYY,
+                        Constant.FORMAT_YYYY_MM_DD,
+                    )
                     tvTitle.text = name
                     tvOverview.text = overview
                     userScoreProgress(binding, userScorePercentage)

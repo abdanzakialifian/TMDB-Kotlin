@@ -9,13 +9,6 @@
         android:id="@+id/movie_fragment"
         android:name="com.application.tmdb.movie.ui.MovieFragment"
         android:label="fragment_movie"
-        tools:layout="@layout/fragment_movie">
-<!--        <action-->
-<!--            android:id="@+id/action_movie_fragment_to_detailFragment"-->
-<!--            app:destination="@id/detail_nav_graph" />-->
-        <!--        <action-->
-        <!--            android:id="@+id/action_movie_fragment_to_movieTvShowFragment"-->
-        <!--            app:destination="@id/movie_tv_show_fragment" />-->
-    </fragment>
+        tools:layout="@layout/fragment_movie"/>
 
 </navigation>
