@@ -6,7 +6,7 @@
         android:title="@string/movie" />
 
     <item
-        android:id="@+id/tv_show_fragment"
+        android:id="@+id/tv_nav_graph"
         android:icon="@drawable/ic_tv_32_outline"
         android:title="@string/tv_show" />
 

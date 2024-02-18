@@ -11,6 +11,7 @@ import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.application.tmdb.common.R
 import com.application.tmdb.common.base.BaseVBFragment
 import com.application.tmdb.common.model.CategoryModel
 import com.application.tmdb.common.model.MovieTvShowModel
@@ -25,7 +26,6 @@ import com.application.tmdb.common.utils.TvShow
 import com.application.tmdb.common.utils.gone
 import com.application.tmdb.common.utils.hideKeyboard
 import com.application.tmdb.common.utils.visible
-import com.application.tmdb.movie.R
 import com.application.tmdb.movie.databinding.FragmentMovieBinding
 import com.application.tmdb.movie.viewmodel.MovieViewModel
 import com.mancj.materialsearchbar.MaterialSearchBar

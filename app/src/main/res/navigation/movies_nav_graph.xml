@@ -74,18 +74,8 @@
 
     <include app:graph="@navigation/movie_nav_graph"/>
 
-    <fragment
-        android:id="@+id/tv_show_fragment"
-        android:name="com.application.tmdb.presentation.tvshow.view.TvShowFragment"
-        android:label="fragment_tv_show"
-        tools:layout="@layout/fragment_tv_show">
-        <action
-            android:id="@+id/action_tvShowsFragment_to_detailFragment"
-            app:destination="@id/detail_fragment" />
-        <action
-            android:id="@+id/action_tv_show_fragment_to_movieTvShowFragment"
-            app:destination="@id/movie_tv_show_fragment" />
-    </fragment>
+    <include app:graph="@navigation/tv_nav_graph"/>
+
     <fragment
         android:id="@+id/detail_cast_crew_fragment"
         android:name="com.application.tmdb.presentation.castcrew.view.DetailCastCrewFragment"

@@ -1,4 +1,4 @@
-package com.application.tmdb.presentation.tvshow.viewmodel
+package com.application.tmdb.tv.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
