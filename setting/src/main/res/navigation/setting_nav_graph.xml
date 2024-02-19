@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/setting_fragment"
-        android:name="com.application.tmdb.setting.SettingFragment"
+        android:name="com.application.tmdb.setting.ui.SettingFragment"
         android:label="fragment_favorite"
         tools:layout="@layout/fragment_setting" />
 

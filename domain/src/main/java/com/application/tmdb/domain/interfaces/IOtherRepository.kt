@@ -21,4 +21,8 @@ interface IOtherRepository {
     fun getDetailCast(
         personId: Int
     ): Flowable<DetailCastModel>
+
+    fun saveTMDBTheme(isDarkMode: Boolean)
+
+    fun getTMDBTheme(): Flowable<Boolean>
 }

@@ -85,4 +85,9 @@ dependencies {
     // material searchbar
     def material_searchbar_version = "0.8.5"
     implementation("com.github.mancj:MaterialSearchBar:$material_searchbar_version")
+
+    // data store
+    def data_store_version = "1.0.0"
+    implementation("androidx.datastore:datastore-preferences:$data_store_version")
+    implementation ("androidx.datastore:datastore-preferences-rxjava2:$data_store_version")
 }

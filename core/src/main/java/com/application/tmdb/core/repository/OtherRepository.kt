@@ -9,6 +9,7 @@ import com.application.tmdb.common.utils.Category
 import com.application.tmdb.common.utils.DataMapper.toDetailCastModel
 import com.application.tmdb.common.utils.DataMapper.toResultItemDiscover
 import com.application.tmdb.common.utils.DataMapper.toReviewItem
+import com.application.tmdb.core.source.local.LocalDataSource
 import com.application.tmdb.core.source.remote.RemoteDataSource
 import com.application.tmdb.domain.interfaces.IOtherRepository
 import io.reactivex.Flowable
@@ -16,8 +17,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class OtherRepository @Inject constructor(private val remoteDataSource: RemoteDataSource) :
-    IOtherRepository {
+class OtherRepository @Inject constructor(
+    private val remoteDataSource: RemoteDataSource,
+    private val localDataSource: LocalDataSource,
+) : IOtherRepository {
     override fun getReviewsPaging(
         id: String?,
         category: Category?
@@ -44,4 +47,10 @@ class OtherRepository @Inject constructor(private val remoteDataSource: RemoteDa
         remoteDataSource.getDetailCast(personId).map { data ->
             data.toDetailCastModel()
         }
+
+    override fun saveTMDBTheme(isDarkMode: Boolean) {
+        localDataSource.saveTMDBTheme(isDarkMode)
+    }
+
+    override fun getTMDBTheme(): Flowable<Boolean> = localDataSource.getTMDBTheme()
 }
